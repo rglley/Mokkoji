@@ -1,6 +1,6 @@
 <template>
   <section class="h-full flex flex-col">
-    <div class="pb-2 basis-1/5 flex flex-row whitespace-nowrap overflow-x-scroll overflow-hidden">
+    <div class="pb-2 basis-1/4 flex flex-row whitespace-nowrap overflow-x-scroll overflow-hidden">
       <div
         v-for="participant in participants"
         :key="participant"
@@ -9,7 +9,7 @@
         {{ participant }}
       </div>
     </div>
-    <div id="host" class="basis-4/5 bg-purple-300 rounded-xl"></div>
+    <div id="host" class="basis-3/4 bg-purple-300 rounded-xl"></div>
   </section>
   <!-- <OvVideo /> -->
 </template>

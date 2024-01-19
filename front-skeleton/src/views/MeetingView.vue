@@ -8,23 +8,23 @@
         <!-- 소그룹 회의 -->
         <GroupMeeting v-else />
       </div>
-
       <!-- 참여자 목록, 채팅방-->
-      <div v-if="isList || isChat" class="pl-2 w-1/4">
-        <div v-if="isList" class="h-1/2 bg-purple-300 rounded-xl">참여자 목록</div>
-        <div v-if="isChat" class="h-1/2 bg-purple-300 rounded-xl">채팅방</div>
+      <div v-if="isList || isChat" class="pl-2 w-1/4 flex flex-col">
+        <div v-if="isList" class="basis-full bg-purple-300 rounded-xl">참여자 목록</div>
+        <div v-if="isList && isChat" class="mb-1"></div>
+        <div v-if="isChat" class="basis-full bg-purple-300 rounded-xl">채팅방</div>
       </div>
     </section>
     <!-- 기능 버튼 -->
     <section class="pt-10 h-1/5">
       <div class="flex">
-        <div class="basis-1/6 flex flex-wrap">
+        <div class="flex flex-wrap">
           아이콘
           <!-- <button><img src="@/assets/icons/meetingdetail.svg" alt="회의 상세 정보" /></button> -->
           <button class="h-10 bg-gray-500 text-white rounded-xl ml-2">화면 배치</button>
         </div>
-        <div class="basis-4/6 flex flex-wrap justify-center space-x-10">
-          <div id="button-container" class="flex flex-col items-center">
+        <div class="basis-4/6 flex flex-wrap justify-center space-x-8">
+          <div id="button-container">
             <button id="button"></button>
             <span>마이크 ON</span>
           </div>
@@ -49,7 +49,7 @@
             <span>사진찍기</span>
           </div>
         </div>
-        <div class="ml-2 basis-2/6 flex flex-row flex-wrap space-x-4 justify-end">
+        <div class="basis-2/6 flex flex-row flex-wrap space-x-4 justify-end">
           <div id="button-container">
             <button id="button" @click="changeListStatus"></button>
             <span>참여자 목록</span>
@@ -58,8 +58,10 @@
             <button id="button" @click="changeChatStatus"></button>
             <span>채팅</span>
           </div>
-          <div>
-            <button class="bg-red-500 rounded-3xl" @click="exitMeeting">나가기</button>
+          <div id="button-container">
+            <button class="w-20 h-10 bg-red-500 rounded-3xl text-white" @click="exitMeeting">
+              나가기
+            </button>
           </div>
         </div>
       </div>
@@ -91,10 +93,12 @@ let changeChatStatus = () => {
 let changeListStatus = () => {
   isList.value = !isList.value
 }
-
+// 회의 나가기
 let exitMeeting = () => {
+  // 메인 화면에서 나가기
   if (isMain.value) {
     console.log('goToHome')
+    // 소그룹에서 나가기
   } else {
     console.log('goToMain')
     isMain.value = !isMain.value
@@ -110,6 +114,14 @@ let exitMeeting = () => {
 }
 
 #button {
+  margin-bottom: 15%;
   border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  background-color: blueviolet;
+}
+
+span {
+  font-size: 13px;
 }
 </style>
