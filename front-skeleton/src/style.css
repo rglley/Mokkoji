@@ -1,3 +1,54 @@
+@import url('https://cdn.jsdelivr.net/gh/sun-typeface/SUITE/fonts/static/woff2/SUITE.css');
+/** @type {import('tailwindcss').Config} */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body {
+    font-family: 'SUITE', sans-serif;
+}
+
+@layer components {
+    p {
+       
+    }
+
+    #p-main {
+        @apply  text-black md:text-xl;
+
+    }
+
+    section {
+        @apply w-full py-12 lg:py-12;
+    }
+
+    #title-bold {
+        @apply text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none;
+    }
+
+    #title-sub-bold {
+        @apply text-3xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none p-5;
+    }
+
+    button {
+        @apply ml-2 inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 m-2 text-sm;
+    }
+
+    #button-submit {
+        @apply ml-2 inline-flex h-10 items-center justify-center rounded-md bg-primary3 px-6 m-2 text-sm text-white;
+    } 
+
+    /* TODO : INPUT BOX 예쁘게 만들기 */
+    input {
+        @apply h-10 items-center justify-center rounded-md bg-gray text-sm font-medium text-black px-6 m-2;
+    }
+    #grid-mypage {
+        @apply grid grid-cols-2 gap-4 ;
+    }
+
+    #grid-item-mypage {
+        @apply bg-gray rounded-lg w-max;
+    }
+    
+}

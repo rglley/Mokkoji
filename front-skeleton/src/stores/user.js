@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', () => {
   // 더미데이터
   let eventRecord = ref({
     eventTotalCnt: 5,
+    eventTotalMinute: 150,
     eventPplCnt: 100,
     eventMsgCnt: 200
   })
