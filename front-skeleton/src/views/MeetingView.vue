@@ -10,9 +10,10 @@
       </div>
 
       <!-- 참여자 목록, 채팅방-->
-      <div v-if="isList || isChat" class="pl-2 w-1/4">
-        <div v-if="isList" class="h-1/2 bg-purple-300 rounded-xl">참여자 목록</div>
-        <div v-if="isChat" class="h-1/2 bg-purple-300 rounded-xl">채팅방</div>
+      <div v-if="isList || isChat" class="pl-2 w-1/4 flex flex-col">
+        <div v-if="isList" class="basis-full bg-purple-300 rounded-xl">참여자 목록</div>
+        <div v-if="isList && isChat" class="mb-2"></div>
+        <div v-if="isChat" class="basis-full bg-purple-300 rounded-xl">채팅방</div>
       </div>
     </section>
     <!-- 기능 버튼 -->
@@ -110,6 +111,10 @@ let exitMeeting = () => {
 }
 
 #button {
+  margin-bottom: 7px;
+  background-color: #c8b6ff;
+  width: 35px;
+  height: 35px;
   border-radius: 100%;
 }
 </style>
