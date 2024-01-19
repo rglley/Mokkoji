@@ -1,8 +1,8 @@
 <template>
   <main class="mx-28 h-full">
     <!-- 회의 화면 -->
-    <section class="pt-4 h-4/5 flex flex-row">
-      <div class="w-full">
+    <section class="pt-4 h-4/5 flex flex-row justify-center">
+      <div class="w-4/5">
         <!-- 메인 회의 -->
         <MainMeeting v-if="isMain" />
         <!-- 소그룹 회의 -->
@@ -11,56 +11,59 @@
 
       <!-- 참여자 목록, 채팅방-->
       <div v-if="isList || isChat" class="pl-2 w-1/4 flex flex-col">
-        <div v-if="isList" class="basis-full bg-purple-300 rounded-xl">참여자 목록</div>
+        <div v-if="isList" class="basis-full bg-purple-200 rounded-xl">참여자 목록</div>
         <div v-if="isList && isChat" class="mb-2"></div>
-        <div v-if="isChat" class="basis-full bg-purple-300 rounded-xl">채팅방</div>
+        <div v-if="isChat" class="basis-full bg-purple-200 rounded-xl">채팅방</div>
       </div>
     </section>
     <!-- 기능 버튼 -->
-    <section class="pt-10 h-1/5">
+    <section class="pt-10">
       <div class="flex">
-        <div class="basis-1/6 flex flex-wrap">
-          아이콘
-          <!-- <button><img src="@/assets/icons/meetingdetail.svg" alt="회의 상세 정보" /></button> -->
-          <button class="h-10 bg-gray-500 text-white rounded-xl ml-2">화면 배치</button>
+        <div class="basis-2/12 flex flex-wrap">
+          <button>아이콘</button>
+          <button class="h-10 w-16 ml-2 bg-gray-400 text-white text-xs rounded-xl">
+            화면 배치
+          </button>
         </div>
-        <div class="basis-4/6 flex flex-wrap justify-center space-x-10">
+        <div class="basis-8/12 flex flex-wrap justify-center space-x-10">
           <div id="button-container" class="flex flex-col items-center">
-            <button id="button"></button>
+            <button id="button" class="bg-purple-100"></button>
             <span>마이크 ON</span>
           </div>
           <div id="button-container">
-            <button id="button"></button>
+            <button id="button" class="bg-purple-100"></button>
             <span>카메라</span>
           </div>
           <div id="button-container" v-if="isMain">
-            <button id="button" @click="changeMeetingType"></button>
+            <button id="button" class="bg-pink-100" @click="changeMeetingType"></button>
             <span>소그룹</span>
           </div>
           <div id="button-container">
-            <button id="button"></button>
+            <button id="button" class="bg-pink-100"></button>
             <span>편지쓰기</span>
           </div>
           <div id="button-container">
-            <button id="button"></button>
+            <button id="button" class="bg-pink-100"></button>
             <span>선물하기</span>
           </div>
           <div id="button-container">
-            <button id="button"></button>
+            <button id="button" class="bg-pink-100"></button>
             <span>사진찍기</span>
           </div>
         </div>
-        <div class="ml-2 basis-2/6 flex flex-row flex-wrap space-x-4 justify-end">
+        <div class="ml-2 basis-3/12 flex flex-row flex-wrap space-x-2 justify-end">
           <div id="button-container">
-            <button id="button" @click="changeListStatus"></button>
+            <button id="button" class="bg-purple-100" @click="changeListStatus"></button>
             <span>참여자 목록</span>
           </div>
           <div id="button-container">
-            <button id="button" @click="changeChatStatus"></button>
+            <button id="button" class="bg-purple-100" @click="changeChatStatus"></button>
             <span>채팅</span>
           </div>
           <div>
-            <button class="bg-red-500 rounded-3xl" @click="exitMeeting">나가기</button>
+            <button class="w-20 h-10 bg-red-500 text-white rounded-3xl" @click="exitMeeting">
+              나가기
+            </button>
           </div>
         </div>
       </div>
@@ -112,9 +115,28 @@ let exitMeeting = () => {
 
 #button {
   margin-bottom: 7px;
-  background-color: #c8b6ff;
   width: 35px;
   height: 35px;
   border-radius: 100%;
 }
+
+::-webkit-scrollbar {
+  background: #f9f1ff;
+  width: 10px;
+  height: 10px;
+}
+
+span {
+  color: #888888;
+  font-size: 10px;
+}
+
+/* 스크롤바 막대 */
+::-webkit-scrollbar-thumb {
+  background: #e7c6ff; /* 스크롤바 막대 색상 */
+  border-radius: 12px 12px 12px 12px;
+}
+
+/* ::-webkit-scrollbar-button */
+/* ::-webkit-resizer */
 </style>
