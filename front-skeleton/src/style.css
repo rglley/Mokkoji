@@ -41,7 +41,4 @@ body {
   p {
     text-align: center;
   }
-  button {
-    @apply inline-flex h-12 items-center justify-center bg-blue-500 px-6 text-sm font-medium text-white;
-  }
 }
