@@ -1,10 +1,10 @@
 <template>
   <section class="w-full h-full flex flex-col">
-    <div class="mb-2 pb-2 basis-2/6 gap-3 flex whitespace-nowrap overflow-x-scroll overflow-hidden">
+    <div class="mb-2 pb-2 basis-2/6 flex whitespace-nowrap overflow-x-scroll overflow-hidden gap-2">
       <div
         v-for="participant in participants"
         :key="participant"
-        class="basis-1/4 bg-purple-200 rounded-xl flex-none"
+        class="basis-1/4 bg-purple-200 rounded-xl flex-none p-3"
       >
         {{ participant }}
       </div>
