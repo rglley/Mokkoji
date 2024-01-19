@@ -25,6 +25,7 @@ spring:
     redis:
       host: localhost
       port: 6379
+#      url:
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
