@@ -1,8 +1,7 @@
 <template>
   <section class="w-full py-12 lg:py-12">
-    
     <main class="flex-1">
-      <section class="w-full px-4 py-6 sm:py-12 md:py-24 lg:py-32 xl:py-48 ">
+      <section class="w-full px-4 py-6 sm:py-12 md:py-24 lg:py-32 xl:py-48">
         <div class="container px-4 md:px-6">
           <div class="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
             <div class="flex flex-col justify-center space-y-4">
@@ -20,7 +19,7 @@
               </div>
               <div class="flex flex-col gap-2 min-[400px] flex-row">
                 <router-link
-                  to="#"
+                  to="/meeting"
                   id="conferenceJoin"
                   class="inline-flex h-10 items-center rounded-md bg-gray-900 px-8 text-sm font-medium text-white text-center transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
                 >
@@ -130,5 +129,4 @@ let submitConferenceId = () => {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

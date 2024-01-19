@@ -1,17 +1,14 @@
 <template>
-  <div>
+  <div class="h-full">
     <header class="flex items-center justify-between px-4 lg:px-6 h-30">
-      <TheHeader />
+      <!-- <TheHeader /> -->
     </header>
-    <Router-view/>
+    <Router-view />
   </div>
 </template>
 
 <script setup>
-import TheHeader from './components/common/TheHeader.vue';
-
+import TheHeader from './components/common/TheHeader.vue'
 </script>
 
-<style scoped>
-
-</style>
+<style></style>
