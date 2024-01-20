@@ -25,7 +25,15 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+  #application-oauth 프로필 등록
+  profiles:
+    include: oauth
 #      url:
+
+
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
+
+
