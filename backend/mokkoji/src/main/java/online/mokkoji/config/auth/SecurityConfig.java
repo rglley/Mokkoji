@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 //permitAll 회의 참여하기 추가 필요
-                                .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
+                                .requestMatchers("/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
                                 .requestMatchers("/users").hasRole("USER")
                                 //.requestMatchers("/admin").hasRole("ADMIN")
                                 //.anyRequest().authenticated() authenticated : 로그인된
