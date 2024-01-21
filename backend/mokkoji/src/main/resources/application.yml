@@ -1,11 +1,11 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/   #경로 추기
+    url: jdbc:h2:tcp://localhost/~/test   #경로 추기
     username: sa
     password:
     driver-class-name: org.h2.Driver
 
-
+  jpa:
     hibernate:
       ddl-auto: create
     properties:
@@ -14,6 +14,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
+
   data:
     web:
       pageable:
@@ -21,10 +22,11 @@ spring:
         max-page-size: 2000
         one-indexed-parameters: true #인덱스가 1인 파라미터부터 시작. 근데 이건 페이징이 안됨
 
-    #redis
+    # redis
     redis:
       host: localhost
       port: 6379
+
 #      url:
 logging.level:
   org.hibernate.SQL: debug
