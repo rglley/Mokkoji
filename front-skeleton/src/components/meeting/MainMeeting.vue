@@ -1,15 +1,15 @@
 <template>
-  <section class="h-full flex flex-col">
-    <div class="pb-2 basis-1/4 flex flex-row whitespace-nowrap overflow-x-scroll overflow-hidden">
+  <section class="w-full h-full flex flex-col">
+    <div class="mb-2 pb-2 basis-2/6 flex whitespace-nowrap overflow-x-scroll overflow-hidden gap-2">
       <div
         v-for="participant in participants"
         :key="participant"
-        class="flex-none basis-1/4 bg-purple-300 rounded-xl space-x-3"
+        class="basis-1/4 bg-purple-200 rounded-xl flex-none p-3"
       >
         {{ participant }}
       </div>
     </div>
-    <div id="host" class="basis-3/4 bg-purple-300 rounded-xl"></div>
+    <div id="host" class="basis-4/5 bg-purple-200 rounded-xl"></div>
   </section>
   <!-- <OvVideo /> -->
 </template>

@@ -5,6 +5,7 @@ import MyPage from '@/components/mypage/MyPage.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import MainMeeting from '@/components/meeting/MainMeeting.vue'
 import GroupMeeting from '@/components/meeting/GroupMeeting.vue'
+import ResultPage from '@/views/ResultView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,6 +44,11 @@ const router = createRouter({
           component: GroupMeeting
         }
       ]
+    },
+    {
+      path: '/resultpage',
+      name: 'resultpage',
+      component: ResultPage
     }
   ]
 })
