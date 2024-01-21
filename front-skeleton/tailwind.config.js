@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require('tailwindcss/colors')
+
 export default {
   content: [
     "./index.html",
@@ -8,16 +11,19 @@ export default {
     container: {
       center: true,
     },
-    
-    colors: {
-      // primary : 보라색, 진한 순서대로
-      'primary': '#C8B6FF',
-      'primary2': '#E7C6FF',
-      'primary3': '#AB90FF',
-      'white' : '#FFFFFF',
-      'black' : '#000000',
-      'gray' : '#EFEFEF',
+
+    extend: {
+      colors: {
+        'primary': '#C8B6FF',
+        'primary2': '#E7C6FF',
+        'primary3': '#AB90FF',
+        'primary0': '#F9F6FF',
+        'white': '#FFFFFF',
+        'black': '#000000',
+        'gray': '#EFEFEF',
+      }
     }
+
   },
   plugins: [],
 
