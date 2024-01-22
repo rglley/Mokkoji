@@ -22,7 +22,7 @@ public class Rollingpaper extends BaseEntity {
     @Column(name = "rollingpaper_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
 

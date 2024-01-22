@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import online.mokkoji.db.entity.BaseEntity;
-import online.mokkoji.db.entity.Survey.Survey;
+import online.mokkoji.db.entity.Photo;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -55,10 +55,16 @@ public class Event extends BaseEntity {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    //결과 설문 List
+    //사진 리스트
     @OneToMany(mappedBy = "event")
-    private List<Survey> surveys = new ArrayList<>();
-
+    private List<Photo> photos = new ArrayList<>();
 
     //==생성자==//
+
+    public Event(User user, String sessionId, LocalDateTime startTime) {
+
+        this.user = user;
+        this.sessionId = sessionId;
+        this.startTime = startTime;
+    }
 }
