@@ -30,6 +30,10 @@ public class Event extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "session_id")
+    @Size(max = 100)
+    private String sessionId;
+
     @ColumnDefault("0")
     @Column(name = "participant_count", nullable = false)
     private int participantCount;
