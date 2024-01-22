@@ -1,8 +1,22 @@
 <!-- 사용자 비디오 -->
 <template>
-  <h2>사용자 비디오</h2>
+  <video ref="videoElement" autoplay />
 </template>
 
-<script setup></script>
+<script setup>
+import { defineProps, ref, onMounted } from 'vue'
 
-<style lang="scss" scoped></style>
+const props = defineProps({
+  streamManager: {
+    type: Object
+  }
+})
+
+const videoElement = ref(null)
+
+onMounted(() => {
+  if (videoElement.value && props.streamManager) {
+    props.streamManager.addVideoElement(videoElement.value)
+  }
+})
+</script>

@@ -24,7 +24,7 @@
             화면 배치
           </button>
         </div>
-        <div class="basis-8/12 flex flex-wrap justify-center space-x-10">
+        <div class="basis-11/12 flex flex-wrap justify-center space-x-10">
           <div id="button-container" class="flex flex-col items-center">
             <button id="button" class="bg-purple-100"></button>
             <span>마이크 ON</span>
@@ -50,7 +50,7 @@
             <span>사진찍기</span>
           </div>
         </div>
-        <div class="ml-2 basis-3/12 flex flex-row flex-wrap space-x-2 justify-end">
+        <div class="ml-2 basis-3/12 flex flex-row flex-wrap space-x-3 justify-end">
           <div id="button-container">
             <button id="button" class="bg-purple-100" @click="changeListStatus"></button>
             <span>참여자 목록</span>
@@ -72,6 +72,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import axios from 'axios'
 import MainMeeting from '@/components/meeting/MainMeeting.vue'
 import GroupMeeting from '@/components/meeting/GroupMeeting.vue'
 
@@ -119,13 +120,11 @@ let exitMeeting = () => {
   width: 35px;
   height: 35px;
   border-radius: 100%;
-  width: 35px;
-  height: 35px;
-  background-color: blueviolet;
 }
 
 span {
   font-size: 13px;
+  color: #888888;
 }
 
 ::-webkit-scrollbar {
@@ -134,17 +133,9 @@ span {
   height: 10px;
 }
 
-span {
-  color: #888888;
-  font-size: 10px;
-}
-
 /* 스크롤바 막대 */
 ::-webkit-scrollbar-thumb {
   background: #e7c6ff; /* 스크롤바 막대 색상 */
   border-radius: 12px 12px 12px 12px;
 }
-
-/* ::-webkit-scrollbar-button */
-/* ::-webkit-resizer */
 </style>
