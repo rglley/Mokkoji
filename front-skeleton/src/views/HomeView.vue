@@ -1,10 +1,11 @@
 <template>
   <section id="main-landing">
-    <main class="flex-1">
-      <section class="py-40 bg-[url('/src/assets/main_banner.png')]">
-        <div id="container mb-40">
-          <div class="space-y-5 text-center">
-            <h1 id="title-bold">모꼬지</h1>
+    <main>
+      <section class="pb-12 pt-32 bg-[url('/src/assets/main_banner2.png')] mb-10">
+        <div id="container">
+          <div class="text-center">
+            <h1 id="title-bold">‘모꼬지 (Mokkoji)’</h1>
+            <p id="title-sub-bold"> 놀이나 잔치로 여러 사람이 모이는  것</p>
             <br />
             <p id="p-main">
               화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를
@@ -14,10 +15,10 @@
               순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을
               제공합니다.
             </p>
-            <br />
+            <br>
             <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
             <div class="grid place-content-center">
-              <button id="button-submit" @click="generateMeeting">회의 생성하기</button>
+              <button id="button" @click="generateMeeting">회의 생성하기</button>
               <!-- TODO : submit 버튼 + invalid input 렌더링 -->
               <div class="grid place-content-center">
                 <div>
@@ -28,9 +29,9 @@
                     @keyup.enter="submitConferenceId"
                   />
                   <button @click="submitConferenceId" id="button-submit">Submit</button>
-                  <div v-if="showModal" tabindex="-1" class="fixed top-80 bg-primary right-0 left-0 z-50 justify-center items-center">
+                  <!-- <div v-if="showModal" tabindex="-1" class="fixed top-80 bg-primary right-0 left-0 z-50 justify-center items-center">
                     <p>qweqew</p>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
@@ -127,7 +128,7 @@
 
 <script setup>
 // TODO : 비회원 사용자 회의 시작 시 안내 모달 띄워주기
-import { ref, onMounted } from "vue";
+import { ref} from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -135,7 +136,6 @@ let conferenceIdInput = ref("");
 let ifInputError = ref(false);
 let isLogin = ref(false); // 나중에 store에서 받을 예정
 let showModal = ref(false);
-let proceedWithoutLogin = ref(false);
 
 let submitConferenceId = () => {
   console.log(conferenceIdInput.value);

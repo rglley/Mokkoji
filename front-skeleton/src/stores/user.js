@@ -15,13 +15,18 @@ export const useUserStore = defineStore('user', () => {
     id: "ssafy1234",
     nickname: "싸피",
     email: 'ssafy@ssafy.ssafy',
-    isAccountLinked : false,
+    isAccountLinked : true,
+  })
+
+  let userAccount = ref({
+    bank: 'KB',
+    accountNumber: '123-123-11111'
   })
 
   // 실제론 axios 요청으로 서버에서 가져옴
 
   return {
-    user,
+    user, userAccount,
     eventRecord,
   }
 })
