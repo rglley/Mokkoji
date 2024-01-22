@@ -4,7 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    font-family: 'SUITE', sans-serif;
+  font-family: 'SUITE', sans-serif;
+}
+
+/** pre , 텍스트에 사용된 여백과 줄바꿈이 모두 그대로 브라우저 화면에 나타납니다.*/
+pre {
+  font-family: 'SUITE', sans-serif;
 }
