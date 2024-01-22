@@ -28,12 +28,12 @@
 
 <script setup>
 import { computed } from 'vue'
-const props = defineProps(['recollection'])
-const description = props.recollection.description
+let props = defineProps(['recollection'])
+let description = props.recollection.description
 const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
 
-const imgNo = computed(() => {
-  const no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
+let imgNo = computed(() => {
+  let no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
   return no === 0 ? VITE_RECOLLECTION_FRAME_COUNT : no
 })
 </script>

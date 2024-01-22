@@ -50,29 +50,29 @@ import IconSandTimer from '@/icons/IconSandTimer.vue'
 import IconCheckMark from '@/icons/IconCheckMark.vue'
 
 const { VITE_MEMORY_IMG_COUNT } = import.meta.env
-const isRollingDone = true
-const isPhotoDone = false
+let isRollingDone = true
+let isPhotoDone = false
 
-const props = defineProps(['memory'])
+let props = defineProps(['memory'])
 
-const imgNo = computed(() => {
-  const no = props.memory.eventId % VITE_MEMORY_IMG_COUNT
+let imgNo = computed(() => {
+  let no = props.memory.eventId % VITE_MEMORY_IMG_COUNT
   return no === 0 ? VITE_MEMORY_IMG_COUNT : no
 })
 console.log(imgNo)
 
-const lastDayToEdit = computed(() => {
-  const eventDate = new Date(props.memory.eventDay) //편집 마감 기한 계산하기
+let lastDayToEdit = computed(() => {
+  let eventDate = new Date(props.memory.eventDay) //편집 마감 기한 계산하기
   let expireMonth = eventDate.getMonth() + 2 //0 - 11월
-  const expireDay = eventDate.getDate()
+  let expireDay = eventDate.getDate()
   let expireYear = eventDate.getYear() + 1900
   if (expireMonth === 13) {
     //13월 -> 다음년도 1월
     expireMonth = 1
     expireYear = expireYear + 1
   }
-  const currentDate = new Date()
-  const expireDate = new Date(expireYear, expireMonth - 1, expireDay)
+  let currentDate = new Date()
+  let expireDate = new Date(expireYear, expireMonth - 1, expireDay)
 
   console.log(expireDate)
 
