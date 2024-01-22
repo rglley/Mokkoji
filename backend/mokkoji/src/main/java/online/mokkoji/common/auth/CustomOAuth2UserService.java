@@ -53,6 +53,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = USER_REPOSITORY.findByEmail(attributes.getEmail())
+                //중복 확인 조건 추가
+                //auto_increment값과 비교
+                //프사 처리 추가 필요
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
