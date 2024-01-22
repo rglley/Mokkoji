@@ -1,15 +1,24 @@
-package online.mokkoji.entity;
+package online.mokkoji.db.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Hello {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    private String name;
+
+    public Hello(String name) {
+        this.name = name;
+    }
 }
