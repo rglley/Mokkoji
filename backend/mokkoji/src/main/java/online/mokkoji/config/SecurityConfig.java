@@ -1,10 +1,9 @@
-package online.mokkoji.config.auth;
+package online.mokkoji.config;
 
 import lombok.RequiredArgsConstructor;
-import online.mokkoji.db.entity.User;
+import online.mokkoji.common.auth.CustomOAuth2UserService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -27,7 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 //permitAll 회의 참여하기 추가 필요
-                                .requestMatchers("/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
+                                .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
                                 .requestMatchers("/users").hasRole("USER")
                                 //.requestMatchers("/admin").hasRole("ADMIN")
                                 //.anyRequest().authenticated() authenticated : 로그인된

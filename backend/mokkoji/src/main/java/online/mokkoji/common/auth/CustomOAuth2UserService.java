@@ -1,9 +1,7 @@
-package online.mokkoji.config.auth;
+package online.mokkoji.common.auth;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import online.mokkoji.config.auth.dto.OAuthAttributes;
-import online.mokkoji.config.auth.dto.SessionUser;
 import online.mokkoji.db.entity.User;
 import online.mokkoji.db.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,8 +19,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final UserRepository userRepository;
-    private final HttpSession httpSession;
+    private final UserRepository USER_REPOSITORY;
+    private final HttpSession HTTP_SESSION;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -43,7 +41,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         
         //SessionUser : 세션에 사용자 정보를 저장하기 위한 Dto 클래스
         User user = saveOrUpdate(attributes);
-        httpSession.setAttribute("user", new SessionUser(user));
+        HTTP_SESSION.setAttribute("user", new SessionUser(user));
         
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
@@ -54,10 +52,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
     
     private User saveOrUpdate(OAuthAttributes attributes) {
-        User user = userRepository.findByEmail(attributes.getEmail())
+        User user = USER_REPOSITORY.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
-        return userRepository.save(user);
+
+        return USER_REPOSITORY.save(user);
     }
 }

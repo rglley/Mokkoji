@@ -1,4 +1,4 @@
-package online.mokkoji.config.auth.dto;
+package online.mokkoji.common.auth;
 
 import lombok.Getter;
 import online.mokkoji.db.entity.User;

@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@NoArgsConstructor  //기본 생성자 생성
+@NoArgsConstructor
 @Entity
 public class User extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private String name;
@@ -27,7 +27,7 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private Role role;
 
-    @Builder    //빌더 패턴 자동 생성
+    @Builder
     public User(String name, String email, String picture, Role role) {
         this.name = name;
         this.email = email;
