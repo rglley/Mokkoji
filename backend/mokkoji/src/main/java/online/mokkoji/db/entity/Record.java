@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Record extends BaseEntity{
+@ToString(of = {"id", "eventCount", "totalTime", "totalParticipant", "totalMessage"})
+public class Record extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -31,5 +33,6 @@ public class Record extends BaseEntity{
     @Column(name = "total_message", nullable = false)
     private int totalMessage;
 
+    //==생성자==//
 
 }

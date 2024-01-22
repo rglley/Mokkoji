@@ -5,11 +5,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account extends BaseEntity{
+@ToString(of = {"id", "bank", "accountNumber"})
+public class Account extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -29,6 +31,7 @@ public class Account extends BaseEntity{
     @Size(max = 20)
     private String accountNumber;
 
+    //==생성자==//
 
 
 }

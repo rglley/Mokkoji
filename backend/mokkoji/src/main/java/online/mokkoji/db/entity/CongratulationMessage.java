@@ -2,11 +2,16 @@ package online.mokkoji.db.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
-public class CongratulationMessage {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "writer", "text", "voice", "video"})
+public class CongratulationMessage extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -26,4 +31,6 @@ public class CongratulationMessage {
     private String voice;
 
     private String video;
+
+    //==생성자==//
 }

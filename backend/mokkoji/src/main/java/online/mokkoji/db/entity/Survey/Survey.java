@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import online.mokkoji.db.entity.BaseEntity;
 import online.mokkoji.db.entity.Event.Event;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "level", "descrition"})
 public class Survey extends BaseEntity {
 
     @Id
@@ -25,5 +27,7 @@ public class Survey extends BaseEntity {
     private SurveyLevel level;
 
     private String descrition;
+
+    //==생성자==//
 }
 

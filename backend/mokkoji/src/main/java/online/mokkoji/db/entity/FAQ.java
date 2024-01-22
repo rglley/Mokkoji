@@ -5,10 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FAQ extends BaseEntity {
     @Id
     @GeneratedValue
@@ -20,4 +23,11 @@ public class FAQ extends BaseEntity {
 
     @Size(max = 1000)
     private String answer;
+
+    //==생성자==//
+
+    public FAQ(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
 }

@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "thumbnail", "path"})
 public class Photo extends BaseEntity {
 
     @Id
@@ -25,5 +27,7 @@ public class Photo extends BaseEntity {
 
     //S3 업로드 경로
     private String path;
+    
+    //==생성자==//
 
 }

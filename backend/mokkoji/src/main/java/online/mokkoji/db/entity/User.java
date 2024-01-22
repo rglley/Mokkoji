@@ -43,4 +43,15 @@ public class User extends BaseEntity {
     //활동 기록
     @OneToMany(mappedBy = "user")
     private List<Record> records = new ArrayList<>();
+
+
+    //==생성자==//
+    public User(String email, String name, String image, Account account) {
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        if (account != null) {
+            this.account = account;
+        }
+    }
 }
