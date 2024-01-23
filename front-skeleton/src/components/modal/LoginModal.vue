@@ -10,11 +10,7 @@
     </a>
   </div>
 </template>
-  
-<script setup>
 
-</script>
-  
-  <style scoped>
-</style>
-  
+<script setup></script>
+
+<style></style>

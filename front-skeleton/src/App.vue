@@ -1,16 +1,17 @@
 <template>
-  <main>
+  <main class="w-full h-full">
     <header class="flex min-w-max">
-      <TheHeader />
+      <!-- <TheHeader /> -->
     </header>
 
     <Router-view />
-    <TheFooter />
+    <!-- <TheFooter /> -->
   </main>
 </template>
 
 <script setup>
 import TheHeader from './components/common/TheHeader.vue'
+import TheFooter from './components/common/TheFooter.vue'
 </script>
 
 <style></style>

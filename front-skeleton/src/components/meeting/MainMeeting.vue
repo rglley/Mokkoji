@@ -1,31 +1,22 @@
 <template>
   <section id="main-container" class="w-full h-full flex flex-col">
-    <div class="mb-2 pb-2 basis-2/6 flex whitespace-nowrap overflow-x-scroll overflow-hidden gap-2">
+    <div class="mb-2 pb-2 flex whitespace-nowrap overflow-x-scroll overflow-hidden gap-2">
       <!-- 참가자 화면 -->
-      <div id="join-dialog" class="flex">
-        <h1>Join a video session</h1>
-        <div class="form-group">
-          <p>
-            <label>Participant</label>
-            <input v-model="state.myUserName" class="border-2" type="text" required />
-          </p>
-        </div>
-      </div>
-      <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
-      <div id="sub-video">
+      <div id="sub-video" class="basis-1/4 flex space-x-3 rounded-xl">
         <user-video
           v-for="sub in state.subscribers"
           :key="sub.stream.connection.connectionId"
           :stream-manager="sub"
           @click.native="updateMainVideoStreamManager(sub)"
-          class="basis-1/4 rounded-xl flex-none p-3"
+          class="rounded-xl flex-none"
         />
       </div>
     </div>
     <!-- 메인 화면 -->
-    <div id="main-video" class="flex justify-center">
+    <div id="main-video" class="flex justify-center rounded-xl">
       <user-video :stream-manager="state.mainStreamManager" class="rounded-xl" />
     </div>
+    <button @click="joinSession">join!</button>
   </section>
 </template>
 
@@ -48,8 +39,8 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: '',
-  myUserName: undefined,
+  mySessionId: 'SessionA',
+  myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   participantId: undefined
 })
@@ -62,14 +53,14 @@ const joinSession = () => {
   // 2) 세션 시작
   state.session = state.OV.initSession()
 
-  console.log('----------------------')
+  console.log(state.myUserName)
 
   // 3) 세션에서 이벤트 발생 시 동작하는 행동 구체화
 
   // 새로운 참가자 입장
   state.session.on('streamCreated', ({ stream }) => {
     console.log('새로운 참가자 입장')
-    const subscriber = state.session.subscribe(stream)
+    const subscriber = state.session.subscribe(stream, undefined)
     state.subscribers.push(subscriber)
     console.log(subscriber)
   })
@@ -101,10 +92,11 @@ const joinSession = () => {
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
+          allowTranscoding: true,
           resolution: '1200x480', // The resolution of your video
           frameRate: 30, // The frame rate of your video
           insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-          mirror: false // Whether to mirror your local video or not
+          mirror: false
         })
 
         // Set the main video in the page to display our webcam and store our Publisher
@@ -113,15 +105,10 @@ const joinSession = () => {
 
         // --- 6) Publish your stream ---
 
+        console.log(state.publisher)
+
         state.session.publish(publisher)
       })
-
-      // Set the main video in the page to display our webcam and store our Publisher
-      state.mainStreamManager = state.publisher
-
-      // --- 6) Publish your stream ---
-
-      state.session.publish(state.publisher)
     })
     .catch((error) => {
       console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
@@ -171,6 +158,7 @@ const createSession = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
+
   return response.data // sessionId
 }
 
@@ -182,6 +170,7 @@ const createToken = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
+  console.log(response.data)
   return response.data // The token
 }
 

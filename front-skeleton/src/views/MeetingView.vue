@@ -1,5 +1,5 @@
 <template>
-  <main class="mx-28 h-full">
+  <main class="mx-24 h-full">
     <!-- 회의 화면 -->
     <section class="pt-4 h-4/5 flex flex-row justify-center">
       <div class="w-4/5">
@@ -9,7 +9,7 @@
         <GroupMeeting v-else />
       </div>
       <!-- 참여자 목록, 채팅방-->
-      <div v-if="isList || isChat" class="pl-2 w-1/4 flex flex-col">
+      <div v-if="isList || isChat" class="pl-2 w-1/5 flex flex-col">
         <div v-if="isList" class="basis-full bg-purple-200 rounded-xl">참여자 목록</div>
         <div v-if="isList && isChat" class="mb-2"></div>
         <div v-if="isChat" class="basis-full bg-purple-200 rounded-xl">채팅방</div>
@@ -38,7 +38,7 @@
             <span>소그룹</span>
           </div>
           <div id="button-container">
-            <button id="button" class="bg-pink-100"></button>
+            <button id="button" class="bg-pink-100" @click="toggleLetterModal"></button>
             <span>편지쓰기</span>
           </div>
           <div id="button-container">
@@ -67,6 +67,7 @@
         </div>
       </div>
     </section>
+    <LetterModal v-if="showLetterModal" />
   </main>
 </template>
 
@@ -75,6 +76,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import MainMeeting from '@/components/meeting/MainMeeting.vue'
 import GroupMeeting from '@/components/meeting/GroupMeeting.vue'
+import LetterModal from '@/components/modal/LetterModal.vue'
 
 // 메인 회의
 let isMain = ref(true)
@@ -82,19 +84,29 @@ let isMain = ref(true)
 let isList = ref(false)
 // 채팅
 let isChat = ref(false)
+// 편지쓰기
+let showLetterModal = ref(false)
 
 // 메인 회의 / 소그룹 이동
 let changeMeetingType = () => {
   isMain.value = !isMain.value
 }
+
 // 채팅 on / off
 let changeChatStatus = () => {
   isChat.value = !isChat.value
 }
+
 // 참여자 목록 on / off
 let changeListStatus = () => {
   isList.value = !isList.value
 }
+
+// 편지 쓰기 모달 생성
+let toggleLetterModal = () => {
+  showLetterModal.value = !showLetterModal.value
+}
+
 // 회의 나가기
 let exitMeeting = () => {
   // 메인 화면에서 나가기

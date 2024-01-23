@@ -55,8 +55,8 @@
 import { ref, onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 
-import ModalView from './ModalView.vue'
-import LoginModal from './LoginModal.vue'
+import ModalView from '@/views/ModalView.vue'
+import LoginModal from '@/components/modal/LoginModal.vue'
 
 onMounted(() => {
   initFlowbite()
