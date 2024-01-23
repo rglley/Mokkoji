@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/backend.iml" filepath="$PROJECT_DIR$/.idea/backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mokkoji.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mokkoji.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mokkoji.test.iml" filepath="$PROJECT_DIR$/.idea/modules/mokkoji.test.iml" />
     </modules>
   </component>

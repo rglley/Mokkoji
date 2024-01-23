@@ -1,4 +1,5 @@
 package online.mokkoji.common.auth;
 
-public class OAuthAttributes {
+public class CustomOAuth2User {
+
 }
