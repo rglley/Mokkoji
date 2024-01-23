@@ -3,8 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
 import MeetingView from '@/views/MeetingView.vue'
-import MainMeeting from '@/components/meeting/MainMeeting.vue'
-import GroupMeeting from '@/components/meeting/GroupMeeting.vue'
+import Meeting from '@/components/meeting/Meeting.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
@@ -46,19 +45,7 @@ const router = createRouter({
     {
       path: '/meeting',
       name: 'meeting',
-      component: MeetingView,
-      children: [
-        {
-          path: '/main',
-          name: MainMeeting,
-          component: MainMeeting
-        },
-        {
-          path: '/group',
-          name: GroupMeeting,
-          component: GroupMeeting
-        }
-      ]
+      component: MeetingView
     },
     {
       path: '/resultpage',
