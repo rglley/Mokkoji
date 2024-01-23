@@ -1,7 +1,9 @@
 package online.mokkoji.api.controller;
 
+import lombok.RequiredArgsConstructor;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.api.response.SessionObjectResDto;
+import online.mokkoji.api.service.EventService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequiredArgsConstructor
 public class OpenviduController {
+
+    private final EventService eventService;
 
 
     //Session 생성 메서드

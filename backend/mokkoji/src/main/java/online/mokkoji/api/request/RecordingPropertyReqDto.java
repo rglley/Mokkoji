@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecordingPropertyRequestDto {
+public class RecordingPropertyReqDto {
 
     private String name;
     private Boolean hasAudio;

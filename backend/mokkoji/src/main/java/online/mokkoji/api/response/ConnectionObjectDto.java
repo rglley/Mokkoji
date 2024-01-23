@@ -7,5 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConnectionResDto {
+public class ConnectionObjectDto {
+
+    private Number id;
+
 }

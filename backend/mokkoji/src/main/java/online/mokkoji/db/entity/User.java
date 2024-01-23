@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users") //h2만 user 사용 불가능
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "email", "name", "image"})
-public class User extends BaseEntity {
+public class User/* extends BaseEntity*/ {
 
     @Id
     @GeneratedValue
@@ -32,9 +33,6 @@ public class User extends BaseEntity {
 
     private String image;
 
-    //계좌
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Account account;
 
     //행사 리스트
     @OneToMany(mappedBy = "user")
@@ -46,12 +44,9 @@ public class User extends BaseEntity {
 
 
     //==생성자==//
-    public User(String email, String name, String image, Account account) {
+    public User(String email, String name, String image) {
         this.email = email;
         this.name = name;
         this.image = image;
-        if (account != null) {
-            this.account = account;
-        }
     }
 }

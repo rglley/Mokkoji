@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionRequestDto {
+public class SessionReqDto {
     private Boolean allowTranscoding;
-    private RecordingPropertyRequestDto defaultRecordingProperties;
+    private RecordingPropertyReqDto defaultRecordingProperties;
 }
