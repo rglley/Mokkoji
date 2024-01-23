@@ -1,4 +1,24 @@
 package online.mokkoji.common.auth.userinfo;
 
-public class GoogleOAuth2UserInfo {
+import java.util.Map;
+
+public class GoogleOAuth2UserInfo extends OAuth2Userinfo {
+    public GoogleOAuth2UserInfo(Map<String, Object> attributes) {
+        super(attributes);
+    }
+
+    @Override
+    public String getId() {
+        return (String) attributes.get("sub");
+    }
+
+    @Override
+    public String getName() {
+        return (String) attributes.get("name");
+    }
+
+    @Override
+    public String getImageUrl() {
+        return (String) attributes.get("picture");
+    }
 }

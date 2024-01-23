@@ -28,7 +28,7 @@ spring:
 
   #application-oauth 프로필 등록
   profiles:
-    include: oauth
+    include: oauth, jwt
 #      url:
 
   #thymeleaf

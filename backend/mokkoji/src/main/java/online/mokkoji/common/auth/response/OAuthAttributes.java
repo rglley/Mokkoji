@@ -1,4 +1,4 @@
-package online.mokkoji.common.auth;
+package online.mokkoji.common.auth.response;
 
 import lombok.Builder;
 import lombok.Getter;
