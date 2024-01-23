@@ -7,7 +7,7 @@
       class="p-8 w-1/3 h-fit bg-yellow-100 flex flex-col justify-center rounded-xl"
     >
       <div class="flex pb-6">
-        <h1 class="text-black text-2xl font-bold">롤링페이퍼 123123작성</h1>
+        <h1 class="text-black text-2xl font-bold">롤링페이퍼 작성</h1>
       </div>
       <form action="" method="post" id="letterForm" class="flex flex-col justify-center">
         <div class="p-6 flex flex-col border-2 rounded-xl">
@@ -43,9 +43,12 @@
           <span
             v-for="(fileName, index) in fileNames"
             :key="fileName"
-            class="text-gray-800 w-40 mr-2 p-1 border-2 rounded-lg flex items-center overflow-hidden"
+            class="text-gray-800 w-36 mr-2 p-1 border-2 rounded-lg flex items-center"
           >
-            <img src="@/assets/clip.png" alt="파일 클립 이미지" class="mr-1 w-4" /> {{ fileName }}
+            <img src="@/assets/clip.png" alt="파일 클립 이미지" class="mr-1 w-4" />
+            <span class="basis-3/4 whitespace-nowrap overflow-hidden">
+              {{ fileName }}
+            </span>
             <img
               src="@/assets/delete.png"
               alt="삭제 버튼 이미지"
