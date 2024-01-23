@@ -37,7 +37,6 @@ let rollingClick = () => {
   if (isRollingEdit.value) {
     isPhotoEdit.value = false
   }
-  console.log(`롤링페이퍼: ${isRollingEdit.value} 포토 모자이크: ${isPhotoEdit.value}`)
 }
 
 let photoClick = () => {
@@ -45,7 +44,6 @@ let photoClick = () => {
   if (isPhotoEdit.value) {
     isRollingEdit.value = false
   }
-  console.log(`롤링페이퍼: ${isRollingEdit.value} 포토 모자이크: ${isPhotoEdit.value}`)
 }
 </script>
 
