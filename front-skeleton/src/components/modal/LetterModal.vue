@@ -7,7 +7,7 @@
       class="p-8 w-1/3 h-fit bg-yellow-100 flex flex-col justify-center rounded-xl"
     >
       <div class="flex pb-6">
-        <h1 class="text-black text-2xl font-bold">롤링페이퍼 작성</h1>
+        <h1 class="text-black text-2xl font-bold">롤링페이퍼 123123작성</h1>
       </div>
       <form action="" method="post" id="letterForm" class="flex flex-col justify-center">
         <div class="p-6 flex flex-col border-2 rounded-xl">
