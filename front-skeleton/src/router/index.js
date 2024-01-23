@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
 import ResultPage from '@/views/ResultView.vue'
+import EditPage from '@/views/EditView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/resultpage',
       name: 'resultpage',
       component: ResultPage
+    },
+    {
+      path: '/editpage',
+      name: 'editpage',
+      component: EditPage
     }
   ]
 })

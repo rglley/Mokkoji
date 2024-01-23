@@ -4,8 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+min height, height 속성값이 자신의 값보다 작아지는 것을 방지, 화면 찌그러짐 방지
+*/
 body {
   font-family: 'SUITE', sans-serif;
+  min-width: 1280px;
+  min-height: 600px;
 }
 
 /** pre , 텍스트에 사용된 여백과 줄바꿈이 모두 그대로 브라우저 화면에 나타납니다.*/

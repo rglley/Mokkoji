@@ -10,13 +10,15 @@
         width="200"
       />
       <div class="absolute bottom-4 right-10 left-14">
-        <img
-          src="@/assets/mokkoji_logo_with_bg.png"
-          alt="unregistered"
-          height="170"
-          width="170"
-          class="z-10"
-        />
+        <a href="https://www.w3schools.com">
+          <img
+            src="@/assets/mokkoji_logo_with_bg.png"
+            alt="unregistered"
+            height="170"
+            width="170"
+            class="z-10"
+          />
+        </a>
       </div>
     </div>
     <div class="mt-2 text-center">
