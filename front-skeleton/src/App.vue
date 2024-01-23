@@ -1,10 +1,12 @@
 <template>
-  <div class="h-full">
-    <header class="flex items-center justify-between px-4 lg:px-6 h-30">
-      <!-- <TheHeader /> -->
+  <main>
+    <header class="flex min-w-max">
+      <TheHeader />
     </header>
+
     <Router-view />
-  </div>
+    <TheFooter />
+  </main>
 </template>
 
 <script setup>
