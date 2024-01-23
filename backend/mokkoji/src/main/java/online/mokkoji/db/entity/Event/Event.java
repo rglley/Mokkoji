@@ -45,7 +45,10 @@ public class Event/* extends BaseEntity */ {
 //    @ColumnDefault("DEFAULT")
     private EventType type;
 
-    @Size(max = 100)
+    @Size(max = 15)
+    private String title;
+
+    @Size(max = 40)
     private String content;
 
     @Column(name = "start_time")
