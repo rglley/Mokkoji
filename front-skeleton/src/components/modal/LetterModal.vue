@@ -71,9 +71,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import IconVoice from '@/icons/IconVoice.vue'
-import IconVideo from '@/icons/IconVideo.vue'
-import IconRemove from '@/icons/IconRemove.vue'
+import IconVoice from '@/icons/meeting/IconVoice.vue'
+import IconVideo from '@/icons/meeting/IconVideo.vue'
+import IconRemove from '@/icons/meeting/IconRemove.vue'
 
 let fileNames = ref([])
 
