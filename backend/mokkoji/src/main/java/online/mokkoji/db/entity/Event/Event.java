@@ -37,7 +37,7 @@ public class Event/* extends BaseEntity */ {
     @Column(name = "participant_count")
     private int participantCount;
 
-    @Column(name = "event_status", insertable = false, updatable = false)
+    @Column(name = "event_status")
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.ACTIVE;
 
@@ -48,7 +48,7 @@ public class Event/* extends BaseEntity */ {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "event_status")
+    @Column(name = "result_status")
     private ResultStatus resultStatus = ResultStatus.MEMORY;
 
     @Column(name = "start_time")
