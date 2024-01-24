@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-@ToString(of = {"id", "participantCount", "status", "type", "content", "startTime", "endTime"})
+@ToString(of = {"id", "participantCount", "eventStatus", "resultStatus", "content", "startTime", "endTime"})
 public class Event/* extends BaseEntity */ {
 
     @Id
@@ -37,9 +37,9 @@ public class Event/* extends BaseEntity */ {
     @Column(name = "participant_count")
     private int participantCount;
 
-    @Column(name = "event_status")
+    @Column(name = "event_status", insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
-    private EventStatus eventStatu
+    private EventStatus eventStatus = EventStatus.ACTIVE;
 
     @Size(max = 15)
     private String title;
@@ -49,8 +49,7 @@ public class Event/* extends BaseEntity */ {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "event_status")
-//    @ColumnDefault("MEMORY")
-    private ResultStatus resultStatus;
+    private ResultStatus resultStatus = ResultStatus.MEMORY;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -59,11 +58,28 @@ public class Event/* extends BaseEntity */ {
     private LocalDateTime endTime;
 
 
-    //==생성자==//
-
-    public Event(User user, String sessionId, LocalDateTime startTime) {
+    //==연관관계 메서드==//
+    public void setUser(User user) {
         this.user = user;
+        user.getEvents().add(this);
+    }
+
+    //==생성자==//
+    public Event(User user, String sessionId, LocalDateTime startTime) {
+        this.setUser(user);
         this.sessionId = sessionId;
         this.startTime = startTime;
     }
+
+
+    //==생성 메서드==//
+//    public Event setEvent(User user, String sessionId, LocalDateTime startTime) {
+//        Event event = new Event();
+//        event.setUser(user);
+//        this.sessionId = sessionId;
+//        this.startTime = startTime;
+//        return event;
+//    }
+
+
 }
