@@ -38,9 +38,8 @@ public class Event/* extends BaseEntity */ {
     @Column(name = "participant_count")
     private int participantCount;
 
-    @Column(name = "event_status")
     @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus = EventStatus.ACTIVE;
+    private EventStatus status = EventStatus.ACTIVE;
 
 
     @Column(name = "start_time")
@@ -64,15 +63,22 @@ public class Event/* extends BaseEntity */ {
         Result result = new Result(this);
     }
 
+    //==설정 메서드==//
 
-    //==생성 메서드==//
-//    public Event setEvent(User user, String sessionId, LocalDateTime startTime) {
-//        Event event = new Event();
-//        event.setUser(user);
-//        this.sessionId = sessionId;
-//        this.startTime = startTime;
-//        return event;
-//    }
+
+    //==비즈니스 로직==//
+
+
+    // session CLOSED로 변경
+    public void closeSession() {
+
+        // 이미 끝나있는 세션이라면
+        if (this.getStatus() == EventStatus.CLOSED) {
+            throw new IllegalStateException("이미 끝난 세션입니다.");
+        }
+
+        this.status = EventStatus.CLOSED;
+    }
 
 
 }

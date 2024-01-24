@@ -34,8 +34,7 @@ public class Result {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "result_status")
-    private ResultStatus resultStatus = ResultStatus.MEMORY;
+    private ResultStatus status = ResultStatus.MEMORY;
 
     // 롤링페이퍼 리스트 -> 엔티티 생겨야 활성화 가능
 //    @OneToMany(mappedBy = "result")
