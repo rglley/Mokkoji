@@ -3,7 +3,6 @@ import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
 import MeetingView from '@/views/MeetingView.vue'
-import Meeting from '@/components/meeting/Meeting.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
@@ -43,9 +42,10 @@ const router = createRouter({
       ]
     },
     {
-      path: '/meeting',
+      path: '/meeting/:accessType',
       name: 'meeting',
-      component: MeetingView
+      component: MeetingView,
+      props: true
     },
     {
       path: '/resultpage',

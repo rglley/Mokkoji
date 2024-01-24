@@ -1,5 +1,6 @@
 <template>
   <ov-video v-if="streamManager" :stream-manager="streamManager" />
+  <!-- {{ clientData() }} -->
 </template>
 
 <script setup>
@@ -11,16 +12,6 @@ const props = defineProps({
     type: Object
   }
 })
-
-const clientData = () => {
-  const { clientData } = getConnectionData()
-  return clientData
-}
-
-const getConnectionData = () => {
-  const { connection } = props.streamManager.stream
-  return JSON.parse(connection.data)
-}
 </script>
 
 <style></style>

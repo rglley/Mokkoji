@@ -1,5 +1,5 @@
 <template>
-  <main class="w-full h-full">
+  <main class="w-screen h-screen">
     <header class="flex min-w-max">
       <!-- <TheHeader /> -->
     </header>

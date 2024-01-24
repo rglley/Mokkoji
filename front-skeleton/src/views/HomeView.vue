@@ -121,10 +121,9 @@
 
 <script setup>
 // TODO : 비회원 사용자 회의 시작 시 안내 모달 띄워주기
-import { ref, reactive, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { OpenVidu } from 'openvidu-browser'
-import axios from 'axios'
+
 const router = useRouter()
 
 let conferenceIdInput = ref('')
@@ -138,7 +137,7 @@ let submitConferenceId = () => {
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
   // 임시로 만든 올바른 id ='qwer'
-  let validId = 'qwer'
+  let validId = 'SessionA'
   if (conferenceIdInput.value == validId) {
     // 로그인하지 않았다면 모달
     if (!isLogin.value) {
@@ -152,7 +151,7 @@ let submitConferenceId = () => {
     }
     ifInputError.value = false
     // 회의 이동
-    router.push('/')
+    router.push('meeting/sub')
   } else {
     ifInputError.value = true
     conferenceIdInput.value = ''
@@ -163,7 +162,7 @@ let submitConferenceId = () => {
 // 로그인하지 않았다면 모달
 // 로그인하지 않았으면 alert
 let generateMeeting = () => {
-  router.push('/meeting')
+  router.push('/meeting/host')
 
   // if (isLogin.value) {
   //   router.push('#') // 회의 리다이렉트(예정)

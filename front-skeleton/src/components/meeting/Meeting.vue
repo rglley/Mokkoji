@@ -1,13 +1,16 @@
 <template>
-  <main class="mx-24 h-full">
+  <main class="w-screen h-screen flex flex-col justify-center">
     <!-- 회의 화면 -->
-    <section class="pt-4 h-4/5 flex flex-row justify-center">
-      <div class="w-4/5">
+    <section class="h-4/5 flex justify-center">
+      <div class="w-full">
         <!-- 메인 회의 -->
-        <section id="main-container" class="w-full h-full flex flex-col">
+        <section id="main-container" class="w-full h-full flex">
           <div class="mb-2 pb-2 flex whitespace-nowrap overflow-x-scroll overflow-hidden gap-2">
             <!-- 참가자 화면 -->
-            <div id="sub-video" class="basis-1/4 flex space-x-3 rounded-xl">
+            <div
+              id="sub-video"
+              class="min-w-[268px] min-h-[107px] basis-1/4 flex space-x-3 rounded-xl"
+            >
               <user-video
                 v-for="sub in state.subscribers"
                 :key="sub.stream.connection.connectionId"
@@ -18,28 +21,111 @@
             </div>
           </div>
           <!-- 메인 화면 -->
-          <div id="main-video" class="flex justify-center rounded-xl">
-            <user-video :stream-manager="state.mainStreamManager" class="rounded-xl" />
+          <div id="main-video" class="flex min-w-[1000px] justify-center rounded-xl">
+            <user-video
+              :stream-manager="state.mainStreamManager"
+              class="min-w-[1000px] max-w-fit min-h-[430px] max-h-fit rounded-xl"
+            />
           </div>
         </section>
       </div>
       <!-- 참여자 목록, 채팅방-->
-      <div v-if="isList || isChat" class="pl-2 w-1/5 flex flex-col">
-        <div v-if="isList" class="basis-full bg-purple-200 rounded-xl">참여자 목록</div>
+      <div v-if="isList || isChat" class="pl-2 min-w-[245px] min-h-[563px] max-h-fit flex flex-col">
+        <div
+          id="user-list"
+          class="h-full border-2 border-gray rounded-xl flex flex-col"
+          v-if="isList"
+        >
+          <div class="bg-white w-full basis-1/12 flex items-center">
+            <div class="ml-2 text-lg font-bold flex-nowrap overflow-hidden">참여자</div>
+            <div class="ml-10 flex space-x-2 overflow-hidden">
+              <div class="text-base text-purple-400 text-end">초대하기</div>
+              <button class="">
+                <IconInvite />
+              </button>
+            </div>
+            <button class="ml-2 flex overflow-hidden" @click="showList">
+              <IconCancel />
+            </button>
+          </div>
+          <div
+            class="bg-gray w-full basis-10/12 flex flex-col justify-center items-center space-y-2 overflow-scroll"
+          >
+            <user-list
+              v-for="sub in state.subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+              class="bg-white w-11/12 basis-1/12 rounded-lg text-base flex justify-center items-center font-semibold"
+            />
+          </div>
+          <div class="w-full basis-1/12 flex flex-col justify-center items-center">
+            <form
+              action="/meeting"
+              class="bg-gray w-11/12 min-h-6 max-h-12 rounded-3xl flex items-center"
+            >
+              <input
+                type="text"
+                name=""
+                id="search-name"
+                placeholder="참여자명 검색"
+                class="bg-gray w-10/12 rounded-3xl"
+              />
+              <button
+                type="submit"
+                class="min-w-4 min-h-4 max-h-10 max-w-10 rounded-full bg-purple-300 flex justify-center items-center"
+              >
+                <IconSearch />
+              </button>
+            </form>
+          </div>
+        </div>
         <div v-if="isList && isChat" class="mb-2"></div>
-        <div v-if="isChat" class="basis-full bg-purple-200 rounded-xl">채팅방</div>
+        <div
+          id="chat-list"
+          class="w-full h-full border-2 border-gray rounded-xl flex flex-col"
+          v-if="isChat"
+        >
+          <div class="p-4 bg-white w-full h-15 flex items-center">
+            <div class="basis-3/12 text-lg font-bold">채팅</div>
+            <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
+              <IconCancel />
+            </button>
+          </div>
+          <div
+            class="bg-gray w-full h-5/6 flex flex-col justify-center items-center space-y-2 overflow-scroll"
+          >
+            채팅
+          </div>
+          <div class="w-full h-20 flex justify-center items-center">
+            <form action="/meeting" class="p-4 bg-gray w-11/12 h-12 rounded-3xl flex items-center">
+              <input
+                type="text"
+                name=""
+                id="search-name"
+                placeholder="메시지 보내기"
+                class="bg-gray w-11/12"
+              />
+              <button
+                type="submit"
+                class="p-2 w-10 h-10 rounded-full bg-purple-200 flex justify-center items-center"
+              >
+                <IconMessageSend />
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
     <!-- 기능 버튼 -->
-    <section class="pt-10">
+    <section class="pt-4">
       <div class="flex">
-        <div class="basis-2/12 flex flex-wrap">
+        <div class="min-w-[200px] flex flex-wrap">
           <button>아이콘</button>
           <button class="h-10 w-16 ml-2 bg-gray-400 text-white text-xs rounded-xl">
             화면 배치
           </button>
         </div>
-        <div class="basis-11/12 flex flex-wrap justify-center space-x-10">
+        <div class="min-w-[900px] flex flex-wrap justify-center space-x-10">
           <div id="button-container" class="flex flex-col items-center">
             <button id="button" class="bg-purple-100"></button>
             <span>마이크 ON</span>
@@ -65,13 +151,13 @@
             <span>사진찍기</span>
           </div>
         </div>
-        <div class="ml-2 basis-3/12 flex flex-row flex-wrap space-x-3 justify-end">
+        <div class="ml-2 min-w-[200px] flex flex-row flex-wrap space-x-3 justify-end">
           <div id="button-container">
-            <button id="button" class="bg-purple-100" @click="changeListStatus"></button>
+            <button id="button" class="bg-purple-100" @click="showList"></button>
             <span>참여자 목록</span>
           </div>
           <div id="button-container">
-            <button id="button" class="bg-purple-100" @click="changeChatStatus"></button>
+            <button id="button" class="bg-purple-100" @click="showChat"></button>
             <span>채팅</span>
           </div>
           <div>
@@ -87,12 +173,23 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import axios from 'axios'
+import { ref, reactive, onMounted, defineProps } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
-import UserVideo from './UserVideo.vue'
-import LetterModal from '@/components/modal/LetterModal.vue'
 import router from '../../router'
+import axios from 'axios'
+import UserList from './UserList.vue'
+import UserVideo from './UserVideo.vue'
+import IconSearch from '@/icons/IconSearch.vue'
+import IconInvite from '@/icons/IconInvite.vue'
+import IconCancel from '@/icons/IconCancel.vue'
+import IconMessageSend from '@/icons/IconMessageSend.vue'
+import LetterModal from '@/components/modal/LetterModal.vue'
+
+const props = defineProps({
+  accessType: {
+    type: String
+  }
+})
 
 // 메인 회의
 let isMain = ref(true)
@@ -109,12 +206,12 @@ let changeMeetingType = () => {
 }
 
 // 채팅 on / off
-let changeChatStatus = () => {
+let showChat = () => {
   isChat.value = !isChat.value
 }
 
 // 참여자 목록 on / off
-let changeListStatus = () => {
+let showList = () => {
   isList.value = !isList.value
 }
 
@@ -136,7 +233,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: undefined,
+  mySessionId: 'SessionA',
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -146,7 +243,7 @@ const state = reactive({
 })
 
 // 세션 참가하기
-const joinSession = () => {
+const joinSession = (accessType) => {
   // 1) Openvidu 객체 생성
   state.OV = new OpenVidu()
 
@@ -154,6 +251,11 @@ const joinSession = () => {
   state.session = state.OV.initSession()
 
   // 3) 세션에서 이벤트 발생 시 동작하는 행동 구체화
+
+  // 비동기 예외
+  state.session.on('exception', ({ exception }) => {
+    console.warn(exception)
+  })
 
   // 새로운 참가자 입장
   state.session.on('streamCreated', ({ stream }) => {
@@ -171,11 +273,6 @@ const joinSession = () => {
     }
   })
 
-  // 비동기 예외
-  state.session.on('exception', ({ exception }) => {
-    console.warn(exception)
-  })
-
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
 
   // OpenVidu 배포에서 토큰 가져오기
@@ -191,8 +288,8 @@ const joinSession = () => {
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
           allowTranscoding: true,
-          resolution: '1200x480', // The resolution of your video
-          frameRate: 60, // The frame rate of your video
+          resolution: '1000x480', // The resolution of your video
+          frameRate: 30, // The frame rate of your video
           insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
           mirror: false
         })
@@ -203,16 +300,12 @@ const joinSession = () => {
 
         // --- 6) Publish your stream ---
 
-        console.log(state.publisher)
-
         state.session.publish(publisher)
       })
     })
     .catch((error) => {
       console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
     })
-
-  console.log(state.session)
 
   window.addEventListener('beforeunload', leaveSession)
 }
@@ -274,7 +367,9 @@ const createToken = async (sessionId) => {
 }
 
 onMounted(() => {
-  joinSession()
+  if (props.accessType === 'host') joinSession('host')
+  else joinSession('sub')
+
   window.addEventListener('beforeunload', leaveSession)
 })
 </script>
@@ -298,8 +393,12 @@ span {
   color: #888888;
 }
 
+input::placeholder {
+  align-content: center;
+  font-size: 0.8em;
+}
+
 ::-webkit-scrollbar {
-  background: #f9f1ff;
   width: 10px;
   height: 10px;
 }
