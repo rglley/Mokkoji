@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -41,15 +42,6 @@ public class Event/* extends BaseEntity */ {
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.ACTIVE;
 
-    @Size(max = 15)
-    private String title;
-
-    @Size(max = 40)
-    private String content;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "result_status")
-    private ResultStatus resultStatus = ResultStatus.MEMORY;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -69,6 +61,7 @@ public class Event/* extends BaseEntity */ {
         this.setUser(user);
         this.sessionId = sessionId;
         this.startTime = startTime;
+        Result result = new Result(this);
     }
 
 
