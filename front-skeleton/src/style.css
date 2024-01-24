@@ -14,20 +14,21 @@ body {
     @apply p-5 ;
   }
 
-  h1 {
-    @apply whitespace-nowrap text-2xl;
-  }
-
-  #p-main {
-    @apply text-black md:text-lg whitespace-nowrap ;
-  }
-
   #title-bold {
-    @apply text-2xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none;
+    @apply text-4xl font-bold tracking-tighter p-2;
+  }
+
+  #title {
+    @apply text-4xl tracking-tighter p-2;
   }
 
   #title-sub-bold {
-    @apply text-2xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none p-5;
+    @apply text-3xl font-bold tracking-tighter;
+  }
+
+  #title-sub {
+    @apply text-3xl tracking-tighter p-2;
+
   }
 
   #card-div {
@@ -44,7 +45,7 @@ body {
 
   /* TODO : INPUT BOX 예쁘게 만들기 */
   input {
-    @apply h-10 items-center justify-center rounded-md bg-white text-sm font-medium text-black px-6 m-2;
+    @apply h-10 items-center justify-center rounded-md bg-white text-sm font-medium text-black px-6 my-3 ml-2;
   }
   #grid-mypage {
     @apply grid grid-cols-2 gap-4;
@@ -56,5 +57,14 @@ body {
 
   slot {
     @apply p-5 m-2
+  }
+
+  #login-icon {
+    @apply min-w-40 max-w-40;
+  }
+
+  #div-stat {
+    @apply flex-col border-solid border-2 border-purple-500 rounded-md bg-white text-center text-xl font-bold relative overflow-hidden w-[160px] justify-center px-7 py-10;
+
   }
 }

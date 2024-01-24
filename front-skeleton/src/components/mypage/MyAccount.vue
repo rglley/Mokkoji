@@ -56,7 +56,6 @@
           />
           <p v-if="accountNumber.length > 0" :class="isValidAccount(accountNumber)? text-red-500: text-blue-500" v-text="isValidAccount(accountNumber)? '올바른 입력값임':'틀린 입력값임'"
           ></p>
-          <p></p>
         </div>
       </div>
       <div class="flex items-center p-6">
@@ -78,8 +77,8 @@ const bank = ref('')
 const accountNumber = ref('')
 
 const isValidAccount = (accountNumber) => {
-  const emailRegex = /[0-9-]+/;
-  return emailRegex.test(accountNumber);
+  const accountRegex = /^(\d+|-)+$/;
+  return accountRegex.test(accountNumber);
 }
 
 </script>

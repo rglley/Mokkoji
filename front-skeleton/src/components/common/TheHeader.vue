@@ -1,7 +1,7 @@
 <template>
-  <nav class="w-full bg-opacity-40 bg-primary flex p-2 pl-5">
+  <nav class="w-full bg-opacity-35 bg-primary flex p-2 pl-5">
     <a href="/" class="flex items-center rtl:l:space-x-reverse">
-      <img src="/src/assets/mokkoji_logo.png" class="h-20" alt="모꼬지 로고" />
+      <img src="/src/assets/mokkoji_logo.png" class="h-20 mr-5" alt="모꼬지 로고" />
       <span id="title-sub-bold">모꼬지</span>
     </a>
 
@@ -12,24 +12,33 @@
         </li>
         <li v-if="!isLogin">
           <button class="bg-white text-black hover:bg-primary" @click="toggleModal">로그인</button>
-          <ModalView v-if="showModal" :show-modal="showModal" @close-modal="toggleModal">
+          <ModalView v-if="showLoginModal" :show-modal="showLoginModal" @close-modal="toggleModal">
             <LoginModal />
           </ModalView>
 
-          <button class="bg-white text-black hover:bg-primary" href="/signup">회원가입</button>
+          <button class="bg-white text-black hover:bg-primary" @click="toggleSignUpModal">
+            회원가입
+          </button>
+          <ModalView
+            v-if="showSignUpModal"
+            :show-modal="showSignUpModal"
+            @close-modal="toggleSignUpModal"
+          >
+            <SignUpModal />
+          </ModalView>
         </li>
         <li v-else>
           <button
             class="bg-white text-black hover:bg-primary"
             data-dropdown-toggle="dropdownHover"
-            data-dropdown-trigger="click"
+            data-dropdown-trigger="hover"
             to="/mypage"
           >
             내 서비스
           </button>
           <div
             id="dropdownHover"
-            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-100"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
           >
             <ul aria-labelledby="dropdownHoverButton" class="w-50">
               <li>
@@ -55,18 +64,25 @@ import { initFlowbite } from 'flowbite'
 
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/LoginModal.vue'
+import SignUpModal from '@/components/modal/SignUpModal.vue'
 
 onMounted(() => {
   initFlowbite()
 })
 
-const showModal = ref(false)
+let showLoginModal = ref(false)
 
-const toggleModal = () => {
-  showModal.value = !showModal.value
+let toggleModal = () => {
+  showLoginModal.value = !showLoginModal.value
 }
 
-let isLogin = ref(true)
+let showSignUpModal = ref(false)
+
+let toggleSignUpModal = () => {
+  showSignUpModal.value = !showSignUpModal.value
+}
+
+let isLogin = ref(false)
 
 let logout = () => {
   //sessionStorage.delete('login-token')

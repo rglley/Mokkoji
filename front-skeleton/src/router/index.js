@@ -8,6 +8,8 @@ import MyAccount from '@/components/mypage/MyAccount.vue'
 // import MyMeeting from '@/components/conference/MyMeeting.vue'
 // import MeetingView from '@/views/MeetingView.vue'
 
+import Error404 from '@/components/common/Error404.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -39,6 +41,16 @@ const router = createRouter({
         },
       ]
 
+    },
+    // Not Found 이동
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '404'
+    },
+    {
+      path: '/404',
+      name: 'Error404',
+      component: Error404
     }
 
     // {

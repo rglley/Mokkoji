@@ -17,20 +17,23 @@
             <br />
             <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
             <div class="grid place-content-center">
-              <button id="button" @click="generateMeeting">회의 생성하기</button>
+              <button id="button" @click="generateMeeting">화상 모임 생성하기</button>
 
               <!-- TODO : submit 버튼 + invalid input 렌더링 -->
-              <div class="grid place-content-center">
-                <div>
+              <div >
+                <div class="relative">
                   <input
                     type="text"
-                    placeholder="회의 ID를 붙여넣으세요"
+                    placeholder="회의 링크(ID)로 참여하기"
                     v-model="conferenceIdInput"
                     @keyup.enter="submitConferenceId"
+                    class="pl-10 w-60 border-2 border-slate-500"
                   />
-                  <button @click="submitConferenceId" id="button-submit">Submit</button>
-                  <ModalView v-if="showModal" :show-modal="showModal" @close-modal="toggleModal" >
-                    <MeetingJoinModal :conferenceIdInput="conferenceIdInput"/>
+                  <div class="absolute top-2 right-2">
+                    <button @click="submitConferenceId" class="rounded-full size-8 mt-2"><img src="@/icons/send.png"></button>
+                  </div>
+                  <ModalView v-if="showModal" :show-modal="showModal" @close-modal="toggleModal">
+                    <MeetingJoinModal :conferenceIdInput="conferenceIdInput" />
                   </ModalView>
                 </div>
               </div>
@@ -41,10 +44,11 @@
       </section>
 
       <!-- first -->
-      <section class="my-16 p-16">
-        <div class="mx-5 mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
+      <section class="my-16 p-4">
+        <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
           <div class="mx-5 mx-5 px-5 text-center">
             <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+            <br />
             <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
             <p id="p-main">
               참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
@@ -57,13 +61,14 @@
       </section>
 
       <!-- second -->
-      <section class="my-16 p-16 bg-gray">
-        <div class="mx-5 mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
+      <section class="my-16 p-4 bg-gray">
+        <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
           <div class="justify-self-end mr-20">
             <img class="pl-0" src="@/assets/main2.png" />
           </div>
           <div class="text-center">
-            <h1 id="title-sub-bold">포토 모자이크로 사진들을 한 눈에 구경하세요.</h1>
+            <h2 id="title-sub-bold">포토 모자이크로 사진들을 한 눈에 구경하세요.</h2>
+            <br />
             <p id="p-main">
               포토 모자이크 기능은 서로 다른 사진들을 조합하여 하나의 이미지를 표현합니다.
             </p>
@@ -73,10 +78,11 @@
       </section>
 
       <!-- third -->
-      <section class="my-16 p-16">
-        <div class="mx-5 mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
+      <section class="my-16 p-4">
+        <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
           <div class="mx-5 mx-5 px-5 text-center">
             <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+            <br />
             <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
             <p id="p-main">
               참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
@@ -89,13 +95,14 @@
       </section>
 
       <!-- fourth -->
-      <section class="my-16 p-16 bg-gray">
-        <div class="mx-5 mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
+      <section class="my-16 p-4 bg-gray">
+        <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
           <div class="justify-self-end mr-20">
             <img src="@/assets/main4.png" />
           </div>
-          <div class="mx-5 mx-5 px-5 text-center">
+          <div class="mx-5 px-5 text-center">
             <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+            <br />
             <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
             <p id="p-main">
               참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
@@ -155,7 +162,6 @@ let submitConferenceId = () => {
     if (!isLogin.value) {
       // 모달 띄우고
       showModal.value = true
-      
     }
     ifInputError.value = false
     // 회의 이동

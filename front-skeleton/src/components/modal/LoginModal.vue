@@ -1,36 +1,36 @@
 <template>
-  <h1 id="title-sub-bold">모꼬지 시작하기</h1>
-  <div v-if="loggedin">
-    <p>이름 : {{user.name}}</p>
-    <p>{{user.email}}</p>
-    <button @click="logout">로그아웃</button>
+  <div class="w-80 items-center">
+  <div id="title-sub-bold" class="ml-auto mr-auto">모꼬지 시작하기</div>
+  <div>
+    <img id="login-icon" src="@/assets/login_naver.png" @click="naverLogin"/>
+    <img id="login-icon" src="@/assets/login_google.png" @click="googleLogin"/>
   </div>
-  <div v-else>
-    <GoogleLogin :callback="callback"></GoogleLogin>
-
   </div>
-  <h1>NAVER LOGIN</h1>
-  <div class="button-container"></div>
 </template>
   
 <script setup>
-import { ref } from 'vue';
-import { decodeCredential, googleLogout } from 'vue3-google-login'
+import axios from 'axios';
 
-let loggedin = ref(false) // 임시 로그인 설정 (실제로는 store 관리)
-let user = ref(null)
-
-let logout = () => {
-  googleLogout();
-  loggedin.value = false;
+let naverLogin = () => {
+  axios({
+    url : '/oauth2/authorization/google',
+    method : postMessage,
+    data: {
+      dummy : 'dummy',
+    }
+  })
 }
 
-let callback = (response) => {
-  console.log(response)
-  user.value = decodeCredential(response.credential)
-  console.log(user)
-  loggedin.value = true
+let googleLogin = () => {
+  axios({
+    url : '/oauth2/authorization/google',
+    method : postMessage,
+    data: {
+      dummy : 'dummy',
+    }
+  })
 }
+
 </script>
   
 <style scoped>

@@ -2,13 +2,15 @@
   <div
     class="bg-white flex mt-0 w-full flex-col justify-center items-center px-16 py-12 max-md:max-w-full max-md:px-5"
   >
-    <div id="card-div" class="flex max-w-full flex-col mt-24 mb-40 items-start bg-primary0">
+    <div
+      id="card-div"
+      class="flex max-w-full flex-col mt-24 mb-40 items-start bg-primary0 border-2 border-slate-200 rounded-md"
+    >
       <div class="absolute -mt-28 mx-10 justify-center">
         <img
           alt="프로필 사진"
           class="overflow-hidden rounded-full border-2 border-white dark:border-gray w-48"
           src="@/assets/dummy_profile.jpg"
-          
         />
       </div>
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
@@ -25,44 +27,37 @@
             </span>
             <div class="marker:text-sm">계좌를 등록하시면 참가자들의 마음을 받을 수 있어요</div>
             <div class="mt-32">
-            <router-link to="/mypage/detail" id="button-submit">회원정보 수정</router-link>
+              <router-link to="/mypage/detail" id="button-submit">회원정보 수정</router-link>
             </div>
           </span>
         </div>
-        <div class="flex flex-col justify-end items-stretch mr-10">
+        <div class="flex flex-col justify-around items-stretch mr-10">
           <div>
-            <span class="flex items-stretch justify-between gap-0">
+            <span class="flex items-stretch justify-between">
               <div class="text-black text-2xl font-bold">활동 기록</div>
+              <!-- TODO : 결과물 보기 링크 -->
               <a href="#" class="text-1xl">상세보기 ></a>
             </span>
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
-            <div
-              class="flex-col border-solid border-2 border-purple-700 rounded-md bg-white text-center text-xl font-bold relative overflow-hidden w-[160px] justify-center px-7 py-10"
-            >
+            <div id="div-stat">
               모꼬지 주최<br /><span class="text-purple-400">{{
                 store.eventRecord.eventTotalCnt
               }}</span
               >번<br />
             </div>
-            <div
-              class="flex-col border-solid border-2 border-purple-700 rounded-md bg-white text-center text-xl font-bold relative overflow-hidden w-[160px] justify-center px-7 py-10"
-            >
+            <div id="div-stat">
               참여자 수<br /><span class="text-purple-400">{{ store.eventRecord.eventPplCnt }}</span
               >명
             </div>
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
-            <div
-              class="flex-col border-solid border-2 border-purple-700 rounded-md bg-white text-center text-xl font-bold relative overflow-hidden w-[160px] justify-center px-7 py-10"
-            >
+            <div id="div-stat">
               모꼬지 시간<br /><span class="text-purple-400">{{ eventHour }}</span
               >시간 <span class="text-purple-400">{{ eventMinute }}</span
               >분
             </div>
-            <div
-              class="flex-col border-solid border-2 border-purple-700 rounded-md bg-white text-center text-xl font-bold relative overflow-hidden w-[160px] justify-center px-7 py-10"
-            >
+            <div id="div-stat">
               받은 메세지<br /><span class="text-purple-400">{{
                 store.eventRecord.eventMsgCnt
               }}</span
