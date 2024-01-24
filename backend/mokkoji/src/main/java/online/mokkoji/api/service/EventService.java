@@ -1,10 +1,12 @@
 package online.mokkoji.api.service;
 
-import online.mokkoji.api.response.SessionObjectResDto;
+import online.mokkoji.api.request.SessionDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface EventService {
 
-    String createEvent(SessionObjectResDto sessionObject);
+    String createSession(SessionDto sessionDto);
+
+    void deleteSession(String sessionId);
 }
