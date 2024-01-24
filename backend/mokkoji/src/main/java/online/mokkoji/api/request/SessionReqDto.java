@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SessionReqDto {
+    private Long userId;
     private Boolean allowTranscoding;
-    private RecordingPropertyReqDto defaultRecordingProperties;
+    private RecordingPropertyDto defaultRecordingProperties;
 }

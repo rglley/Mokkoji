@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import online.mokkoji.api.request.RecordingPropertyReqDto;
+import online.mokkoji.api.request.RecordingPropertyDto;
 
 @Getter
 @NoArgsConstructor
@@ -12,17 +12,19 @@ import online.mokkoji.api.request.RecordingPropertyReqDto;
 @ToString
 public class SessionObjectResDto {
 
+    private Long userId;
     private String id;
     private String object;
     private Number createdAt; //millisecond
     private String mediaMode;
     private String recordingMode;
-    private RecordingPropertyReqDto defaultRecordingProperties;
+    private RecordingPropertyDto defaultRecordingProperties;
     private ConnectionsResDto connections;
     private Boolean allowTranscoding;
 
-    public SessionObjectResDto(String id, RecordingPropertyReqDto defaultRecordingProperties) {
-        this.id = id;
+    public SessionObjectResDto(Long userId, String sessionId, RecordingPropertyDto defaultRecordingProperties) {
+        this.userId = userId;
+        this.id = sessionId;
         this.defaultRecordingProperties = defaultRecordingProperties;
         this.createdAt = System.currentTimeMillis();
         this.object = "session";
