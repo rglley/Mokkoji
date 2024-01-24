@@ -37,19 +37,20 @@ public class Event/* extends BaseEntity */ {
     @Column(name = "participant_count")
     private int participantCount;
 
+    @Column(name = "event_status")
     @Enumerated(EnumType.STRING)
-//    @ColumnDefault("MEMORY")
-    private EventStatus status;
-
-    @Enumerated(EnumType.STRING)
-//    @ColumnDefault("DEFAULT")
-    private EventType type;
+    private EventStatus eventStatu
 
     @Size(max = 15)
     private String title;
 
     @Size(max = 40)
     private String content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_status")
+//    @ColumnDefault("MEMORY")
+    private ResultStatus resultStatus;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
