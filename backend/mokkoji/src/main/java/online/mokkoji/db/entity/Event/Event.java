@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-@ToString(of = {"id", "participantCount", "eventStatus", "resultStatus", "content", "startTime", "endTime"})
+@ToString(of = {"id", "participantCount", "status", "startTime", "endTime"})
 public class Event/* extends BaseEntity */ {
 
     @Id

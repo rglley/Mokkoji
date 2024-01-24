@@ -10,7 +10,7 @@ import online.mokkoji.db.entity.User;
 
 @Entity
 @NoArgsConstructor
-@ToString(of = {"title", "content", "resultStatus"})
+@ToString(of = {"title", "content", "status"})
 @Getter
 public class Result {
 
