@@ -10,6 +10,7 @@ import online.mokkoji.db.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -24,9 +25,10 @@ public class SecurityConfig {
     private final OAuth2LoginFailureHandler oauth2Loginfailurehandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    //http가 아니고 webConfiguration에서 기본 로그인을 없애줘야 하는듯?
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .formLogin(formlogin -> formlogin.disable())
+                .formLogin(formLoginConfigurer -> formLoginConfigurer.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .csrf(csrf -> csrf.disable())
 
@@ -40,7 +42,7 @@ public class SecurityConfig {
                                         "/h2-console/**").permitAll()
 
                                 //회의 참여 등 비회원 가능 url 추가 필요
-                                .requestMatchers("/sign-up").permitAll()
+                                .requestMatchers("/signup", "/login/oauth2/code/**").permitAll()
                                 .anyRequest().authenticated()
                 )
 

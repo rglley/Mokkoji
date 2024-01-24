@@ -1,8 +1,10 @@
 package online.mokkoji.api.service;
 
+import online.mokkoji.api.request.UserSignupDto;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserService {
-    //회원가입 시 role User로 바꿔줘야 함
+public interface UserService {
+    public void createUser(UserSignupDto userSignupDto) throws Exception;
+
+
 }

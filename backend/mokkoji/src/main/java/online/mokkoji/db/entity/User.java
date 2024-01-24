@@ -25,11 +25,11 @@ public class User extends BaseEntity{
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private SocialType socialType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private SocialType socialType;
+    private Role role;
 
     private String image;
     private String account;
