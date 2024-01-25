@@ -5,6 +5,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.api.service.EventService;
+import online.mokkoji.db.entity.Event.Event;
+import online.mokkoji.db.repository.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +24,7 @@ public class OpenviduController {
     private static final Logger log = LoggerFactory.getLogger(OpenviduController.class);
 
     private final EventService eventService;
+    private final EventRepository eventRepository;
 
 
     @Value("${OPENVIDU_URL}")
@@ -37,12 +40,7 @@ public class OpenviduController {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    /**
-     * Session 생성
-     *
-     * @param params The Session properties
-     * @return The Session ID
-     */
+    // Session 생성
     @PostMapping("/api/sessions")
     public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
@@ -86,6 +84,13 @@ public class OpenviduController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        // 세션의 호스트Id와 지금 전달받은 userId가 맞는지 확인
+        Event event = eventRepository.findBySessionId(sessionId);
+        if (event.getUser().getId() != sessionReqDto.getUserId()) {
+            log.error("권한이 없습니다"); //임시로 하는 거.
+            // throw 해야함
+        }
+
         // 참가자 수 , 상태, 종료 시간 넣어야 함
         SessionReqDto sessionDto = new SessionReqDto(sessionId, sessionReqDto.getParticipantCount(), sessionReqDto.getEndTime());
 
@@ -94,20 +99,14 @@ public class OpenviduController {
         activeSession.close();
 
         if (!(openvidu.getActiveSession(sessionId) == null)) {
-            log.error("세션 삭제가 되지 않았음");
+            log.error("세션 삭제가 되지 않았음"); // ㅈ
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
-    /**
-     * Session에 참가
-     *
-     * @param sessionId The Session in which to create the Connection
-     * @param params    The Connection properties
-     * @return The Token associated to the Connection
-     */
+    // Session에 Connect
     @PostMapping("/api/sessions/{sessionId}/connections")
     public ResponseEntity<String> addConnection(@PathVariable("sessionId") String sessionId,
                                                 @RequestBody(required = false) Map<String, Object> params)
@@ -118,6 +117,9 @@ public class OpenviduController {
         }
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
+
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
+
+
 }

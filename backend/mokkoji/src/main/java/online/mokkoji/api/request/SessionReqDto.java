@@ -37,7 +37,8 @@ public class SessionReqDto {
     }
 
     // RequestBody로 받을 생성자(없어도 되는지 실험해보기)
-    public SessionReqDto(int participantCount, LocalDateTime endTime) {
+    public SessionReqDto(Long userId, int participantCount, LocalDateTime endTime) {
+        this.userId = userId;
         this.participantCount = participantCount;
         this.endTime = endTime;
     }
