@@ -1,6 +1,5 @@
 <template>
   <ov-video v-if="streamManager" :stream-manager="streamManager" />
-  <!-- {{ clientData() }} -->
 </template>
 
 <script setup>

@@ -1,80 +1,111 @@
 <template>
-  <main class="px-4 w-screen h-screen flex flex-col justify-center">
-    <!-- 회의 화면 -->
-    <section class="w-full h-full flex justify-center items-center">
-      <!-- 참가자 화면 -->
-      <div class="max-h-[550px] basis-2/5 flex flex-col overflow-y-scroll overflow-y-hidden gap-2">
-        <user-video
-          v-for="sub in state.subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click.native="updateMainVideoStreamManager(sub)"
-          class="min-w-[270px] max-w-fit min-h-[180px] max-h-fit basis-1/4 rounded-xl flex-none"
-        />
+  <main class="px-2 w-screen h-screen flex flex-col justify-center">
+    <section class="w-full h-[80%] flex">
+      <!-- 스포트라이트 레이아웃 -->
+      <div v-if="!isGrid" class="w-full h-full flex basis-3/4">
+        <!-- 회의 화면 -->
+        <div
+          id="meeting-container"
+          ref="groupVideo"
+          class="w-full h-full flex justify-center items-center"
+        >
+          <!-- 참가자 화면 -->
+          <div
+            class="h-[100%] w-[100%] basis-1/3 flex-col overflow-y-scroll overflow-hidden space-y-2"
+          >
+            <user-Video
+              v-for="sub in state.subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+              @click.native="updateMainVideoStreamManager(sub)"
+              class="min-w-[100%] max-w-[100%] rounded-xl flex-none"
+            />
+          </div>
+          <!-- 메인 화면 -->
+          <div ref="myVideo" class="max-h-[100%] basis-2/3 flex justify-center items-center">
+            <user-Video
+              id="main-video"
+              :stream-manager="state.mainStreamManager"
+              class="px-2 min-w-[100%] max-w-[100%] min-h-[100%] max-h-[100%] rounded-xl"
+            />
+          </div>
+        </div>
       </div>
-      <!-- 메인 화면 -->
-      <div
-        id="main-video"
-        class="min-w-[800px] max-w-7xl min-h-[550px] max-h-3xl basis-3/5 rounded-xl flex justify-center"
-        data-aos="fade-left"
-      >
-        <user-video
-          :stream-manager="state.mainStreamManager"
-          class="min-w-[800px] max-w-7xl min-h-[550px] max-h-3xl rounded-xl"
-        />
+      <!-- 그리드 레이아웃 -->
+      <div v-else class="w-full h-full flex basis-3/4">
+        <!-- 회의 화면 -->
+        <div
+          id="meeting-container"
+          ref="groupVideo"
+          class="w-full h-full flex justify-center items-center"
+        >
+          <!-- 참가자 화면 -->
+          <user-Video
+            v-for="sub in state.subscribers"
+            :key="sub.stream.connection.connectionId"
+            :stream-manager="sub"
+            @click.native="updateMainVideoStreamManager(sub)"
+            class="min-w-[10%] max-w-[10%] rounded-xl flex-none"
+          />
+          <!-- 메인 화면 -->
+          <user-Video
+            id="main-video"
+            :stream-manager="state.mainStreamManager"
+            class="px-2 min-w-[10%] max-w-[10%] min-h-[10%] max-h-[10%] rounded-xl"
+          />
+        </div>
       </div>
       <!-- 참여자 목록, 채팅방-->
-      <div class="pl-2 h-[550px] basis-1/5 self-center flex flex-col justify-center">
+      <div class="h-full basis-1/4 self-center flex flex-col justify-center">
         <div
-          v-if="isSubList"
-          id="sub-list"
-          class="min-w-[270px] max-w-fit h-full border-2 border-gray rounded-xl flex flex-col"
+          v-if="isUserList"
+          id="user-list"
+          class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
           data-aos="fade-left"
         >
-          <div class="bg-white w-full basis-1/12 flex items-center">
-            <div class="ml-2 text-lg font-bold flex-nowrap overflow-hidden">참여자</div>
-            <div class="ml-10 flex space-x-2 overflow-hidden">
-              <div class="text-base text-purple-400 text-end">초대하기</div>
-              <button class="">
-                <IconInvite />
+          <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
+            <div class="w-[30%] font-bold text-xs md:text-md lg:text-lg xl:text-xl">참여자</div>
+            <div class="w-[70%] flex just overflow-hidden">
+              <button class="w-[70%]">
+                <div class="text-xs md:text-xs lg:text-md xl:text-lg text-purple-400 text-end">
+                  초대하기
+                </div>
+                <IconInvite class="size-[40%]" />
+              </button>
+              <button class="ml-auto flex overflow-hidden" @click="setUserListState">
+                <IconCancel class="size-{80%]" />
               </button>
             </div>
-            <button class="flex overflow-hidden" @click="showList">
-              <IconCancel />
-            </button>
           </div>
           <div
-            class="bg-gray w-full basis-10/12 flex flex-col justify-center items-center space-y-2 overflow-scroll"
+            class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-y-scroll"
           >
             <user-list
               v-for="sub in state.subscribers"
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
-              class="bg-white w-11/12 basis-1/12 rounded-lg text-base flex justify-center items-center font-semibold"
+              class="bg-white w-[90%] min-h-16 rounded-lg text-base flex justify-center items-center font-semibold"
             />
           </div>
-          <div class="w-full basis-1/12 flex flex-col justify-center items-center">
-            <form
-              action="/meeting"
-              class="bg-gray w-11/12 min-h-6 max-h-12 rounded-3xl flex items-center"
-            >
+          <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
+            <form action="/meeting" class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center">
               <input
                 type="text"
                 name=""
                 id="search-name"
                 placeholder="참여자명 검색"
-                class="bg-gray w-10/12 rounded-3xl"
+                class="bg-gray w-[80%] h-[100%] rounded-full"
               />
               <button
                 type="submit"
-                class="min-w-4 min-h-4 max-h-10 max-w-10 rounded-full bg-purple-200 flex justify-center items-center"
+                class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
               >
-                <IconSearch />
+                <IconSearch class="size-[80%]" />
               </button>
             </form>
           </div>
         </div>
-        <div v-if="isSubList && isChat" class="mb-2"></div>
+        <div v-if="isUserList && isChat" class="mb-2"></div>
         <div
           v-if="isChat"
           id="chat-list"
@@ -93,7 +124,10 @@
             채팅
           </div>
           <div class="w-full h-20 flex justify-center items-center">
-            <form action="/meeting" class="p-4 bg-gray w-11/12 h-12 rounded-3xl flex items-center">
+            <form
+              action="/meeting"
+              class="p-4 bg-gray w-[90%] h-[70%] rounded-3xl flex items-center"
+            >
               <input
                 type="text"
                 name=""
@@ -113,14 +147,15 @@
       </div>
     </section>
     <!-- 기능 버튼 -->
-    <section class="mx-32 pt-2 min-h-[130px] flex items-center">
-      <div class="flex justify-center items-center space-x-20">
+    <section class="mx-32 pt-2 h-[20%] flex justify-center items-center">
+      <div class="h-full flex justify-center items-center space-x-20">
         <div class="min-w-[110px] flex items-center space-x-2">
           <button class="w-10 h-10 rounded-full bg-white hover:bg-slate-200">
             <IconInfo />
           </button>
           <button
             class="min-h-10 min-w-24 bg-neutral-500 hover:bg-neutral-800 text-white text-sm rounded-xl"
+            @click="setLayoutState"
           >
             <div>
               <IconLayout />
@@ -128,79 +163,116 @@
             <div class="mx-1">화면 배치</div>
           </button>
         </div>
-        <div class="min-w-[500px] flex flex-wrap justify-center items-center space-x-8">
-          <div id="button-container" class="flex flex-col items-center">
-            <button id="button-mic" class="hover:bg-purple-400" @click="setMicrophoneState">
+        <div
+          id="button-container"
+          class="min-w-[500px] flex flex-wrap justify-center items-center space-x-8"
+        >
+          <div class="flex flex-col items-center">
+            <button
+              id="button-mic"
+              :class="{ 'bg-purple-200': isMic, 'bg-red-500': !isMic }"
+              @click="setMicrophoneState"
+            >
               <IconMicOn v-if="isMic" />
               <IconMicOff v-else />
             </button>
-            <span v-if="isMic" @click="setMicrophoneState">마이크 ON</span>
-            <span v-else @click="setMicrophoneState">마이크 OFF</span>
+            <span v-if="isMic" @click="setMicrophoneState">ON</span>
+            <span v-else @click="setMicrophoneState">OFF</span>
           </div>
-          <div id="button-container">
-            <button id="button-camera" @click="setCameraState">
+          <div>
+            <button
+              id="button-camera"
+              :class="{ 'bg-purple-200': isCamera, 'bg-red-500': !isCamera }"
+              @click="setCameraState"
+            >
               <IconVideoOn v-if="isCamera" />
               <IconVideoOff v-else />
             </button>
-            <span v-if="isCamera" @click="setCameraState">카메라 ON</span>
-            <span v-else @click="setCameraState">카메라 OFF</span>
+            <span v-if="isCamera" @click="setCameraState">ON</span>
+            <span v-else @click="setCameraState">OFF</span>
           </div>
-          <div id="button-container" v-if="isMain">
-            <button id="button-group" @click="createGroup">
+          <div v-if="isMain">
+            <button id="button-group" class="bg-purple-200" @click="createGroup">
               <IconGroup />
             </button>
             <span @click="createGroup">소그룹</span>
           </div>
-          <div id="button-container">
-            <button id="button-letter" @click="toggleLetterModal">
+          <div>
+            <button
+              id="button-letter"
+              :class="{ 'bg-purple-400': isLetterModal, 'bg-purple-200': !isLetterModal }"
+              @click="setLetterModalState"
+            >
               <IconLetter />
             </button>
-            <span @click="toggleLetterModal">편지쓰기</span>
+            <span @click="setLetterModalState">편지쓰기</span>
           </div>
-          <div id="button-container">
-            <button id="button-gift">
+          <div>
+            <button
+              id="button-gift"
+              :class="{ 'bg-purple-400': isGift, 'bg-purple-200': !isGift }"
+              @click="setGiftState"
+            >
               <IconGift />
             </button>
             <span>선물하기</span>
           </div>
-          <div id="button-container">
-            <button id="button-picture">
+          <div>
+            <button
+              id="button-picture"
+              :class="{ 'bg-purple-400': isCapture, 'bg-purple-200': !isCapture }"
+              @click="captureScreen"
+            >
               <IconCamera />
             </button>
             <span>사진찍기</span>
           </div>
         </div>
-        <div class="ml-2 min-w-[220px] flex space-x-6 justify-end">
-          <div id="button-container">
-            <button id="button-subList" @click="setSubListState">
-              <IconSubList />
+        <div id="button-container" class="ml-2 min-w-[220px] flex space-x-6 justify-end">
+          <div>
+            <button
+              id="button-subList"
+              :class="{ 'bg-purple-400': isUserList, 'bg-purple-200': !isUserList }"
+              @click="setUserListState"
+            >
+              <IconUserList />
             </button>
-            <span @click="setSubListState">참여자 목록</span>
+            <span @click="setUserListState">참여자</span>
           </div>
-          <div id="button-container">
-            <button id="button-chat" @click="setChatState">
+          <div>
+            <button
+              id="button-chat"
+              :class="{ 'bg-purple-400': isChat, 'bg-purple-200': !isChat }"
+              @click="setChatState"
+            >
               <IconChat />
             </button>
             <span @click="setChatState">채팅</span>
           </div>
-          <div class="flex items-center">
-            <button
-              class="w-20 h-10 bg-red-500 hover:bg-red-400 text-white rounded-3xl"
-              @click="leaveSession"
-            >
-              나가기
-            </button>
+          <div>
+            <div class="flex items-center">
+              <button
+                id="button-quit"
+                class="w-20 h-10 bg-red-500 hover:bg-red-400 text-white rounded-3xl"
+                @click="leaveSession"
+              >
+                나가기
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
     <LetterModal v-if="isLetterModal" />
+    <!-- <GiftModal v-if="isGiftModal" />
+    <CaptureModal v-if="isCaptureModal" /> -->
   </main>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, defineProps } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
+import html2canvas from 'html2canvas'
 import router from '../../router'
 import axios from 'axios'
 import UserList from './UserList.vue'
@@ -218,7 +290,7 @@ import IconGroup from '@/icons/meeting/IconGroup.vue'
 import IconGift from '@/icons/meeting/IconGift.vue'
 import IconLetter from '@/icons/meeting/IconLetter.vue'
 import IconCamera from '@/icons/meeting/IconCamera.vue'
-import IconSubList from '@/icons/meeting/IconSubList.vue'
+import IconUserList from '@/icons/meeting/IconUserList.vue'
 import IconChat from '@/icons/meeting/IconChat.vue'
 import IconMessageSend from '@/icons/meeting/IconMessageSend.vue'
 import LetterModal from '@/components/modal/LetterModal.vue'
@@ -229,33 +301,89 @@ const props = defineProps({
   }
 })
 
-// 메인 회의
-let isMain = ref(true)
-// 참여자 목록
-let isSubList = ref(false)
-// 채팅
-let isChat = ref(false)
+// 레이아웃 형식
+let isGrid = ref(false)
+
 // 마이크
 let isMic = ref(true)
-// 비디오
+// 카메라
 let isCamera = ref(true)
+// 메인 회의
+let isMain = ref(true)
 // 편지쓰기
 let isLetterModal = ref(false)
+// 선물하기
+let isGift = ref(false)
+// 사진찍기
+let isCapture = ref(false)
+// 참여자 목록
+let isUserList = ref(false)
+// 채팅
+let isChat = ref(false)
+
+const groupVideo = ref(null)
+
+// 화면 캡쳐
+const captureScreen = () => {
+  const target = groupVideo.value
+  if (!target) {
+    return alert('결과 저장 실패')
+  }
+  html2canvas(target).then((canvas) => {
+    onSaveAs(canvas.toDataURL('image/png'), 'test.png')
+  })
+}
+
+// 사진 저장
+const onSaveAs = (uri, filename) => {
+  const link = document.createElement('a')
+  document.body.appendChild(link)
+  link.href = uri
+  link.download = filename
+  link.click()
+  document.body.removeChild(link)
+}
+
+// 화면 레이아웃 변경
+let setLayoutState = () => {
+  isGrid.value = !isGrid.value
+}
 
 // 마이크 on / off
 let setMicrophoneState = () => {
   isMic.value = !isMic.value
 
-  if (isMic.value) document.getElementById('button-mic').style.backgroundColor = '#e9d5ff'
-  else document.getElementById('button-mic').style.backgroundColor = '#EF4444'
+  if (isMic.value) {
+    state.publisher.publishAudio(true)
+  } else {
+    state.publisher.publishAudio(false)
+  }
 }
 
-// 비디오 on / off
+// 카메라 on / off
 let setCameraState = () => {
   isCamera.value = !isCamera.value
 
-  if (isCamera.value) document.getElementById('button-camera').style.backgroundColor = '#e9d5ff'
-  else document.getElementById('button-camera').style.backgroundColor = '#EF4444'
+  if (isCamera.value) {
+    state.publisher.publishVideo(true)
+  } else {
+    state.publisher.publishVideo(false)
+  }
+}
+
+// 편지쓰기 모달 on / off
+let setLetterModalState = () => {
+  isLetterModal.value = !isLetterModal.value
+}
+
+// 선물하기 모달 on / off
+let setGiftState = () => {
+  isGift.value = !isGift.value
+}
+
+// 사진찍기 모달 on / off
+let setCaptureState = () => {
+  isCapture.value = !isCapture.value
 }
 
 // 메인 회의 / 소그룹 이동
@@ -264,28 +392,13 @@ let createGroup = () => {
 }
 
 // 참여자 목록 on / off
-let setSubListState = () => {
-  isSubList.value = !isSubList.value
-
-  if (isSubList.value) document.getElementById('button-subList').style.backgroundColor = '#c084fc'
-  else document.getElementById('button-subList').style.backgroundColor = '#e9d5ff'
+let setUserListState = () => {
+  isUserList.value = !isUserList.value
 }
 
 // 채팅 on / off
 let setChatState = () => {
   isChat.value = !isChat.value
-
-  if (isChat.value) document.getElementById('button-chat').style.backgroundColor = '#c084fc'
-  else document.getElementById('button-chat').style.backgroundColor = '#e9d5ff'
-}
-
-// 편지 쓰기 모달 생성
-let toggleLetterModal = () => {
-  isLetterModal.value = !isLetterModal.value
-
-  if (isLetterModal.value)
-    document.getElementById('button-letter').style.backgroundColor = '#c084fc'
-  else document.getElementById('button-letter').style.backgroundColor = '#e9d5ff'
 }
 
 // ---------------- OpenVidu 관련 ----------------------
@@ -310,11 +423,8 @@ const state = reactive({
   isChat: true
 })
 
-const width = window.innerWidth
-const height = window.innerHeight
-
 // 세션 참가하기
-const joinSession = (accessType) => {
+const joinSession = () => {
   // 1) Openvidu 객체 생성
   state.OV = new OpenVidu()
 
@@ -333,7 +443,7 @@ const joinSession = (accessType) => {
     console.log('새로운 참가자 입장')
     const subscriber = state.session.subscribe(stream, undefined)
     state.subscribers.push(subscriber)
-    console.log(subscriber)
+    console.log(state.subscribers)
   })
 
   // 참가자 퇴장
@@ -342,6 +452,7 @@ const joinSession = (accessType) => {
     if (index >= 0) {
       state.subscribers.splice(index, 1)
     }
+    console.log(state.subscribers)
   })
 
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
@@ -359,10 +470,10 @@ const joinSession = (accessType) => {
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
           allowTranscoding: true,
-          resolution: '800x550', // The resolution of your video
+          resolution: '800x600', // The resolution of your video
           frameRate: 30, // The frame rate of your video
           insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-          mirror: true
+          mirror: false
         })
 
         // Set the main video in the page to display our webcam and store our Publisher
@@ -394,7 +505,6 @@ const leaveSession = () => {
   window.removeEventListener('beforeunload', leaveSession)
 
   router.push('/')
-  console.clear()
 }
 
 const updateMainVideoStreamManager = (stream) => {
@@ -446,22 +556,21 @@ onMounted(() => {
 </script>
 
 <style>
-#button-container {
+#button-container > div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-#button-container > button {
+#button-container > div > button {
   margin-bottom: 7px;
   width: 45px;
   height: 45px;
   border-radius: 100%;
-  background-color: #e9d5ff;
 }
 
-#button-container > button:hover {
+#button-container > div > button:hover {
   background-color: #c084fc;
 }
 
@@ -478,7 +587,7 @@ span:hover {
 
 input::placeholder {
   align-content: center;
-  font-size: 0.8em;
+  font-size: 100%;
 }
 
 ::-webkit-scrollbar {

@@ -46,49 +46,44 @@ body {
   }
   p {
     text-align: center;
+  }
+  li {
+    @apply p-5;
+  }
 
-    li {
-      @apply p-5;
-    }
+  h1 {
+    @apply whitespace-nowrap;
+  }
 
-    h1 {
-      @apply whitespace-nowrap;
-    }
+  #p-main {
+    @apply text-black md:text-lg;
+  }
 
-    #p-main {
-      @apply text-black md:text-lg;
-    }
+  #title-bold {
+    @apply text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none;
+  }
 
-    #title-bold {
-      @apply text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none;
-    }
+  #title-sub-bold {
+    @apply text-3xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none p-5;
+  }
 
-    #title-sub-bold {
-      @apply text-3xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none p-5;
-    }
+  #card-div {
+    @apply rounded-md shadow-lg bg-primary0 p-4 pb-10;
+  }
 
-    #card-div {
-      @apply rounded-md shadow-lg bg-primary0 p-4 pb-10;
-    }
+  #button-submit {
+    @apply ml-2 h-10 items-center justify-center rounded-md;
+  }
 
-    button {
-      @apply ml-2 h-10 items-center p-2 inline-block rounded-md bg-primary3 text-sm text-white hover:bg-purple-700;
-    }
+  /* TODO : INPUT BOX 예쁘게 만들기 */
+  input {
+    @apply h-10 items-center justify-center rounded-md bg-gray text-sm font-medium text-black px-6 m-2;
+  }
+  #grid-mypage {
+    @apply grid grid-cols-2 gap-4;
+  }
 
-    #button-submit {
-      @apply ml-2 h-10 items-center justify-center rounded-md;
-    }
-
-    /* TODO : INPUT BOX 예쁘게 만들기 */
-    input {
-      @apply h-10 items-center justify-center rounded-md bg-gray text-sm font-medium text-black px-6 m-2;
-    }
-    #grid-mypage {
-      @apply grid grid-cols-2 gap-4;
-    }
-
-    #grid-item-mypage {
-      @apply bg-gray rounded-lg w-max;
-    }
+  #grid-item-mypage {
+    @apply bg-gray rounded-lg w-max;
   }
 }
