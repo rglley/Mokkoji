@@ -1,7 +1,6 @@
 package online.mokkoji.api.service;
 
 import lombok.RequiredArgsConstructor;
-import online.mokkoji.api.controller.OpenviduController;
 import online.mokkoji.api.request.SessionDto;
 import online.mokkoji.db.entity.Event.Event;
 import online.mokkoji.db.entity.User;
@@ -17,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
-    private static final Logger log = LoggerFactory.getLogger(OpenviduController.class);
+    private static final Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
