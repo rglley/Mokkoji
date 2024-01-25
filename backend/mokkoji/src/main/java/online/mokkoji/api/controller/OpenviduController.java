@@ -3,7 +3,7 @@ package online.mokkoji.api.controller;
 import io.openvidu.java.client.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import online.mokkoji.api.request.SessionDto;
+import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.api.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class OpenviduController {
      * @return The Session ID
      */
     @PostMapping("/api/sessions")
-    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
+    public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
@@ -63,9 +63,9 @@ public class OpenviduController {
         userId = 1L; //임시
 
 
-        SessionDto sessionDto = new SessionDto(userId, session.getSessionId(), session.createdAt());
+        SessionReqDto sessionReqDto = new SessionReqDto(userId, session.getSessionId(), session.createdAt());
         // DB에 저장
-        String sessionDBId = eventService.createSession(sessionDto);
+        String sessionDBId = eventService.createSession(sessionReqDto);
 
 
         // redis에 저장
@@ -74,16 +74,43 @@ public class OpenviduController {
     }
 
 
+    // Session 삭제
+    @DeleteMapping("/api/sessions/{sessionId}")
+    public ResponseEntity<?> deleteSession(@PathVariable("sessionId") String sessionId,
+                                           @RequestBody(required = false) SessionReqDto sessionReqDto)
+            throws OpenViduJavaClientException, OpenViduHttpException {
+
+        Session activeSession = openvidu.getActiveSession(sessionId);
+
+        if (activeSession == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // 참가자 수 , 상태, 종료 시간 넣어야 함
+        SessionReqDto sessionDto = new SessionReqDto(sessionId, sessionReqDto.getParticipantCount(), sessionReqDto.getEndTime());
+
+        eventService.deleteSession(sessionDto);
+
+        activeSession.close();
+
+        if (!(openvidu.getActiveSession(sessionId) == null)) {
+            log.error("세션 삭제가 되지 않았음");
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
     /**
-     * 세션으로 연결
+     * Session에 참가
      *
      * @param sessionId The Session in which to create the Connection
      * @param params    The Connection properties
      * @return The Token associated to the Connection
      */
     @PostMapping("/api/sessions/{sessionId}/connections")
-    public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
-                                                   @RequestBody(required = false) Map<String, Object> params)
+    public ResponseEntity<String> addConnection(@PathVariable("sessionId") String sessionId,
+                                                @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
         if (session == null) {

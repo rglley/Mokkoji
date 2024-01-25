@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
@@ -69,8 +70,8 @@ public class Event/* extends BaseEntity */ {
     //==비즈니스 로직==//
 
 
-    // session CLOSED로 변경
-    public void closeSession() {
+    // Session 종료 시 정보 추가, CLOSED로 변경
+    public void closeSession(SessionReqDto sessionReqDto) {
 
         // 이미 끝나있는 세션이라면
         if (this.getStatus() == EventStatus.CLOSED) {
@@ -78,6 +79,8 @@ public class Event/* extends BaseEntity */ {
         }
 
         this.status = EventStatus.CLOSED;
+        this.participantCount = sessionReqDto.getParticipantCount();
+        this.endTime = sessionReqDto.getEndTime();
     }
 
 

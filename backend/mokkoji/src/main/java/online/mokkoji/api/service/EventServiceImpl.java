@@ -1,7 +1,7 @@
 package online.mokkoji.api.service;
 
 import lombok.RequiredArgsConstructor;
-import online.mokkoji.api.request.SessionDto;
+import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.db.entity.Event.Event;
 import online.mokkoji.db.entity.User;
 import online.mokkoji.db.repository.EventRepository;
@@ -23,7 +23,7 @@ public class EventServiceImpl implements EventService {
 
     // 호스트 헹시(세션) 생성
     @Override
-    public String createSession(SessionDto sessionDto) {
+    public String createSession(SessionReqDto sessionDto) {
 
         User dump = new User("email", "name", "image");
         userRepository.save(dump);
@@ -43,7 +43,7 @@ public class EventServiceImpl implements EventService {
 
 
         // Event 객체 생성
-        Event event = new Event(user, sessionDto.getSessionId(), sessionDto.getCreatedAt());
+        Event event = new Event(user, sessionDto.getSessionId(), sessionDto.getStartTime());
 
         // repository에 저장
         Event savedEvent = eventRepository.save(event);
@@ -54,13 +54,13 @@ public class EventServiceImpl implements EventService {
 
     // 호스트의 세션 status closed로 변경
     @Override
-    public void deleteSession(String sessionId) {
+    public void deleteSession(SessionReqDto sessionReqDto) {
 
         //sessionId로 session 찾기
-        Event findSession = eventRepository.findBySessionId(sessionId);
+        Event findSession = eventRepository.findBySessionId(sessionReqDto.getSessionId());
 
         //session의 status를 CLOSED로 변경
-        findSession.closeSession();
+        findSession.closeSession(sessionReqDto);
 
         //session 저장
         eventRepository.save(findSession);
