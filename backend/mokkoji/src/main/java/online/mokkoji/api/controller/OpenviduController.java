@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin(origins = "*")
@@ -42,33 +43,42 @@ public class OpenviduController {
 
     // Session 생성
     @PostMapping("/api/sessions")
-    public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params)
+    public ResponseEntity<Map<String, String>> addSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-
+        // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
+
+        //세션 생성
         Session session = openvidu.createSession(properties);
 
+        // 리턴값(sessionId) 담는 map 생성
+        Map<String, String> response = new HashMap<>();
 
-        // 유저Id를 받기
+        // map에 담기
+        response.put("sessionId", session.getSessionId());
+
+        // DB에 담을 유저Id를 받기
         Long userId;
 
+        // 로그인이 되지 않은 상태에서 세션 생성을 누른 경우
         if (!params.containsKey("userId")) {
-//            throw new IllegalArgumentException("로그인을 해주세요");
             log.error("유저 아이디 없음");
+//            throw new IllegalArgumentException("로그인을 해주세요");
         }
+
+        // 제대로 userId가 있는 경우
 //        userId = (Long) params.get("userId");
         userId = 1L; //임시
 
-
+        // DB에 저장할 Dto 생성
         SessionReqDto sessionReqDto = new SessionReqDto(userId, session.getSessionId(), session.createdAt());
+
         // DB에 저장
         String sessionDBId = eventService.createSession(sessionReqDto);
 
 
-        // redis에 저장
-
-        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -99,8 +109,13 @@ public class OpenviduController {
         activeSession.close();
 
         if (!(openvidu.getActiveSession(sessionId) == null)) {
-            log.error("세션 삭제가 되지 않았음"); // ㅈ
+            log.error("세션 삭제가 되지 않았음");
         }
+
+        // redis에서 롤링페이퍼, 사진들 정보 받아옴
+
+        // 결과물 파일 저장
+
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
