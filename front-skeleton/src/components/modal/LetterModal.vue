@@ -39,6 +39,9 @@
             </div>
           </div>
         </div>
+        <div>
+          <audio-recorder src=""></audio-recorder>
+        </div>
         <div class="pt-2 pb-4 flex flex-wrap">
           <span
             v-for="(fileName, index) in fileNames"
@@ -74,6 +77,7 @@ import { ref } from 'vue'
 import IconVoice from '@/icons/meeting/IconVoice.vue'
 import IconVideo from '@/icons/meeting/IconVideo.vue'
 import IconRemove from '@/icons/meeting/IconRemove.vue'
+import AudioRecorder from './AudioRecorder.vue'
 
 let fileNames = ref([])
 
