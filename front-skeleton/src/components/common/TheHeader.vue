@@ -1,8 +1,7 @@
 <template>
   <header class="fixed top-0 z-10 w-full h-64">
     <!-- <nav class="w-full bg-opacity-35 p-2 bg-primary flex pl-5"> -->
-      <nav class="w-full flex pl-5">
-
+    <nav class="w-full flex pl-5">
       <a href="/" class="flex items-center rtl:l:space-x-reverse">
         <img
           src="/src/assets/mokkoji_logo.png"
@@ -35,6 +34,7 @@
             >
               <SignUpModal />
             </ModalView>
+            <button id="button-header"><a href="signup">회원가입</a></button>
           </li>
           <li v-else>
             <button

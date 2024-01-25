@@ -44,7 +44,6 @@ body {
 
   #box-shadow {
     @apply p-3 pt-5 border-2 border-slate-200 rounded-lg shadow-md flex-col justify-around;
-
   }
 
   #button-header{
