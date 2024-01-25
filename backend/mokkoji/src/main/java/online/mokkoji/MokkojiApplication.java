@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 public class MokkojiApplication {
-
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
     public static void main(String[] args) {
         SpringApplication.run(MokkojiApplication.class, args);
     }

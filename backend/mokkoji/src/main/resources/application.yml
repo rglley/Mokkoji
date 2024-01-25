@@ -34,3 +34,16 @@ logging.level:
 # org.hibernate.type: trace
 
 
+cloud:
+  aws:
+    s3:
+      bucket: mokkoji-bucket # 버킷명
+    credentials:
+      access-key: AKIAVHLP3OU6SLLAJDH2
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
