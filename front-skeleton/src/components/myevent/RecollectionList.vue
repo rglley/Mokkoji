@@ -10,7 +10,7 @@
         width="200"
       />
       <div class="absolute bottom-4 right-10 left-14">
-        <a href="https://www.w3schools.com">
+        <a href="">
           <img
             src="@/assets/mokkoji_logo_with_bg.png"
             alt="unregistered"

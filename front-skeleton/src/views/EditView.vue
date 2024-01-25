@@ -26,8 +26,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import RollingEdit from '@/components/myEdit/RollingEdit.vue'
-import PhotoEdit from '@/components/myEdit/PhotoEdit.vue'
+import RollingEdit from '@/components/myedit/RollingEdit.vue'
+import PhotoEdit from '@/components/myedit/PhotoEdit.vue'
 
 let isRollingEdit = ref(true)
 let isPhotoEdit = ref(false)
