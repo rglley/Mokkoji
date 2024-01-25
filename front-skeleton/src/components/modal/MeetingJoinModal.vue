@@ -1,5 +1,8 @@
 <template>
-  <div class="w-max text-sm text-left pl-2 pb-2" v-text="infoMsg"/>
+  <div class="w-max text-sm text-left pl-2 pb-2"> 
+    <p v-if="confirm">사용자 이름 설정</p>
+    <p v-else>회원 혜택 안내</p>
+  </div>
 
   <div v-if="!confirm">
     <div class="text-black text-lg max-w-xl self-center m-3 max-md:max-w-full text-justify">
@@ -21,7 +24,6 @@
         <p>
           참가자들의 마음과 생생한 현장이 담긴 롤링페이퍼, 사진첩을 추억으로 남겨 간직할 수 있어요.
         </p>
-        <br />
       </div>
 
       <div class="float-right">
@@ -36,20 +38,18 @@
       v-model="userName"
       class="w-80 border-2 border-gray"
     /><br />
-    <button @click="suubmitTempName" class="float-right">참가하기</button>
+    <button @click="submitTempName" class="float-right">참가하기</button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 let confirm = ref(false)
 let userName = ref('')
 
 let props = defineProps({
   conferenceIdInput: String
 })
-
-let infoMsg = (!confirm.value? '회원 혜택 안내': '참가자명 설정')
 
 // 이름 랜덤 생성
 let capFirst = (string) => string.charAt(0).toUpperCase() + string.slice(1)
@@ -77,7 +77,7 @@ let generateName = () => {
   return name
 }
 
-let suubmitTempName = (tempName) => {
+let submitTempName = (tempName) => {
   if (tempName.value == null || tempName.trim(' ').length == 0) {
     // tempName 조합 로직
     tempName = generateName()

@@ -2,12 +2,12 @@
   <Transition name="modal-outer" :appear="true">
     <div
       v-if="showModal"
-      class="fixed w-full h-screen bg-black bg-opacity-30 top-0 left-0 z-10 flex justify-center px-8"
+      class="fixed w-full h-screen my-auto bg-black bg-opacity-30 top-0 left-0 z-10 flex justify-center px-8"
     >
       <Transition name="modal-inner" :appear="true">
         <div
           v-show="showModal"
-          class="p-4 bg-white self-start m-32"
+          class="p-4 bg-white self-start m-auto"
           v-on-click-outside="clickOutsideEmit"
 
         >

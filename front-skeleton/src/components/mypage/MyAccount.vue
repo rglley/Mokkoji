@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-lg">
-      <div class="flex flex-col p-6">
-        <h3 class="text-2xl font-semibold whitespace-nowrap">현재 계좌 정보</h3>
+  <div>
+    <div id="box-shadow" class="w-5/6 mx-auto mt-10 mb-5">
+      <div class="p-6">
+        <h3 class="text-2xl font-semibold whitespace-nowrap text-center">현재 계좌 정보</h3>
       </div>
       <div class="p-6 space-y-4">
         <div class="space-y-2">
-          <label
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >은행명</label
+          <span
+            class="text-sm font-medium"
+            >은행명</span
           >
           <div class="text-gray-600">{{ store.userAccount.bank }}</div>
         </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-lg mt-8">
+    <div id="box-shadow" class="w-5/6 mx-auto mt-10 mb-5">
       <div class="flex flex-col p-6">
         <h3 class="text-2xl font-semibold">계좌 등록 및 수정</h3>
         <p class="text-sm text-muted-foreground">계좌를 등록 또는 수정하세요</p>

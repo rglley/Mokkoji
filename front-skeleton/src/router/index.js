@@ -7,7 +7,6 @@ import MyAccount from '@/components/mypage/MyAccount.vue'
 
 // import MyMeeting from '@/components/conference/MyMeeting.vue'
 // import MeetingView from '@/views/MeetingView.vue'
-
 import Error404 from '@/components/common/Error404.vue'
 
 const router = createRouter({

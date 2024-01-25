@@ -1,9 +1,9 @@
 <template>
-  <footer class="bg-white rounded-lg shadow dark:bg-gray-900 mt-40">
+  <footer class="bg-slate-800">
     <hr class="my-6 border-gray-200" />
 
-    <div class="w-full max-w-screen-xl mx-auto p-4">
-      <div class="sm:flex sm:items-center justify-between">
+    <div class="w-full max-w-screen-xl mx-auto p-4 h-auto">
+      <!-- <div class="sm:flex sm:items-center justify-between">
         <a href="/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
           <img src="@/assets/mokkoji_logo.png" class="h-12" />
         </a>
@@ -18,11 +18,11 @@
             <a href="#" class="hover:underline">Contact</a>
           </li>
         </ul>
-      </div>
-      <!-- <hr class="my-6 border-gray-200" />
-      <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
-        >© <span class="hover:underline">모꼬지™</span>
-      </span> -->
+      </div> -->
+      <hr class="border-white mt-10" />
+      <span class="block text-white sm:text-center h-12 mh-2"
+        >© <span class="hover:underline">모꼬지™ All rights reserved.</span>
+      </span>
     </div>
   </footer>
 </template>

@@ -2,14 +2,11 @@
   <div
     class="bg-white flex mt-0 w-full flex-col justify-center items-center px-16 py-12 max-md:max-w-full max-md:px-5"
   >
-    <div
-      id="card-div"
-      class="flex max-w-full flex-col mt-24 mb-40 items-start bg-primary0 border-2 border-slate-200 rounded-md"
-    >
+    <div id="card-div">
       <div class="absolute -mt-28 mx-10 justify-center">
         <img
           alt="프로필 사진"
-          class="overflow-hidden rounded-full border-2 border-white dark:border-gray w-48"
+          id="image-profile"
           src="@/assets/dummy_profile.jpg"
         />
       </div>
@@ -18,15 +15,15 @@
           <span class="flex flex-col mt-10 max-md:mt-10"
             ><div class="text-black text-3xl font-bold self-stretch">{{ store.user.id }}님</div>
             <div class="text-black text-xl self-stretch mt-2.5">{{ store.user.email }}</div>
-            <span class="self-stretch flex items-stretch justify-between gap-4 mt-8 pr-4"
+            <span class="mt-16 pl-2 pr-4"
               ><div class="text-black text-3xl">
                 계좌 등록
-                <a class="text-3xl text-red-500" v-if="store.user.isAccountLinked">O</a>
-                <a class="text-3xl text-red-500" v-else>X </a>
+                <a class="text-2xl text-red-500" v-if="store.user.isAccountLinked">O</a>
+                <a class="text-2xl text-red-500" v-else>X </a>
               </div>
             </span>
-            <div class="marker:text-sm">계좌를 등록하시면 참가자들의 마음을 받을 수 있어요</div>
-            <div class="mt-32">
+            <div class="text-sm font-light m-2 text-wrap max-w-52">계좌를 등록하시면 참가자들의 마음을 받을 수 있어요</div>
+            <div class="mt-20">
               <router-link to="/mypage/detail" id="button-submit">회원정보 수정</router-link>
             </div>
           </span>

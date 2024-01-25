@@ -5,14 +5,10 @@
     <div class="flex flex-row gap-10 h-max">
       <div class="flex-auto w-max m-5">
         <label>
-          <img
-            id="preview"
-            src="@/assets/profile_icon.jpg"
-            class="overflow-hidden rounded-full border-2 border-white dark:border-gray w-48 ml-auto mr-auto"
-          />
+          <img id="image-profile" src="@/assets/profile_icon.jpg" />
         </label>
         <input
-          class="h-10 w-56 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium ml-auto mr-auto"
+          class="h-10 w-60 rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm ml-auto mr-auto"
           id="profile-picture"
           type="file"
           @change="getFileName($event.target.files)"
@@ -20,33 +16,22 @@
       </div>
       <div class="flex-auto">
         <div class="p-2">
-          <label class="text-sm font-light"> 계좌번호 </label>
+          <label class="text-sm font-light"> 계좌 </label>
 
           <div class="flex flex-row items-baseline">
-            <select
-              v-model="bank"
-              class="flex rounded-md h-10 border border-input text-sm text-gray-500 focus:outline-none focus:border-gray-200 peer"
-              aria-placeholder="은행명"
-              required
-            >
+            <select v-model="bank" id="input" aria-placeholder="은행명" required>
               <option v-for="bank in banks" :key="bank" :value="bank">
                 {{ bank }}
               </option>
             </select>
-            <input
-              class="flex h-10 w-60 rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground"
-              id="account-number"
-              placeholder="계좌번호를 입력하세요"
-              v-model="accountNumber"
-            />
-            
+            <input id="input" class="w-64" placeholder="계좌번호를 입력하세요" v-model="accountNumber" />
           </div>
         </div>
         <div class="p-2">
-          <label class="text-sm font-light">Email</label
+          <label class="text-sm font-light mr-5">Email</label
           ><input
-            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            id="email"
+            id="input"
+            class="w-72"
             placeholder="email@example.com"
             required=""
             type="email"
@@ -79,7 +64,7 @@ let base64 = (file) => {
     let reader = new FileReader()
     reader.onload = (e) => {
       resolve(e.target.result)
-      let previewImage = document.getElementById('preview')
+      let previewImage = document.getElementById('image-profile')
       previewImage.src = e.target.result
     }
     reader.readAsDataURL(file)
