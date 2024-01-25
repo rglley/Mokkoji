@@ -10,7 +10,7 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        show_sql: true
+        #        show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
@@ -27,7 +27,10 @@ spring:
       host: localhost
       port: 6379
 
+  
 #      url:
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
+
+

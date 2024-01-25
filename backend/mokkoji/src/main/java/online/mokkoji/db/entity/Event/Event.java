@@ -6,20 +6,20 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import online.mokkoji.db.entity.BaseEntity;
-import online.mokkoji.db.entity.Photo;
+import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
+@Table(name = "event")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "participantCount", "status", "type", "content", "startTime", "endTime"})
-public class Event extends BaseEntity {
+@DynamicInsert
+@ToString(of = {"id", "participantCount", "status", "startTime", "endTime"})
+public class Event/* extends BaseEntity */ {
 
     @Id
     @GeneratedValue
@@ -35,19 +35,12 @@ public class Event extends BaseEntity {
     private String sessionId;
 
     @ColumnDefault("0")
-    @Column(name = "participant_count", nullable = false)
+    @Column(name = "participant_count")
     private int participantCount;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("MEMORY")
-    private EventStatus status;
+    private EventStatus status = EventStatus.ACTIVE;
 
-    @Enumerated(EnumType.STRING)
-    @ColumnDefault("DEFAULT")
-    private EventType type;
-
-    @Size(max = 100)
-    private String content;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -55,16 +48,37 @@ public class Event extends BaseEntity {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    //사진 리스트
-    @OneToMany(mappedBy = "event")
-    private List<Photo> photos = new ArrayList<>();
+
+    //==연관관계 메서드==//
+    public void setUser(User user) {
+        this.user = user;
+        user.getEvents().add(this);
+    }
 
     //==생성자==//
-
     public Event(User user, String sessionId, LocalDateTime startTime) {
-
-        this.user = user;
+        this.setUser(user);
         this.sessionId = sessionId;
         this.startTime = startTime;
+        Result result = new Result(this);
     }
+
+    //==설정 메서드==//
+
+
+    //==비즈니스 로직==//
+
+
+    // session CLOSED로 변경
+    public void closeSession() {
+
+        // 이미 끝나있는 세션이라면
+        if (this.getStatus() == EventStatus.CLOSED) {
+            throw new IllegalStateException("이미 끝난 세션입니다.");
+        }
+
+        this.status = EventStatus.CLOSED;
+    }
+
+
 }
