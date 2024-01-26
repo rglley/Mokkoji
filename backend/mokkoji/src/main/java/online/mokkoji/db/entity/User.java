@@ -1,45 +1,42 @@
 package online.mokkoji.db.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
+@Entity
 @Getter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity
-public class User extends BaseEntity{
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
+    @Size(max = 30)
     private String email;
 
-    @Column(nullable = false)
-    private String socialId;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private SocialType socialType;
+    private Provider provider;
 
     @Column(nullable = false)
+    @Size(max = 10)
+    private String name;
+
+    //enum이 낫지 않을까?
     @Enumerated(EnumType.STRING)
     private Role role;
 
     private String image;
-    private String account;
-    private String refreshToken;
 
-    public void authorizeUser() {
-        this.role = Role.USER;
-    }
+    @OneToOne(mappedBy = "user")
+    private Account account;
 
-    public void updateRefreshToken(String updateRefreshToken) {
-        this.refreshToken = updateRefreshToken;
-    }
+    @OneToOne(mappedBy = "user")
+    private Record record;
 }
