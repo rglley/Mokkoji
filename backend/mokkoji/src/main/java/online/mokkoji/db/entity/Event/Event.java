@@ -9,7 +9,6 @@ import lombok.ToString;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.EventErrorCode;
-import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -63,7 +62,6 @@ public class Event/* extends BaseEntity */ {
         this.setUser(user);
         this.sessionId = sessionId;
         this.startTime = startTime;
-        Result result = new Result(this);
     }
 
     //==설정 메서드==//

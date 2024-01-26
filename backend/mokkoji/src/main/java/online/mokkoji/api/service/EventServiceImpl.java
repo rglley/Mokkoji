@@ -5,8 +5,10 @@ import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
 import online.mokkoji.db.entity.Event.Event;
+import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import online.mokkoji.db.repository.EventRepository;
+import online.mokkoji.db.repository.ResultRepository;
 import online.mokkoji.db.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ public class EventServiceImpl implements EventService {
 
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final ResultRepository resultRepository;
 
     //userId 받기
     @Override
@@ -63,6 +66,10 @@ public class EventServiceImpl implements EventService {
 
         // repository에 저장
         Event savedEvent = eventRepository.save(event);
+
+        // 빈 Result도 생성
+        Result result = new Result(savedEvent);
+        resultRepository.save(result);
 
         return savedEvent.getSessionId();
     }
