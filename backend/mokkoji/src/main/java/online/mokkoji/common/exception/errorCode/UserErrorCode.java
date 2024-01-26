@@ -7,9 +7,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum UserErrorCode implements ErrorCode{
-    DUPLICATE_SIGNUP(HttpStatus.CONFLICT, "이미 존재하는 회원입니다.");
+    DUPLICATE_SIGNUP(409, "이미 존재하는 회원입니다."),
+    USER_NOT_FOUND(404, "해당 회원이 존재하지 않습니다.");
 
-    private final HttpStatus httpStatus;
-    private final String message;
+    private final Integer errorCode;
+    private final String errorMessage;
 }
 

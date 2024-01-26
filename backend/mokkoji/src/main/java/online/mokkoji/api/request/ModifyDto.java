@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import online.mokkoji.db.entity.Account;
 import online.mokkoji.db.entity.Provider;
 import online.mokkoji.db.entity.Role;
 import online.mokkoji.db.entity.User;
@@ -14,7 +13,7 @@ import online.mokkoji.db.entity.User;
 @Builder
 @ToString
 @AllArgsConstructor
-public class SignupDto {
+public class ModifyDto {
 
     @NotBlank
     private String provider;
@@ -22,17 +21,11 @@ public class SignupDto {
     @NotBlank
     private String email;
 
-    @NotBlank
-    private String name;
-
-    //기본 이미지
-    @NotBlank
     private String image;
-
     private String bank;
     private String accountNumber;
 
-    public User toEntitiy() {
+    public User toEntitiy(User user) {
         return User.builder()
                 .provider(Provider.valueOf(provider))
                 .email(email)
@@ -41,12 +34,5 @@ public class SignupDto {
                 .role(Role.USER)
                 .build();
     }
-
-    public Account toEntity(User user) {
-        return Account.builder()
-                .user(user)
-                .bank(bank)
-                .number(accountNumber)
-                .build();
-    }
 }
+

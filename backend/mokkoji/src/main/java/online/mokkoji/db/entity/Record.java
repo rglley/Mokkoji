@@ -12,7 +12,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Record {
 
     @Id

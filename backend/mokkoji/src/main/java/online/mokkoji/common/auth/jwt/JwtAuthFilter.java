@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.db.entity.Provider;
 import online.mokkoji.db.entity.User;
 import online.mokkoji.db.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         // request Header에서 AccessToken을 가져온다.
         String accessToken = request.getHeader("Authorization");
 
@@ -51,7 +53,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (jwtUtil.verifyToken(accessToken)) {
 
             // AccessToken 내부의 payload에 있는 email로 user를 조회한다. 없다면 예외를 발생시킨다 -> 정상 케이스가 아님
-            User findUser = userRepository.findByEmail(jwtUtil.getEmail(accessToken))
+            User findUser = userRepository.findByProviderAndEmail
+                            (Provider.valueOf(jwtUtil.getProvider(accessToken)), jwtUtil.getEmail(accessToken))
                     .orElseThrow(IllegalStateException::new);
 
             // SecurityContext에 등록할 User 객체를 만들어준다.

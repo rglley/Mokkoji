@@ -28,7 +28,6 @@ public class User {
     @Size(max = 10)
     private String name;
 
-    //enum이 낫지 않을까?
     @Enumerated(EnumType.STRING)
     private Role role;
 
