@@ -1,13 +1,16 @@
 <template>
   <main class="px-2 w-screen h-screen flex flex-col justify-center">
-    <section class="w-full h-[80%] flex justify-center">
+    <section class="w-full h-[85%] flex justify-center">
       <!-- 스포트라이트 레이아웃 -->
       <div v-if="!isGrid" class="w-full h-full flex basis-3/4">
         <!-- 회의 화면 -->
         <div
           id="meeting-container"
           ref="groupVideo"
-          class="w-full h-full flex justify-center items-center"
+          :class="{
+            'w-full h-full flex justify-center items-center': !isChat && !isUserList,
+            'w-full h-full flex justify-end items-center': isChat || isUserList
+          }"
         >
           <!-- 참가자 화면 -->
           <div
@@ -23,14 +26,12 @@
             />
           </div>
           <!-- 메인 화면 -->
-          <transition-group name="myVideo-slide">
-            <div ref="myVideo" class="max-h-[100%] basis-2/3 flex justify-center items-center">
-              <user-Video
-                :stream-manager="state.mainStreamManager"
-                class="px-2 min-w-[100%] max-w-[100%] min-h-[100%] max-h-[100%] rounded-3xl"
-              />
-            </div>
-          </transition-group>
+          <div ref="myVideo" class="max-h-[100%] basis-2/3 flex justify-center items-center">
+            <user-Video
+              :stream-manager="state.mainStreamManager"
+              class="px-2 min-w-[100%] max-w-[100%] min-h-[100%] max-h-[100%] rounded-3xl"
+            />
+          </div>
         </div>
       </div>
       <!-- 그리드 레이아웃 -->
@@ -54,98 +55,108 @@
         </div>
       </div>
       <!-- 참여자 목록, 채팅방-->
-      <transition-group name="slide-fade">
+      <transition-group name="slide">
         <div
           v-if="isUserList || isChat"
-          class="h-full basis-1/4 self-center flex flex-col justify-center"
+          class="h-full basis-1/4 self-center flex flex-col justify-end"
         >
-          <div
-            v-if="isUserList"
-            name="slide-fade"
-            class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
-          >
-            <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
-              <div class="w-[30%] font-bold text-xs md:text-md lg:text-lg xl:text-xl">참여자</div>
-              <div class="w-[70%] flex just overflow-hidden">
-                <button class="w-[70%]">
-                  <div class="text-xs md:text-xs lg:text-md xl:text-lg text-purple-400 text-end">
-                    초대하기
-                  </div>
-                  <IconInvite class="size-[40%]" />
-                </button>
-                <button class="ml-auto flex overflow-hidden" @click="setUserListState">
-                  <IconCancel class="size-{80%]" />
-                </button>
+          <transition-group name="slide">
+            <div
+              v-if="isUserList"
+              name="slide-fade"
+              class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
+            >
+              <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
+                <div class="w-[30%] font-bold text-xs md:text-md lg:text-lg xl:text-xl">참여자</div>
+                <div class="w-[70%] flex just overflow-hidden">
+                  <button class="w-[70%]">
+                    <div class="text-xs md:text-xs lg:text-md xl:text-lg text-purple-400 text-end">
+                      초대하기
+                    </div>
+                    <IconInvite class="size-[40%]" />
+                  </button>
+                  <button class="ml-auto flex overflow-hidden" @click="setUserListState">
+                    <IconCancel class="size-{80%]" />
+                  </button>
+                </div>
+              </div>
+              <div
+                class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
+              >
+                <user-list
+                  v-for="sub in state.subscribers"
+                  :key="sub.stream.connection.connectionId"
+                  :stream-manager="sub"
+                  class="bg-white w-[90%] min-h-16 rounded-lg text-base flex justify-center items-center font-semibold"
+                />
+              </div>
+              <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
+                <form
+                  action="/meeting"
+                  class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center"
+                >
+                  <input
+                    type="text"
+                    name=""
+                    id="search-name"
+                    placeholder="참여자명 검색"
+                    class="bg-gray w-[80%] h-[100%] rounded-full"
+                  />
+                  <button
+                    type="submit"
+                    class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                  >
+                    <IconSearch class="size-[60%]" />
+                  </button>
+                </form>
               </div>
             </div>
-            <div
-              class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
-            >
-              <user-list
-                v-for="sub in state.subscribers"
-                :key="sub.stream.connection.connectionId"
-                :stream-manager="sub"
-                class="bg-white w-[90%] min-h-16 rounded-lg text-base flex justify-center items-center font-semibold"
-              />
-            </div>
-            <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
-              <form action="/meeting" class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center">
-                <input
-                  type="text"
-                  name=""
-                  id="search-name"
-                  placeholder="참여자명 검색"
-                  class="bg-gray w-[80%] h-[100%] rounded-full"
-                />
-                <button
-                  type="submit"
-                  class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
-                >
-                  <IconSearch class="size-[60%]" />
-                </button>
-              </form>
-            </div>
-          </div>
-
+          </transition-group>
           <div v-if="isUserList && isChat" class="mb-2"></div>
-          <div
-            v-if="isChat"
-            id="chat-list"
-            class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
-            data-aos="fade-left"
-          >
-            <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
-              <div class="basis-3/12 font-bold text-xs md:text-md lg:text-lg xl:text-xl">채팅</div>
-              <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
-                <IconCancel @click="setChatState" />
-              </button>
-            </div>
-            <div
-              class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
-            ></div>
-            <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
-              <form action="/meeting" class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center">
-                <input
-                  type="text"
-                  name=""
-                  id="search-name"
-                  placeholder="메시지 보내기"
-                  class="bg-gray w-[80%] h-[100%] rounded-full"
-                />
-                <button
-                  type="submit"
-                  class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
-                >
-                  <IconMessageSend class="size-[60%]" />
+          <transition-group name="slide"
+            ><div
+              v-if="isChat"
+              id="chat-list"
+              class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
+            >
+              <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
+                <div class="basis-3/12 font-bold text-xs md:text-md lg:text-lg xl:text-xl">
+                  채팅
+                </div>
+                <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
+                  <IconCancel @click="setChatState" />
                 </button>
-              </form>
+              </div>
+              <div
+                class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
+              ></div>
+              <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
+                <form
+                  action="/meeting"
+                  class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center"
+                >
+                  <input
+                    type="text"
+                    name=""
+                    id="search-name"
+                    placeholder="메시지 보내기"
+                    class="bg-gray w-[80%] h-[100%] rounded-full"
+                  />
+                  <button
+                    type="submit"
+                    class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                  >
+                    <IconMessageSend class="size-[60%]" />
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          </transition-group>
         </div>
       </transition-group>
     </section>
     <!-- 기능 버튼 -->
-    <section class="mx-32 pt-2 h-[20%] flex justify-center items-center">
+    <section class="mx-32 pt-2 h-[25%] flex justify-center items-center">
       <div class="h-full flex justify-center items-center space-x-20">
         <div class="min-w-[110px] flex items-center space-x-2">
           <button class="w-10 h-10 rounded-full bg-white hover:bg-slate-200">
@@ -522,6 +533,7 @@ const getToken = async (mySessionId) => {
   return await createToken(sessionId)
 }
 
+// 세션 생성
 const createSession = async (sessionId) => {
   const response = await axios.post(
     APPLICATION_SERVER_URL + 'api/sessions',
@@ -534,6 +546,7 @@ const createSession = async (sessionId) => {
   return response.data // sessionId
 }
 
+// 토큰 생성
 const createToken = async (sessionId) => {
   const response = await axios.post(
     APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
@@ -544,6 +557,34 @@ const createToken = async (sessionId) => {
   )
   console.log(response.data)
   return response.data // The token
+}
+
+const sendMessage = () => {
+  state.session
+    .signal({
+      data: 'My message', // 메시지
+      to: [], // 메시지 전송 대상
+      type: 'my-chat' // 메시지 타입
+    })
+    .then(() => {
+      console.log('메시지 전송 성공') // 메시지 전송 성공
+    })
+    .catch((error) => {
+      console.error(error) // 메시지 전송 실패
+    })
+
+  // 메시지 수신
+  state.session.on('signal:my-chat', (event) => {
+    console.log(event.data) // 메시지
+    console.log(event.from) // 메시지 전송자 객체 연결
+    console.log(event.type) // 메시지 타입
+  })
+
+  state.session.on('signal', (event) => {
+    console.log(event.data)
+    console.log(event.from)
+    console.log(event.type)
+  })
 }
 
 onMounted(() => {
@@ -599,31 +640,26 @@ input::placeholder {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 0;
 }
 
 /* 스크롤바 막대 */
 ::-webkit-scrollbar-thumb {
-  background: #e7c6ff; /* 스크롤바 막대 색상 */
-  border-radius: 12px 12px 12px 12px;
+  background-color: transparent;
+  border: none;
 }
 
-.slide-fade-enter-active {
+.slide-enter-active {
   transition: all 0.5s;
 }
 
-.slide-fade-leave-active {
+.slide-leave-active {
   transition: all 0.5s;
 }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(40px);
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100px);
   opacity: 0;
-}
-
-.myVideo-slide-enter-active {
-  transition: all 0.5s;
 }
 </style>
