@@ -29,14 +29,8 @@ public class SessionReqDto {
         this.startTime = createdAt;
     }
 
-    // Session 비활성화용 생성자(Service에 보내는 용)
-    public SessionReqDto(String sessionId, int participantCount, LocalDateTime endTime) {
-        this.sessionId = sessionId;
-        this.participantCount = participantCount;
-        this.endTime = endTime;
-    }
 
-    // RequestBody로 받을 생성자(없어도 되는지 실험해보기)
+    // deleteSession에서 RequestBody로 받을 생성자(없어도 되는지 실험해보기)
     public SessionReqDto(Long userId, int participantCount, LocalDateTime endTime) {
         this.userId = userId;
         this.participantCount = participantCount;

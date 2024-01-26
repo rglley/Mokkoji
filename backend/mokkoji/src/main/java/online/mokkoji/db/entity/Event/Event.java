@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import online.mokkoji.api.request.SessionReqDto;
+import online.mokkoji.common.exception.RestApiException;
+import online.mokkoji.common.exception.errorCode.EventErrorCode;
 import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
@@ -75,7 +77,7 @@ public class Event/* extends BaseEntity */ {
 
         // 이미 끝나있는 세션이라면
         if (this.getStatus() == EventStatus.CLOSED) {
-            throw new IllegalStateException("이미 끝난 세션입니다.");
+            throw new RestApiException(EventErrorCode.ALREADY_CLOSED_EVENT);
         }
 
         this.status = EventStatus.CLOSED;

@@ -5,7 +5,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.api.service.EventService;
-import online.mokkoji.db.entity.Event.Event;
 import online.mokkoji.db.repository.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,24 +51,10 @@ public class OpenviduController {
         //세션 생성
         Session session = openvidu.createSession(properties);
 
-        // 리턴값(sessionId) 담는 map 생성
-        Map<String, String> response = new HashMap<>();
-
-        // map에 담기
-        response.put("sessionId", session.getSessionId());
 
         // DB에 담을 유저Id를 받기
-        Long userId;
+        Long userId = eventService.getUserId(params);
 
-        // 로그인이 되지 않은 상태에서 세션 생성을 누른 경우
-        if (!params.containsKey("userId")) {
-            log.error("유저 아이디 없음");
-//            throw new IllegalArgumentException("로그인을 해주세요");
-        }
-
-        // 제대로 userId가 있는 경우
-//        userId = (Long) params.get("userId");
-        userId = 1L; //임시
 
         // DB에 저장할 Dto 생성
         SessionReqDto sessionReqDto = new SessionReqDto(userId, session.getSessionId(), session.createdAt());
@@ -77,6 +62,11 @@ public class OpenviduController {
         // DB에 저장
         String sessionDBId = eventService.createSession(sessionReqDto);
 
+        // 리턴값(sessionId) 담는 map 생성
+        Map<String, String> response = new HashMap<>();
+
+        // map에 담기
+        response.put("sessionId", session.getSessionId());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -89,32 +79,13 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
         Session activeSession = openvidu.getActiveSession(sessionId);
-
-        if (activeSession == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        // 세션의 호스트Id와 지금 전달받은 userId가 맞는지 확인
-        Event event = eventRepository.findBySessionId(sessionId);
-        if (event.getUser().getId() != sessionReqDto.getUserId()) {
-            log.error("권한이 없습니다"); //임시로 하는 거.
-            // throw 해야함
-        }
-
-        // 참가자 수 , 상태, 종료 시간 넣어야 함
-        SessionReqDto sessionDto = new SessionReqDto(sessionId, sessionReqDto.getParticipantCount(), sessionReqDto.getEndTime());
-
-        eventService.deleteSession(sessionDto);
+        eventService.deleteSession(sessionId, sessionReqDto);
 
         activeSession.close();
 
-        if (!(openvidu.getActiveSession(sessionId) == null)) {
-            log.error("세션 삭제가 되지 않았음");
-        }
-
         // redis에서 롤링페이퍼, 사진들 정보 받아옴
 
-        // 결과물 파일 저장
+        // 결과물 파일 저장(resultService)
 
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -123,17 +94,20 @@ public class OpenviduController {
 
     // Session에 Connect
     @PostMapping("/api/sessions/{sessionId}/connections")
-    public ResponseEntity<String> addConnection(@PathVariable("sessionId") String sessionId,
-                                                @RequestBody(required = false) Map<String, Object> params)
+    public ResponseEntity<Map<String, String>> addConnection(@PathVariable("sessionId") String sessionId,
+                                                             @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
-        if (session == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);
 
-        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+        // return값 담기
+        Map<String, String> response = new HashMap<>();
+        response.put("connectionToken", connection.getToken());
+        response.put("Status", "Session에 참여자 연결 성공");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
