@@ -8,19 +8,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum CommonErrorCode implements ErrorCode {
+    INVALID_PARAMETER(400, "잘못된 매개변수가 포함되었습니다."),
+    RESOURCE_NOT_FOUND(404, "요청 내용을 찾을 수 없습니다."),
+    INTERNAL_SERVER_ERROR(500, "서버 오류가 발생했습니다.");
 
-    // 3xx(리다이렉션) : 추가 작업 조치
-
-
-    // 4xx(클라이언트 오류) : 요청 문법 오류, 요청 처리 실패
-    INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 매개변수가 포함되었습니다."), // 400
-    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "요청 내용을 찾을 수 없습니다."), // 404
-
-
-    // 5xx(서버 오류) : 서버 오류
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다."); // 500
-
-
-    private final HttpStatus httpStatus;
-    private final String message;
+    private final Integer errorCode;
+    private final String errorMessage;
 }
