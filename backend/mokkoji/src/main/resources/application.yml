@@ -10,7 +10,7 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        #        show_sql: true
+        # show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
@@ -27,8 +27,17 @@ spring:
       host: localhost
       port: 6379
 
-  
-#      url:
+# OpenVidu
+OPENVIDU_URL: http://localhost:4443/
+OPENVIDU_SECRET: MOKKOJI_SECRET
+
+# server
+server:
+  port: '5000'
+  ssl:
+    enabled: 'false'
+
+# url:
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
