@@ -519,6 +519,6 @@ gradle-app.setting
 *.hprof
 
 ### S3 access yml ###
-*.application-s3.yml
+*/application-s3.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/java,node,sass,macos,maven,redis,vuejs,gradle,python,eclipse,windows,intellij,visualstudiocode,opencv,vue
