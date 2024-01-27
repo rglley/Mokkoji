@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum OpenviduErrorCode implements ErrorCode {
 
-    NO_USER_ID(400, "유저 아이디 없거나 일치하는 아이디 없음"),
-    NOT_HOST_USER_ID(403, "호스트와 동일한 아이디가 아님"),
+    NO_USER_ID(400, "userId가 없거나 일치하는 userId 없음"),
+    NOT_HOST_USER_ID(403, "호스트와 동일한 userId가 아님"),
     ;
 
     private final Integer errorCode;

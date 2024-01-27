@@ -38,10 +38,13 @@ dependencies {
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-
     //Openvidu
     // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
     implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.29.0'
+
+    //S3
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
 
 
     compileOnly 'org.projectlombok:lombok'
