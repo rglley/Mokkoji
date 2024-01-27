@@ -518,7 +518,7 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-### S3 access key yml ###
+### S3 access yml ###
 *.application-s3.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/java,node,sass,macos,maven,redis,vuejs,gradle,python,eclipse,windows,intellij,visualstudiocode,opencv,vue
