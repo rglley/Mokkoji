@@ -3,11 +3,10 @@ package online.mokkoji.api.controller;
 import io.openvidu.java.client.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.api.service.EventService;
 import online.mokkoji.db.repository.EventRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
 public class OpenviduController {
-
-    private static final Logger log = LoggerFactory.getLogger(OpenviduController.class);
 
     private final EventService eventService;
     private final EventRepository eventRepository;
