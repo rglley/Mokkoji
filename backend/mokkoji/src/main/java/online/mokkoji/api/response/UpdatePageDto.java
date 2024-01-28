@@ -20,5 +20,5 @@ public class UpdatePageDto {
     private String name;
 
     private String bank;
-    private String account;
+    private String accountNumber;
 }
