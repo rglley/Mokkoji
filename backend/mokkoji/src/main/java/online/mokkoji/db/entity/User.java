@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "email", "name", "image"})
+// TODO: 2024.01.28 BaseEntity 그래서 어떻게 사용하는데
 public class User/* extends BaseEntity*/ {
 
     @Id

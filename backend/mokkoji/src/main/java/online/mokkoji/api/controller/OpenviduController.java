@@ -81,9 +81,8 @@ public class OpenviduController {
 
         activeSession.close();
 
-        // redis에서 롤링페이퍼, 사진들 정보 받아옴
 
-        // 결과물 파일 저장(resultService)
+        // TODO: 2024.01.28 redis에 남은 결과물 파일 저장(resultService)||아직 작성 중인 사람은?
 
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -103,7 +102,7 @@ public class OpenviduController {
         // return값 담기
         Map<String, String> response = new HashMap<>();
         response.put("connectionToken", connection.getToken());
-        response.put("Status", "Session에 참여자 연결 성공");
+        response.put("message", "Session에 참여자 연결 성공");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
