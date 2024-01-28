@@ -32,11 +32,14 @@ public class EventController {
     // 캡쳐사진 저장
     @PostMapping("/photos/{sessionId}")
     public ResponseEntity<Map<String, String>> addPhoto(@PathVariable("sessionId") String sessionId,
-                                                        @RequestBody PhotoReqDto photoReqDto) throws IOException {
+                                                        @RequestPart("photo") MultipartFile photo,
+                                                        @RequestPart("userId") PhotoReqDto photoReqDto) throws IOException {
 
         Event event = eventRepository.findBySessionId(sessionId);
         Long resultId = event.getResult().getId();
-        URL s3Url = s3Service.uploadImage(photoReqDto.getPhoto(), photoReqDto.getUserId(), resultId);
+        URL s3Url = s3Service.uploadImage(photo, photoReqDto.getUserId(), resultId);
+
+        log.info(s3Url.toString());
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "사진 업로드 완료");
@@ -46,8 +49,9 @@ public class EventController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // TODO : 2024.01.28 여기도 형식 바꿔야 함
     //롤링페이퍼 저장
-    @PostMapping("/events/rollingpapers/{sessionId}")
+    @PostMapping("/rollingpapers/{sessionId}")
     public ResponseEntity<Map<String, String>> addRollingpaper(@PathVariable("sessionId") String sessionId,
                                                                @RequestBody RollingpaperReqDto rollingpaperReqDto) throws IOException {
 
@@ -87,5 +91,6 @@ public class EventController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

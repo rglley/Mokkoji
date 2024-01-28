@@ -104,7 +104,6 @@ public class S3ServiceImpl implements S3Service {
         return urlMap;
     }
 
-
     // 파일 이름 생성
     private String createFileName(String fileName, String prefix) {
         return prefix.concat(UUID.randomUUID().toString()).concat(getFileExtension(fileName));
