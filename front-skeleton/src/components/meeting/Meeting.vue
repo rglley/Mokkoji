@@ -129,26 +129,30 @@
               </div>
               <div
                 class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
-              ></div>
+              >
+                <div v-for="chatMessage in chatMessages" :key="chatMessage">{{ chatMessage }}</div>
+              </div>
               <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
-                <form
+                <div
                   action="/meeting"
                   class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center"
                 >
                   <input
+                    v-model="chatMessage"
                     type="text"
                     name=""
-                    id="search-name"
+                    id="chat-message"
                     placeholder="메시지 보내기"
                     class="bg-gray w-[80%] h-[100%] rounded-full"
                   />
                   <button
+                    @click="sendMessage()"
                     type="submit"
                     class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
                   >
                     <IconMessageSend class="size-[60%]" />
                   </button>
-                </form>
+                </div>
               </div>
             </div>
           </transition-group>
@@ -310,28 +314,18 @@ const props = defineProps({
   }
 })
 
-// 레이아웃 형식
 let isGrid = ref(false)
-// 마이크
 let isMic = ref(true)
-// 카메라
 let isCamera = ref(true)
-// 메인 회의
 let isMain = ref(true)
-// 편지쓰기
 let isLetterModal = ref(false)
-// 선물하기
 let isGift = ref(false)
-// 사진찍기
 let isCapture = ref(false)
-// 참여자 목록
 let isUserList = ref(false)
-// 채팅
 let isChat = ref(false)
-
-let show = ref(false)
-
-const groupVideo = ref(null)
+let chatMessage = ref('')
+let chatMessages = reactive([])
+let groupVideo = ref(null)
 
 // 화면 캡쳐
 const captureScreen = () => {
@@ -427,6 +421,7 @@ const state = reactive({
   mySessionId: 'SessionA',
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
+
   isMic: true,
   isCamera: true,
   isSpeaker: true,
@@ -454,6 +449,13 @@ const joinSession = () => {
     const subscriber = state.session.subscribe(stream, undefined)
     state.subscribers.push(subscriber)
     console.log(state.subscribers)
+  })
+
+  // 시그널링 서버로부터 수신된 채팅 메시지 처리
+  state.session.on('signal:chat', (event) => {
+    const chatData = event.data
+    // 여기서 수신된 채팅 메시지(chatData)를 적절히 처리합니다.
+    chatMessages.push(chatData)
   })
 
   // 참가자 퇴장
@@ -559,37 +561,22 @@ const createToken = async (sessionId) => {
   return response.data // The token
 }
 
+// 채팅 메시지 보내기
 const sendMessage = () => {
-  state.session
-    .signal({
-      data: 'My message', // 메시지
-      to: [], // 메시지 전송 대상
-      type: 'my-chat' // 메시지 타입
+  if (chatMessage.value.trim() !== '') {
+    // OpenVidu 시그널링 서버를 통해 채팅 메시지를 보낸다.
+    state.session.signal({
+      data: chatMessage.value,
+      to: [],
+      type: 'chat' // 채팅 메시지 타입
     })
-    .then(() => {
-      console.log('메시지 전송 성공') // 메시지 전송 성공
-    })
-    .catch((error) => {
-      console.error(error) // 메시지 전송 실패
-    })
-
-  // 메시지 수신
-  state.session.on('signal:my-chat', (event) => {
-    console.log(event.data) // 메시지
-    console.log(event.from) // 메시지 전송자 객체 연결
-    console.log(event.type) // 메시지 타입
-  })
-
-  state.session.on('signal', (event) => {
-    console.log(event.data)
-    console.log(event.from)
-    console.log(event.type)
-  })
+    chatMessage.value = '' // 메시지 전송 후 입력 필드 비우기
+  }
 }
 
 onMounted(() => {
-  if (props.accessType === 'host') joinSession('host')
-  else joinSession('sub')
+  if (props.accessType === 'host') joinSession()
+  else joinSession()
 
   window.addEventListener('beforeunload', leaveSession)
 })
