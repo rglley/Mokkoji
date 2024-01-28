@@ -14,7 +14,7 @@
       <div class="ml-auto mr-10 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <li>
-            <button id="button-header" href="/">HOME</button>
+            <button id="button-header"><a href="/">HOME</a></button>
           </li>
           <li v-if="!isLogin">
             <button id="button-header" @click="toggleModal">로그인</button>
@@ -25,16 +25,7 @@
             >
               <LoginModal />
             </ModalView>
-
-            <button id="button-header" @click="toggleSignUpModal">회원가입</button>
-            <ModalView
-              v-if="showSignUpModal"
-              :show-modal="showSignUpModal"
-              @close-modal="toggleSignUpModal"
-            >
-              <SignUpModal />
-            </ModalView>
-            <button id="button-header"><a href="signup">회원가입</a></button>
+            <button id="button-header"><a href="/signup">회원가입</a></button>
           </li>
           <li v-else>
             <button
@@ -74,7 +65,6 @@ import { initFlowbite } from 'flowbite'
 
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/LoginModal.vue'
-import SignUpModal from '@/components/modal/SignUpModal.vue'
 
 onMounted(() => {
   initFlowbite()
@@ -85,12 +75,6 @@ let showLoginModal = ref(false)
 
 let toggleModal = () => {
   showLoginModal.value = !showLoginModal.value
-}
-
-let showSignUpModal = ref(false)
-
-let toggleSignUpModal = () => {
-  showSignUpModal.value = !showSignUpModal.value
 }
 
 let logout = () => {

@@ -7,19 +7,19 @@
   <div v-if="!confirm">
     <div class="text-black text-lg max-w-xl self-center m-3 max-md:max-w-full text-justify">
       <span class="text-4xl">잠깐! </span>
-      <span>모두가 행복한 모꼬지를 찾아 주셔서 감사합니다.</span> <br /><br />
+      <span>모두가 행복한 모꼬지를 찾아 주셔서 감사합니다.</span> <br />
       <span>
         <a class="text-primary3" href="/signup">회원가입 </a> 후 더욱 즐겁게 참여할 수 있는
         모꼬지만의 기능을 소개해 드릴게요!</span
       ><br /><br />
-      <h1 class="text-2xl">1. 직접 가진 못했지만 진심으로 축하해!!</h1>
+      <h1 class="text-2xl pl-5 py-2">직접 가진 못했지만 진심으로 축하해!!</h1>
       <div class="text-sm pl-5 py-2">
         <p>오프라인으로 전하지 못하는 마음을 텍스트, 음성, 영상 메세지로 전달할 수 있어요.</p>
         <p>작성하신 메세지는 롤링페이퍼로 모꼬지의 주인공에게 전해집니다!</p>
       </div>
       <br />
-      <h1 class="text-2xl">2. 주최하시는 행사에 초대하지 못한, 참석하지 못하는 지인이 있나요?</h1>
-      <div class="text-sm pl-5 py-2">
+      <h1 class="text-2xl pl-5 py-2">주최하시는 행사에 초대하지 못한, 참석하지 못하는 지인이 있나요?</h1>
+      <div class="text-sm pl-5 py-2 pb-8">
         <p>여러분만의 모꼬지를 기다리는 지인들을 온라인으로 초대해보세요!</p>
         <p>
           참가자들의 마음과 생생한 현장이 담긴 롤링페이퍼, 사진첩을 추억으로 남겨 간직할 수 있어요.
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 let confirm = ref(false)
 let userName = ref('')
 

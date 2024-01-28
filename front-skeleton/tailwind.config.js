@@ -13,16 +13,21 @@ export default {
     extend: {
       colors: {
         'primary': '#C8B6FF',
-        'primary2': '#E7C6FF',
+        'primary2': '#E1F4F8',
         'primary3': '#AB90FF',
         'primary0': '#F9F6FF',
         'white': '#FFFFFF',
         'black': '#000000',
         'gray': '#EFEFEF',
+        'natural-beige': '#FCF7FF',
+        'natural-yellow': '#fffade',
       }
     }
 
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-animate"),
+
+  ],
 
 }

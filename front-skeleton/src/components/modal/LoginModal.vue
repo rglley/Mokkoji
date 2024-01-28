@@ -1,6 +1,9 @@
 <template>
   <div class="w-80 items-center m-5 flex flex-col gap-2 mb-16">
-    <div id="title-sub-bold" class="ml-auto mr-auto mb-5">모꼬지 시작하기</div>
+    <img src="@/assets/mokkoji_logo.png" class="w-20">
+    <div id="title-sub-bold" class="ml-auto mr-auto mb-5 tracking-wider pb-10">
+      모꼬지 시작하기
+    </div>
     <div id="box-shadow">
       <div>
         <button
@@ -27,41 +30,46 @@
       <div>
         <button
           type="button"
-          class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2"
+          class="text-white bg-green-400 hover:bg-green-500 me-2 my-4"
           @click="naverLogin"
         >
-          <img src="@/assets/logoN_naver.svg" class="w-4 h-4 inline-block mb-2 ml-2 mt-1 mr-2" />
+          <img
+            src="@/assets/logoN_naver.svg"
+            class="w-4 h-4 inline-block mb-2 ml-2 mt-1 mr-2"
+          />
 
           네이버 계정으로 시작하기
         </button>
       </div>
     </div>
   </div>
+  <span class="m-1 float-right font-light text-slate-300"> 계정이 없으신가요?
+  <a href="/signup" class="text-primary  hover:text-blue-800 hover:bg-natural-yellow">회원가입</a>
+    </span>
 </template>
-  
+
 <script setup>
-import axios from 'axios'
+import axios from "axios";
 
 let naverLogin = () => {
   axios({
-    url: '/oauth2/authorization/google',
+    url: "/oauth2/authorization/google",
     method: postMessage,
     data: {
-      dummy: 'dummy'
-    }
-  })
-}
+      dummy: "dummy",
+    },
+  });
+};
 
 let googleLogin = () => {
   axios({
-    url: '/oauth2/authorization/google',
+    url: "/oauth2/authorization/google",
     method: postMessage,
     data: {
-      dummy: 'dummy'
-    }
-  })
-}
+      dummy: "dummy",
+    },
+  });
+};
 </script>
-  
-<style scoped>
-</style>  
+
+<style scoped></style>
