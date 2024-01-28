@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -31,7 +33,7 @@ public class S3ServiceImpl implements S3Service {
 
     // 사진 업로드 후 레디스에 저장
     @Override
-    public URL createImage(MultipartFile multipartFile, Long userId, Long resultId) throws IOException {
+    public URL uploadImage(MultipartFile multipartFile, Long userId, Long resultId) throws IOException {
 
         // S3 내의 사진용 폴더에 저장
         String dirName = "photos";
@@ -47,17 +49,59 @@ public class S3ServiceImpl implements S3Service {
         try {
             amazonS3Client.putObject(request);
         } catch (AmazonServiceException e) {
-            // The call was transmitted successfully, but Amazon S3 couldn't process
-            // it, so it returned an error response.
+            // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
             e.printStackTrace();
         } catch (SdkClientException e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
             e.printStackTrace();
         }
 
         return amazonS3Client.getUrl(bucket, fileName);
     }
+
+    // 롤링페이퍼 업로드
+    @Override
+    public Map<String, URL> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long resultId) throws IOException {
+
+        String dirName;
+        String prefix;
+        Map<String, URL> urlMap = new HashMap<>();
+
+        for (Map.Entry<String, MultipartFile> fileEntry : multipartFiles.entrySet()) {
+            // 음성인 경우
+            if (fileEntry.getKey().equals("voice")) {
+                dirName = "voices";
+                prefix = "voi_" + userId + "_" + resultId + "_";
+            } else {
+                dirName = "videos";
+                prefix = "vid_" + userId + "_" + resultId + "_";
+            }
+
+            MultipartFile multipartFile = fileEntry.getValue();
+
+            // 사진_유저ID_결과물ID
+            String fileName = dirName + "/" + createFileName(multipartFile.getOriginalFilename(), prefix);
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(multipartFile.getContentType());
+            metadata.setContentLength(multipartFile.getSize());
+            PutObjectRequest request = new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata);
+
+            try {
+                amazonS3Client.putObject(request);
+            } catch (AmazonServiceException e) {
+                // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
+                e.printStackTrace();
+            } catch (SdkClientException e) {
+                e.printStackTrace();
+            }
+
+
+            urlMap.put(fileEntry.getKey(), amazonS3Client.getUrl(bucket, fileName));
+
+        }
+        return urlMap;
+    }
+
 
     // 파일 이름 생성
     private String createFileName(String fileName, String prefix) {
