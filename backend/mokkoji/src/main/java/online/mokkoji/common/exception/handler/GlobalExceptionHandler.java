@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,10 +37,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(errorCode, e.getMessage());
     }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Object> handleAuthentication(AuthenticationException e) {
-        log.warn("handleAuthenticationException", e);
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Object> handleAuthentication(JwtException e) {
+        log.warn("handleJwtException", e);
         ErrorCode errorCode = CommonErrorCode.UNAUTHORIZED;
         return handleExceptionInternal(errorCode, e.getMessage());
     }
