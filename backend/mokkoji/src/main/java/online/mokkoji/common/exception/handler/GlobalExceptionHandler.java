@@ -37,12 +37,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(errorCode, e.getMessage());
     }
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<Object> handleAuthentication(JwtException e) {
-        log.warn("handleJwtException", e);
-        ErrorCode errorCode = CommonErrorCode.UNAUTHORIZED;
-        return handleExceptionInternal(errorCode, e.getMessage());
-    }
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAllException(Exception ex) {
