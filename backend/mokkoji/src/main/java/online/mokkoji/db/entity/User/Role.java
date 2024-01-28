@@ -1,4 +1,4 @@
-package online.mokkoji.db.entity;
+package online.mokkoji.db.entity.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -10,7 +10,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @AllArgsConstructor
-public class SignupDto {
+public class UpdateDto {
 
     @NotBlank
     private String name;

@@ -17,8 +17,10 @@ import java.io.IOException;
 public class OAuth2LoginFailureHandler implements AuthenticationFailureHandler {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.info("소셜 로그인 실패");
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException, ServletException {
+        log.error("소셜 로그인 실패");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.sendRedirect("http://localhost:8080/");
     }
 }

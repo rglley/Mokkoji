@@ -1,4 +1,4 @@
-package online.mokkoji.db.entity;
+package online.mokkoji.db.entity.User;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -31,5 +31,11 @@ public class Account {
     @Size(max = 20)
     private String number;
 
-
+    public Account toEntity(User user, String bank, String number) {
+        return Account.builder()
+                .user(user)
+                .bank(bank)
+                .number(number)
+                .build();
+    }
 }

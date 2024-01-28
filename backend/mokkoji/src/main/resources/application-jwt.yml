@@ -1,2 +1,9 @@
 jwt:
-  secret: 'ssafyA401MokkojiOnline240216JieunKimCheoljunParkGyungbaeLeeJungminLeeYoungunChoJaehunHan'
+
+  secretKey: 'ssafyA401MokkojiOnline240216JieunKimCheoljunParkGyungbaeLeeJungminLeeYoungunChoJaehunHan'
+  access:
+    expiration: 3600000 # 1시간(60분) (밀리초, 1000 * 60 * 60)
+    header: Authorization
+    refresh:
+      expiration: 1209600000 #  (밀리초, 1000 * 60 * 60 * 24 * 14)
+      header: Authorization-Refresh

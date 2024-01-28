@@ -1,23 +1,24 @@
-package online.mokkoji.api.request;
+package online.mokkoji.api.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@Builder
 @ToString
 @AllArgsConstructor
-public class SignupDto {
-
+public class UpdatePageDto {
     @NotBlank
-    private String name;
+    private String email;
 
     @NotBlank
     private String image;
 
+    @NotBlank
+    private String name;
+
     private String bank;
-    private String accountNumber;
+    private String account;
 }
