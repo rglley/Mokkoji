@@ -255,18 +255,27 @@ let submitConferenceId = () => {
 // 회의 생성 로직
 // 로그인하지 않았다면 모달
 // 로그인하지 않았으면 alert
+// let generateMeeting = () => {
+//   if (isLogin.value) {
+//     router.push("#"); // 회의 리다이렉트(예정)
+//   } else {
+//     toast("로그인이 필요합니다", {
+//       theme: "auto",
+//       type: "warning",
+//       transition: "flip",
+//       autoClose: 1000,
+//     });
+//   }
+// };
+
 let generateMeeting = () => {
-  if (isLogin.value) {
-    router.push("#"); // 회의 리다이렉트(예정)
-  } else {
-    toast("로그인이 필요합니다", {
-      theme: "auto",
-      type: "warning",
-      transition: "flip",
-      autoClose: 1000,
-    });
-  }
-};
+  router.push('/meeting/host')
+  // if (isLogin.value) {
+  //   router.push('#') // 회의 리다이렉트(예정)
+  // } else {
+  //   alert('로그인이 필요합니다')
+  // }
+}
 
 let toTop = () => {
   window.scrollTo({

@@ -2,13 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
-import MeetingView from '@/views/MeetingView.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
-
-// import MyMeeting from '@/components/conference/MyMeeting.vue'
-// import MeetingView from '@/views/MeetingView.vue'
+import Meeting from '@/components/conference/MyMeeting.vue'
+import MeetingView from '@/views/MeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 
 const router = createRouter({
@@ -68,17 +66,6 @@ const router = createRouter({
       name: 'resultpage',
       component: ResultPage
     }
-
-    // {
-    //   path: '/meeting',
-    //   name: 'meeting',
-    //   component: MeetingView,
-    //   children:[{
-    //     path: '/',
-    //     name: 'meeting',
-    //     component: MyMeeting,
-    //   }]
-    // }
   ]
 })
 
