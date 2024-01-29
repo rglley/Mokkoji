@@ -48,7 +48,7 @@
       class="m-auto z-20 relative0"
     />
   </div>
-  <RollingLetter />
+  <!-- <RollingLetter /> -->
 </template>
 <script setup>
 import { ref } from 'vue'
