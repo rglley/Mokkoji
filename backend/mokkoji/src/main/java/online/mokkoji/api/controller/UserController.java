@@ -48,7 +48,7 @@ public class UserController {
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<SignupDto> addUser(HttpServletRequest req, @Valid @RequestBody SignupDto signupDto) {
         log.info("회원 가입 요청, signupDto : {}", signupDto.toString());
         String provider = jwtService.getProvider(req);
@@ -60,7 +60,7 @@ public class UserController {
         return new ResponseEntity<>(signupDto, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<UpdateDto> editUser(HttpServletRequest req, @Valid @RequestBody UpdateDto modifyDto) {
         log.info("회원 정보 수정 요청, modifyDto : {}", modifyDto.toString());
         String provider = jwtService.getProvider(req);
@@ -72,7 +72,7 @@ public class UserController {
         return new ResponseEntity<>(modifyDto, HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/withdrawal")
     public ResponseEntity<User> removeUser(HttpServletRequest req) {
         log.info("회원 탈퇴 요정");
         String provider = jwtService.getProvider(req);
