@@ -1,16 +1,15 @@
 <template>
-  <div>
-    <header class="flex items-center justify-between px-4 lg:px-6 h-30">
-      <TheHeader />
-    </header>
-    <Router-view />
-  </div>
+  <main>
+    <TheHeader />
+    <RouterView />
+    <TheFooter />
+  </main>
 </template>
 
 <script setup>
-import TheHeader from './components/common/TheHeader.vue'
+import TheHeader from "./components/common/TheHeader.vue";
+import TheFooter from "./components/common/TheFooter.vue";
+import { RouterView } from "vue-router";
 </script>
 
-<style scoped>
-@import './assets/scss/main.css';
-</style>
+<style scoped></style>

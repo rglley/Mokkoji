@@ -1,12 +1,30 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
-    
-    extend: {},
+    container: {
+      center: true
+    },
+
+    extend: {
+      colors: {
+        'primary': '#C8B6FF',
+        'primary2': '#E1F4F8',
+        'primary3': '#AB90FF',
+        'primary0': '#F9F6FF',
+        'white': '#FFFFFF',
+        'black': '#000000',
+        'gray': '#EFEFEF',
+        'natural-beige': '#FCF7FF',
+        'natural-yellow': '#fffade',
+      }
+    }
+
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-animate"),
+
+  ],
+
 }
