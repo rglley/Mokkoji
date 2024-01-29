@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.api.response.MainPageDto;
 import online.mokkoji.api.response.SignupPageDto;
 import online.mokkoji.common.auth.jwt.JwtProperties;
 import online.mokkoji.common.auth.jwt.JwtService;
@@ -59,9 +60,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
             User loginUser = userRepository.findByProviderAndEmail(provider, email).get();
             loginUser.updateRefreshToken(refreshToken);
+            MainPageDto mainPageDto = new MainPageDto(loginUser.getImage(), loginUser.getName());
 
             jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
-            response.getWriter().write(objectMapper.writeValueAsString(loginUser));
+            response.getWriter().write(objectMapper.writeValueAsString(mainPageDto));
             response.sendRedirect("/");
         }
     }
