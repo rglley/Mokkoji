@@ -70,7 +70,7 @@
             </div>
           </div>
       </div>
-      <button class="float-right" @click="submit">회원가입</button>
+      <button class="float-right" @click="signup">회원가입</button>
     </div>
   </div>
 </template>
@@ -134,6 +134,16 @@ let base64 = (file) => {
 let banks = ['KB', '농협', '기업', '카카오뱅크']
 let bank = ref('')
 let accountNumber = ref('')
+
+// const signup = () => {
+//   axios.post(
+//     URL: '', 
+//     data: {
+
+//     }
+//   )
+// }
+
 </script>
 
 <style scoped></style>
