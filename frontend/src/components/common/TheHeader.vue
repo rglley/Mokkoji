@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed top-0 z-10 w-full h-64">
+  <header class="relative h-32 top-0 z-10 w-full">
     <!-- <nav class="w-full bg-opacity-35 p-2 bg-primary flex pl-5"> -->
     <nav class="w-full flex pl-5">
       <a href="/" class="flex items-center rtl:l:space-x-reverse">
@@ -83,5 +83,4 @@ let logout = () => {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
