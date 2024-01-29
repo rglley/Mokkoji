@@ -30,7 +30,7 @@ spring:
 
   #application-oauth 프로필 등록
   profiles:
-    include: oauth, jwt
+    include: oauth, jwt, s3
 
 
 # OpenVidu
