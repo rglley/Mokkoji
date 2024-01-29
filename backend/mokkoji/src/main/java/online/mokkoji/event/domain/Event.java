@@ -2,10 +2,7 @@ package online.mokkoji.event.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.EventErrorCode;
@@ -19,7 +16,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "event")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @DynamicInsert
 @ToString(of = {"id", "participantCount", "status", "startTime", "endTime"})
 public class Event/* extends BaseEntity */ {
@@ -33,7 +32,7 @@ public class Event/* extends BaseEntity */ {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "session_id")
+    @Column(name = "session_id", length = 100)
     @Size(max = 100)
     private String sessionId;
 
@@ -62,9 +61,11 @@ public class Event/* extends BaseEntity */ {
 
     //==생성자==//
     public Event(User user, String sessionId, LocalDateTime startTime) {
-        this.setUser(user);
-        this.sessionId = sessionId;
-        this.startTime = startTime;
+        this.builder()
+                .user(user)
+                .sessionId(sessionId)
+                .startTime(startTime)
+                .build();
     }
 
     //==설정 메서드==//
