@@ -2,46 +2,30 @@
   <div id="main-gradient2" class="py-40">
     <div class="mx-auto w-1/3 bg-white rounded-lg shadow-md p-20">
       <div class="space-y-2 text-center">
-        <h1 class="text-3xl font-bold">모꼬지</h1>
-        <p class="text-slate-400">회원가입 하세용</p>
+        <h1 class="text-3xl font-bold">모꼬지 시작하기</h1>
+        <p class="text-slate-400">회원정보를 입력해요</p>
       </div>
       <div class="space-y-4">
         <div class="space-y-2">
           <label class="text-sm font-medium text-slate-500" for="email"
-            ><span class="text-red-500">*</span> Email
+            > 이메일
           </label>
           <input
             class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            placeholder="m@example.com"
-            v-model="email"
-            required="true"
+            v-model="store.email"
+            disabled
           />
-          <p v-show="!validEmail">올바른 이메일을 입력해 주세요</p>
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium text-slate-500" for="password">
-            <span class="text-red-500">*</span>비밀번호
-          </label>
-          <input
-            class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            id="password"
-            type="password"
-            v-model="pwInput"
-          />
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium text-slate-500" for="confirm-password"
-            ><span class="text-red-500">*</span> 비밀번호 확인
-          </label>
-          <input
-            class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            id="confirm-password"
-            type="password"
-            v-model="pwConfirm"
-          />
-          <p class="text-red-500 text-xs"></p>
         </div>
 
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-slate-500" for="name">
+          이름 </label>
+          <input
+            class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
+            v-model="name"
+          />
+        </div>
+       
         <div class="flex items-center space-x-4">
           <div class="flex-auto w-max m-5">
             <label>
@@ -76,73 +60,75 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, onMounted } from "vue";
+import { useUserStore } from '../../stores/user';
+import axios from 'axios';
+import { useRouter } from "vue-router";
 
-const email = ref("");
-const validEmail = ref(true);
+const router = useRouter();
+const store = useUserStore();
 
-const pwInput = ref('');
-const pwConfirm = ref('');
-const msg = ref([]);
+const name = ref('')
+const image = ref('')
 
-const validateEmail = (value) => {
-  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-    msg.value['email'] = '';
-  } else {
-    msg.value['email'] = 'Invalid Email Address';
-  }
-};
+onMounted(() => {
+  name.value = store.name;
+  image.value = store.image;
+})
 
-const validatePassword = (value) => {
-  let difference = 8 - value.length;
-  if (value.length < 8) {
-    msg.value['password'] = 'Must be 8 characters! ' + difference + ' characters left';
-  } else {
-    msg.value['password'] = '';
-  }
-};
+const fileName = ref('');
 
-watch(email, (value) => {
-  email.value = value;
-  validateEmail(value);
-});
-
-watch(pwInput, (value) => {
-  pwInput.value = value;
-  validatePassword(value);
-});
-
-let fileName = ref("");
-
-let getFileName = async (files) => {
+const getFileName = async (files) => {
   fileName.value = files[0].name;
   await base64(files[0]);
 };
 
-let base64 = (file) => {
+const base64 = (file) => {
   return new Promise((resolve) => {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (e) => {
       resolve(e.target.result);
-      let previewImage = document.getElementById("image-profile");
+      const previewImage = document.getElementById("image-profile");
       previewImage.src = e.target.result;
     };
+    image.value = file;
     reader.readAsDataURL(file);
   });
 };
 
-let banks = ['KB', '농협', '기업', '카카오뱅크']
-let bank = ref('')
-let accountNumber = ref('')
+const banks = ['KB', '농협', '기업', '카카오뱅크']
+const bank = ref('')
+const accountNumber = ref('')
 
-// const signup = () => {
-//   axios.post(
-//     URL: '', 
-//     data: {
-
-//     }
-//   )
-// }
+const signup =  () => {
+  axios.post({
+    url : store.API_URI + '/signup',
+    data : {
+      name : name.value,
+      image : image.value,
+      bank : bank.value,
+      accountNumber : accountNumber.value,
+    },
+    headers: {
+      Authorization : localStorage.getItem('access-token'),
+    }    
+  })
+  .then(() => {
+    router.push('/')
+  })
+  .catch((err) => {
+    switch(err.status) {
+      case 401:
+        alert(err.errorMsg)
+        break;
+      case 403:
+        alert('User 권한이 없습니다')
+        break;
+      case 409:
+        alert('이미 가입한 회원입니다')
+    }
+  })
+}
 
 </script>
 

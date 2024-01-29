@@ -16,7 +16,7 @@
     <!-- <section class="pb-12 pt-32 bg-[url('/src/assets/main_banner2.png')] mb-10"> -->
     <section class="pt-52 z-2 h-max" id="main-gradient2">
       <div class="absolute y-0 right-0">
-        <img src="@/assets/wedding.svg" />
+        <img src="@/assets/landing/wedding.svg" />
       </div>
       <div id="container" class="mt-52 flex flex-col">
         <div
@@ -96,7 +96,7 @@
           </p>
         </div>
         <div class="items-center">
-          <img src="@/assets/main1.png" />
+          <img src="@/assets/landing/main1.png" />
         </div>
       </div>
       <div id="space"></div>
@@ -119,7 +119,7 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="justify-self-end mr-20">
-          <img class="pl-0" src="@/assets/main2.png" />
+          <img class="pl-0" src="@/assets/landing/main2.png" />
         </div>
         <div class="text-center">
           <h2 id="title-sub-bold">포토 모자이크로 사진들을 한 눈에 구경하세요.</h2>
@@ -160,7 +160,7 @@
           </p>
         </div>
         <div class="flex-col items-center">
-          <img src="@/assets/main3.png" />
+          <img src="@/assets/landing/main3.png" />
         </div>
       </div>
       <div id="space"></div>
@@ -183,7 +183,7 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="justify-self-end mr-20">
-          <img src="@/assets/main4.png" />
+          <img src="@/assets/landing/main4.png" />
         </div>
         <div class="mx-5 px-5 text-center">
           <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
@@ -214,29 +214,29 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 // toast : custom alert
-import { toast } from "vue3-toastify";
+// import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 import ModalView from "./ModalView.vue";
 import MeetingJoinModal from "../components/modal/MeetingJoinModal.vue";
 
-let conferenceIdInput = ref("");
-let ifInputError = ref(false);
-let isLogin = ref(false); // 나중에 store에서 받을 예정
+const conferenceIdInput = ref("");
+const ifInputError = ref(false);
+const isLogin = ref(false); // 나중에 store에서 받을 예정
 
-let showModal = ref(false);
+const showModal = ref(false);
 
 const toggleModal = () => {
   showModal.value = !showModal.value;
 };
 
-let submitConferenceId = () => {
+const submitConferenceId = () => {
   console.log(conferenceIdInput.value);
   // id input을 백엔드 서버로 axios 전송
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
   // 임시로 만든 올바른 id ='qwer'
-  let validId = "qwer";
+  const validId = "qwer";
   if (conferenceIdInput.value == validId) {
     // 로그인하지 않았다면 모달
     if (!isLogin.value) {
@@ -255,7 +255,7 @@ let submitConferenceId = () => {
 // 회의 생성 로직
 // 로그인하지 않았다면 모달
 // 로그인하지 않았으면 alert
-// let generateMeeting = () => {
+// const generateMeeting = () => {
 //   if (isLogin.value) {
 //     router.push("#"); // 회의 리다이렉트(예정)
 //   } else {
@@ -268,7 +268,7 @@ let submitConferenceId = () => {
 //   }
 // };
 
-let generateMeeting = () => {
+const generateMeeting = () => {
   router.push('/meeting/host')
   // if (isLogin.value) {
   //   router.push('#') // 회의 리다이렉트(예정)
@@ -277,7 +277,7 @@ let generateMeeting = () => {
   // }
 }
 
-let toTop = () => {
+const toTop = () => {
   window.scrollTo({
     top: 0,
     behavior: "smooth",

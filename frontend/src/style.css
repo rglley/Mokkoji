@@ -4,7 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  @apply m-0 p-0 box-border;
+}
 body {
+  font-family: 'SUITE', sans-serif;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  cursor: pointer;
+  outline: inherit;
+}
+
+li {
+  list-style: none;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+input:focus {
+  outline: none;
+}
+pre {
   font-family: 'SUITE', sans-serif;
 }
 
@@ -22,7 +47,7 @@ body {
   }
 
   #title-sub {
-    @apply text-3xl tracking-tighter p-2;
+    @apply text-3xl tracking-tighter p-3 m-2;
   }
 
   #li-dropdown {
@@ -70,6 +95,10 @@ body {
   }
   #card-div {
     @apply rounded-md shadow-lg bg-primary0 p-4 pb-10 flex flex-col mt-24 mb-40 border-2 border-slate-200;
+  }
+
+  #button-header {
+    @apply p-2 h-10 mx-5 bg-transparent items-center justify-center rounded-md hover:underline hover:text-primary duration-300;
   }
 
   #button-submit {

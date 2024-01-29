@@ -12,7 +12,7 @@
       <div class="absolute bottom-4 right-10 left-14">
         <a href="">
           <img
-            src="@/assets/mokkoji_logo_with_bg.png"
+            src="@/assets/logo/mokkoji_logo_with_bg.png"
             alt="unregistered"
             height="170"
             width="170"

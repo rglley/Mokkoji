@@ -23,7 +23,7 @@
           <button id="button-submit" class="w-48">
             <router-link to="/mypage/account">계좌 정보 수정</router-link>
           </button>
-          <button class="w-20 bg-gray text-red-400 mt-10 mr-auto">회원 탈퇴</button>
+          <button class="w-20 bg-gray text-red-400 mt-10 mr-auto" @click="store.withdraw">회원 탈퇴</button>
         </div>
       </div>
     </div>
@@ -32,20 +32,23 @@
   
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '../../stores/user'
 
-let fileName = ref('')
+const store = useUserStore();
 
-let getFileName = async (files) => {
+const fileName = ref('')
+
+const getFileName = async (files) => {
   fileName.value = files[0].name
   await base64(files[0])
 }
 
-let base64 = (file) => {
+const base64 = (file) => {
   return new Promise((resolve) => {
-    let reader = new FileReader()
+    const reader = new FileReader()
     reader.onload = (e) => {
       resolve(e.target.result)
-      let previewImage = document.getElementById('preview')
+      const previewImage = document.getElementById('preview')
       previewImage.src = e.target.result
     }
     reader.readAsDataURL(file)

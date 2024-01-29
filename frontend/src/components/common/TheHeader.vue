@@ -1,10 +1,10 @@
 <template>
-  <header class="relative h-32 top-0 z-10 w-full">
+  <header class="relative h-32 top-0 z-10 w-full bg-[#fbf8f4]">
     <!-- <nav class="w-full bg-opacity-35 p-2 bg-primary flex pl-5"> -->
     <nav class="w-full flex pl-5">
       <a href="/" class="flex items-center rtl:l:space-x-reverse">
         <img
-          src="/src/assets/mokkoji_logo.png"
+          src="/src/assets/logo/mokkoji_logo.png"
           class="h-28 mx-5 transition ease-in-out hover:animate-pulse"
           alt="모꼬지 로고"
         />
@@ -17,15 +17,14 @@
             <button id="button-header"><a href="/">HOME</a></button>
           </li>
           <li v-if="!isLogin">
-            <button id="button-header" @click="toggleModal">로그인</button>
+            <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView
-              v-if="showLoginModal"
-              :show-modal="showLoginModal"
-              @close-modal="toggleModal"
+              v-if="isLoginModal"
+              :show-modal="isLoginModal"
+              @close-modal="showLoginModal"
             >
               <LoginModal />
             </ModalView>
-            <button id="button-header"><a href="/signup">회원가입</a></button>
           </li>
           <li v-else>
             <button
@@ -69,15 +68,15 @@ import LoginModal from '@/components/modal/LoginModal.vue'
 onMounted(() => {
   initFlowbite()
 })
-let isLogin = ref(true)
+const isLogin = ref(true)
 
-let showLoginModal = ref(false)
+const isLoginModal = ref(false)
 
-let toggleModal = () => {
-  showLoginModal.value = !showLoginModal.value
+const showLoginModal = () => {
+  isLoginModal.value = !isLoginModal.value
 }
 
-let logout = () => {
+const logout = () => {
   //sessionStorage.delete('login-token')
   isLogin.value = false
 }
