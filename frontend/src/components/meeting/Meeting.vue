@@ -40,7 +40,7 @@
             v-for="sub in state.subscribers"
             :key="sub.stream.connection.connectionId"
             :stream-manager="sub"
-            @click.native="updateMainVideoStreamManager(sub)"
+            @click="updateMainVideoStreamManager(sub)"
             class="rounded-2xl"
           />
           <!-- 메인 화면 -->
@@ -79,6 +79,7 @@
               <div
                 class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
               >
+                <div></div>
                 <user-list
                   v-for="sub in state.subscribers"
                   :key="sub.stream.connection.connectionId"
@@ -280,6 +281,7 @@
 <script setup>
 import { ref, reactive, onMounted, defineProps } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
+import { io } from 'socket.io-client'
 import html2canvas from 'html2canvas'
 import router from '../../router'
 import axios from 'axios'
@@ -310,6 +312,7 @@ const props = defineProps({
     type: String
   }
 })
+
 const emit = defineEmits(['leave-meeting'])
 
 const isGrid = ref(false)
@@ -324,7 +327,7 @@ const isChat = ref(false)
 
 const searchUserName = ref('')
 const chatMessage = ref('')
-const chatMessages = reactive([])
+const chatMessages = ref([])
 const groupVideo = ref(null)
 
 const captureScreen = () => {
@@ -395,7 +398,7 @@ const setChatState = () => {
   isChat.value = !isChat.value
 }
 
-// ---------------- OpenVidu 관련 ----------------------
+// ---------------- OpenVidu 관련 ----------------
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -442,9 +445,13 @@ const joinSession = () => {
 
   // 시그널링 서버로부터 수신된 채팅 메시지 처리
   state.session.on('signal:chat', (event) => {
-    const chatData = event.data
-    // 여기서 수신된 채팅 메시지(chatData)를 적절히 처리합니다.
-    chatMessages.push(chatData)
+    const sender = JSON.parse(event.from.data)
+
+    const chatData = {
+      sender: sender.clientData,
+      content: event.data
+    }
+    chatMessages.value.push(chatData)
   })
 
   // 참가자 퇴장
@@ -511,14 +518,12 @@ const leaveMeeting = () => {
 
 const updateMainVideoStreamManager = (stream) => {
   if (state.mainStreamManager === stream) return
+
   state.mainStreamManager = stream
 }
 
 /* APPLICATION SERVER로부터 토큰 얻기
-아래의 메소드들은 세션과 토큰의 생성을 어플리케이션 서버에 요청합니다.
-이로써 OpenVidu 배포를 안전하게 유지할 수 있습니다.
-실제 제품 환경에서는 어플리케이션 서버가 사용자를 식별하여
-엔드포인트에 액세스를 허용해야 합니다. */
+아래의 메소드들은 세션과 토큰의 생성을 어플리케이션 서버에 요청한다. */
 
 const getToken = async (mySessionId) => {
   const sessionId = await createSession(mySessionId)
@@ -551,7 +556,6 @@ const createToken = async (sessionId) => {
   return response.data // The token
 }
 
-// 채팅 메시지 보내기
 const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
     // OpenVidu 시그널링 서버를 통해 채팅 메시지를 보낸다.

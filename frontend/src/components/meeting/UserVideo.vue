@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { ref } from 'vue'
 import OvVideo from './OvVideo.vue'
 
 const props = defineProps({
@@ -11,6 +11,19 @@ const props = defineProps({
     type: Object
   }
 })
+
+const userName = ref('')
+
+// 사용자 데이터 가져오기
+const clientData = () => {
+  const { clientData } = getConnectionData()
+  userName.value = clientData
+}
+
+const getConnectionData = () => {
+  const { connection } = props.streamManager.stream
+  return JSON.parse(connection.data)
+}
 </script>
 
 <style></style>

@@ -1,6 +1,9 @@
 <!-- 사용자 비디오 -->
 <template>
-  <video ref="videoElement" autoplay />
+  <div>
+    <div>{{ clientData() }}</div>
+    <video ref="videoElement" autoplay />
+  </div>
 </template>
 
 <script setup>
@@ -12,6 +15,17 @@ const props = defineProps({
     type: Object
   }
 })
+
+// 사용자 데이터 가져오기
+const clientData = () => {
+  const { clientData } = getConnectionData()
+  return clientData
+}
+
+const getConnectionData = () => {
+  const { connection } = props.streamManager.stream
+  return JSON.parse(connection.data)
+}
 
 const captureImg = () => {
   const target = videoElement.value
