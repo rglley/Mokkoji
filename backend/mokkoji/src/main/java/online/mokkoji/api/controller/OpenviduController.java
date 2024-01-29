@@ -3,11 +3,10 @@ package online.mokkoji.api.controller;
 import io.openvidu.java.client.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.api.service.EventService;
 import online.mokkoji.db.repository.EventRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
 public class OpenviduController {
-
-    private static final Logger log = LoggerFactory.getLogger(OpenviduController.class);
 
     private final EventService eventService;
     private final EventRepository eventRepository;
@@ -83,9 +81,8 @@ public class OpenviduController {
 
         activeSession.close();
 
-        // redis에서 롤링페이퍼, 사진들 정보 받아옴
 
-        // 결과물 파일 저장(resultService)
+        // TODO: 2024.01.28 redis에 남은 결과물 파일 저장(resultService)||아직 작성 중인 사람은?
 
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -105,7 +102,7 @@ public class OpenviduController {
         // return값 담기
         Map<String, String> response = new HashMap<>();
         response.put("connectionToken", connection.getToken());
-        response.put("Status", "Session에 참여자 연결 성공");
+        response.put("message", "Session에 참여자 연결 성공");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

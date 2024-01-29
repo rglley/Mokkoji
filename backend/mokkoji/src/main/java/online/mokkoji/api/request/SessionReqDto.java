@@ -30,7 +30,7 @@ public class SessionReqDto {
     }
 
 
-    // deleteSession에서 RequestBody로 받을 생성자(없어도 되는지 실험해보기)
+    // deleteSession에서 RequestBody로 받을 생성자
     public SessionReqDto(Long userId, int participantCount, LocalDateTime endTime) {
         this.userId = userId;
         this.participantCount = participantCount;

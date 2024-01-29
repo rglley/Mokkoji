@@ -1,6 +1,8 @@
 package online.mokkoji.api.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
@@ -10,18 +12,17 @@ import online.mokkoji.db.entity.User;
 import online.mokkoji.db.repository.EventRepository;
 import online.mokkoji.db.repository.ResultRepository;
 import online.mokkoji.db.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EventServiceImpl implements EventService {
 
-    private static final Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private final UserRepository userRepository;
     private final EventRepository eventRepository;

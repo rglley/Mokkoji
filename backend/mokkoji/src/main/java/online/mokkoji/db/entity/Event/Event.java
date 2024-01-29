@@ -9,6 +9,7 @@ import lombok.ToString;
 import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.EventErrorCode;
+import online.mokkoji.db.entity.Result.Result;
 import online.mokkoji.db.entity.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -50,6 +51,8 @@ public class Event/* extends BaseEntity */ {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY)
+    private Result result;
 
     //==연관관계 메서드==//
     public void setUser(User user) {
