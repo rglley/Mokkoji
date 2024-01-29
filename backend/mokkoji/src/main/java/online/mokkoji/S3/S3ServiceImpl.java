@@ -53,8 +53,7 @@ public class S3ServiceImpl implements S3Service {
     public Map<String, URL> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long resultId) throws IOException {
 
         if (multipartFiles == null) {
-            String msg = "파일 없음";
-            log.info(msg);
+            log.info("파일 없음");
             return null;
         }
 
@@ -101,6 +100,7 @@ public class S3ServiceImpl implements S3Service {
         } catch (SdkClientException e) {
             e.printStackTrace();
         }
+
     }
 
     // 파일 이름 생성
