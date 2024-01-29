@@ -1,19 +1,5 @@
 <template>
-  <!-- <section class="carousel" aria-label="Gallery">
-    <ol class="carousel__viewport">
-      <li id="carousel__slide1" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-      <li id="carousel__slide2" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-      <li id="carousel__slide3" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-    </ol>
-  </section> -->
   <main id="main-landing">
-    <!-- <section class="pb-12 pt-32 bg-[url('/src/assets/main_banner2.png')] mb-10"> -->
     <section class="pt-52 z-2 h-max" id="main-gradient2">
       <div class="absolute y-0 right-0">
         <img src="@/assets/landing/wedding.svg" />
