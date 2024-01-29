@@ -4,12 +4,46 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 초기 세팅 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'SUITE', sans-serif;
 }
 
-@layer components {
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  cursor: pointer;
+  outline: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+pre {
+  font-family: 'SUITE', sans-serif;
+}
+
+@layer components {
   #title-bold {
     @apply text-6xl font-bold tracking-wider p-2;
   }
@@ -25,13 +59,27 @@ body {
   #title-sub {
     @apply text-3xl tracking-tighter p-2;
   }
-  
+
   #li-dropdown {
     @apply m-1 p-2;
   }
-  
+
   #main-gradient {
-    background-image: linear-gradient(to top, #c8b6ff, #d5c1fe, #e0cdfe, #ead9fe, #f3e6fe, #f9eafc, #fdeffb, #fff5fb, #fff3f6, #fff3ed, #fff6e3, #fffade);
+    background-image: linear-gradient(
+      to top,
+      #c8b6ff,
+      #d5c1fe,
+      #e0cdfe,
+      #ead9fe,
+      #f3e6fe,
+      #f9eafc,
+      #fdeffb,
+      #fff5fb,
+      #fff3f6,
+      #fff3ed,
+      #fff6e3,
+      #fffade
+    );
   }
 
   #main-gradient2 {
@@ -39,14 +87,24 @@ body {
   }
 
   #main-gradient3 {
-    background-image: radial-gradient(circle, #ffffff, #f7f6ff, #f0edfe, #e9e3fe, #e2dafd, #e2d7fd, #e2d4fd, #e3d1fc, #ead4fc, #f0d8fc, #f6dcfc, #fbe0fc);
+    background-image: radial-gradient(
+      circle,
+      #ffffff,
+      #f7f6ff,
+      #f0edfe,
+      #e9e3fe,
+      #e2dafd,
+      #e2d7fd,
+      #e2d4fd,
+      #e3d1fc,
+      #ead4fc,
+      #f0d8fc,
+      #f6dcfc,
+      #fbe0fc
+    );
   }
   #card-div {
     @apply rounded-md shadow-lg bg-primary0 p-4 pb-10 flex flex-col mt-24 mb-40 border-2 border-slate-200;
-  }
-
-  button {
-    @apply ml-2 h-10 items-center p-2 inline-block rounded-md bg-primary3 text-sm text-white transition duration-300 ease-in-out hover:bg-yellow-100 hover:text-black
   }
 
   #button-submit {
@@ -57,7 +115,7 @@ body {
     @apply p-5 pt-7 border-2 border-natural-beige rounded-lg shadow-md bg-slate-50 items-center;
   }
 
-  #button-header{
+  #button-header {
     @apply bg-transparent text-black text-lg hover:underline;
   }
 
@@ -102,15 +160,15 @@ body {
     @apply fill-primary w-[120%] h-[135px];
   }
 
-  #svg-curve-2{
+  #svg-curve-2 {
     @apply fill-white  w-[135%] h-[100px];
   }
 
-  #svg-curve-3{
+  #svg-curve-3 {
     @apply fill-natural-yellow w-[150%] h-[92px];
   }
 
-  #svg-curve-4{
+  #svg-curve-4 {
     @apply fill-natural-beige w-[200%] h-[120px];
   }
 

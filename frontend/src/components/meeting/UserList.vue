@@ -1,27 +1,37 @@
 <template>
-  <div v-if="streamManager">{{ clientData() }}</div>
+  <div v-if="streamManager && userName.includes(props.searchUserName)">{{ userName }}</div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const props = defineProps({
   streamManager: {
     type: Object
+  },
+  searchUserName: {
+    type: String
   }
 })
+
+const userName = ref('')
+
+console.log(1)
 
 // 사용자 데이터 가져오기
 const clientData = () => {
   const { clientData } = getConnectionData()
-  return clientData
+  userName.value = clientData
 }
 
 const getConnectionData = () => {
   const { connection } = props.streamManager.stream
-  console.log(connection)
   return JSON.parse(connection.data)
 }
+
+onMounted(() => {
+  clientData()
+})
 </script>
 
 <style></style>

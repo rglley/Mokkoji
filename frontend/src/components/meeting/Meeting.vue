@@ -7,10 +7,7 @@
         <div
           id="meeting-container"
           ref="groupVideo"
-          :class="{
-            'w-full h-full flex justify-center items-center': !isChat && !isUserList,
-            'w-full h-full flex justify-end items-center': isChat || isUserList
-          }"
+          class="w-full h-full flex justify-center items-center"
         >
           <!-- 참가자 화면 -->
           <div
@@ -37,7 +34,7 @@
       <!-- 그리드 레이아웃 -->
       <div v-else class="w-full h-full flex basis-3/4">
         <!-- 회의 화면 -->
-        <div id="grid-container" ref="groupVideo" class="w-full h-full">
+        <div id="grid-container" ref="groupVideo">
           <!-- 참가자 화면 -->
           <user-Video
             v-for="sub in state.subscribers"
@@ -55,15 +52,14 @@
         </div>
       </div>
       <!-- 참여자 목록, 채팅방-->
-      <transition-group name="slide">
+      <transition-group name="side">
         <div
           v-if="isUserList || isChat"
           class="h-full basis-1/4 self-center flex flex-col justify-end"
         >
-          <transition-group name="slide">
+          <transition-group name="side">
             <div
               v-if="isUserList"
-              name="slide-fade"
               class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
             >
               <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
@@ -87,36 +83,34 @@
                   v-for="sub in state.subscribers"
                   :key="sub.stream.connection.connectionId"
                   :stream-manager="sub"
+                  :search-user-name="searchUserName"
                   class="bg-white w-[90%] min-h-16 rounded-lg text-base flex justify-center items-center font-semibold"
                 />
               </div>
               <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
-                <form
-                  action="/meeting"
-                  class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center"
-                >
+                <div class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center">
                   <input
                     type="text"
                     name=""
                     id="search-name"
                     placeholder="참여자명 검색"
-                    class="bg-gray w-[80%] h-[100%] rounded-full"
+                    class="bg-gray w-[80%] h-[100%] border-0 rounded-full"
+                    v-model="searchUserName"
                   />
                   <button
-                    type="submit"
-                    class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                    class="w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
                   >
                     <IconSearch class="size-[60%]" />
                   </button>
-                </form>
+                </div>
               </div>
             </div>
           </transition-group>
           <div v-if="isUserList && isChat" class="mb-2"></div>
-          <transition-group name="slide"
+          <transition-group name="side"
             ><div
               v-if="isChat"
-              id="chat-list"
+              id="chat-container"
               class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
             >
               <div class="px-4 w-full min-h-16 max-h-[20%] flex items-center">
@@ -128,9 +122,9 @@
                 </button>
               </div>
               <div
-                class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-hidden"
+                class="bg-gray h-[80%] flex flex-col justify-center items-center space-y-2 overflow-y-scroll"
               >
-                <div v-for="chatMessage in chatMessages" :key="chatMessage">{{ chatMessage }}</div>
+                <ChatLog :chat-log="chatMessages" />
               </div>
               <div class="min-h-16 max-h-[20%] flex flex-col justify-center items-center">
                 <div
@@ -143,12 +137,12 @@
                     name=""
                     id="chat-message"
                     placeholder="메시지 보내기"
-                    class="bg-gray w-[80%] h-[100%] rounded-full"
+                    class="bg-gray w-[80%] h-[100%] border-0 rounded-full"
                   />
                   <button
                     @click="sendMessage()"
                     type="submit"
-                    class="w-[15%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                    class="w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
                   >
                     <IconMessageSend class="size-[60%]" />
                   </button>
@@ -223,7 +217,7 @@
           <div>
             <button
               id="button-gift"
-              :class="{ 'bg-purple-400': isGift, 'bg-purple-200': !isGift }"
+              :class="{ 'bg-purple-400': isGiftModal, 'bg-purple-200': !isGiftModal }"
               @click="setGiftState"
             >
               <IconGift />
@@ -267,7 +261,7 @@
               <button
                 id="button-quit"
                 class="w-20 h-10 bg-red-500 hover:bg-red-400 text-white rounded-3xl"
-                @click="leaveSession"
+                @click="leaveMeeting"
               >
                 나가기
               </button>
@@ -277,8 +271,9 @@
       </div>
     </section>
     <LetterModal v-if="isLetterModal" />
-    <!-- <GiftModal v-if="isGiftModal" />
-    <CaptureModal v-if="isCaptureModal" /> -->
+    <transition-group name="gift-modal">
+      <GiftModal v-if="isGiftModal" />
+    </transition-group>
   </main>
 </template>
 
@@ -290,6 +285,7 @@ import router from '../../router'
 import axios from 'axios'
 import UserList from './UserList.vue'
 import UserVideo from './UserVideo.vue'
+import ChatLog from './ChatLog.vue'
 import IconInfo from '@/icons/meeting/IconInfo.vue'
 import IconSearch from '@/icons/meeting/IconSearch.vue'
 import IconInvite from '@/icons/meeting/IconInvite.vue'
@@ -307,27 +303,30 @@ import IconUserList from '@/icons/meeting/IconUserList.vue'
 import IconChat from '@/icons/meeting/IconChat.vue'
 import IconMessageSend from '@/icons/meeting/IconMessageSend.vue'
 import LetterModal from '@/components/modal/LetterModal.vue'
+import GiftModal from '@/components/modal/GiftModal.vue'
 
 const props = defineProps({
   accessType: {
     type: String
   }
 })
+const emit = defineEmits(['leave-meeting'])
 
-let isGrid = ref(false)
-let isMic = ref(true)
-let isCamera = ref(true)
-let isMain = ref(true)
-let isLetterModal = ref(false)
-let isGift = ref(false)
-let isCapture = ref(false)
-let isUserList = ref(false)
-let isChat = ref(false)
-let chatMessage = ref('')
-let chatMessages = reactive([])
-let groupVideo = ref(null)
+const isGrid = ref(false)
+const isMic = ref(true)
+const isCamera = ref(true)
+const isMain = ref(true)
+const isLetterModal = ref(false)
+const isGiftModal = ref(false)
+const isCapture = ref(false)
+const isUserList = ref(false)
+const isChat = ref(false)
 
-// 화면 캡쳐
+const searchUserName = ref('')
+const chatMessage = ref('')
+const chatMessages = reactive([])
+const groupVideo = ref(null)
+
 const captureScreen = () => {
   const target = groupVideo.value
   if (!target) {
@@ -338,7 +337,7 @@ const captureScreen = () => {
   })
 }
 
-// 사진 저장
+// 캡쳐 사진 저장
 const onSaveAs = (uri, filename) => {
   const link = document.createElement('a')
   document.body.appendChild(link)
@@ -348,13 +347,11 @@ const onSaveAs = (uri, filename) => {
   document.body.removeChild(link)
 }
 
-// 화면 레이아웃 변경
-let setLayoutState = () => {
+const setLayoutState = () => {
   isGrid.value = !isGrid.value
 }
 
-// 마이크 on / off
-let setMicrophoneState = () => {
+const setMicrophoneState = () => {
   isMic.value = !isMic.value
 
   if (isMic.value) {
@@ -364,8 +361,7 @@ let setMicrophoneState = () => {
   }
 }
 
-// 카메라 on / off
-let setCameraState = () => {
+const setCameraState = () => {
   isCamera.value = !isCamera.value
 
   if (isCamera.value) {
@@ -375,33 +371,27 @@ let setCameraState = () => {
   }
 }
 
-// 편지쓰기 모달 on / off
-let setLetterModalState = () => {
+const setLetterModalState = () => {
   isLetterModal.value = !isLetterModal.value
 }
 
-// 선물하기 모달 on / off
-let setGiftState = () => {
-  isGift.value = !isGift.value
+const setGiftState = () => {
+  isGiftModal.value = !isGiftModal.value
 }
 
-// 사진찍기 모달 on / off
-let setCaptureState = () => {
+const setCaptureState = () => {
   isCapture.value = !isCapture.value
 }
 
-// 메인 회의 / 소그룹 이동
-let createGroup = () => {
+const createGroup = () => {
   isMain.value = !isMain.value
 }
 
-// 참여자 목록 on / off
-let setUserListState = () => {
+const setUserListState = () => {
   isUserList.value = !isUserList.value
 }
 
-// 채팅 on / off
-let setChatState = () => {
+const setChatState = () => {
   isChat.value = !isChat.value
 }
 
@@ -421,7 +411,6 @@ const state = reactive({
   mySessionId: 'SessionA',
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
-
   isMic: true,
   isCamera: true,
   isSpeaker: true,
@@ -501,11 +490,11 @@ const joinSession = () => {
       console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
     })
 
-  window.addEventListener('beforeunload', leaveSession)
+  window.addEventListener('beforeunload', leaveMeeting)
 }
 
 // 세션 종료
-const leaveSession = () => {
+const leaveMeeting = () => {
   if (state.session) state.session.disconnect()
 
   state.session = undefined
@@ -514,8 +503,9 @@ const leaveSession = () => {
   state.subscribers = []
   state.OV = undefined
 
-  window.removeEventListener('beforeunload', leaveSession)
+  window.removeEventListener('beforeunload', leaveMeeting)
 
+  emit('leave-meeting')
   router.push('/')
 }
 
@@ -578,7 +568,7 @@ onMounted(() => {
   if (props.accessType === 'host') joinSession()
   else joinSession()
 
-  window.addEventListener('beforeunload', leaveSession)
+  window.addEventListener('beforeunload', leaveMeeting)
 })
 </script>
 
@@ -602,8 +592,10 @@ onMounted(() => {
 }
 
 #grid-container {
+  width: 100%;
+  height: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 30%);
+  grid-template-columns: repeat(auto-fit, 33%);
   align-items: center;
   justify-content: center;
   gap: 1rem;
@@ -630,23 +622,36 @@ input::placeholder {
   width: 0;
 }
 
-/* 스크롤바 막대 */
 ::-webkit-scrollbar-thumb {
   background-color: transparent;
   border: none;
 }
 
-.slide-enter-active {
+.side-enter-active {
   transition: all 0.5s;
 }
 
-.slide-leave-active {
+.side-leave-active {
   transition: all 0.5s;
 }
 
-.slide-enter-from,
-.slide-leave-to {
+.side-enter-from,
+.side-leave-to {
   transform: translateX(100px);
+  opacity: 0;
+}
+
+.gift-modal-enter-active {
+  transition: all 0.3s;
+}
+
+.gift-modal-leave-active {
+  transition: all 0.3s;
+}
+
+.gift-modal-enter-from,
+.gift-modal-leave-to {
+  transform: translateY(10px);
   opacity: 0;
 }
 </style>

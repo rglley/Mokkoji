@@ -77,7 +77,7 @@ import { ref } from 'vue'
 import IconVoice from '@/icons/meeting/IconVoice.vue'
 import IconVideo from '@/icons/meeting/IconVideo.vue'
 import IconRemove from '@/icons/meeting/IconRemove.vue'
-import AudioRecorder from './AudioRecorder.vue'
+import AudioRecorderModal from './AudioRecorderModal.vue'
 
 let fileNames = ref([])
 

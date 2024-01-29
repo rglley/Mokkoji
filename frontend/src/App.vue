@@ -1,15 +1,26 @@
 <template>
   <main>
-    <TheHeader />
-    <RouterView />
-    <TheFooter />
+    <TheHeader v-if="!isMeeting" />
+    <RouterView @create-meeting="createMeeting" @leave-meeting="leaveMeeting" />
+    <TheFooter v-if="!isMeeting" />
   </main>
 </template>
 
 <script setup>
-import TheHeader from "./components/common/TheHeader.vue";
-import TheFooter from "./components/common/TheFooter.vue";
-import { RouterView } from "vue-router";
+import { ref } from 'vue'
+import TheHeader from './components/common/TheHeader.vue'
+import TheFooter from './components/common/TheFooter.vue'
+import { RouterView } from 'vue-router'
+
+const isMeeting = ref(false)
+
+const createMeeting = () => {
+  isMeeting.value = true
+}
+
+const leaveMeeting = () => {
+  isMeeting.value = false
+}
 </script>
 
 <style scoped></style>
