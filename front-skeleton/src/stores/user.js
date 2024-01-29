@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', () => {
     id: 'ssafy1234',
     nickname: '싸피',
     email: 'ssafy@ssafy.ssafy',
-    isAccountLinked: true
+    isAccountLinked : true,
   })
 
   let userAccount = ref({
@@ -26,8 +26,7 @@ export const useUserStore = defineStore('user', () => {
   // 실제론 axios 요청으로 서버에서 가져옴
 
   return {
-    user,
-    userAccount,
-    eventRecord
+    user, userAccount,
+    eventRecord,
   }
 })

@@ -1,17 +1,15 @@
 <template>
-  <main class="w-screen h-screen">
-    <header class="flex min-w-max">
-      <!-- <TheHeader /> -->
-    </header>
-
-    <Router-view />
-    <!-- <TheFooter /> -->
+  <main>
+    <TheHeader />
+    <RouterView />
+    <TheFooter />
   </main>
 </template>
 
 <script setup>
-import TheHeader from './components/common/TheHeader.vue'
-import TheFooter from './components/common/TheFooter.vue'
+import TheHeader from "./components/common/TheHeader.vue";
+import TheFooter from "./components/common/TheFooter.vue";
+import { RouterView } from "vue-router";
 </script>
 
-<style></style>
+<style scoped></style>

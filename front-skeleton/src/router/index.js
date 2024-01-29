@@ -9,6 +9,7 @@ import MyAccount from '@/components/mypage/MyAccount.vue'
 
 // import MyMeeting from '@/components/conference/MyMeeting.vue'
 // import MeetingView from '@/views/MeetingView.vue'
+import Error404 from '@/components/common/Error404.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,11 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: "/signup",
+      name: 'signup',
+      component: () => import('@/components/common/SignUp.vue') 
+    },
+    {
       // path: '/${userId}',
       path: '/mypage',
       name: 'mypage',
@@ -26,8 +32,18 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: MyPage,
-          component: MyPage
+          name: 'mypage',
+          component: MyPage,
+        },
+        {
+          path: 'detail',
+              name: 'mydetail',
+              component: MyDetail,
+        },
+        {
+          path: 'account',
+          name: 'account',
+          component: MyAccount,
         },
         {
           path: 'detail',
@@ -52,6 +68,17 @@ const router = createRouter({
       name: 'resultpage',
       component: ResultPage
     }
+
+    // {
+    //   path: '/meeting',
+    //   name: 'meeting',
+    //   component: MeetingView,
+    //   children:[{
+    //     path: '/',
+    //     name: 'meeting',
+    //     component: MyMeeting,
+    //   }]
+    // }
   ]
 })
 
