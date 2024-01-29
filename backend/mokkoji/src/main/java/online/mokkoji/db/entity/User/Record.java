@@ -1,18 +1,15 @@
 package online.mokkoji.db.entity.User;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-
+@ToString(of = {"id", "eventCount", "totalTime", "totalParticipant", "totalMessage"})
 public class Record {
 
     @Id
@@ -40,8 +37,8 @@ public class Record {
     @ColumnDefault("0")
     private int totalMessage;
 
-    public Record toEntity(User user, int eventCount, int totalTime, int totalParticipant, int totalMessage) {
-        return Record.builder()
+    public Record(User user, int eventCount, int totalTime, int totalParticipant, int totalMessage) {
+        this.builder()
                 .user(user)
                 .eventCount(eventCount)
                 .totalTime(totalTime)

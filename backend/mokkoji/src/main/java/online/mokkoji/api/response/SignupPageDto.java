@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import online.mokkoji.db.entity.User.Provider;
 
 @Getter
 @ToString

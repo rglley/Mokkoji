@@ -1,6 +1,8 @@
 package online.mokkoji.common.auth.oauth2;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import online.mokkoji.db.entity.User.Provider;
 
 import java.util.HashMap;
@@ -34,8 +36,8 @@ public class OAuth2Attribute {
                 .attributeKey(attributeKey)
                 .provider(Provider.valueOf(provider))
                 .email((String) response.get("email"))
-                .name((String)response.get("name"))
-                .image((String)response.get("profile_image"))
+                .name((String) response.get("name"))
+                .image((String) response.get("profile_image"))
                 .attributes(response)
                 .build();
 

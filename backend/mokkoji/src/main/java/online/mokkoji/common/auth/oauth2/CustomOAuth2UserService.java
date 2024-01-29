@@ -47,7 +47,7 @@ public class CustomOAuth2UserService implements
                 OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         Map<String, Object> attributes = oAuth2Attribute.convertToMap();
 
-        Provider provider = Provider.valueOf((String) attributes.get("provider")) ;
+        Provider provider = Provider.valueOf((String) attributes.get("provider"));
         String email = (String) attributes.get("email");
 
         //provider, email로 회원 조회

@@ -3,17 +3,22 @@ package online.mokkoji.db.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import online.mokkoji.db.entity.Event.Event;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "users") //h2만 user 사용 불가능
 @Getter
 @Builder
-@ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@ToString(of = {"id", "email", "name", "image"})
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -34,6 +39,9 @@ public class User {
 
     private String image;
 
+    @OneToMany(mappedBy = "user")
+    private List<Event> events = new ArrayList<>();
+
     @OneToOne(mappedBy = "user")
     private Account account;
 
@@ -44,8 +52,8 @@ public class User {
     @Size(max = 100)
     private String refreshToken;
 
-    public User toEntity(String provider, String email, String name, String image, Role role) {
-        return User.builder()
+    public User(String provider, String email, String name, String image, Role role) {
+        this.builder()
                 .provider(Provider.valueOf(provider))
                 .email(email)
                 .name(name)
@@ -54,8 +62,8 @@ public class User {
                 .build();
     }
 
-    public User toEntity(String provider, String email, String name, String image, Role role, String refreshToken) {
-        return User.builder()
+    public User(String provider, String email, String name, String image, Role role, String refreshToken) {
+        this.builder()
                 .provider(Provider.valueOf(provider))
                 .email(email)
                 .name(name)
@@ -65,7 +73,23 @@ public class User {
                 .build();
     }
 
+    public User(String email, String name, String image) {
+        this.email = email;
+        this.name = name;
+        this.image = image;
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateUser(String provider, String email, String name, String image, Role role) {
+        this.provider = Provider.valueOf(provider);
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        this.role = role;
+
+
     }
 }

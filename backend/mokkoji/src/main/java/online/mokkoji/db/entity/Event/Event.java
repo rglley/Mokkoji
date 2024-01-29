@@ -10,7 +10,7 @@ import online.mokkoji.api.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.EventErrorCode;
 import online.mokkoji.db.entity.Result.Result;
-import online.mokkoji.db.entity.User;
+import online.mokkoji.db.entity.User.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 

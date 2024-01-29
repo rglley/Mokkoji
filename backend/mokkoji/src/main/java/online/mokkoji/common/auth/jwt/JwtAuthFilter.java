@@ -62,11 +62,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
     }
+
     public void checkAndUpdateToken(HttpServletResponse response, String refreshToken) {
 
         Optional<User> findUser = userRepository.findByRefreshToken(refreshToken);
 
-        if(findUser.isEmpty()) {
+        if (findUser.isEmpty()) {
             log.error("RefreshToken에 해당하는 회원 정보 존재 X, AccessToken 재발급 불가능");
             throw new JwtException("RefreshToken is not valid");
         }
@@ -85,12 +86,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
     public void checkValidity(HttpServletRequest req, HttpServletResponse resp,
-                                                  FilterChain filterChain) throws ServletException, IOException {
+                              FilterChain filterChain) throws ServletException, IOException {
 
         log.info("AccessToken 유효성 검사 진행");
         Optional<String> extractAccessToken = jwtService.extractAccessToken(req);
 
-        if(extractAccessToken.isEmpty()) {
+        if (extractAccessToken.isEmpty()) {
             log.error("유효하지 않은 AccessToken!");
             throw new JwtException("헤더에서 AccessToken을 찾을 수 없습니다.");
         }
@@ -99,7 +100,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Optional<String> extractProvider = jwtService.extractEmail(accessToken);
         Optional<String> extractEmail = jwtService.extractEmail(accessToken);
 
-        if(extractEmail.isEmpty() || extractProvider.isEmpty()) {
+        if (extractEmail.isEmpty() || extractProvider.isEmpty()) {
             log.error("유효하지 않은 AccessToken!");
             throw new JwtException("AccessToken claim이 올바르지 않습니다");
         }
@@ -108,7 +109,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String email = extractProvider.get();
 
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
-        if(findUser.isEmpty()) {
+        if (findUser.isEmpty()) {
             log.error("회원 정보를 찾을 수 없습니다!");
             throw new JwtException("존재하지 않는 회원의 토큰입니다");
         }

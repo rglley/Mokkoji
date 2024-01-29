@@ -2,8 +2,8 @@ package online.mokkoji.api.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import online.mokkoji.api.request.UpdateDto;
 import online.mokkoji.api.request.SignupDto;
+import online.mokkoji.api.request.UpdateDto;
 import online.mokkoji.api.response.MyPageDto;
 import online.mokkoji.api.response.UpdatePageDto;
 import online.mokkoji.common.auth.jwt.JwtService;
@@ -35,7 +35,7 @@ public class UserService {
         log.info("회원 정보 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
-        if(findUser.isEmpty()) {
+        if (findUser.isEmpty()) {
             log.error("존재하지 않는 회원 정보. 조회 불가능");
             throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
         }
@@ -44,7 +44,7 @@ public class UserService {
         User readUser = findUser.get();
         Account account = readUser.getAccount();
 
-        if(account == null) {
+        if (account == null) {
             log.info("계좌 연동 X");
             UpdatePageDto updatePageDto = new UpdatePageDto(readUser.getEmail(), readUser.getImage(), readUser.getName(),
                     null, null);
@@ -61,25 +61,25 @@ public class UserService {
 
     public MyPageDto readMypage(String provider, String email) {
         log.info("회원 정보 조회(provider, email) : {}, {}", provider, email);
-       Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
-       if(findUser.isEmpty()) {
-           log.error("존재하지 않는 회원 정보. 조회 불가능");
-           throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
-       }
+        if (findUser.isEmpty()) {
+            log.error("존재하지 않는 회원 정보. 조회 불가능");
+            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
+        }
 
-       log.info("회원 정보 반환");
-       User readUser = findUser.get();
-       Account account = readUser.getAccount();
-       Record record = readUser.getRecord();
+        log.info("회원 정보 반환");
+        User readUser = findUser.get();
+        Account account = readUser.getAccount();
+        Record record = readUser.getRecord();
 
-       if(account == null) {
-           log.info("계좌 연동 X");
-           MyPageDto myPageDto = new MyPageDto(readUser.getEmail(), readUser.getName(), false,
-                   record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
+        if (account == null) {
+            log.info("계좌 연동 X");
+            MyPageDto myPageDto = new MyPageDto(readUser.getEmail(), readUser.getName(), false,
+                    record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
 
-           return myPageDto;
-       }
+            return myPageDto;
+        }
 
         log.info("계좌 연동 O");
         MyPageDto myPageDto = new MyPageDto(readUser.getEmail(), readUser.getName(), true,
@@ -93,23 +93,22 @@ public class UserService {
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if(!findUser.isPresent()) {
+        if (!findUser.isPresent()) {
             log.error("이미 존재하는 회원. 회원가입 불가능");
             throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
 
         log.info("회원가입 진행");
-        //이름 null이면 랜덤 닉네임 부여?!?!?
-        User newUser = new User();
+        // TODO: 2024.01.29 이름 null이면 랜덤 닉네임 부여?!?!?
         String refreshToken = jwtService.createRefreshToken();
-        newUser.toEntity(provider, email, signupDto.getName(), signupDto.getImage(), Role.USER, refreshToken);
+        User newUser = new User(provider, email, signupDto.getName(), signupDto.getImage(), Role.USER, refreshToken);
 
         userRepository.save(newUser);
 
         String bank = signupDto.getBank();
         String accountNumber = signupDto.getAccountNumber();
 
-        if(bank != null && accountNumber != null) {
+        if (bank != null && accountNumber != null) {
             log.info("계좌 정보 확인, 등록 진행");
             Account account = newUser.getAccount();
             account.toEntity(newUser, bank, accountNumber);
@@ -122,7 +121,7 @@ public class UserService {
         log.info("회원 정보 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
-        if(findUser.isEmpty()) {
+        if (findUser.isEmpty()) {
             log.error("존재하지 않는 회원 정보. 수정 불가능");
             throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
         }
@@ -134,11 +133,11 @@ public class UserService {
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
-        updateUser.toEntity(provider, email, name, image, Role.USER);
+        updateUser.updateUser(provider, email, name, image, Role.USER);
 
         userRepository.save(updateUser);
 
-        if(bank != null && accountNumber != null) {
+        if (bank != null && accountNumber != null) {
             log.info("계좌 정보 업데이트");
             Account account = new Account();
             account.toEntity(findUser.get(), bank, accountNumber);

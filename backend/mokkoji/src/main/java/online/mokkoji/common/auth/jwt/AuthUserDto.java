@@ -2,7 +2,6 @@ package online.mokkoji.common.auth.jwt;
 
 import lombok.Builder;
 import lombok.Getter;
-import online.mokkoji.db.entity.User.Role;
 
 @Getter
 @Builder

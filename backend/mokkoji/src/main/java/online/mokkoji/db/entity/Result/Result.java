@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import online.mokkoji.db.entity.Event.Event;
-import online.mokkoji.db.entity.User;
+import online.mokkoji.db.entity.User.User;
 
 @Entity
 @NoArgsConstructor
