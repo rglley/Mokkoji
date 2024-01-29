@@ -43,19 +43,7 @@ public class S3ServiceImpl implements S3Service {
         String prefix = "pic_" + userId + "_" + resultId + "_";
         String fileName = dirName + "/" + createFileName(multipartFile.getOriginalFilename(), prefix);
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(multipartFile.getContentType());
-        metadata.setContentLength(multipartFile.getSize());
-        PutObjectRequest request = new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata);
-
-        try {
-            amazonS3Client.putObject(request);
-        } catch (AmazonServiceException e) {
-            // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
-            e.printStackTrace();
-        } catch (SdkClientException e) {
-            e.printStackTrace();
-        }
+        upload(multipartFile, fileName);
 
         return amazonS3Client.getUrl(bucket, fileName);
     }
@@ -83,25 +71,30 @@ public class S3ServiceImpl implements S3Service {
             // 사진_유저ID_결과물ID
             String fileName = dirName + "/" + createFileName(multipartFile.getOriginalFilename(), prefix);
 
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(multipartFile.getContentType());
-            metadata.setContentLength(multipartFile.getSize());
-            PutObjectRequest request = new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata);
-
-            try {
-                amazonS3Client.putObject(request);
-            } catch (AmazonServiceException e) {
-                // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
-                e.printStackTrace();
-            } catch (SdkClientException e) {
-                e.printStackTrace();
-            }
+            upload(multipartFile, fileName);
 
 
             urlMap.put(fileEntry.getKey(), amazonS3Client.getUrl(bucket, fileName));
 
         }
         return urlMap;
+    }
+
+    // S3에 upload
+    private void upload(MultipartFile multipartFile, String fileName) throws IOException {
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(multipartFile.getContentType());
+        metadata.setContentLength(multipartFile.getSize());
+        PutObjectRequest request = new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata);
+
+        try {
+            amazonS3Client.putObject(request);
+        } catch (AmazonServiceException e) {
+            // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
     }
 
     // 파일 이름 생성
