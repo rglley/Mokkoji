@@ -12,6 +12,7 @@ public enum CommonErrorCode implements ErrorCode {
     RESOURCE_NOT_FOUND(404, "요청 내용을 찾을 수 없습니다."),
     INTERNAL_SERVER_ERROR(500, "서버 오류가 발생했습니다.");
 
+
     private final Integer errorCode;
     private final String errorMessage;
 }

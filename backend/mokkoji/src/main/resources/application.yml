@@ -7,12 +7,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         # show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
 
 
   data:
@@ -26,6 +27,11 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+  #application-oauth 프로필 등록
+  profiles:
+    include: oauth, jwt
+
 
 # OpenVidu
 OPENVIDU_URL: http://localhost:4443/

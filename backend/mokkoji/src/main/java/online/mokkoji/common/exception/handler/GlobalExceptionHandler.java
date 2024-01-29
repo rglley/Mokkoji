@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 //전역적으로 에러를 처리해주는 클래스
@@ -40,7 +42,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
         return handleExceptionInternal(errorCode);
     }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -80,20 +81,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ErrorResponse.builder()
                 .code(errorCode.name())
                 .message(message)
-                .build();
-    }
-
-    private ErrorResponse makeErrorResponse(MethodArgumentNotValidException e, ErrorCode errorCode) {
-        List<ErrorResponse.ValidationError> validationErrorList = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(ErrorResponse.ValidationError::of)
-                .collect(Collectors.toList());
-
-        return ErrorResponse.builder()
-                .code(errorCode.name())
-                .message(errorCode.getErrorMessage())
-                .errors(validationErrorList)
                 .build();
     }
 }
