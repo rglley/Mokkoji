@@ -145,6 +145,15 @@ public class UserService {
     }
 
     public User deleteUser(String provider, String email) {
+        User deleteUser = getByProviderAndEmail(provider, email);
+        log.info("회원 탈퇴 진행");
+
+        userRepository.delete(deleteUser);
+
+        return deleteUser;
+    }
+
+    public User getByProviderAndEmail(String provider, String email) {
         log.info("회원 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
@@ -153,10 +162,6 @@ public class UserService {
             throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
         }
 
-        log.info("회원 탈퇴 진행");
-        User deleteUser = findUser.get();
-        userRepository.delete(deleteUser);
-
-        return deleteUser;
+        return findUser.get();
     }
 }
