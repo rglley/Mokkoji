@@ -12,8 +12,8 @@ export const useUserStore = defineStore('user', () => {
   })
 
   let user = ref({
-    id: "ssafy1234",
-    nickname: "싸피",
+    id: 'ssafy1234',
+    nickname: '싸피',
     email: 'ssafy@ssafy.ssafy',
     isAccountLinked : true,
   })

@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
+import MeetingView from '@/views/MeetingView.vue'
+import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
 
@@ -43,18 +45,28 @@ const router = createRouter({
           name: 'account',
           component: MyAccount,
         },
+        {
+          path: 'detail',
+          name: 'mydetail',
+          component: MyDetail
+        },
+        {
+          path: 'account',
+          name: 'account',
+          component: MyAccount
+        }
       ]
-
-    },
-    // Not Found 이동
-    {
-      path: '/:pathMatch(.*)*',
-      redirect: '404'
     },
     {
-      path: '/404',
-      name: 'Error404',
-      component: Error404
+      path: '/meeting/:accessType',
+      name: 'meeting',
+      component: MeetingView,
+      props: true
+    },
+    {
+      path: '/resultpage',
+      name: 'resultpage',
+      component: ResultPage
     }
 
     // {

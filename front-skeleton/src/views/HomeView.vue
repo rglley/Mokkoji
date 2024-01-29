@@ -62,6 +62,7 @@
                   <MeetingJoinModal :conferenceIdInput="conferenceIdInput" />
                 </ModalView>
               </div>
+              <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
             </div>
             <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
           </div>
