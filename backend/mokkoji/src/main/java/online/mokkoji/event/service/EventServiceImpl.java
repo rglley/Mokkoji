@@ -3,6 +3,7 @@ package online.mokkoji.event.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.event.dto.request.RollingpaperReqDto;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
@@ -13,7 +14,9 @@ import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.repository.ResultRepository;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -97,5 +100,41 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(findSession);
 
 
+    }
+
+    // 롤링페이퍼 파일 받아서 유효성 검사
+    @Override
+    public Map<String, Map> createRollingpaperFileMap(RollingpaperReqDto rollingpaperReqDto) {
+
+        // resonse용 map
+        Map<String, Map> returnMap = new HashMap<>();
+        Map<String, String> textMap = new HashMap<>();
+
+        // text가 있는 경우 map에 저장
+        String text = rollingpaperReqDto.getText();
+        if (text != null) {
+            if (!text.isBlank()) {
+                textMap.put("text", text);
+            }
+        }
+
+
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        // 음성이 있는 경우 map에 저장
+        // TODO : ispresent 사용, 서비스로 null처리 이동 다 dto에 담아서
+        MultipartFile voice = rollingpaperReqDto.getVoice();
+        if (voice != null && !voice.isEmpty()) {
+            fileMap.put("voice", voice);
+        }
+        // 영상이 있는 경우 map에 저장
+        MultipartFile video = rollingpaperReqDto.getVideo();
+        if (video != null && !video.isEmpty()) {
+            fileMap.put("video", video);
+        }
+
+        returnMap.put("files", fileMap);
+        returnMap.put("text", textMap);
+
+        return returnMap;
     }
 }

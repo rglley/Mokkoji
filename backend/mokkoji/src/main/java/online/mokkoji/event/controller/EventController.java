@@ -2,10 +2,9 @@ package online.mokkoji.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.S3.S3ServiceImpl;
 import online.mokkoji.event.dto.request.PhotoReqDto;
 import online.mokkoji.event.dto.request.RollingpaperReqDto;
-import online.mokkoji.S3.S3ServiceImpl;
-import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
 import org.springframework.http.HttpStatus;
@@ -31,10 +30,11 @@ public class EventController {
 
     // 캡쳐사진 저장
     @PostMapping("/photos/{sessionId}")
-    public ResponseEntity<Map<String, String>> addPhoto(@PathVariable("sessionId") String sessionId,
-                                                        @RequestPart("photo") MultipartFile photo,
-                                                        @RequestPart("userId") PhotoReqDto photoReqDto) throws IOException {
+    public ResponseEntity<?> addPhoto(@PathVariable("sessionId") String sessionId,
+                                      @RequestPart("photo") MultipartFile photo,
+                                      @RequestPart("userId") PhotoReqDto photoReqDto) throws IOException {
 
+        // TODO : 2024.01.29 jwt에서 사용자 권한 받아오기
 //        Event event = eventRepository.findBySessionId(sessionId);
 //        Long resultId = event.getResult().getId();
         Long resultId = 1L;
@@ -42,56 +42,40 @@ public class EventController {
 
         log.info(s3Url.toString());
 
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "사진 업로드 완료");
-
         // TODO: 2024.01.28 redis에 url 저장
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // TODO : 2024.01.28 여기도 형식 바꿔야 함
     //롤링페이퍼 저장
     @PostMapping("/rollingpapers/{sessionId}")
-    public ResponseEntity<Map<String, String>> addRollingpaper(@PathVariable("sessionId") String sessionId,
-                                                               @RequestBody RollingpaperReqDto rollingpaperReqDto) throws IOException {
+    public ResponseEntity<Map<String, ?>> addRollingpaper(@PathVariable("sessionId") String sessionId,
+                                                          @RequestPart(value = "voice", required = false) MultipartFile voice,
+                                                          @RequestPart(value = "video", required = false) MultipartFile video,
+                                                          @RequestPart("dto") RollingpaperReqDto rollingpaperReqDto) throws IOException {
 
-        Event event = eventRepository.findBySessionId(sessionId);
-        Long resultId = event.getResult().getId();
+        // TODO : 2024.01.29 jwt에서 사용자 정보 받기
+//        Event event = eventRepository.findBySessionId(sessionId);
+//        Long resultId = event.getResult().getId();
+        Long resultId = 1L;
 
-        Map<String, MultipartFile> fileMap = new HashMap<>();
+        rollingpaperReqDto.setVoice(voice);
+        rollingpaperReqDto.setVideo(video);
 
-        String text = rollingpaperReqDto.getText();
-
-        if (!text.isEmpty() && text.length() > 0) {
-            // TODO : 2023.01.28 redis에 text 저장
-        }
-
-        // 음성이 있는 경우 map에 저장
-        MultipartFile voice = rollingpaperReqDto.getVoice();
-        // TODO : ispresent 사용, 서비스로 null처리 이동 다 dto에 담아서
-        if (voice != null && !voice.isEmpty()) {
-            fileMap.put("voice", voice);
-        }
-        // 영상이 있는 경우 map에 저장
-        MultipartFile video = rollingpaperReqDto.getVideo();
-        if (video != null && !video.isEmpty()) {
-            fileMap.put("video", video);
-        }
-
-        // 미디어 파일이 있는 경우만 uploadRollingpaper 실행
-        if (fileMap.size() > 0) {
-            Map<String, URL> urlMap = s3Service.uploadRollingpaper(fileMap, rollingpaperReqDto.getUserId(), resultId);
-
-            // TODO: 2024.01.28 redis에 저장
-        }
+        // 텍스트, 음성, 영상 유효성 검사 후 file, text 맵에 담음
+        Map<String, Map> rollingpaperMap = eventService.createRollingpaperFileMap(rollingpaperReqDto);
 
 
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "롤링페이퍼 업로드 완료");
+        Map<String, MultipartFile> fileMap = rollingpaperMap.get("files");
+        // 유효성 검사 후 파일 S3에 업로드
+        Map<String, URL> urlMap = s3Service.uploadRollingpaper(fileMap, rollingpaperReqDto.getUserId(), resultId);
 
+        Map<String, Map> response = new HashMap<>();
+        response.put("text", rollingpaperMap.get("text"));
+        response.put("fileURL", urlMap);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
 

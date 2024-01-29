@@ -52,6 +52,12 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public Map<String, URL> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long resultId) throws IOException {
 
+        if (multipartFiles == null) {
+            String msg = "파일 없음";
+            log.info(msg);
+            return null;
+        }
+
         String dirName;
         String prefix;
         Map<String, URL> urlMap = new HashMap<>();
