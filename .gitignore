@@ -1,5 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,node,sass,macos,maven,redis,vuejs,gradle,python,eclipse,windows,intellij,visualstudiocode,opencv,vue
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,node,sass,macos,maven,redis,vuejs,gradle,python,eclipse,windows,intellij,visualstudiocode,opencv,vue
+
+### S3 access 정보 ###
+backend/mokkoji/src/main/resources/application-s3.yml
+backend/mokkoji/src/main/resources/application.properties
+
+
 ### Eclipse ###
 .metadata
 bin/
@@ -517,4 +523,7 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
+
+
+
 # End of https://www.toptal.com/developers/gitignore/api/java,node,sass,macos,maven,redis,vuejs,gradle,python,eclipse,windows,intellij,visualstudiocode,opencv,vue
