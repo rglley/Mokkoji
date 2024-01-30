@@ -1,13 +1,14 @@
 <template>
-  <div
-    class="fixed w-full bg-black bg-opacity-30 h-screen top-0 left-0 z-10 flex justify-center items-center px-8"
-  >
+  <div class="fixed w-full h-full top-0 left-0 z-10 flex justify-center items-center px-8">
     <div
       id="letter-container"
       class="p-8 w-1/3 h-fit bg-yellow-100 flex flex-col justify-center rounded-xl"
     >
-      <div class="flex pb-6">
+      <div class="flex pb-6 space-x-64">
         <h1 class="text-black text-2xl font-bold">롤링페이퍼 작성</h1>
+        <button @click="$emit('remove-letter-modal')">
+          <IconLetterCancel />
+        </button>
       </div>
       <form action="" method="post" id="letterForm" class="flex flex-col justify-center">
         <div class="p-6 flex flex-col border-2 rounded-xl">
@@ -77,15 +78,18 @@ import { ref } from 'vue'
 import IconVoice from '@/icons/meeting/IconVoice.vue'
 import IconVideo from '@/icons/meeting/IconVideo.vue'
 import IconRemove from '@/icons/meeting/IconRemove.vue'
-import AudioRecorderModal from './AudioRecorderModal.vue'
+import IconLetterCancel from '@/icons/meeting/IconLetterCancel.vue'
+// import AudioRecorderModal from './AudioRecorderModal.vue'
 
-let fileNames = ref([])
+defineEmits(['remove-letter-modal'])
 
-let removeContents = () => {
+const fileNames = ref([])
+
+const removeContents = () => {
   document.getElementById('input-text').value = ''
 }
 
-let showFileName = (event) => {
+const showFileName = (event) => {
   const files = event.target.files
 
   if (files.length > 0) {
@@ -97,7 +101,7 @@ let showFileName = (event) => {
   }
 }
 
-let removeFile = (index) => {
+const removeFile = (index) => {
   fileNames.value.splice(index, 1)
 }
 </script>

@@ -16,8 +16,6 @@ const props = defineProps({
 
 const userName = ref('')
 
-console.log(1)
-
 // 사용자 데이터 가져오기
 const clientData = () => {
   const { clientData } = getConnectionData()

@@ -1,9 +1,6 @@
 <!-- 사용자 비디오 -->
 <template>
-  <div>
-    <div>{{ clientData() }}</div>
-    <video ref="videoElement" autoplay />
-  </div>
+  <video ref="videoElement" autoplay class="rounded-2xl" />
 </template>
 
 <script setup>

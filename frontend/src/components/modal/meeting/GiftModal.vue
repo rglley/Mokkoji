@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-[20%] h-[15%] top-[68%] left-[44%]">
+  <div class="fixed w-[20%] h-[15%] top-[71%] left-[44%]">
     <div
       id="gift-container"
       class="p-8 h-[100%] bg-purple-100 flex flex-col justify-center items-center rounded-xl"

@@ -3,61 +3,49 @@
     <section class="w-full h-[85%] flex justify-center">
       <!-- 스포트라이트 레이아웃 -->
       <div v-if="!isGrid" class="w-full h-full flex basis-3/4">
-        <!-- 회의 화면 -->
-        <div
-          id="meeting-container"
-          ref="groupVideo"
-          class="w-full h-full flex justify-center items-center"
-        >
-          <!-- 참가자 화면 -->
+        <div id="meeting-container" ref="groupVideo" class="w-full h-full flex justify-center">
           <div
             v-if="state.subscribers.length > 0"
-            class="h-[90%] w-[100%] basis-1/3 flex-col overflow-y-scroll overflow-hidden space-y-2"
+            class="h-full basis-1/4 flex flex-col justify-start items-center overflow-y-scroll space-y-2"
           >
             <user-Video
+              id="sub-video"
               v-for="sub in state.subscribers"
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
               @click.native="updateMainVideoStreamManager(sub)"
-              class="min-w-[100%] max-w-[100%] rounded-2xl flex-none"
+              class="h-1/3 flex-none"
             />
+            <!-- <div class=" bg-slate-800 h-[20%] bg-opacity-50 text-white">123</div> -->
           </div>
-          <!-- 메인 화면 -->
-          <div ref="myVideo" class="max-h-[100%] basis-2/3 flex justify-center items-center">
+          <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
             <user-Video
+              id="main-video"
               :stream-manager="state.mainStreamManager"
-              class="px-2 min-w-[100%] max-w-[100%] min-h-[100%] max-h-[100%] rounded-3xl"
+              class="px-2 h-full"
             />
           </div>
         </div>
       </div>
       <!-- 그리드 레이아웃 -->
-      <div v-else class="w-full h-full flex basis-3/4">
-        <!-- 회의 화면 -->
-        <div id="grid-container" ref="groupVideo">
-          <!-- 참가자 화면 -->
-          <user-Video
-            v-for="sub in state.subscribers"
-            :key="sub.stream.connection.connectionId"
-            :stream-manager="sub"
-            @click="updateMainVideoStreamManager(sub)"
-            class="rounded-2xl"
-          />
-          <!-- 메인 화면 -->
-          <user-Video
-            id="main-video"
-            :stream-manager="state.mainStreamManager"
-            class="rounded-2xl"
-          />
-        </div>
+      <div
+        v-else
+        class="w-full h-full basis-3/4 grid grid-cols-3 gap-2 overflow-y-scroll items-center"
+      >
+        <user-Video
+          id="sub-video"
+          v-for="sub in state.subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+        />
       </div>
       <!-- 참여자 목록, 채팅방-->
-      <transition-group name="side">
+      <transition-group name="left">
         <div
           v-if="isUserList || isChat"
           class="h-full basis-1/4 self-center flex flex-col justify-end"
         >
-          <transition-group name="side">
+          <transition-group name="left">
             <div
               v-if="isUserList"
               class="w-full h-full border-2 border-gray rounded-xl flex flex-col resize"
@@ -108,7 +96,7 @@
             </div>
           </transition-group>
           <div v-if="isUserList && isChat" class="mb-2"></div>
-          <transition-group name="side"
+          <transition-group name="left"
             ><div
               v-if="isChat"
               id="chat-container"
@@ -155,10 +143,13 @@
       </transition-group>
     </section>
     <!-- 기능 버튼 -->
-    <section class="mx-32 pt-2 h-[25%] flex justify-center items-center">
+    <section class="mx-32 h-[15%] flex justify-center items-center">
       <div class="h-full flex justify-center items-center space-x-20">
         <div class="min-w-[110px] flex items-center space-x-2">
-          <button class="w-10 h-10 rounded-full bg-white hover:bg-slate-200">
+          <button
+            class="w-10 h-10 rounded-full bg-white hover:bg-slate-200"
+            @click="setMeetingDetailModalState"
+          >
             <IconInfo />
           </button>
           <button
@@ -271,8 +262,19 @@
         </div>
       </div>
     </section>
-    <LetterModal v-if="isLetterModal" />
-    <transition-group name="gift-modal">
+    <transition-group name="up">
+      <MeetingDetailModal v-if="isMeetingDetailModal" :session="state.session" />
+    </transition-group>
+    <transition-group name="up">
+      <MicModal v-if="isMicModal" :is-mic="isMic" />
+    </transition-group>
+    <transition-group name="up">
+      <CameraModal v-if="isCameraModal" :is-camera="isCamera" />
+    </transition-group>
+    <transition-group name="up">
+      <LetterModal v-if="isLetterModal" @remove-letter-modal="setLetterModalState" />
+    </transition-group>
+    <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
     </transition-group>
   </main>
@@ -281,7 +283,6 @@
 <script setup>
 import { ref, reactive, onMounted, defineProps } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
-import { io } from 'socket.io-client'
 import html2canvas from 'html2canvas'
 import router from '../../router'
 import axios from 'axios'
@@ -304,8 +305,11 @@ import IconCamera from '@/icons/meeting/IconCamera.vue'
 import IconUserList from '@/icons/meeting/IconUserList.vue'
 import IconChat from '@/icons/meeting/IconChat.vue'
 import IconMessageSend from '@/icons/meeting/IconMessageSend.vue'
-import LetterModal from '@/components/modal/LetterModal.vue'
-import GiftModal from '@/components/modal/GiftModal.vue'
+import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
+import MicModal from '@/components/modal/meeting/MicModal.vue'
+import CameraModal from '@/components/modal/meeting/CameraModal.vue'
+import GiftModal from '@/components/modal/meeting/GiftModal.vue'
+import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 
 const props = defineProps({
   accessType: {
@@ -317,8 +321,11 @@ const emit = defineEmits(['leave-meeting'])
 
 const isGrid = ref(false)
 const isMic = ref(true)
+const isMicModal = ref(false)
 const isCamera = ref(true)
+const isCameraModal = ref(false)
 const isMain = ref(true)
+const isMeetingDetailModal = ref(false)
 const isLetterModal = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -350,6 +357,10 @@ const onSaveAs = (uri, filename) => {
   document.body.removeChild(link)
 }
 
+const setMeetingDetailModalState = () => {
+  isMeetingDetailModal.value = !isMeetingDetailModal.value
+}
+
 const setLayoutState = () => {
   isGrid.value = !isGrid.value
 }
@@ -362,6 +373,12 @@ const setMicrophoneState = () => {
   } else {
     state.publisher.publishAudio(false)
   }
+
+  isMicModal.value = true
+
+  setTimeout(() => {
+    isMicModal.value = false
+  }, 1000)
 }
 
 const setCameraState = () => {
@@ -372,6 +389,12 @@ const setCameraState = () => {
   } else {
     state.publisher.publishVideo(false)
   }
+
+  isCameraModal.value = true
+
+  setTimeout(() => {
+    isCameraModal.value = false
+  }, 1000)
 }
 
 const setLetterModalState = () => {
@@ -405,7 +428,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 const APPLICATION_SERVER_URL = 'http://localhost:5000/'
 
 const state = reactive({
-  // Openvidu 객체
   OV: undefined,
   session: undefined,
   mainStreamManager: undefined,
@@ -439,8 +461,8 @@ const joinSession = () => {
   state.session.on('streamCreated', ({ stream }) => {
     console.log('새로운 참가자 입장')
     const subscriber = state.session.subscribe(stream, undefined)
+    console.log(subscriber)
     state.subscribers.push(subscriber)
-    console.log(state.subscribers)
   })
 
   // 시그널링 서버로부터 수신된 채팅 메시지 처리
@@ -460,7 +482,6 @@ const joinSession = () => {
     if (index >= 0) {
       state.subscribers.splice(index, 1)
     }
-    console.log(state.subscribers)
   })
 
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
@@ -468,7 +489,7 @@ const joinSession = () => {
   // OpenVidu 배포에서 토큰 가져오기
   getToken(state.mySessionId)
     .then((token) => {
-      console.log(state.session)
+      // console.log(state.session)
       // 첫 번째 파라미터는 토큰이다. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
@@ -478,19 +499,20 @@ const joinSession = () => {
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
           allowTranscoding: true,
-          resolution: '800x600', // The resolution of your video
+          resolution: '850x600', // The resolution of your video
           frameRate: 30, // The frame rate of your video
           insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
           mirror: false
         })
 
-        // Set the main video in the page to display our webcam and store our Publisher
         state.mainStreamManager = publisher
         state.publisher = publisher
+        state.subscribers.push(publisher)
 
-        // --- 6) Publish your stream ---
+        // const { host } = state.subscribers[0].stream
+        // const result = JSON.parse(host.data)
 
-        state.session.publish(publisher)
+        state.session.host = state.session.publish(publisher)
       })
     })
     .catch((error) => {
@@ -539,7 +561,6 @@ const createSession = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
-
   return response.data // sessionId
 }
 
@@ -552,11 +573,10 @@ const createToken = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
-  console.log(response.data)
   return response.data // The token
 }
 
-const sendMessage = () => {
+const sendMessage = (event) => {
   if (chatMessage.value.trim() !== '') {
     // OpenVidu 시그널링 서버를 통해 채팅 메시지를 보낸다.
     state.session.signal({
@@ -569,8 +589,7 @@ const sendMessage = () => {
 }
 
 onMounted(() => {
-  if (props.accessType === 'host') joinSession()
-  else joinSession()
+  joinSession()
 
   window.addEventListener('beforeunload', leaveMeeting)
 })
@@ -631,30 +650,30 @@ input::placeholder {
   border: none;
 }
 
-.side-enter-active {
+.left-enter-active {
   transition: all 0.5s;
 }
 
-.side-leave-active {
+.left-leave-active {
   transition: all 0.5s;
 }
 
-.side-enter-from,
-.side-leave-to {
+.left-enter-from,
+.left-leave-to {
   transform: translateX(100px);
   opacity: 0;
 }
 
-.gift-modal-enter-active {
+.up-enter-active {
   transition: all 0.3s;
 }
 
-.gift-modal-leave-active {
+.up-leave-active {
   transition: all 0.3s;
 }
 
-.gift-modal-enter-from,
-.gift-modal-leave-to {
+.up-enter-from,
+.up-leave-to {
   transform: translateY(10px);
   opacity: 0;
 }
