@@ -1,4 +1,4 @@
-package online.mokkoji.event.repository;
+package online.mokkoji.result.repository;
 
 import online.mokkoji.result.domain.Result;
 import org.springframework.data.jpa.repository.JpaRepository;

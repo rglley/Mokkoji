@@ -62,7 +62,7 @@ public class OpenviduController {
         SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
 
         // DB에 저장
-        String sessionDBId = eventService.createSession(sessionReqDto);
+        eventService.createSession(sessionReqDto);
 
         // 리턴값(sessionId) 담는 map 생성
         Map<String, String> response = new HashMap<>();

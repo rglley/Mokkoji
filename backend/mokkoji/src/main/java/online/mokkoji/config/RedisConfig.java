@@ -1,8 +1,6 @@
 package online.mokkoji.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -23,15 +21,18 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        String localhost="localhost";
+        String localhost = "localhost";
         return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
     @Bean
     public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 
-        RedisTemplate<?,?> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory);
-        return template;
+        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setEnableTransactionSupport(true);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        return redisTemplate;
     }
 }

@@ -24,11 +24,8 @@ public class SessionReqDto {
     public SessionReqDto(Long userId, String sessionId, Long milli) {
         this.userId = userId;
         this.sessionId = sessionId;
-
         // millisceconds -> LocalDateTime-UTC으로 변경
-        LocalDateTime createdAt = Instant.ofEpochMilli(milli).atZone(ZoneId.of("UTC")).toLocalDateTime();
-
-        this.startTime = createdAt;
+        this.startTime = Instant.ofEpochMilli(milli).atZone(ZoneId.of("UTC")).toLocalDateTime();
     }
 
 
