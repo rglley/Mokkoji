@@ -33,43 +33,42 @@ public class User {
     @Size(max = 10)
     private String name;
 
-    //enum이 낫지 않을까?
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Authority authority = Authority.GUEST;
 
     private String image;
 
     @OneToMany(mappedBy = "user")
     private List<Event> events = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserAccount userAccount;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Record record;
 
-    //차후 Reddis로 넣을 예정
+    // TODO : reddis로 관리
     @Size(max = 100)
     private String refreshToken;
 
     // TODO : 2024.01.29 생성자->빌더로 refactoring 필요
-    public User(String provider, String email, String name, String image, Role role) {
+    public User(String provider, String email, String name, String image, Authority authority) {
         this.builder()
                 .provider(Provider.valueOf(provider))
                 .email(email)
                 .name(name)
                 .image(image)
-                .role(role)
+                .authority(authority)
                 .build();
     }
 
-    public User(String provider, String email, String name, String image, Role role, String refreshToken) {
+    public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
         this.builder()
                 .provider(Provider.valueOf(provider))
                 .email(email)
                 .name(name)
                 .image(image)
-                .role(role)
+                .authority(authority)
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -84,13 +83,11 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public void updateUser(String provider, String email, String name, String image, Role role) {
+    public void updateUser(String provider, String email, String name, String image, Authority authority) {
         this.provider = Provider.valueOf(provider);
         this.email = email;
         this.name = name;
         this.image = image;
-        this.role = role;
-
-
+        this.authority = authority;
     }
 }

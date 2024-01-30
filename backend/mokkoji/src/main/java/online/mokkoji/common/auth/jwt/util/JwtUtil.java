@@ -118,7 +118,5 @@ public class JwtUtil {
     public String getEmail(HttpServletRequest req) {
         return extractEmail(extractAccessToken(req).get()).get();
     }
-
-
 }
 

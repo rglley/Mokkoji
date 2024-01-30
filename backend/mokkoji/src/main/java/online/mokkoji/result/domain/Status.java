@@ -1,5 +1,5 @@
 package online.mokkoji.result.domain;
 
-public enum ResultStatus {
+public enum Status {
     MEMORY, RECOLLECTION
 }

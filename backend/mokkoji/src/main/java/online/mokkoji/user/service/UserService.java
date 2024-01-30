@@ -99,7 +99,7 @@ public class UserService {
         log.info("회원가입 진행");
         // TODO: 2024.01.29 이름 null이면 랜덤 닉네임 부여?!?!?
         String refreshToken = jwtService.createRefreshToken();
-        User newUser = new User(provider, email, signupDto.getName(), signupDto.getImage(), Role.USER, refreshToken);
+        User newUser = new User(provider, email, signupDto.getName(), signupDto.getImage(), Authority.USER, refreshToken);
 
         userRepository.save(newUser);
 
@@ -131,7 +131,7 @@ public class UserService {
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
-        updateUser.updateUser(provider, email, name, image, Role.USER);
+        updateUser.updateUser(provider, email, name, image, Authority.USER);
 
         userRepository.save(updateUser);
 

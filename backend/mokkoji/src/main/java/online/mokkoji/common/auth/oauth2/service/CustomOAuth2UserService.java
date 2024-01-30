@@ -68,7 +68,7 @@ public class CustomOAuth2UserService implements
         log.info("존재하는 회원입니다.");
         attributes.put("exist", true);
         DefaultOAuth2User defaultOAuth2User = new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(findUser.get().getRole().getKey())),
+                Collections.singleton(new SimpleGrantedAuthority(findUser.get().getAuthority().getKey())),
                 attributes, "email");
         // 회원의 권한과, 회원속성, 속성이름을 이용해 DefaultOAuth2User 객체를 생성해 반환한다.
         return defaultOAuth2User;
