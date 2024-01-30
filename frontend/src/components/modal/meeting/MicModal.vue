@@ -1,11 +1,18 @@
 <template>
-  <div class="fixed w-[10%] h-[8%] top-[77%] left-[29.5%]">
+  <div class="fixed w-[10%] h-[8%] top-[2%] left-[50%]">
     <div
+      v-if="isMic"
       id="gift-container"
-      class="p-8 h-[100%] bg-purple-100 flex flex-col justify-center items-center rounded-xl"
+      class="h-[100%] bg-blue-400 flex flex-col justify-center items-center rounded-r-lg"
     >
-      <div v-if="isMic" class="text-sm md:text-sm lg:text-md xl:text-base">마이크 ON</div>
-      <div v-else class="text-sm md:text-sm lg:text-md xl:text-base">마이크 OFF</div>
+      <div class="text-r-md text-white font-bold">마이크 ON</div>
+    </div>
+    <div
+      v-else
+      id="gift-container"
+      class="h-[100%] bg-red-400 flex flex-col justify-center items-center rounded-r-lg"
+    >
+      <div class="text-r-md text-white font-bold">마이크 OFF</div>
     </div>
   </div>
 </template>

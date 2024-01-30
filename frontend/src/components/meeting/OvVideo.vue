@@ -1,6 +1,5 @@
-<!-- 사용자 비디오 -->
 <template>
-  <video ref="videoElement" autoplay class="rounded-2xl" />
+  <video ref="videoElement" autoplay />
 </template>
 
 <script setup>

@@ -43,6 +43,66 @@ pre {
   font-family: 'SUITE', sans-serif;
 }
 
+:root {
+  --font-size-lg: 1.5vw;
+  --font-size-md: 1.3vw;
+  --font-size-sm: 1vw;
+  --margin-left-sm: 0.5vw;
+  --padding-left-md: 1vw;
+  --padding-right-md: 1vw;
+  --padding-left-sm: 0.5vw;
+  --padding-right-sm: 0.5vw;
+  --border-line-sm: 0.3vw;
+  --border-radius-lg: 1vw;
+  --border-radius-xl: 4vh;
+}
+
+.button-text {
+  font-size: var(--font-size-sm);
+}
+
+.text-r-lg {
+  font-size: var(--font-size-lg);
+}
+
+.text-r-md {
+  font-size: var(--font-size-md);
+}
+
+.text-r-sm {
+  font-size: var(--font-size-sm);
+}
+
+.ml-sm {
+  margin-left: var(--margin-left-sm);
+}
+
+.ml-md {
+  margin-left: var(--margin-left-md);
+}
+
+.px-sm {
+  padding-left: var(--padding-left-sm);
+  padding-right: var(--padding-right-sm);
+}
+
+.px-md {
+  padding-left: var(--padding-left-md);
+  padding-right: var(--padding-right-md);
+}
+
+.border-sm {
+  border-width: var(--border-line-sm);
+}
+
+.rounded-r-lg {
+  border-radius: var(--border-radius-lg);
+}
+
+.rounded-r-xl {
+  border-radius: var(--border-radius-xl);
+}
+
 @layer components {
   #title-bold {
     @apply text-6xl font-bold tracking-wider p-2;
