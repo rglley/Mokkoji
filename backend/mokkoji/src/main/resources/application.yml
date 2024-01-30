@@ -7,10 +7,10 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
-        #        show_sql: true
+        # show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
@@ -27,8 +27,22 @@ spring:
       host: localhost
       port: 6379
 
-  
-#      url:
+  #application 프로필 등록
+  profiles:
+    include: oauth, jwt, s3
+
+
+# OpenVidu
+OPENVIDU_URL: http://localhost:4443/
+OPENVIDU_SECRET: MOKKOJI_SECRET
+
+# server
+server:
+  port: '5000'
+  ssl:
+    enabled: 'false'
+
+# url:
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
@@ -46,4 +60,3 @@ cloud:
       auto: false
     stack:
       auto: false
-
