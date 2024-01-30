@@ -48,11 +48,11 @@ public class CustomOAuth2UserService implements
                 OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         Map<String, Object> attributes = oAuth2Attribute.convertToMap();
 
-        Provider provider = Provider.valueOf((String) attributes.get("provider"));
+        String provider = (String) attributes.get("provider");
         String email = (String) attributes.get("email");
 
         //provider, email로 회원 조회
-        Optional<User> findUser = userRepository.findByProviderAndEmail(provider, email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
             log.info("존재하지 않는 회원입니다. 게스트 권한을 부여합니다.");

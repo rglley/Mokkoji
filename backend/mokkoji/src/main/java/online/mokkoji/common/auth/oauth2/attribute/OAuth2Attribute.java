@@ -15,14 +15,14 @@ import java.util.Map;
 public class OAuth2Attribute {
     private Map<String, Object> attributes;
     private String attributeKey;    //OAuth2 로그인 진행의 PK
-    private Provider provider;
+    private String provider;
     private String email;
     private String name;
     private String image;
 
     public static OAuth2Attribute of(String provider,
                                      String attributeKey, Map<String, Object> attributes) {
-        if (provider == "naver") {
+        if (provider.equals("naver")) {
             return ofNaver(provider, "id", attributes);
         }
 
@@ -34,19 +34,18 @@ public class OAuth2Attribute {
 
         return OAuth2Attribute.builder()
                 .attributeKey(attributeKey)
-                .provider(Provider.valueOf(provider))
+                .provider(provider)
                 .email((String) response.get("email"))
                 .name((String) response.get("name"))
                 .image((String) response.get("profile_image"))
                 .attributes(response)
                 .build();
-
     }
 
     public static OAuth2Attribute ofGoogle(String provider, String attributeKey, Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
                 .attributeKey(attributeKey)
-                .provider(Provider.valueOf(provider))
+                .provider(provider)
                 .email((String) attributes.get("email"))
                 .name((String) attributes.get("name"))
                 .image((String) attributes.get("picture"))

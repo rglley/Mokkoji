@@ -1,18 +1,18 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test   #경로 추기
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/mokkoji
+    username: root
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         # show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 
   data:
@@ -43,6 +43,8 @@ server:
     enabled: 'false'
 
 # url:
-logging.level:
-  org.hibernate.SQL: debug
+
+logging:
+  level:
+   org.hibernate.SQL: trace
 # org.hibernate.type: trace

@@ -39,13 +39,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         String email = oAuth2User.getAttribute("email");
-        Provider provider = oAuth2User.getAttribute("provider");
+        String provider = oAuth2User.getAttribute("provider");
         boolean isExist = oAuth2User.getAttribute("exist");
 
 
         if (!isExist) {
             log.info("회원가입 페이지로 이동합니다.");
-            String accessToken = jwtService.createAccessToken(provider.getKey(), email);
+            String accessToken = jwtService.createAccessToken(provider, email);
             response.setHeader(jwtConfig.getAccessHeader(), accessToken);
 
             SignupPageDto signupPageDto = new SignupPageDto((String) attributes.get("email"),
@@ -55,10 +55,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             response.sendRedirect("/signup");
         } else {
             log.info("메인 페이지로 이동합니다");
-            String accessToken = jwtService.createAccessToken(provider.getKey(), email);
+            String accessToken = jwtService.createAccessToken(provider, email);
             String refreshToken = jwtService.createRefreshToken();
 
-            User loginUser = userRepository.findByProviderAndEmail(provider, email).get();
+            User loginUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email).get();
             loginUser.updateRefreshToken(refreshToken);
             MainPageDto mainPageDto = new MainPageDto(loginUser.getImage(), loginUser.getName());
 

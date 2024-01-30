@@ -24,8 +24,13 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtService;
 
-    @GetMapping("/update")
-    public ResponseEntity<?> mvToUpdate(HttpServletRequest req) {
+    @PostMapping("/login")
+    public void socialTest() {
+        log.info("hello~!~!~!~!~!~!");
+    }
+
+    @GetMapping("/userinfo")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest req) {
         log.info("회원 정보 수정으로 이동 요청");
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
@@ -37,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/mypage")
-    public ResponseEntity<MyPageDto> mvToMypage(HttpServletRequest req) {
+    public ResponseEntity<MyPageDto> getMyPage(HttpServletRequest req) {
         log.info("마이페이지로 이동 요청");
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
@@ -48,7 +53,7 @@ public class UserController {
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
+    @PostMapping
     public ResponseEntity<SignupDto> addUser(HttpServletRequest req, @Valid @RequestBody SignupDto signupDto) {
         log.info("회원 가입 요청, signupDto : {}", signupDto.toString());
         String provider = jwtService.getProvider(req);
@@ -60,7 +65,7 @@ public class UserController {
         return new ResponseEntity<>(signupDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<UpdateDto> editUser(HttpServletRequest req, @Valid @RequestBody UpdateDto modifyDto) {
         log.info("회원 정보 수정 요청, modifyDto : {}", modifyDto.toString());
         String provider = jwtService.getProvider(req);
@@ -72,7 +77,7 @@ public class UserController {
         return new ResponseEntity<>(modifyDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/withdrawal")
+    @DeleteMapping
     public ResponseEntity<User> removeUser(HttpServletRequest req) {
         log.info("회원 탈퇴 요정");
         String provider = jwtService.getProvider(req);
