@@ -7,9 +7,7 @@
       </div>
       <div class="space-y-4">
         <div class="space-y-2">
-          <label class="text-sm font-medium text-slate-500" for="email"
-            > 이메일
-          </label>
+          <label class="text-sm font-medium text-slate-500" for="email"> 이메일 </label>
           <input
             class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
             v-model="store.email"
@@ -18,18 +16,18 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-sm font-medium text-slate-500" for="name">
-          이름 </label>
+          <label class="text-sm font-medium text-slate-500" for="name"> 이름 </label>
           <input
             class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
             v-model="name"
           />
         </div>
-       
+
         <div class="flex items-center space-x-4">
           <div class="flex-auto w-max m-5">
             <label>
-              <img id="image-profile" src="@/assets/profile_icon.jpg" />
+              <!-- <img id="image-profile" src="{{ image }}" /> -->
+              <img id="image-profile" src="@/assets/dummy_profile.jpg" />
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
@@ -39,20 +37,25 @@
             />
           </div>
         </div>
-        <div >
-            <div class="p-2">
-              <label class="text-sm font-light"> 계좌번호 </label>
-    
-              <div class="flex flex-row items-baseline">
-                <select v-model="bank" id="input" aria-placeholder="은행명" required>
-                  <option v-for="bank in banks" :key="bank" :value="bank">
-                    {{ bank }}
-                  </option>
-                </select>
-                <input id="input" class="w-64" placeholder="계좌번호를 입력하세요" v-model="accountNumber" />
-              </div>
+        <div>
+          <div class="p-2">
+            <label class="text-sm font-light"> 계좌번호 </label>
+
+            <div class="flex flex-row items-baseline">
+              <select v-model="bank" id="input" aria-placeholder="은행명" required>
+                <option v-for="bank in banks" :key="bank" :value="bank">
+                  {{ bank }}
+                </option>
+              </select>
+              <input
+                id="input"
+                class="w-64"
+                placeholder="계좌번호를 입력하세요"
+                v-model="accountNumber"
+              />
             </div>
           </div>
+        </div>
       </div>
       <button class="float-right" @click="signup">회원가입</button>
     </div>
@@ -60,76 +63,74 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useUserStore } from '../../stores/user';
-import axios from 'axios';
-import { useRouter } from "vue-router";
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const store = useUserStore();
+const router = useRouter()
+const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
 
 onMounted(() => {
-  name.value = store.name;
-  image.value = store.image;
+  name.value = store.name
+  image.value = store.image
 })
 
-const fileName = ref('');
+const fileName = ref('')
 
 const getFileName = async (files) => {
-  fileName.value = files[0].name;
-  await base64(files[0]);
-};
+  const maxFileSize = 1024 * 1024 * 2
+  if (files[0].size > maxFileSize) {
+    alert('파일 크기가 2MB를 초과했습니다')
+    return
+  }
+
+  fileName.value = files[0].name
+  await base64(files[0])
+}
 
 const base64 = (file) => {
   return new Promise((resolve) => {
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = (e) => {
-      resolve(e.target.result);
-      const previewImage = document.getElementById("image-profile");
-      previewImage.src = e.target.result;
-    };
-    image.value = file;
-    reader.readAsDataURL(file);
-  });
-};
+      resolve(e.target.result)
+      const previewImage = document.getElementById('image-profile')
+      previewImage.src = e.target.result
+      console.log(previewImage)
+      image.value = previewImage.src
+    }
+    reader.readAsDataURL(file)
+  })
+}
 
 const banks = ['KB', '농협', '기업', '카카오뱅크']
 const bank = ref('')
 const accountNumber = ref('')
 
-const signup =  () => {
-  axios.post({
-    url : store.API_URI + '/signup',
-    data : {
-      name : name.value,
-      image : image.value,
-      bank : bank.value,
-      accountNumber : accountNumber.value,
-    },
-    headers: {
-      Authorization : localStorage.getItem('access-token'),
-    }    
-  })
-  .then(() => {
-    router.push('/')
-  })
-  .catch((err) => {
-    switch(err.status) {
-      case 401:
-        alert(err.errorMsg)
-        break;
-      case 403:
-        alert('User 권한이 없습니다')
-        break;
-      case 409:
-        alert('이미 가입한 회원입니다')
-    }
-  })
+const signup = () => {
+  axios
+    .post({
+      url: store.API_URI + '/signup',
+      data: {
+        name: name.value,
+        image: image.value,
+        bank: bank.value,
+        accountNumber: accountNumber.value
+      },
+      headers: {
+        Authorization: localStorage.getItem('access-token')
+      }
+    })
+    .then(() => {
+      router.push('/')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
-
 </script>
 
 <style scoped></style>

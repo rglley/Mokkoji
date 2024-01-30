@@ -5,8 +5,6 @@ import MyPage from '@/components/mypage/MyPage.vue'
 import EventListPage from '@/views/EventListView.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
-import MyAccount from '@/components/mypage/MyAccount.vue'
-import Meeting from '@/components/meeting/Meeting.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
@@ -25,7 +23,6 @@ const router = createRouter({
       component: () => import('@/components/common/SignUp.vue') 
     },
     {
-      // path: '/${userId}',
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
@@ -40,21 +37,6 @@ const router = createRouter({
               name: 'mydetail',
               component: MyDetail,
         },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount,
-        },
-        {
-          path: 'detail',
-          name: 'mydetail',
-          component: MyDetail
-        },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
-        }
       ]
     },
     {

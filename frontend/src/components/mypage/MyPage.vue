@@ -9,12 +9,12 @@
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
         <div class="flex flex-col w-6/12 ml-10">
           <span class="flex flex-col mt-10 max-md:mt-10"
-            ><div class="text-black text-3xl font-bold self-stretch">{{ userName }}님</div>
-            <div class="text-black text-xl self-stretch mt-2.5">{{ userEmail }}</div>
+            ><div class="text-black text-3xl font-bold self-stretch">{{ store.name }}님</div>
+            <div class="text-black text-xl self-stretch mt-2.5">{{ store.email }}</div>
             <span class="mt-16 pl-2 pr-4"
               ><div class="text-black text-3xl">
                 계좌 등록
-                <a class="text-2xl text-red-500" v-if="isAccountLinked">O</a>
+                <a class="text-2xl text-red-500" v-if="store.isAccountLinked">O</a>
                 <a class="text-2xl text-red-500" v-else>X </a>
               </div>
             </span>
@@ -55,7 +55,7 @@
             </div>
             <div id="div-stat">
               받은 메세지<br /><span class="text-purple-400">{{
-                store.eventRecord.eventMsgCnt
+                totalMessage
               }}</span
               >개
             </div>
@@ -87,10 +87,6 @@ const getUserDetail = () => {
   axios({
     url: API_URI + '/users/userinfo',
     method: 'GET',
-    headers: {
-      Authorization : 'accessToken',
-      // Authorization-Refresh : 'refreshToken'
-    }    
   })
   .then((res) => {
       res.name = name.value,
@@ -102,15 +98,7 @@ const getUserDetail = () => {
       res.totalMessage = totalMessage.value
   }).
   catch((err) => {
-    if (err.status == 401) { // unauthorized
-      alert("401:헤더에서 AccessToken을 찾을 수 없습니다.")
-    }
-    else if (err.status == 403) { // forbidden
-      alert("403:AccessToken claim이 올바르지 않습니다")
-    }
-    else {
-      alert(err)
-    }
+    console.log(err);
   })
   
 }

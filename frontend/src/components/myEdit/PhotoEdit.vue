@@ -79,7 +79,7 @@ import IconPhotoAdd from '@/icons/IconPhotoAdd.vue'
 import IconQuestionMark from '@/icons/IconQuestionMark.vue'
 import IconLightBulb from '@/icons/IconLightBulb.vue'
 import IconMarkPhoto from '@/icons/IconMarkPhoto.vue'
-import Gallery from '@/components/myedit/Gallery.vue'
+import Gallery from '@/components/myEdit/Gallery.vue'
 import { ref } from 'vue'
 
 let isOpenFive = ref(false)

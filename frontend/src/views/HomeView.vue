@@ -3,6 +3,17 @@
     <section class="pt-52 z-2 h-max" id="main-gradient2">
       <div class="absolute y-0 right-0">
         <img src="@/assets/landing/wedding.svg" />
+        <!-- <carousel :per-page="1" :autoplay="true" :paginationEnabled="false">
+          <slide>
+            <img src="@/assets/main_landing.png">
+          </slide>
+          <slide>
+            <img src="@/assets/main_landing.png">
+          </slide>
+          <slide>
+            <img src="@/assets/main_landing.png">
+          </slide>
+        </carousel> -->
       </div>
       <div id="container" class="mt-52 flex flex-col">
         <div
@@ -136,13 +147,13 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="mx-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">소그룹을 형성하여 친구들과 자유롭게 소통하세요.</h1>
           <br />
           <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
+            소그룹 기능을 이용하여 소통하고 싶은 다른 참여자들과
           </p>
           <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
+            사적인 공간에서 자유롭게 이야기 할 수 있습니다.
           </p>
         </div>
         <div class="flex-col items-center">
@@ -172,13 +183,13 @@
           <img src="@/assets/landing/main4.png" />
         </div>
         <div class="mx-5 px-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">QR코드를 통해 축하금을 간편하게 보내세요.</h1>
           <br />
           <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
+            화상 모임 내에서 주최자의 계좌와 연동된 QR코드가 제공됩니다.
           </p>
           <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
+            메세지로 다 담지 못한 축하하는 마음을 전달해보세요.
           </p>
         </div>
       </div>
@@ -198,11 +209,10 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
-
 // toast : custom alert
-// import { toast } from "vue3-toastify";
+import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-
+// 모달
 import ModalView from "./ModalView.vue";
 import MeetingJoinModal from "../components/modal/MeetingJoinModal.vue";
 
