@@ -5,7 +5,7 @@ spring:
         registration:
           google:
             client-id: 784446908563-mecj1ijjk02b1064karovm690fedar97.apps.googleusercontent.com
-            client-secret: #시크릿 키 넣기
+            client-secret: ${JWT_SECRET_GOOGLE}
             redirect-uri: "http://localhost:8080/login/oauth2/code/google"
             authorization-grant-type: authorization_code
             scope: email, profile
@@ -19,7 +19,7 @@ spring:
 
           naver:
             client-id: Y_veSn1KXI8bYwTv29AA
-            client-secret: #시크릿 키 넣기
+            client-secret: ${JWT_SECRET_NAVER}
             redirect-uri: "http://localhost:8080/login/oauth2/code/naver"
             client-authentication-method: client_secret_basic
             authorization-grant-type: authorization_code

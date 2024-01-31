@@ -525,3 +525,4 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,node,sass,macos,maven,redis,vuejs,gradle,python,eclipse,windows,intellij,visualstudiocode,opencv,vue
+application-secret.yml
