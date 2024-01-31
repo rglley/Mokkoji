@@ -1,10 +1,10 @@
 <template>
-  <Transition name="modal-outer" :appear="true">
+  <!-- <Transition name="modal-outer" :appear="true"> -->
     <div
       v-if="showModal"
       class="fixed w-full h-screen my-auto bg-black bg-opacity-30 top-0 left-0 z-10 flex justify-center px-8"
     >
-      <Transition name="modal-inner" :appear="true">
+      <!-- <Transition name="modal-inner" :appear="true"> -->
         <div
           v-show="showModal"
           class="p-4 bg-white self-start m-auto"
@@ -27,9 +27,9 @@
           <br />
           <slot />
         </div>
-      </Transition>
+      <!-- </Transition> -->
     </div>
-  </Transition>
+  <!-- </Transition> -->
 </template>
   
 <script setup>

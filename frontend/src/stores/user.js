@@ -3,10 +3,11 @@ import { ref } from 'vue'
 import axios from 'axios';
 import tokenService from '@/services/token.service';
 import { useRouter } from 'vue-router';
-const router = useRouter();
 
 export const useUserStore = defineStore('user', () => {
-  const API_URI = 'http://localhost:8080/';
+  const router = useRouter();
+
+  const API_URI = '';
   const name = ref('');
   const email = ref('');
   const image = ref('');
@@ -14,10 +15,11 @@ export const useUserStore = defineStore('user', () => {
 
   const login = (provider) => {
     axios({
-      url: API_URI + '/oauth2/authorization/' + provider,
+      url: API_URI + 'oauth2/authorization/' + provider,
       method: 'GET',
     })
     .then((res) => {
+      console.log(res)
       isLogin.value = true;
       const token = res.headers.get('Authorization');
       // cookie에 token 및 user 정보 저장

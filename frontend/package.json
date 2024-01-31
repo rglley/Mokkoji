@@ -12,6 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^2.3.3",
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.1.1",
     "@vueuse/components": "^10.7.2",

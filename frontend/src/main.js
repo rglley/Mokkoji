@@ -8,14 +8,12 @@ AOS.init()
 
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
 import VueCookies from 'vue-cookies'
 
 const app = createApp(App)
 
 import setupInterceptors from './services/setupInterceptors';
 
-app.config.globalProperties.$axios = axios
 app.use(createPinia())
 app.use(router)
 app.mount('#app')

@@ -1,53 +1,61 @@
 <template>
-  <div id="main-gradient2" class="py-40">
-    <div class="mx-auto w-1/3 bg-white rounded-lg shadow-md p-20">
+  <div id="main-gradient2" class="py-20">
+    <div class="mx-auto w-1/3 bg-white rounded-lg shadow-md p-20 pb-5">
       <div class="space-y-2 text-center">
-        <h1 class="text-3xl font-bold">{{name}}님의 정보</h1>
+        <h1 class="text-3xl font-bold">{{ name }}님의 정보</h1>
         <p class="text-slate-400">회원정보를 수정해요</p>
-      </div>       
-        <div class="flex items-center space-x-4">
-          <div class="flex-auto w-max m-5">
-            <label>
-              <img id="image-profile" src="@/assets/profile_icon.jpg" />
-            </label>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div class="flex-auto w-max m-5">
+          <label>
+            <img id="image-profile" src="@/assets/profile_icon.jpg" />
+          </label>
+          <input
+            class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
+            id="profile-picture"
+            type="file"
+            @change="getFileName($event.target.files)"
+          />
+        </div>
+      </div>
+      <div>
+        <div class="p-2">
+          <label class="text-sm font-light"> 계좌번호 </label>
+          <div class="flex flex-row items-baseline ">
+            <select v-model="bank" id="input" aria-placeholder="은행명" required class="border-2 border-slate-200 py-[4px] mx-2 rounded-xl">
+              <option v-for="bank in banks" :key="bank" :value="bank">
+                {{ bank }}
+              </option>
+            </select>
             <input
-              class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
-              id="profile-picture"
-              type="file"
-              @change="getFileName($event.target.files)"
+              id="input"
+              class="w-64"
+              placeholder="계좌번호를 입력하세요"
+              v-model="accountNumber"
             />
           </div>
         </div>
-        <div >
-            <div class="p-2">
-              <label class="text-sm font-light"> 계좌번호 </label>
-              <div class="flex flex-row items-baseline">
-                <select v-model="bank" id="input" aria-placeholder="은행명" required>
-                  <option v-for="bank in banks" :key="bank" :value="bank">
-                    {{ bank }}
-                  </option>
-                </select>
-                <input id="input" class="w-64" placeholder="계좌번호를 입력하세요" v-model="accountNumber" />
-              </div>
-            </div>
-          </div>
-      
-      <button class="float-right" @click="update">정보 수정하기</button>
+      </div>
+      <button class="float-right bg-natural-beige border-2 border-yellow-600 rounded-xl p-2" @click="update">정보 수정하기</button>
+      <button
+        class="w-fit rounded-xl text-red-400 my-10 p-2"
+        @click="store.withdraw"
+      >
+        회원 탈퇴
+      </button>
     </div>
-    <button class="w-20 bg-gray text-red-400 mt-10 mr-auto" @click="store.withdraw">회원 탈퇴</button>
-    
   </div>
 </template>
 
   
 <script setup>
-import { ref, onMounted } from "vue";
-import { useUserStore } from '../../stores/user';
-import axios from 'axios';
-import { useRouter } from "vue-router";
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '../../stores/user'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const store = useUserStore();
+const router = useRouter()
+const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
@@ -58,48 +66,49 @@ const bank = ref('')
 const accountNumber = ref('')
 
 onMounted(() => {
-  axios.get({
-    URL : store.API_URI + '/update',
-    headers: {
-      Authorization : localStorage.getItem('access-token'),
-    }    
-  })
-  .then((res) => {
-    res.name=name.value;
-    res.image=image.value;
-    if (res.bank != null) res.bank = bank.value;
-    if (res.accountNumber != null) res.accountNumber = accountNumber.value;
-  })
+  axios
+    .get({
+      URL: store.API_URI + '/update',
+      headers: {
+        Authorization: localStorage.getItem('access-token')
+      }
+    })
+    .then((res) => {
+      res.name = name.value
+      res.image = image.value
+      if (res.bank != null) res.bank = bank.value
+      if (res.accountNumber != null) res.accountNumber = accountNumber.value
+    })
 })
 
 const update = () => {
-  axios.post({
-    URL : store.API_URI + '/update',
-    headers: {
-      Authorization : localStorage.getItem('access-token'),
-    },
-    data: {
-      name: name.value,
-      image: image.value,
-      bank:  bank.value,
-      accountNumber: accountNumber.value,
-    }
-  })
-  .then(() => {
-    alert("회원 정보 수정!")
-    router.go(-1)
-  })
-  .catch((err) => {
-    alert(err.errorMsg);
-    // switch(err.status) {
-    //   case(401):
-    //     alert('Invalid token');
-    //     break;
-    //   case(403):
-    // }
-  })
+  axios
+    .post({
+      URL: store.API_URI + '/update',
+      headers: {
+        Authorization: localStorage.getItem('access-token')
+      },
+      data: {
+        name: name.value,
+        image: image.value,
+        bank: bank.value,
+        accountNumber: accountNumber.value
+      }
+    })
+    .then(() => {
+      alert('회원 정보 수정!')
+      router.go(-1)
+    })
+    .catch((err) => {
+      alert(err.errorMsg)
+      // switch(err.status) {
+      //   case(401):
+      //     alert('Invalid token');
+      //     break;
+      //   case(403):
+      // }
+    })
 }
-
 
 const getFileName = async (files) => {
   fileName.value = files[0].name

@@ -49,7 +49,7 @@
               </select>
               <input
                 id="input"
-                class="w-64"
+                class="w-auto"
                 placeholder="계좌번호를 입력하세요"
                 v-model="accountNumber"
               />
@@ -67,16 +67,36 @@ import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
+const email = ref('')
 
 onMounted(() => {
-  name.value = store.name
-  image.value = store.image
+
+
+  console.log(route.query.data)
+  
+  // async () => {
+  //   await axios({
+  //     url: 'https://localhost:8080/signup',
+  //     method: 'GET',
+  //   })
+  //   .then((res) => {
+  //     res.email = email.value;
+  //     res.name = name.value;
+  //     res.email = email.value;
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+  // }
+
 })
 
 const fileName = ref('')
@@ -110,20 +130,20 @@ const banks = ['KB', '농협', '기업', '카카오뱅크']
 const bank = ref('')
 const accountNumber = ref('')
 
-const signup = () => {
-  axios
-    .post({
-      url: store.API_URI + '/signup',
-      data: {
-        name: name.value,
-        image: image.value,
-        bank: bank.value,
-        accountNumber: accountNumber.value
-      },
-      headers: {
-        Authorization: localStorage.getItem('access-token')
-      }
-    })
+const signup = async () => {
+  await axios({
+    url: 'http://localhost:8080/users',
+    method: 'POST',
+    data: {
+      name: name.value,
+      image: image.value,
+      bank: bank.value,
+      accountNumber: accountNumber.value
+    }
+    // headers: {
+    //   Authorization: localStorage.getItem('access-token')
+    // }
+  })
     .then(() => {
       router.push('/')
     })

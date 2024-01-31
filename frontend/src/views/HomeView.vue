@@ -181,21 +181,20 @@
 </template>
 
 <script setup>
-// TODO : 비회원 사용자 회의 시작 시 안내 모달 띄워주기
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 // toast : custom alert
 
+// eslint-disable-next-line no-unused-vars
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-// 모달
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '../components/modal/MeetingJoinModal.vue'
 
 const conferenceIdInput = ref('')
 const ifInputError = ref(false)
-const isLogin = ref(false) // 나중에 store에서 받을 예정
+const isLogin = ref(false) 
 
 const showModal = ref(false)
 
