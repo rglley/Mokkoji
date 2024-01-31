@@ -6,7 +6,6 @@ import EventListPage from '@/views/EventListView.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
-import Meeting from '@/components/meeting/Meeting.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
@@ -58,7 +57,7 @@ const router = createRouter({
       ]
     },
     {
-      path: '/meeting/:accessType',
+      path: '/meeting/:sessionId',
       name: 'meeting',
       component: MeetingView,
       props: true

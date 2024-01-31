@@ -46,6 +46,7 @@
                 />
                 <div class="absolute top-2 right-2">
                   <button @click="submitConferenceId" class="rounded-full size-8 mt-2">
+                    123123
                     <img src="@/icons/send.png" class="" />
                   </button>
                 </div>
@@ -207,24 +208,26 @@ const toggleModal = () => {
 
 const submitConferenceId = () => {
   console.log(conferenceIdInput.value)
+
+  router.push(`/meeting/${conferenceIdInput.value}`)
   // id input을 백엔드 서버로 axios 전송
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
   // 임시로 만든 올바른 id ='qwer'
-  let validId = 'qwer'
-  if (conferenceIdInput.value == validId) {
-    // 로그인하지 않았다면 모달
-    if (!isLogin.value) {
-      // 모달 띄우고
-      showModal.value = true
-    }
-    ifInputError.value = false
-    // 회의 이동
-    router.push('/')
-  } else {
-    ifInputError.value = true
-    conferenceIdInput.value = ''
-  }
+  // let validId = 'qwer'
+  // if (conferenceIdInput.value == validId) {
+  //   // 로그인하지 않았다면 모달
+  //   if (!isLogin.value) {
+  //     // 모달 띄우고
+  //     showModal.value = true
+  //   }
+  //   ifInputError.value = false
+  //   // 회의 이동
+  //   router.push('/')
+  // } else {
+  //   ifInputError.value = true
+  //   conferenceIdInput.value = ''
+  // }
 }
 
 // 회의 생성 로직

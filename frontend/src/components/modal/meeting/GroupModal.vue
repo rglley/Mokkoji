@@ -49,6 +49,7 @@
         <button
           id="submit-button"
           class="w-[6vw] h-[6vh] bg-purple-200 font-bold text-r-sm text-center rounded-r-lg"
+          @click="$emit('create-group-meeting')"
         >
           생성하기
         </button>
@@ -71,8 +72,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['remove-group-modal'])
-
+defineEmits(['remove-group-modal']['create-group-meeting'])
 const searchUserName = ref('')
 </script>
 

@@ -53,9 +53,9 @@ pre {
   --padding-left-sm: 0.5vw;
   --padding-right-sm: 0.5vw;
   --border-line-sm: 0.2vw;
-  --border-radius-md: 0.5vw;
-  --border-radius-lg: 1vw;
-  --border-radius-xl: 4vh;
+  --border-radius-md: 0.5vb;
+  --border-radius-lg: 1vb;
+  --border-radius-xl: 4vb;
 }
 
 .button-text {

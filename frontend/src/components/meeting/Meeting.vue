@@ -14,14 +14,14 @@
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
               @click.native="updateMainVideoStreamManager(sub)"
-              class="h-1/3 flex-none"
+              class="h-1/3 flex-none rounded-[3vb]"
             />
           </div>
           <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
             <user-Video
               id="main-video"
               :stream-manager="state.mainStreamManager"
-              class="px-sm w-full h-full"
+              class="px-sm w-full h-full rounded-[5.5vb]"
             />
           </div>
         </div>
@@ -36,7 +36,7 @@
           v-for="sub in state.subscribers"
           :key="sub.stream.connection.connectionId"
           :stream-manager="sub"
-          class="w-full"
+          class="w-full rounded-[3vb]"
         />
       </div>
       <!-- 참여자 목록, 채팅방-->
@@ -272,6 +272,7 @@
         :subscribers="state.subscribers"
         :button-type="'group'"
         @remove-group-modal="showGroupModal"
+        @create-group-meeting="createGroupMeeting"
       />
     </transition-group>
     <transition-group name="up">
@@ -316,7 +317,7 @@ import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const props = defineProps({
-  accessType: {
+  sessionId: {
     type: String
   }
 })
@@ -441,7 +442,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: 'SessionA',
+  mySessionId: props.sessionId === 'host' ? '' : props.sessionId,
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -526,36 +527,6 @@ const joinSession = () => {
   window.addEventListener('beforeunload', leaveMeeting)
 }
 
-// 세션 종료
-const leaveMeeting = () => {
-  if (state.session) state.session.disconnect()
-
-  state.session = undefined
-  state.mainStreamManager = undefined
-  state.publisher = undefined
-  state.subscribers = []
-  state.OV = undefined
-
-  window.removeEventListener('beforeunload', leaveMeeting)
-
-  emit('leave-meeting')
-  router.push('/')
-}
-
-const updateMainVideoStreamManager = (stream) => {
-  if (state.mainStreamManager === stream) return
-
-  state.mainStreamManager = stream
-}
-
-/* APPLICATION SERVER로부터 토큰 얻기
-아래의 메소드들은 세션과 토큰의 생성을 어플리케이션 서버에 요청한다. */
-
-const getToken = async (mySessionId) => {
-  const sessionId = await createSession(mySessionId)
-  return await createToken(sessionId)
-}
-
 // 세션 생성
 const createSession = async (sessionId) => {
   const response = await axios.post(
@@ -582,6 +553,38 @@ const createToken = async (sessionId) => {
   return response.data // 토큰
 }
 
+/* APPLICATION SERVER로부터 토큰 얻기
+아래의 메소드들은 세션과 토큰의 생성을 어플리케이션 서버에 요청한다. */
+
+const getToken = async (mySessionId) => {
+  const sessionId = await createSession(mySessionId)
+  console.log(sessionId)
+  return await createToken(sessionId)
+}
+
+const leaveMeeting = () => {
+  if (state.session) {
+    state.session.disconnect()
+
+    state.session = undefined
+    state.mainStreamManager = undefined
+    state.publisher = undefined
+    state.subscribers = []
+    state.OV = undefined
+
+    window.removeEventListener('beforeunload', leaveMeeting)
+
+    emit('leave-meeting')
+    router.push('/')
+  }
+}
+
+const updateMainVideoStreamManager = (stream) => {
+  if (state.mainStreamManager === stream) return
+
+  state.mainStreamManager = stream
+}
+
 const sendMessage = (event) => {
   if (chatMessage.value.trim() !== '') {
     // OpenVidu 시그널링 서버를 통해 채팅 메시지를 보낸다.
@@ -594,9 +597,12 @@ const sendMessage = (event) => {
   }
 }
 
+const createGroupMeeting = () => {
+  router.push('/meeting/host')
+}
+
 onMounted(() => {
-  if (props.accessType === 'host') joinSession('host')
-  else joinSession('sub')
+  joinSession()
 
   window.addEventListener('beforeunload', leaveMeeting)
 })
@@ -674,6 +680,7 @@ input::placeholder {
 
 ::-webkit-scrollbar {
   width: 0;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
