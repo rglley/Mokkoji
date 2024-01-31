@@ -4,5 +4,5 @@ import online.mokkoji.result.domain.Photo;
 
 public interface ResultService {
 
-    Photo createPhoto(Photo photo);
+    void createPhoto(Photo photo);
 }

@@ -13,11 +13,10 @@ import org.springframework.stereotype.Service;
 public class ResultServiceImpl implements ResultService {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final RMapCache<Long, Photo> photoRMapCache;
+    private final RMapCache<String, Photo> photoRMapCache;
 
     @Override
-    public Photo createPhoto(Photo photo) {
-        Photo savedPhoto = photoRMapCache.put(1L, photo);
-        return savedPhoto;
+    public void createPhoto(Photo photo) {
+        photoRMapCache.put(photo.getUrl(), photo);
     }
 }

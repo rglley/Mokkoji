@@ -53,17 +53,16 @@ public class EventController {
 
         Event event = eventRepository.findBySessionId(sessionId);
         Long resultId = event.getResult().getId();
+//        Long resultId = 2L;
         String url = s3Service.uploadImage(photo, user.getId(), resultId);
+//        String url = s3Service.uploadImage(photo, 1L, resultId);
 
         log.info("url : {}", url);
 
-//        PhotoResDto photoToRedis = new PhotoResDto(user.getId(), resultId, url);
         Photo photoToRedis = new Photo(resultId, url);
-//        redisTemplate.opsForList().leftPush("photos", objectMapper.writeValueAsString(photoToRedis));
-//        redisTemplate.opsForList().leftPush("photos", objectMapper.writeValueAsString(photoToRedis));
-        Photo savedPhoto = resultService.createPhoto(photoToRedis);
+        resultService.createPhoto(photoToRedis);
 
-        return new ResponseEntity<>(savedPhoto.toString(), HttpStatus.OK);
+        return new ResponseEntity<>("사진 저장 완료", HttpStatus.OK);
     }
 
     //롤링페이퍼 저장

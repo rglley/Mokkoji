@@ -22,35 +22,32 @@ public class CacheConfig {
     private final PhotoRepository photoRepository;
 
     @Bean
-    public RMapCache<Long, Photo> photoRMapCache() {
-        final RMapCache<Long, Photo> photoRMapCache
-                = redissonClient.getMapCache("photos", MapCacheOptions.<Long, Photo>defaults()
+    public RMapCache<String, Photo> photoRMapCache() {
+        final RMapCache<String, Photo> photoRMapCache
+                = redissonClient.getMapCache("photos", MapCacheOptions.<String, Photo>defaults()
                 .writer(getPhotoMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
-                .writeBehindDelay(1000));
+                // TODO : 2024.01.31 실제로는 시간 분단위로 하기
+                .writeBehindDelay(30000));
 
         return photoRMapCache;
     }
 
-    private MapWriter<Long, Photo> getPhotoMapWriter() {
-        return new MapWriter<Long, Photo>() {
+    private MapWriter<String, Photo> getPhotoMapWriter() {
+        return new MapWriter<String, Photo>() {
             @Override
-            public void write(Map<Long, Photo> map) {
+            public void write(Map<String, Photo> map) {
                 map.forEach((k, v) -> {
-//                    Result result = resultRepository.findById(v.getResultId())
-//                            .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
-//                    ;
-//                    Photo photo = new Photo(result, v.getPhotoUrl());
                     photoRepository.save(v);
                 });
             }
 
             @Override
-            public void delete(Collection<Long> keys) {
+            public void delete(Collection<String> keys) {
                 // TODO : 2024.01.31 url로 삭제 시 삭제되게 하고싶은데 이상함
                 keys.stream().forEach(key -> {
-                    photoRepository.deleteById(key);
+                    photoRepository.deleteByUrl(key);
                 });
 
             }
