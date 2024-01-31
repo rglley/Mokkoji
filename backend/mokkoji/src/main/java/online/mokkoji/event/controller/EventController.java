@@ -1,6 +1,5 @@
 package online.mokkoji.event.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,14 +7,13 @@ import online.mokkoji.S3.S3ServiceImpl;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.RollingpaperReqDto;
-import online.mokkoji.event.dto.response.RollingpaperRedisDto;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
+import online.mokkoji.result.domain.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.service.UserService;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +34,6 @@ public class EventController {
     private final EventService eventService;
     private final S3ServiceImpl s3Service;
     private final JwtUtil jwtUtil;
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
     private final ResultService resultService;
 
     // 캡쳐사진 저장
@@ -60,6 +56,7 @@ public class EventController {
         log.info("url : {}", url);
 
         Photo photoToRedis = new Photo(resultId, url);
+        log.info("photo : {}", photoToRedis.toString());
         resultService.createPhoto(photoToRedis);
 
         return new ResponseEntity<>("사진 저장 완료", HttpStatus.OK);
@@ -77,8 +74,10 @@ public class EventController {
         String email = jwtUtil.getEmail(req);
 
         User user = userService.getByProviderAndEmail(provider, email);
+
         Event event = eventRepository.findBySessionId(sessionId);
-        Long resultId = event.getResult().getId();
+        Long paperId = event.getResult().getRollingpaper().getId();
+//        Long paperId = 1L;
 
         rollingpaperReqDto.setVoice(voice);
         rollingpaperReqDto.setVideo(video);
@@ -88,12 +87,13 @@ public class EventController {
 
 
         // 유효성 검사 후 파일 S3에 업로드
-        Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, user.getId(), resultId);
-        RollingpaperRedisDto redisDto = new RollingpaperRedisDto(user.getId(), resultId, rollingpaperReqDto.getWriter(), rollingpaperReqDto.getText(), urlMap);
-        redisTemplate.opsForList().leftPush("rollingpaper", objectMapper.writeValueAsString(redisDto));
-
+        Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, user.getId(), paperId);
+//        Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, 2L, paperId);
+        Message message = new Message(paperId, rollingpaperReqDto.getWriter(), rollingpaperReqDto.getText(), urlMap);
+        resultService.createMessage(message);
         return new ResponseEntity<>("롤링페이퍼 업로드 완료", HttpStatus.OK);
 
     }
+
 
 }

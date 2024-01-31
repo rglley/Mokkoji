@@ -8,9 +8,11 @@ import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.RollingpaperReqDto;
 import online.mokkoji.event.repository.EventRepository;
+import online.mokkoji.result.domain.RollingPaper;
 import online.mokkoji.result.repository.ResultRepository;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.domain.Result;
+import online.mokkoji.result.repository.RollingPaperRepository;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final ResultRepository resultRepository;
+    private final RollingPaperRepository rollingPaperRepository;
 
     //userId 받기
     @Override
@@ -61,7 +64,10 @@ public class EventServiceImpl implements EventService {
 
         // 빈 Result도 생성
         Result result = new Result(savedEvent);
-        resultRepository.save(result);
+        Result savedResult = resultRepository.save(result);
+        // 빈 rollingpaper 생성
+        RollingPaper rollingPaper = new RollingPaper(savedResult);
+        rollingPaperRepository.save(rollingPaper);
 
         return savedEvent.getSessionId();
     }
@@ -73,7 +79,7 @@ public class EventServiceImpl implements EventService {
 
         // 세션의 호스트Id와 지금 전달받은 userId가 맞는지 확인
         Event event = eventRepository.findBySessionId(sessionId);
-        if (event.getUser().getId().equals(sessionReqDto.getUserId())) {
+        if (!event.getUser().getId().equals(sessionReqDto.getUserId())) {
             log.error("호스트Id가 아님"); //임시로 하는 거.
             throw new RestApiException(OpenviduErrorCode.NOT_HOST_USER_ID);
         }

@@ -6,9 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
-import online.mokkoji.openvidu.dto.request.SessionReqDto;
-import online.mokkoji.event.service.EventService;
 import online.mokkoji.event.repository.EventRepository;
+import online.mokkoji.event.service.EventService;
+import online.mokkoji.openvidu.dto.request.SessionReqDto;
+import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ public class OpenviduController {
     private final EventRepository eventRepository;
     private final JwtUtil jwtUtil;
     private final UserService userService;
+    private final ResultService resultService;
 
 
     @Value("${OPENVIDU_URL}")
@@ -81,6 +83,8 @@ public class OpenviduController {
                                                 @RequestBody(required = false) SessionReqDto sessionReqDto)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
+        if (sessionReqDto.getAuthority().equals("sub")) return new ResponseEntity<>("참여자 회의 나감", HttpStatus.OK);
+
         User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
         sessionReqDto.setUserId(user.getId());
 
@@ -90,10 +94,11 @@ public class OpenviduController {
         activeSession.close();
 
 
-        // TODO: 2024.01.28 redis에 남은 결과물 파일 저장(resultService)||아직 작성 중인 사람은?
+        // TODO: 2024.01.31 아직 작성 중인 사람은?
+        resultService.saveRemainingPhotos();
+        resultService.saveRemainingMessages();
 
-
-        return new ResponseEntity<>("삭제 완료", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(" 세션 삭제 완료", HttpStatus.NO_CONTENT);
     }
 
 
