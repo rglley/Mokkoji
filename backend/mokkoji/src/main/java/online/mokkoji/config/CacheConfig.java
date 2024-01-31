@@ -27,15 +27,12 @@ public class CacheConfig {
 
     @Bean
     public RMapCache<String, Photo> photoRMapCache() {
-        final RMapCache<String, Photo> photoRMapCache
-                = redissonClient.getMapCache("photos", MapCacheOptions.<String, Photo>defaults()
+        return redissonClient.getMapCache("photos", MapCacheOptions.<String, Photo>defaults()
                 .writer(getPhotoMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
                 // TODO : 2024.01.31 실제로는 시간 분단위로 하기
                 .writeBehindDelay(60000));
-
-        return photoRMapCache;
     }
 
     private MapWriter<String, Photo> getPhotoMapWriter() {
@@ -51,9 +48,7 @@ public class CacheConfig {
             @Override
             public void delete(Collection<String> keys) {
                 // TODO : 2024.01.31 url로 삭제 시 삭제되게 하고싶은데 이상함
-                keys.stream().forEach(key -> {
-                    photoRepository.deleteByUrl(key);
-                });
+                keys.stream().forEach(photoRepository::deleteByUrl);
 
             }
         };
@@ -61,15 +56,12 @@ public class CacheConfig {
 
     @Bean
     public RMapCache<String, Message> messageRMapCache() {
-        final RMapCache<String, Message> messageRMapCache
-                = redissonClient.getMapCache("messages", MapCacheOptions.<String, Message>defaults()
+        return redissonClient.getMapCache("messages", MapCacheOptions.<String, Message>defaults()
                 .writer(getMessageMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
                 // TODO : 2024.01.31 실제로는 시간 분단위로 하기
                 .writeBehindDelay(2000));
-
-        return messageRMapCache;
     }
 
     private MapWriter<String, Message> getMessageMapWriter() {
