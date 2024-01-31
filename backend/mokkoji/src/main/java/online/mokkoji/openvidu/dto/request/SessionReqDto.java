@@ -18,7 +18,7 @@ public class SessionReqDto {
 
     private int participantCount;
     private LocalDateTime endTime;
-
+    private String authority;
 
     // Session 생성용 생성자
     public SessionReqDto(Long userId, String sessionId, Long milli) {
@@ -29,10 +29,9 @@ public class SessionReqDto {
     }
 
 
-    // deleteSession에서 RequestBody로 받을 생성자
-    public SessionReqDto(Long userId, int participantCount, LocalDateTime endTime) {
-        this.userId = userId;
-        this.participantCount = participantCount;
-        this.endTime = endTime;
-    }
+//    // deleteSession에서 RequestBody로 받을 생성자
+//    public SessionReqDto( int participantCount, LocalDateTime endTime) {
+//        this.participantCount = participantCount;
+//        this.endTime = endTime;
+//    }
 }

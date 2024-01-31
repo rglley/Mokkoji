@@ -40,6 +40,7 @@ public class User {
     private String image;
 
     @OneToMany(mappedBy = "user")
+    @Builder.Default
     private List<Event> events = new ArrayList<>();
 
     @OneToOne(mappedBy = "user")
@@ -52,7 +53,6 @@ public class User {
     @Size(max = 100)
     private String refreshToken;
 
-    // TODO : 2024.01.29 생성자->빌더로 refactoring 필요
     public User(String provider, String email, String name, String image, Role role) {
         this.builder()
                 .provider(Provider.valueOf(provider))
@@ -75,9 +75,11 @@ public class User {
     }
 
     public User(String email, String name, String image) {
-        this.email = email;
-        this.name = name;
-        this.image = image;
+        this.builder()
+                .email(email)
+                .name(name)
+                .image(image)
+                .build();
     }
 
     public void updateRefreshToken(String refreshToken) {
