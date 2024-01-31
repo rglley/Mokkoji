@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 export const useUserStore = defineStore('user', () => {
-  const API_URI = '';
+  const API_URI = 'http://localhost:8080/';
   const name = ref('');
   const email = ref('');
   const image = ref('');

@@ -25,7 +25,3 @@ app.use(VueCookies, { expires: '7d'})
 
 // axios interceptor
 setupInterceptors();
-
-// // carousel
-import VueCarousel from 'vue-carousel'
-app.use(VueCarousel)
