@@ -16,13 +16,12 @@
               @click.native="updateMainVideoStreamManager(sub)"
               class="h-1/3 flex-none"
             />
-            <!-- <div class=" bg-slate-800 h-[20%] bg-opacity-50 text-white">123</div> -->
           </div>
           <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
             <user-Video
               id="main-video"
               :stream-manager="state.mainStreamManager"
-              class="px-sm h-full"
+              class="px-sm w-full h-full"
             />
           </div>
         </div>
@@ -58,15 +57,14 @@
                     <div class="text-r-sm text-purple-400 text-end">초대하기</div>
                     <IconInvite class="size-[40%]" />
                   </button>
-                  <button class="ml-auto w-[20%] flex overflow-hidden" @click="setUserListState">
-                    <IconCancel class="size-[60%]" />
+                  <button class="ml-auto w-[20%] flex overflow-hidden" @click="showUserList">
+                    <IconCancelPurple class="size-[60%]" />
                   </button>
                 </div>
               </div>
               <div
                 class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-hidden"
               >
-                <div></div>
                 <user-list
                   v-for="sub in state.subscribers"
                   :key="sub.stream.connection.connectionId"
@@ -86,7 +84,7 @@
                     v-model="searchUserName"
                   />
                   <button
-                    class="w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                    class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
                   >
                     <IconSearch class="size-[60%]" />
                   </button>
@@ -104,7 +102,7 @@
               <div class="px-md w-full h-[13%] flex items-center">
                 <div class="basis-3/12 font-bold text-r-md">채팅</div>
                 <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
-                  <IconCancel @click="setChatState" class="size-[50%]" />
+                  <IconCancelPurple @click="showChat" class="size-[50%]" />
                 </button>
               </div>
               <div
@@ -128,9 +126,9 @@
                   <button
                     @click="sendMessage()"
                     type="submit"
-                    class="w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                    class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
                   >
-                    <IconMessageSend class="size-[60%]" />
+                    <IconSendMessage class="size-[60%]" />
                   </button>
                 </div>
               </div>
@@ -144,13 +142,13 @@
       <div class="w-[75%] h-full flex justify-center items-center">
         <div class="w-[15%] h-full flex items-center">
           <button
-            class="w-[20%] h-[30%] rounded-full bg-white hover:bg-slate-200"
-            @click="setMeetingDetailModalState"
+            class="w-[20%] aspect-square rounded-full bg-white hover:bg-slate-200"
+            @click="showMeetingDetailModal"
           >
             <IconInfo class="size-[100%]" />
           </button>
           <button
-            class="w-[80%] h-[40%] bg-neutral-500 hover:bg-neutral-800 text-white rounded-r-lg ml-sm"
+            class="w-[70%] aspect-[2.5] bg-neutral-500 hover:bg-neutral-800 text-white rounded-r-lg ml-sm"
             @click="setLayoutState"
           >
             <div class="w-[30%] h-full flex justify-center items-center">
@@ -187,31 +185,31 @@
             <span v-if="isCamera" @click="setCameraState" class="button-text">ON</span>
             <span v-else @click="setCameraState" class="button-text">OFF</span>
           </div>
-          <div v-if="isMain">
-            <button id="button-group" class="bg-purple-200" @click="createGroup">
+          <div v-if="!isGroup">
+            <button id="button-group" class="bg-purple-200" @click="showGroupModal">
               <IconGroup class="size-[70%]" />
             </button>
-            <span @click="createGroup" class="button-text">소그룹</span>
+            <span @click="showGroupModal" class="button-text">소그룹</span>
           </div>
           <div>
             <button
               id="button-letter"
               :class="{ 'bg-purple-400': isLetterModal, 'bg-purple-200': !isLetterModal }"
-              @click="setLetterModalState"
+              @click="showLetterModal"
             >
               <IconLetter class="size-[50%]" />
             </button>
-            <span @click="setLetterModalState" class="button-text">편지쓰기</span>
+            <span @click="showLetterModal" class="button-text">편지쓰기</span>
           </div>
           <div>
             <button
               id="button-gift"
               :class="{ 'bg-purple-400': isGiftModal, 'bg-purple-200': !isGiftModal }"
-              @click="setGiftState"
+              @click="showGiftModal"
             >
               <IconGift class="size-[50%]" />
             </button>
-            <span @click="setGiftState" class="button-text">선물하기</span>
+            <span @click="showGiftModal" class="button-text">선물하기</span>
           </div>
           <div>
             <button
@@ -229,27 +227,27 @@
             <button
               id="button-subList"
               :class="{ 'bg-purple-400': isUserList, 'bg-purple-200': !isUserList }"
-              @click="setUserListState"
+              @click="showUserList"
             >
               <IconUserList class="size-[50%]" />
             </button>
-            <span @click="setUserListState" class="button-text">참여자</span>
+            <span @click="showUserList" class="button-text">참여자</span>
           </div>
           <div class="w-1/4 ml-sm">
             <button
               id="button-chat"
               :class="{ 'bg-purple-400': isChat, 'bg-purple-200': !isChat }"
-              @click="setChatState"
+              @click="showChat"
             >
               <IconChat class="size-[50%]" />
             </button>
-            <span @click="setChatState" class="button-text">채팅</span>
+            <span @click="showChat" class="button-text">채팅</span>
           </div>
           <div class="w-2/4">
             <div class="w-[80%] h-full flex items-center">
               <button
                 id="button-quit"
-                class="w-full h-[40%] bg-red-500 hover:bg-red-400 text-white rounded-r-xl button-text"
+                class="w-full aspect-[2.5] bg-red-500 hover:bg-red-400 text-white rounded-r-xl button-text"
                 @click="leaveMeeting"
               >
                 나가기
@@ -269,7 +267,15 @@
       <CameraModal v-if="isCameraModal" :is-camera="isCamera" />
     </transition-group>
     <transition-group name="up">
-      <LetterModal v-if="isLetterModal" @remove-letter-modal="setLetterModalState" />
+      <GroupModal
+        v-if="isGroupModal"
+        :subscribers="state.subscribers"
+        :button-type="'group'"
+        @remove-group-modal="showGroupModal"
+      />
+    </transition-group>
+    <transition-group name="up">
+      <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal" />
     </transition-group>
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
@@ -289,7 +295,7 @@ import ChatLog from './ChatLog.vue'
 import IconInfo from '@/icons/meeting/IconInfo.vue'
 import IconSearch from '@/icons/meeting/IconSearch.vue'
 import IconInvite from '@/icons/meeting/IconInvite.vue'
-import IconCancel from '@/icons/meeting/IconCancel.vue'
+import IconCancelPurple from '@/icons/meeting/IconCancelPurple.vue'
 import IconLayout from '@/icons/meeting/IconLayout.vue'
 import IconMicOn from '@/icons/meeting/IconMicOn.vue'
 import IconMicOff from '@/icons/meeting/IconMicOff.vue'
@@ -301,12 +307,13 @@ import IconLetter from '@/icons/meeting/IconLetter.vue'
 import IconCamera from '@/icons/meeting/IconCamera.vue'
 import IconUserList from '@/icons/meeting/IconUserList.vue'
 import IconChat from '@/icons/meeting/IconChat.vue'
-import IconMessageSend from '@/icons/meeting/IconMessageSend.vue'
+import IconSendMessage from '@/icons/meeting/IconSendMessage.vue'
 import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
 import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
+import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const props = defineProps({
   accessType: {
@@ -316,14 +323,18 @@ const props = defineProps({
 
 const emit = defineEmits(['leave-meeting'])
 
+const videoWidth = window.screen.width * 0.65
+const videoHeight = window.screen.height * 0.9
+
 const isGrid = ref(false)
 const isMic = ref(true)
 const isMicModal = ref(false)
 const isCamera = ref(true)
 const isCameraModal = ref(false)
-const isMain = ref(true)
 const isMeetingDetailModal = ref(false)
+const isGroupModal = ref(false)
 const isLetterModal = ref(false)
+const isGroup = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
 const isUserList = ref(false)
@@ -354,7 +365,7 @@ const onSaveAs = (uri, filename) => {
   document.body.removeChild(link)
 }
 
-const setMeetingDetailModalState = () => {
+const showMeetingDetailModal = () => {
   isMeetingDetailModal.value = !isMeetingDetailModal.value
 }
 
@@ -394,27 +405,27 @@ const setCameraState = () => {
   }, 1000)
 }
 
-const setLetterModalState = () => {
+const showGroupModal = () => {
+  isGroupModal.value = !isGroupModal.value
+}
+
+const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
 }
 
-const setGiftState = () => {
+const showGiftModal = () => {
   isGiftModal.value = !isGiftModal.value
 }
 
-const setCaptureState = () => {
-  isCapture.value = !isCapture.value
-}
+// const setCaptureState = () => {
+//   isCapture.value = !isCapture.value
+// }
 
-const createGroup = () => {
-  isMain.value = !isMain.value
-}
-
-const setUserListState = () => {
+const showUserList = () => {
   isUserList.value = !isUserList.value
 }
 
-const setChatState = () => {
+const showChat = () => {
   isChat.value = !isChat.value
 }
 
@@ -440,7 +451,7 @@ const state = reactive({
 })
 
 // 세션 참가하기
-const joinSession = (type) => {
+const joinSession = () => {
   // 1) Openvidu 객체 생성
   state.OV = new OpenVidu()
 
@@ -484,18 +495,16 @@ const joinSession = (type) => {
 
   getToken(state.mySessionId)
     .then((token) => {
-      // 첫 번째 파라미터는 토큰이다. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
         let publisher = state.OV.initPublisher(undefined, {
-          audioSource: undefined, // The source of audio. If undefined default microphone
-          videoSource: undefined, // The source of video. If undefined default webcam
-          publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-          publishVideo: true, // Whether you want to start publishing with your video enabled or not
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
           allowTranscoding: true,
-          resolution: '900x700', // The resolution of your video
-          frameRate: 30, // The frame rate of your video
-          insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+          resolution: `${videoWidth}x${videoHeight}`,
+          frameRate: 30,
+          insertMode: 'APPEND',
           mirror: false
         })
 
@@ -503,8 +512,7 @@ const joinSession = (type) => {
         state.publisher = publisher
         state.subscribers.push(publisher)
 
-        // const { host } = state.subscribers[0].stream
-        // const result = JSON.parse(host.data)
+        console.log(publisher.resolution)
 
         state.session.host = state.session.publish(publisher)
       })
@@ -562,29 +570,16 @@ const createSession = async (sessionId) => {
 
 // 토큰 생성
 const createToken = async (sessionId) => {
-  if (props.accessType === 'host') {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
-      {
-        role: 'MODERATOR'
-      },
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
-    )
-    return response.data // 토큰
-  } else if (props.accessType === 'sub') {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
-      {
-        role: 'SUBSCRIBER'
-      },
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
-    )
-    return response.data // 토큰
-  }
+  const response = await axios.post(
+    APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+    {
+      role: 'MODERATOR'
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+  return response.data // 토큰
 }
 
 const sendMessage = (event) => {
@@ -628,14 +623,14 @@ onMounted(() => {
 #button-container-center > div > button {
   margin-bottom: 10%;
   width: 65%;
-  height: 50%;
-  border-radius: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
 }
 
 #button-container-right > div > button {
   margin-bottom: 10%;
   width: 90%;
-  height: 50%;
+  aspect-ratio: 1/1;
   border-radius: 100%;
 }
 

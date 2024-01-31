@@ -52,7 +52,8 @@ pre {
   --padding-right-md: 1vw;
   --padding-left-sm: 0.5vw;
   --padding-right-sm: 0.5vw;
-  --border-line-sm: 0.3vw;
+  --border-line-sm: 0.2vw;
+  --border-radius-md: 0.5vw;
   --border-radius-lg: 1vw;
   --border-radius-xl: 4vh;
 }
@@ -93,6 +94,10 @@ pre {
 
 .border-sm {
   border-width: var(--border-line-sm);
+}
+
+.rounded-r-md {
+  border-radius: var(--border-radius-md);
 }
 
 .rounded-r-lg {

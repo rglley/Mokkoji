@@ -2,12 +2,12 @@
   <div class="fixed w-full h-full top-0 left-0 z-10 flex justify-center items-center px-8">
     <div
       id="letter-container"
-      class="p-8 w-1/3 h-fit bg-yellow-100 flex flex-col justify-center rounded-xl"
+      class="fixed p-8 w-1/3 h-fit bg-yellow-100 flex flex-col justify-center rounded-xl"
     >
       <div class="flex pb-6 space-x-64">
         <h1 class="text-black text-2xl font-bold">롤링페이퍼 작성</h1>
         <button @click="$emit('remove-letter-modal')">
-          <IconLetterCancel />
+          <IconCancelBlack />
         </button>
       </div>
       <form action="" method="post" id="letterForm" class="flex flex-col justify-center">
@@ -78,7 +78,7 @@ import { ref } from 'vue'
 import IconVoice from '@/icons/meeting/IconVoice.vue'
 import IconVideo from '@/icons/meeting/IconVideo.vue'
 import IconRemove from '@/icons/meeting/IconRemove.vue'
-import IconLetterCancel from '@/icons/meeting/IconLetterCancel.vue'
+import IconCancelBlack from '@/icons/meeting/IconCancelBlack.vue'
 // import AudioRecorderModal from './AudioRecorderModal.vue'
 
 defineEmits(['remove-letter-modal'])
