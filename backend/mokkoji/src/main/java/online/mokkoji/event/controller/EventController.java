@@ -8,10 +8,11 @@ import online.mokkoji.S3.S3ServiceImpl;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.RollingpaperReqDto;
-import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.event.dto.response.RollingpaperRedisDto;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
+import online.mokkoji.result.domain.Photo;
+import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.service.UserService;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,6 +38,7 @@ public class EventController {
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
+    private final ResultService resultService;
 
     // 캡쳐사진 저장
     @PostMapping("/photos/{sessionId}")
@@ -55,10 +57,13 @@ public class EventController {
 
         log.info("url : {}", url);
 
-        PhotoResDto photoToRedis = new PhotoResDto(user.getId(), resultId, url);
-        redisTemplate.opsForList().leftPush("photos", objectMapper.writeValueAsString(photoToRedis));
+//        PhotoResDto photoToRedis = new PhotoResDto(user.getId(), resultId, url);
+        Photo photoToRedis = new Photo(resultId, url);
+//        redisTemplate.opsForList().leftPush("photos", objectMapper.writeValueAsString(photoToRedis));
+//        redisTemplate.opsForList().leftPush("photos", objectMapper.writeValueAsString(photoToRedis));
+        Photo savedPhoto = resultService.createPhoto(photoToRedis);
 
-        return new ResponseEntity<>("사진 업로드 완료", HttpStatus.OK);
+        return new ResponseEntity<>(savedPhoto.toString(), HttpStatus.OK);
     }
 
     //롤링페이퍼 저장
@@ -67,7 +72,7 @@ public class EventController {
                                                   HttpServletRequest req,
                                                   @RequestPart(value = "voice", required = false) MultipartFile voice,
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
-                                                  @RequestPart("text") RollingpaperReqDto rollingpaperReqDto) throws IOException {
+                                                  @RequestPart("writerAndText") RollingpaperReqDto rollingpaperReqDto) throws IOException {
 
         String provider = jwtUtil.getProvider(req);
         String email = jwtUtil.getEmail(req);
@@ -79,13 +84,13 @@ public class EventController {
         rollingpaperReqDto.setVoice(voice);
         rollingpaperReqDto.setVideo(video);
 
-        // 텍스트, 음성, 영상 유효성 검사 후 file, text 맵에 담음
+        // 파일들 유효성 검사 후 map에 담음
         Map<String, MultipartFile> fileMap = eventService.createRollingpaperFileMap(rollingpaperReqDto);
 
 
         // 유효성 검사 후 파일 S3에 업로드
         Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, user.getId(), resultId);
-        RollingpaperRedisDto redisDto = new RollingpaperRedisDto(user.getId(), resultId, rollingpaperReqDto.getText(), urlMap);
+        RollingpaperRedisDto redisDto = new RollingpaperRedisDto(user.getId(), resultId, rollingpaperReqDto.getWriter(), rollingpaperReqDto.getText(), urlMap);
         redisTemplate.opsForList().leftPush("rollingpaper", objectMapper.writeValueAsString(redisDto));
 
         return new ResponseEntity<>("롤링페이퍼 업로드 완료", HttpStatus.OK);

@@ -15,13 +15,15 @@ public class RollingpaperRedisDto {
 
     private Long userId;
     private Long resultId;
+    private String writer;
     private String text;
     private String voice;
     private String video;
 
-    public RollingpaperRedisDto(Long userId, Long resultId, String text, Map<String, String> urlMap) {
+    public RollingpaperRedisDto(Long userId, Long resultId, String writer, String text, Map<String, String> urlMap) {
         this.userId = userId;
         this.resultId = resultId;
+        this.writer = writer;
         this.text = text;
         for (Map.Entry<String, String> urlEntry : urlMap.entrySet()) {
             if (urlEntry.getKey().equals("voice")) this.voice = urlEntry.getValue();

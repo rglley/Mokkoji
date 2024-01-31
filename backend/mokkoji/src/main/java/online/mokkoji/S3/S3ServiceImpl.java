@@ -56,16 +56,17 @@ public class S3ServiceImpl implements S3Service {
         }
 
         String dir = "rollingpaper";
-        String subDir, prefix;
+        String subDir = "";
+        String prefix;
         Map<String, String> urlMap = new HashMap<>();
 
         for (Map.Entry<String, MultipartFile> fileEntry : multipartFiles.entrySet()) {
             // 음성인 경우
             if (fileEntry.getKey().equals("voice")) {
-                subDir = "voice";
+//                subDir = "voice";
                 prefix = "voi_";
             } else {
-                subDir = "video";
+//                subDir = "video";
                 prefix = "vid_";
             }
 
@@ -103,6 +104,8 @@ public class S3ServiceImpl implements S3Service {
 
     // 파일 이름 생성
     private String createFileName(String userId, String resultId, String dir, String subDir, String prefix, String fileName) {
+        if (subDir.isBlank()) return String.format("%s/%s/%s/%s%s%s",
+                userId, resultId, dir, prefix, UUID.randomUUID(), getFileExtension(fileName));
         return String.format("%s/%s/%s/%s/%s%s%s",
                 userId, resultId, dir, subDir, prefix, UUID.randomUUID(), getFileExtension(fileName));
     }

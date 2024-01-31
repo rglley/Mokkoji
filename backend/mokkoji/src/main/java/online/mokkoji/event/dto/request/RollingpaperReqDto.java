@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class RollingpaperReqDto {
 
+    private String writer;
     @Size(max = 100)
     private String text;
     private MultipartFile voice;
