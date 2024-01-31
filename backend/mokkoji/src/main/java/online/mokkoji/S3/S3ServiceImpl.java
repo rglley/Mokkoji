@@ -48,7 +48,7 @@ public class S3ServiceImpl implements S3Service {
 
     // 롤링페이퍼 업로드
     @Override
-    public Map<String, String> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long resultId) throws IOException {
+    public Map<String, String> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long paperId) throws IOException {
 
         if (multipartFiles == null) {
             log.info("파일 없음");
@@ -63,17 +63,15 @@ public class S3ServiceImpl implements S3Service {
         for (Map.Entry<String, MultipartFile> fileEntry : multipartFiles.entrySet()) {
             // 음성인 경우
             if (fileEntry.getKey().equals("voice")) {
-//                subDir = "voice";
                 prefix = "voi_";
             } else {
-//                subDir = "video";
                 prefix = "vid_";
             }
 
             MultipartFile multipartFile = fileEntry.getValue();
 
             // 사진_유저ID_결과물ID
-            String fileName = createFileName(userId.toString(), resultId.toString(), dir, subDir, prefix, multipartFile.getOriginalFilename());
+            String fileName = createFileName(userId.toString(), paperId.toString(), dir, subDir, prefix, multipartFile.getOriginalFilename());
 
             upload(multipartFile, fileName);
 

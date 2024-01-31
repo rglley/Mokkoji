@@ -37,8 +37,8 @@ public class Result {
     private ResultStatus status = ResultStatus.MEMORY;
 
     // 롤링페이퍼 리스트 -> 엔티티 생겨야 활성화 가능
-//    @OneToMany(mappedBy = "result")
-//    private List<Rollingpaper> rollingpaperList=new ArrayList<>();
+    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY)
+    private RollingPaper rollingpaper;
 
     // 포토모자이크 -> 엔티티 생겨야 활성화 가능
 //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "result")
@@ -51,5 +51,10 @@ public class Result {
 
     public Result(Event event) {
         this.event = event;
+    }
+
+    
+    public void setRollingpaper(RollingPaper rollingPaper) {
+        this.rollingpaper = rollingPaper;
     }
 }

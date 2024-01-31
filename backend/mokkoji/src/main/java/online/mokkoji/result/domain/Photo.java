@@ -1,17 +1,16 @@
 package online.mokkoji.result.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString
+@Builder
 public class Photo implements Serializable {
 
     @Id
@@ -20,8 +19,7 @@ public class Photo implements Serializable {
 
     private Long resultId;
 
-    //    @Column(nullable = false, length = 100)
-//    @Size(max = 100)
+    @Column(nullable = false)
     private String url;
 
     public Photo(Long resultId, String url) {

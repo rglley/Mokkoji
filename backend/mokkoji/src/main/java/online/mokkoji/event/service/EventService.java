@@ -20,4 +20,5 @@ public interface EventService {
     void deleteSession(String sessionId, SessionReqDto sessionReqDto);
 
     Map<String, MultipartFile> createRollingpaperFileMap(RollingpaperReqDto rollingpaperReqDto);
+
 }
