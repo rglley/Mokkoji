@@ -8,10 +8,16 @@ import MyDetail from '@/components/mypage/MyDetail.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
+import HandleCallback from '@/components/common/HandleCallback.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/oauth2/redirect',
+      component: HandleCallback
+      
+    },
     {
       path: '/',
       name: 'home',

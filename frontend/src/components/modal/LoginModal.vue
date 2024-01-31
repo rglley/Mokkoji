@@ -33,6 +33,7 @@
           type="button"
           class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2"
           href="http://localhost:8080/oauth2/authorization/naver"
+          redirect_uri="http://localhost:5173/oauth2/redirect"
         >
           <img
             src="@/assets/logo/logoN_naver.svg"

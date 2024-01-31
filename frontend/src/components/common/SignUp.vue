@@ -63,41 +63,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { useRoute } from 'vue-router'
 
 const router = useRouter()
-const route = useRoute()
 const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
 const email = ref('')
-
-onMounted(() => {
-
-
-  console.log(route.query.data)
-  
-  // async () => {
-  //   await axios({
-  //     url: 'https://localhost:8080/signup',
-  //     method: 'GET',
-  //   })
-  //   .then((res) => {
-  //     res.email = email.value;
-  //     res.name = name.value;
-  //     res.email = email.value;
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   })
-  // }
-
-})
 
 const fileName = ref('')
 
