@@ -13,17 +13,6 @@ const props = defineProps({
 })
 
 const userName = ref('')
-
-// 사용자 데이터 가져오기
-const clientData = () => {
-  const { clientData } = getConnectionData()
-  userName.value = clientData
-}
-
-const getConnectionData = () => {
-  const { connection } = props.streamManager.stream
-  return JSON.parse(connection.data)
-}
 </script>
 
 <style></style>

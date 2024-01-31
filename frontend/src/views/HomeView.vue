@@ -247,7 +247,7 @@ const submitConferenceId = () => {
 // };
 
 const createMeeting = () => {
-  router.push('/meeting/host')
+  router.push('/mainmeeting/host')
 
   // if (isLogin.value) {
   //   router.push('#') // 회의 리다이렉트(예정)
