@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@headlessui/vue": "^1.7.17",
-    "html2canvas": "^1.4.1"
-  }
-}
