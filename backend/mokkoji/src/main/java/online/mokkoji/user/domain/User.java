@@ -34,12 +34,12 @@ public class User {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private Authority authority = Authority.GUEST;
+    private Authority authority;
 
     private String image;
 
     @OneToMany(mappedBy = "user")
-    private List<Event> events = new ArrayList<>();
+    private List<Event> events;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserAccount userAccount;

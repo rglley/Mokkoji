@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.user.domain.User;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
 @Entity
 @Getter
-@ToString(of = {"title", "content", "status"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"name", "content", "status"})
 public class Result {
 
     @Id
@@ -22,7 +22,7 @@ public class Result {
     @Column(name = "result_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -32,10 +32,15 @@ public class Result {
 
     @Column(nullable = false, length = 15)
     @Size(max = 15)
-    private String title;
+    private String name;
 
+    @Column(length = 40)
     @Size(max = 40)
     private String content;
+
+    @Column(nullable = false, length = 100)
+    @Size(max = 100)
+    private String image;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -49,4 +54,8 @@ public class Result {
 
     @OneToMany(mappedBy = "result")
     private List<Photo> photoList;
+
+    public Result(Event event) {
+        this.event = event;
+    }
 }

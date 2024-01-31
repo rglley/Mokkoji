@@ -26,7 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JwtUtil jwtService;
+    private final JwtUtil jwtUtil;
     private final JwtConfig jwtConfig;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
@@ -45,7 +45,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         if (!isExist) {
             log.info("회원가입 페이지로 이동합니다.");
-            String accessToken = jwtService.createAccessToken(provider.getKey(), email);
+            String accessToken = jwtUtil.createAccessToken(provider.getKey(), email);
             response.setHeader(jwtConfig.getAccessHeader(), accessToken);
 
             SignupPageDto signupPageDto = new SignupPageDto((String) attributes.get("email"),
@@ -53,16 +53,18 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             response.getWriter().write(objectMapper.writeValueAsString(signupPageDto));
 
             response.sendRedirect("/signup");
+
+            jwtUtil.sendAccessAndRefreshToken(response, accessToken, null);
         } else {
             log.info("메인 페이지로 이동합니다");
-            String accessToken = jwtService.createAccessToken(provider.getKey(), email);
-            String refreshToken = jwtService.createRefreshToken();
+            String accessToken = jwtUtil.createAccessToken(provider.getKey(), email);
+            String refreshToken = jwtUtil.createRefreshToken();
 
             User loginUser = userRepository.findByProviderAndEmail(provider, email).get();
             loginUser.updateRefreshToken(refreshToken);
             MainPageDto mainPageDto = new MainPageDto(loginUser.getImage(), loginUser.getName());
 
-            jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
+            jwtUtil.sendAccessAndRefreshToken(response, accessToken, refreshToken);
             response.getWriter().write(objectMapper.writeValueAsString(mainPageDto));
             response.sendRedirect("/");
         }

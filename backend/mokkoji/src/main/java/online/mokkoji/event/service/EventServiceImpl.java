@@ -8,9 +8,9 @@ import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.result.domain.Result;
+import online.mokkoji.result.repository.ResultRepository;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.event.repository.EventRepository;
-import online.mokkoji.event.repository.ResultRepository;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
