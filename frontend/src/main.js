@@ -1,4 +1,5 @@
-import '../src/style.css'
+// import '../src/style.css'
+import './style.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'
