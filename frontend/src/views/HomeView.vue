@@ -177,7 +177,7 @@
 
       <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요? </h1>
       <button @click="toTop" 
-      class="my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
+      class="animate-bounce duration-700 my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
       >처음으로 돌아가기</button>
     </section>
   </main>
