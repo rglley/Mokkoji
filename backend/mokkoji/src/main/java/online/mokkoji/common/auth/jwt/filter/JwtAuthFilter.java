@@ -32,6 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     //토큰 인증이 필요 없는 요청 : 회의참가(추가 필요)
     private static final String MAIN_URL = "/";
     private static final String JOIN_URL = "/signup";
+    private static final String LOGIN_URL = "/users/login";
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
@@ -42,7 +43,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL)) {
+        if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
+                request.getRequestURI().equals(LOGIN_URL)){
             log.info("JWT 인증 불필요한 요청 접수, JwtAuthFilter 종료");
             filterChain.doFilter(request, response); //JwtAuthFilter 다음 필터 호출
             return;

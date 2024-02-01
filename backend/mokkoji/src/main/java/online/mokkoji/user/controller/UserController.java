@@ -1,6 +1,7 @@
 package online.mokkoji.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +12,12 @@ import online.mokkoji.user.dto.response.UpdatePageDto;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -23,11 +27,6 @@ public class UserController {
     //add, get, edit, remove
     private final UserService userService;
     private final JwtUtil jwtService;
-
-    @PostMapping("/login")
-    public void socialTest() {
-        log.info("hello~!~!~!~!~!~!");
-    }
 
     @GetMapping("/userinfo")
     public ResponseEntity<?> getUserInfo(HttpServletRequest req) {
@@ -52,6 +51,8 @@ public class UserController {
 
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
     }
+
+
 
     @PostMapping
     public ResponseEntity<SignupDto> addUser(HttpServletRequest req, @Valid @RequestBody SignupDto signupDto) {
