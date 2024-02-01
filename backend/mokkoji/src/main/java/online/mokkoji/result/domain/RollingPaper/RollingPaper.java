@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@ToString
 public class RollingPaper {
 
     @Id
@@ -20,24 +20,22 @@ public class RollingPaper {
     @JoinColumn(name = "result_id")
     private Result result;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "background_id")
+    @Embedded
     private BackgroundTemplate backgroundTemplate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postit_id")
+    @Embedded
     private PostitTemplate postitTemplate;
 
     @Column(nullable = false)
     @ColumnDefault("false")
     private boolean isEdited;
 
+
+    @Builder(builderMethodName = "buildWithResult")
     public RollingPaper(Result result) {
-        this.builder()
-                .result(result)
-                .backgroundTemplate(new BackgroundTemplate())
-                .postitTemplate(new PostitTemplate())
-                .build();
+        this.result = result;
+        this.backgroundTemplate = new BackgroundTemplate(BackgroundName.BASIC, "url"); //TODO : 진짜 url 넣기
+        this.postitTemplate = new PostitTemplate(PostitName.RAINBOW, "url"); //TODO : 진짜 url 넣기
         result.setRollingpaper(this);
     }
 }

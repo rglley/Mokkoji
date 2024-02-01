@@ -67,7 +67,7 @@ public class EventServiceImpl implements EventService {
         Result result = new Result(savedEvent);
         Result savedResult = resultRepository.save(result);
         // 빈 rollingpaper 생성
-        RollingPaper rollingPaper = new RollingPaper(savedResult);
+        RollingPaper rollingPaper = RollingPaper.buildWithResult().result(savedResult).build();
         rollingPaperRepository.save(rollingPaper);
 
         return savedEvent.getSessionId();

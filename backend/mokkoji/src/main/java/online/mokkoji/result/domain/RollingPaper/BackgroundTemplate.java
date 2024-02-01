@@ -1,22 +1,21 @@
 package online.mokkoji.result.domain.RollingPaper;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Embeddable
 @Getter
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
 public class BackgroundTemplate {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "background_id")
-    private int id;
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private BackgroundName backgroundName = BackgroundName.BASIC;
-    private String backgroundPath = "url";
+    private BackgroundName backgroundName;
+    private String backgroundPath;
+
+    
 }
