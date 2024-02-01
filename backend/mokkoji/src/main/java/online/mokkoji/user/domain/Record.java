@@ -8,8 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "eventCount", "totalTime", "totalParticipant", "totalMessage"})
 public class Record {
 

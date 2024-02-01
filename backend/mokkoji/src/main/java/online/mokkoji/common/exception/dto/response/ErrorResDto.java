@@ -23,7 +23,6 @@ public class ErrorResDto {
     @Builder
     @RequiredArgsConstructor
     public static class ValidationError {
-        //@Valid로 에러가 들어왔을 때, 어느 필드에서 에러가 발생했는지 응답
         private final String field;
         private final String message;
 
