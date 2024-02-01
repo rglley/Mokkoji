@@ -1,5 +1,4 @@
 <template>
-  <!-- wrapper -->
   <div class="flex text-center">
     <!-- tab bar -->
 
@@ -106,63 +105,47 @@
 </template>
 
 <script setup>
-import RollingResult from '@/components/myresult/RollingResult.vue'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 import PhotoCard from '@/temp/result/photocard.json'
-import IconPeople from '@/icons/IconPeople.vue'
-import IconPhoto from '@/icons/IconPhoto.vue'
-import IconLetter from '@/icons/IconLetter.vue'
-import IconVideo from '@/icons/IconVideo.vue'
-import IconAudio from '@/icons/IconAudio.vue'
-import IconMailBox from '@/icons/IconMailBox.vue'
-import IconLightBulb from '@/icons/IconLightBulb.vue'
-import PageNavigationTwo from '@/components/myresult/PageNavigationTwo.vue'
+import IconPeople from '@/icons/result/IconPeople.vue'
+import IconPhoto from '@/icons/result/IconPhoto.vue'
+import IconLetter from '@/icons/result/IconLetter.vue'
+import IconVideo from '@/icons/result/IconVideo.vue'
+import IconAudio from '@/icons/result/IconAudio.vue'
+import IconMailBox from '@/icons/result/IconMailBox.vue'
+import IconLightBulb from '@/icons/result/IconLightBulb.vue'
 import { ref } from 'vue'
 
-let photocard = PhotoCard
-let design = 'basic'
-let isOpenShare = ref(false)
-let isOpenDownload = ref(false)
-let isRollingEdit = ref(true)
-let isPhotoEdit = ref(false)
+const photocard = PhotoCard
+const design = 'basic'
+const isOpenShare = ref(false)
+const isOpenDownload = ref(false)
+const isRollingEdit = ref(true)
+const isPhotoEdit = ref(false)
 
-let openDownLoadList = () => {
+const openDownLoadList = () => {
   isOpenDownload.value = !isOpenDownload.value
 }
 
-let openShareList = () => {
+const openShareList = () => {
   isOpenShare.value = !isOpenShare.value
 }
 
-let rollingClick = () => {
+const rollingClick = () => {
   isRollingEdit.value = true
   if (isRollingEdit.value) {
     isPhotoEdit.value = false
   }
 }
 
-let photoClick = () => {
+const photoClick = () => {
   isPhotoEdit.value = true
   if (isPhotoEdit.value) {
     isRollingEdit.value = false
   }
 }
-/*
-let fileDownload = () => {
-  axios
-    .get('/uri/uri' + variable, {
-      responseType: 'blob'
-    })
-    .then((response) => {
-      fileDownload(response.data, attachFileName)
-    })
-    .catch((exception) => {
-      alert('파일 다운로드 실패')
-    })``
-}
-*/
 
-let optDownload = (value) => {
+const optDownload = (value) => {
   isOpenDownload.value = false
 
   switch (value) {
@@ -177,7 +160,7 @@ let optDownload = (value) => {
   }
 }
 
-let optShare = (value) => {
+const optShare = (value) => {
   isOpenShare.value = false
   switch (value) {
     case '클립보드':

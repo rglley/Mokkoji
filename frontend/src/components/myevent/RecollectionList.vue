@@ -1,43 +1,59 @@
 <template>
-  <div class="h-[22rem] w-72 mx-8 my-4 rounded-lg border-violet-400 border-4 border-solid bg-white">
-    <p class="pl-2 pt-2 pb-2">{{ recollection.eventDay }}</p>
-    <div class="relative">
-      <img
+  <div class="h-[22rem] w-72 mx-8 my-4 rounded-xl bg-white border-2 border-[#ff81c8]">
+    <p class="pl-2 pt-2 pb-2 text-black">
+      <strong class="effect-pink">{{ recollection.eventDay }}</strong>
+    </p>
+
+    <!--액자, 미정-->
+    <!-- <img
         :src="`src/assets/recollection/recollection_random_${imgNo}.png`"
         alt="recollection-random"
         class="m-auto z-0"
         height="200"
         width="200"
-      />
-      <div class="absolute bottom-4 right-10 left-14">
-        <a href="">
-          <img
-            src="@/assets/mokkoji_logo_with_bg.png"
-            alt="unregistered"
-            height="170"
-            width="170"
-            class="z-10"
-          />
-        </a>
-      </div>
+      /> -->
+    <div class="flex justify-center items-center">
+      <a href="">
+        <img src="@/assets/mokkoji_logo_with_bg.png" alt="unregistered" height="180" width="180" />
+      </a>
     </div>
-    <div class="mt-2 text-center">
-      <p class="text-lg mb-2">{{ recollection.eventType }}</p>
-      <pre class="text-base whitespace-pre-wrap">{{ description }}</pre>
+    <div class="mt-5 text-center text-black">
+      <p class="text-lg mb-2">
+        <strong class="effect">{{ recollection.eventType }}</strong>
+      </p>
+      <pre
+        class="text-base whitespace-pre-wrap w-[284px] h-[72px] custom-border flex justify-center items-center"
+        >{{ description }}</pre
+      >
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-let props = defineProps(['recollection'])
-let description = props.recollection.description
+const props = defineProps(['recollection'])
+const description = props.recollection.description
 const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
-
+//액자, 미정
 let imgNo = computed(() => {
   let no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
   return no === 0 ? VITE_RECOLLECTION_FRAME_COUNT : no
 })
 </script>
 
-<style></style>
+<style scoped>
+.effect {
+  box-shadow: inset 0 -5px 0 #f6d8fd;
+  color: black;
+}
+
+.effect-pink {
+  box-shadow: inset 0 -5px 0 #fea7d9;
+  color: black;
+}
+
+.custom-border {
+  border-top: solid 2px;
+  border-color: #ff81c8;
+}
+</style>

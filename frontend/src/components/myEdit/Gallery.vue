@@ -14,11 +14,11 @@ import getImages from '@/api/get_images'
 
 import { ref, onMounted, onUnmounted } from 'vue'
 
-let photos = ref(getImages(30))
-let scrollContainer = ref(null)
-let scrollComponent = ref(null)
+const photos = ref(getImages(30))
+const scrollContainer = ref(null)
+const scrollComponent = ref(null)
 
-let loadMorePhotos = () => {
+const loadMorePhotos = () => {
   let newImages = getImages(10)
   photos.value.push(...newImages)
 }
@@ -31,7 +31,7 @@ onUnmounted(() => {
   scrollContainer.value.removeEventListener('scroll', handleScroll)
 })
 
-let handleScroll = () => {
+const handleScroll = () => {
   let component = scrollComponent.value
   let container = scrollComponent.value
   if (container.scrollTop + container.clientHeight >= component.offsetHeight) {

@@ -45,7 +45,7 @@
                   <a href="mypage">마이페이지</a>
                 </li>
                 <li id="li-dropdown">
-                  <a href="#">내 결과물</a>
+                  <a href="eventlist">내 결과물</a>
                 </li>
                 <li id="li-dropdown">
                   <a @click="logout">로그아웃</a>
@@ -83,5 +83,4 @@ let logout = () => {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
