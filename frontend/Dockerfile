@@ -24,6 +24,7 @@ EXPOSE 5173
 #EXPOSE 3000
 
 # 애플리케이션 실행 명령어
-CMD ["node", "app.js"]
+CMD ["node", "main.js"]
+#CMD ["node", "app.js"]
 #CMD ["npm", "run", "serve"]
 #CMD ["node", "server.js"]
