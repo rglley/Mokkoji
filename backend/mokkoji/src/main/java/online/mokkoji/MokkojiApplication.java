@@ -9,5 +9,4 @@ public class MokkojiApplication {
     public static void main(String[] args) {
         SpringApplication.run(MokkojiApplication.class, args);
     }
-
 }

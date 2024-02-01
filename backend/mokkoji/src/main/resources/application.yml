@@ -15,7 +15,6 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
 
 
-
   data:
     web:
       pageable:
@@ -30,7 +29,7 @@ spring:
       host: localhost
       port: 6379
 
-  #application-oauth 프로필 등록
+  #application 프로필 등록
   profiles:
     include: oauth, jwt, s3
 
@@ -49,4 +48,3 @@ server:
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
-
