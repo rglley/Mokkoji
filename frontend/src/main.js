@@ -25,6 +25,6 @@ app.config.globalProperties.$axios = axios
 app.use(VueCookies, { expires: '7d' })
 
 // axios interceptor
-import setupInterceptors from './services/setupInterceptors'
+import setupInterceptors from './services/setupInterceptors.js'
 
 setupInterceptors()
