@@ -18,11 +18,14 @@ export default {
         'gray': '#EFEFEF',
         'natural-beige': '#FCF7FF',
         'natural-yellow': '#fffade',
+        'gradient-blue' : '#80AEF8',
+        'spot-purple' : '#9183C6',
       }
     }
 
   },
   plugins: [
+    // eslint-disable-next-line no-undef
     require("tailwindcss-animate"),
 
   ],

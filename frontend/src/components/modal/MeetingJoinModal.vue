@@ -44,40 +44,40 @@
 
 <script setup>
 import { ref } from 'vue'
-let confirm = ref(false)
-let userName = ref('')
+const confirm = ref(false)
+const userName = ref('')
 
-let props = defineProps({
+const props = defineProps({
   conferenceIdInput: String
 })
 
 // 이름 랜덤 생성
-let capFirst = (string) => string.charAt(0).toUpperCase() + string.slice(1)
-let getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min
+const capFirst = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min
 
-let generateName = () => {
-  let name1 = [
+const generateName = () => {
+  const name1 = [
     'abandoned',
     'able',
     'absolute',
     'adorable',
     'adventurous',
   ]
-  let name2 = [
+  const name2 = [
     'people',
     'history',
     'way',
     'art', 
   ]
 
-  var name =
+  const name =
     capFirst(name1[getRandomInt(0, name1.length + 1)]) +
     ' ' +
     capFirst(name2[getRandomInt(0, name2.length + 1)])
   return name
 }
 
-let submitTempName = (tempName) => {
+const submitTempName = (tempName) => {
   if (tempName.value == null || tempName.trim(' ').length == 0) {
     // tempName 조합 로직
     tempName = generateName()

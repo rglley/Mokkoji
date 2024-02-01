@@ -4,33 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 body {
-  font-family: 'SUITE', sans-serif;
-}
-button {
-  background: none;
-  color: inherit;
-  border: none;
-  cursor: pointer;
-  outline: inherit;
-}
-li {
-  list-style: none;
-}
-a {
-  color: inherit;
-  text-decoration: none;
-}
-input:focus {
-  outline: none;
-}
-/** pre , 텍스트에 사용된 여백과 줄바꿈이 모두 그대로 브라우저 화면에 나타납니다.*/
-pre {
   font-family: 'SUITE', sans-serif;
 }
 
@@ -48,7 +22,7 @@ pre {
   }
 
   #title-sub {
-    @apply text-3xl tracking-tighter p-2;
+    @apply text-3xl tracking-tighter p-3 m-2;
   }
 
   #li-dropdown {
@@ -98,10 +72,6 @@ pre {
   #card-div {
     @apply rounded-md shadow-lg bg-primary0 p-4 pb-10 flex flex-col mt-24 mb-40 border-2 border-slate-200;
   }
-
-  /* button {
-    @apply ml-2 h-10 items-center p-2 inline-block rounded-md bg-primary3 text-sm text-white transition duration-300 ease-in-out hover:bg-yellow-100 hover:text-black;
-  } */
 
   #button-submit {
     @apply ml-2 h-10 items-center justify-center rounded-md;

@@ -9,6 +9,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import getImages from '@/api/get_images'
 

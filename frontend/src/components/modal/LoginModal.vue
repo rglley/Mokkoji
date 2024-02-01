@@ -1,15 +1,16 @@
 <template>
   <div class="w-80 items-center m-5 flex flex-col gap-2 mb-16">
-    <img src="@/assets/mokkoji_logo.png" class="w-20">
-    <div id="title-sub-bold" class="ml-auto mr-auto mb-5 tracking-wider pb-10">
-      모꼬지 시작하기
-    </div>
+    <img
+      src="@/assets/logo/mokkoji_logo.png"
+      class="w-24 p-2 m-2 mb-4 border-2 rounded-2xl border-primary bg-natural-beige shadow-md"
+    />
+    <div id="title-sub-bold" class="ml-auto mr-auto mb-5 tracking-wider pb-10">모꼬지 시작하기</div>
     <div id="box-shadow">
       <div>
         <button
           type="button"
-          class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 me-2 mb-2"
-          @click="googleLogin"
+          class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
+          @click="login('naver')"
         >
           <svg
             class="w-4 h-4 me-2"
@@ -28,48 +29,32 @@
         </button>
       </div>
       <div>
-        <button
+        <a
           type="button"
-          class="text-white bg-green-400 hover:bg-green-500 me-2 my-4"
-          @click="naverLogin"
+          class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2"
+          href="http://localhost:8080/oauth2/authorization/naver"
+          redirect_uri="http://localhost:5173/oauth2/redirect"
         >
           <img
-            src="@/assets/logoN_naver.svg"
-            class="w-4 h-4 inline-block mb-2 ml-2 mt-1 mr-2"
+            src="@/assets/logo/logoN_naver.svg"
+            class="w-4 h-43 inline-block mb-2 ml-2 mt-1 mr-2"
           />
 
           네이버 계정으로 시작하기
-        </button>
+        </a>
       </div>
     </div>
   </div>
-  <span class="m-1 float-right font-light text-slate-300"> 계정이 없으신가요?
-  <a href="/signup" class="text-primary  hover:text-blue-800 hover:bg-natural-yellow">회원가입</a>
-    </span>
+  <span class="m-1 float-right font-light text-slate-300">
+    계정이 없으신가요?
+    <a href="/signup" class="text-primary hover:text-blue-800 hover:bg-natural-yellow">회원가입</a>
+  </span>
 </template>
 
 <script setup>
-import axios from "axios";
+import { ref } from 'vue';
 
-let naverLogin = () => {
-  axios({
-    url: "/oauth2/authorization/google",
-    method: postMessage,
-    data: {
-      dummy: "dummy",
-    },
-  });
-};
-
-let googleLogin = () => {
-  axios({
-    url: "/oauth2/authorization/google",
-    method: postMessage,
-    data: {
-      dummy: "dummy",
-    },
-  });
-};
+const isLogin = ref(false);
 </script>
 
 <style scoped></style>

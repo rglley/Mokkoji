@@ -5,15 +5,19 @@ import MyPage from '@/components/mypage/MyPage.vue'
 import EventListPage from '@/views/EventListView.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
-import MyAccount from '@/components/mypage/MyAccount.vue'
-import Meeting from '@/components/meeting/Meeting.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
+import HandleCallback from '@/components/common/HandleCallback.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/oauth2/redirect',
+      component: HandleCallback
+      
+    },
     {
       path: '/',
       name: 'home',
@@ -25,7 +29,6 @@ const router = createRouter({
       component: () => import('@/components/common/SignUp.vue')
     },
     {
-      // path: '/${userId}',
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
@@ -33,28 +36,13 @@ const router = createRouter({
         {
           path: '',
           name: 'mypage',
-          component: MyPage
+          component: MyPage,
         },
         {
           path: 'detail',
           name: 'mydetail',
           component: MyDetail
         },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
-        },
-        {
-          path: 'detail',
-          name: 'mydetail',
-          component: MyDetail
-        },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
-        }
       ]
     },
     {
@@ -77,8 +65,18 @@ const router = createRouter({
       path: '/editpage',
       name: 'editpage',
       component: EditPage
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '404'
+    },
+    {
+      path: '/404',
+      name: 'Error404',
+      component: Error404
+    },
   ]
 })
+
 
 export default router
