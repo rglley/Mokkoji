@@ -10,9 +10,21 @@ import { useUserStore } from '@/stores/user'
 
 export default {
   setup() {
-    const token = this.$route.query.token;
-    const router = useRouter();
-    sessionStorage.setItem('token', token);
+    console.log('callback')
+    let naverLogin = new URL(window.location.href).searchParams.get('code')
+    if (naverLogin != null) {
+      ;((result) => {
+        console.log(result)
+        router.push({
+          path: '/'
+        })
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
+    const token = this.$route.query.token
+    const router = useRouter()
+    sessionStorage.setItem('token', token)
     router.push('/signup')
     // const route = useRoute()
     // const router = useRouter()
@@ -71,7 +83,7 @@ export default {
     //     alert('가입이력이 없습니다.')
     //     localStorage.setItem('state', state);
     //     // router.push('/signup')
-    //   } 
+    //   }
     //   else {
     //     state.userid = data.response.email
     //   }

@@ -16,7 +16,8 @@
           <li>
             <button id="button-header"><a href="/">HOME</a></button>
           </li>
-          <li v-if="!store.isLogin">
+          <li v-if="!isLogin">
+          <!-- <li v-if="store.isLogin"> -->
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView
               v-if="isLoginModal"
@@ -41,13 +42,14 @@
             >
               <ul aria-labelledby="dropdownHoverButton" class="w-50">
                 <li id="li-dropdown">
-                  <a href="mypage">마이페이지</a>
+                  <router-link to="mypage">마이페이지</router-link>
                 </li>
                 <li id="li-dropdown">
-                  <a href="#">내 결과물</a>
+                  <router-link to="??">내 결과물</router-link>
                 </li>
                 <li id="li-dropdown">
                   <a @click="logout">로그아웃</a>
+                  <!-- <a @click="store.logout">로그아웃</a> -->
                 </li>
               </ul>
             </div>
@@ -65,6 +67,7 @@ import { useUserStore } from '@/stores/user'
 
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/LoginModal.vue'
+import router from '@/router'
 const store = useUserStore();
 
 onMounted(() => {

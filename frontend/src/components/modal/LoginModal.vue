@@ -7,7 +7,7 @@
     <div id="title-sub-bold" class="ml-auto mr-auto mb-5 tracking-wider pb-10">모꼬지 시작하기</div>
     <div id="box-shadow">
       <div>
-        <button 
+        <button
           type="button"
           class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
           @click="login('naver')"
@@ -52,27 +52,9 @@
 </template>
 
 <script setup>
-import axios from 'axios'
+import { ref } from 'vue';
 
-// const store = useUserStore()
-// const login = (provider) => {
-//   store.login(provider);
-// }
-
-const login = async (provider) => {
-  await axios({
-    url: 'http://localhost:8080/oauth2/authorization/' + provider,
-    method: 'GET'
-  })
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-}
-
-
+const isLogin = ref(false);
 </script>
 
 <style scoped></style>
