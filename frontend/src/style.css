@@ -15,6 +15,10 @@ body {
   font-family: 'SUITE', sans-serif;
 }
 
+pre {
+  font-family: 'SUITE', sans-serif;
+}
+
 @layer components {
   #title-bold {
     @apply text-6xl font-bold tracking-wider p-2;

@@ -14,7 +14,7 @@
       /> -->
     <div class="flex justify-center items-center">
       <a href="">
-        <img src="@/assets/mokkoji_logo_with_bg.png" alt="unregistered" height="180" width="180" />
+        <img src="@/assets/logo/mokkoji_logo_with_bg.png" alt="unregistered" height="180" width="180" />
       </a>
     </div>
     <div class="mt-5 text-center text-black">
