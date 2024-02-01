@@ -82,7 +82,6 @@ const showLoginModal = () => {
 }
 
 const logout = () => {
-  //sessionStorage.delete('login-token')
   isLogin.value = false
 }
 </script>
