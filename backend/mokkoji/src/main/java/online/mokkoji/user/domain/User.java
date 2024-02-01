@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users") //h2만 user 사용 불가능
 @Getter
-@Builder
 @AllArgsConstructor
 @ToString(of = {"id", "email", "name", "image"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,26 +45,23 @@ public class User {
     @Size(max = 100)
     private String refreshToken;
 
-    // TODO : 2024.01.29 생성자->빌더로 refactoring 필요
+    @Builder(builderMethodName = "nonTokenBuilder")
     public User(String provider, String email, String name, String image, Authority authority) {
-        this.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(name)
-                .image(image)
-                .authority(authority)
-                .build();
+        this.provider = Provider.valueOf(provider);
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        this.authority = authority;
     }
 
+    @Builder
     public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
-        this.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(name)
-                .image(image)
-                .authority(authority)
-                .refreshToken(refreshToken)
-                .build();
+        this.provider = Provider.valueOf(provider);
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        this.authority = authority;
+        this.refreshToken = refreshToken;
     }
 
     public User(String email, String name, String image) {

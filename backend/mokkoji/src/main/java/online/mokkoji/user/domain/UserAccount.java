@@ -32,6 +32,7 @@ public class UserAccount {
     @Size(max = 20)
     private String number;
 
+
     public UserAccount toEntity(User user, String bank, String number) {
         return UserAccount.builder()
                 .user(user)
