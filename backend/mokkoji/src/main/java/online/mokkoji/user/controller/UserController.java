@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.user.dto.request.UserInputReqDto;
 import online.mokkoji.user.dto.response.MyPageResDto;
-import online.mokkoji.user.dto.response.UpdatePageResDto;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.dto.response.UpdatePageResDto;
 import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     //add, get, edit, remove
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final JwtUtil jwtService;
 
     @GetMapping("/update")
@@ -29,10 +29,10 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        UpdatePageDto updatePageDto = userService.readUpdatePage(provider, email);
+        UpdatePageResDto updatePageDto = userService.getUpdatePage(provider, email);
         log.info("회원 정보 수정으로 이동 성공");
 
-        return new ResponseEntity<>(updatePageResDto, HttpStatus.OK);
+        return new ResponseEntity<>(updatePageDto, HttpStatus.OK);
     }
 
     @GetMapping("/mypage")
@@ -40,8 +40,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        MyPageDto myPageDto = userService.readMypage(provider, email);
-        log.info("마이페이지로 이동 성공");
+        MyPageResDto myPageResDto = userService.getMypage(provider, email);
 
         return new ResponseEntity<>(myPageResDto, HttpStatus.OK);
     }
@@ -50,14 +49,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserInputReqDto> addUser(HttpServletRequest req,
-                                                   @Valid @RequestBody UserInputReqDto userInputReqDto) {
+                                                   @Valid @RequestBody UserInputReqDto signupDto) {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
         userService.createUser(provider, email, signupDto);
         log.info("회원 가입 성공");
 
-        return new ResponseEntity<>(userInputReqDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(signupDto, HttpStatus.CREATED);
     }
 
     @PutMapping

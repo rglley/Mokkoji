@@ -3,13 +3,13 @@ package online.mokkoji.user.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import online.mokkoji.event.domain.Event;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @ToString(of = {"id", "email", "name", "image"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -48,38 +48,6 @@ public class User {
     @Column(length = 100)
     @Size(max = 100)
     private String refreshToken;
-
-    @Builder(builderMethodName = "nonTokenBuilder")
-    public User(String provider, String email, String name, String image, Authority authority) {
-        this.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(name)
-                .image(image)
-                .authority(authority)
-                .build();
-    }
-
-    public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
-        this.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(name)
-                .image(image)
-                .authority(authority)
-                .refreshToken(refreshToken)
-                .build();
-    }
-
-    public User(String email, String name, String image) {
-        this.email = email;
-        this.name = name;
-        this.image = image;
-    }
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 
     @Builder
     public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
