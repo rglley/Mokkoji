@@ -76,6 +76,11 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         return new UserInfoResDto("naver", email, name, image);
     }
 
+    @Override
+    public UserInfoResDto getGoogleUserInfo(String accessToken) throws Exception {
+        return null;
+    }
+
     private HttpEntity<MultiValueMap<String, String>> generateNaverTokenReq(String authorizationCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -84,7 +89,7 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         params.add("grant_type", "authorization_code");
         params.add("client_id", oAuth2Config.getNaverId());
         params.add("client_secret", oAuth2Config.getNaverSecret());
-        params.add("redirect_uri", UUID.randomUUID().toString());
+        params.add("redirect_uri", "mokkoji");
         params.add("code", authorizationCode);
         return new HttpEntity<>(params, headers);
     }
@@ -97,7 +102,7 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         params.add("grant_type", "authorization_code");
         params.add("client_id", oAuth2Config.getNaverId());
         params.add("client_secret", oAuth2Config.getNaverSecret());
-        params.add("state", UUID.randomUUID().toString());
+        params.add("state", "mokkoji");
         params.add("code", authorizationCode);
         return new HttpEntity<>(params, headers);
     }
