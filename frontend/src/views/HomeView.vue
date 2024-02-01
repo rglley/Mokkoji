@@ -26,18 +26,13 @@
           <h1 id="title-bold" class="ml-8 text-8xl">모꼬지</h1>
           <br />
           <p>
-            화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를
-            공간적인 제약 없이 참여해보세요.
+            화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
+            없이 참여해보세요.
           </p>
-          <p>
-            순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을
-            제공합니다.
-          </p>
+          <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
           <div class="grid place-content-center my-20 w-2/3">
-            <button class="rounded-2xl" @click="generateMeeting">
-              화상 모임 생성하기
-            </button>
+            <button class="rounded-2xl" @click="createMeeting">화상 모임 생성하기</button>
 
             <!-- TODO : submit 버튼 + invalid input 렌더링 -->
             <div>
@@ -51,14 +46,11 @@
                 />
                 <div class="absolute top-2 right-2">
                   <button @click="submitConferenceId" class="rounded-full size-8 mt-2">
+                    123123
                     <img src="@/icons/send.png" class="" />
                   </button>
                 </div>
-                <ModalView
-                  v-if="showModal"
-                  :show-modal="showModal"
-                  @close-modal="toggleModal"
-                >
+                <ModalView v-if="showModal" :show-modal="showModal" @close-modal="toggleModal">
                   <MeetingJoinModal :conferenceIdInput="conferenceIdInput" />
                 </ModalView>
               </div>
@@ -88,12 +80,8 @@
         <div class="mx-5 px-5 text-center">
           <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
           <br />
-          <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
-          </p>
-          <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
-          </p>
+          <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
+          <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
         </div>
         <div class="items-center">
           <img src="@/assets/main1.png" />
@@ -152,12 +140,8 @@
         <div class="mx-5 text-center">
           <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
           <br />
-          <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
-          </p>
-          <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
-          </p>
+          <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
+          <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
         </div>
         <div class="flex-col items-center">
           <img src="@/assets/main3.png" />
@@ -188,12 +172,8 @@
         <div class="mx-5 px-5 text-center">
           <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
           <br />
-          <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
-          </p>
-          <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
-          </p>
+          <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
+          <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
         </div>
       </div>
       <div id="space"></div>
@@ -201,56 +181,54 @@
 
     <!--logo-->
     <section class="flex items-center justify-center py-20 bg-primary2">
-        <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요?</h1>
-        <button @click="toTop" class="animate-spin">처음으로 돌아가기</button>
+      <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요?</h1>
+      <button @click="toTop" class="animate-spin">처음으로 돌아가기</button>
     </section>
   </main>
 </template>
 
 <script setup>
-// TODO : 비회원 사용자 회의 시작 시 안내 모달 띄워주기
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
-
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 // toast : custom alert
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import ModalView from './ModalView.vue'
+import MeetingJoinModal from '../components/modal/MeetingJoinModal.vue'
+const router = useRouter()
 
-import ModalView from "./ModalView.vue";
-import MeetingJoinModal from "../components/modal/MeetingJoinModal.vue";
-
-let conferenceIdInput = ref("");
-let ifInputError = ref(false);
-let isLogin = ref(false); // 나중에 store에서 받을 예정
-
-let showModal = ref(false);
+const conferenceIdInput = ref('')
+const ifInputError = ref(false)
+const isLogin = ref(false)
+const showModal = ref(false)
 
 const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
+  showModal.value = !showModal.value
+}
 
-let submitConferenceId = () => {
-  console.log(conferenceIdInput.value);
+const submitConferenceId = () => {
+  console.log(conferenceIdInput.value)
+
+  router.push(`/meeting/${conferenceIdInput.value}`)
   // id input을 백엔드 서버로 axios 전송
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
   // 임시로 만든 올바른 id ='qwer'
-  let validId = "qwer";
-  if (conferenceIdInput.value == validId) {
-    // 로그인하지 않았다면 모달
-    if (!isLogin.value) {
-      // 모달 띄우고
-      showModal.value = true;
-    }
-    ifInputError.value = false;
-    // 회의 이동
-    router.push("/");
-  } else {
-    ifInputError.value = true;
-    conferenceIdInput.value = "";
-  }
-};
+  // let validId = 'qwer'
+  // if (conferenceIdInput.value == validId) {
+  //   // 로그인하지 않았다면 모달
+  //   if (!isLogin.value) {
+  //     // 모달 띄우고
+  //     showModal.value = true
+  //   }
+  //   ifInputError.value = false
+  //   // 회의 이동
+  //   router.push('/')
+  // } else {
+  //   ifInputError.value = true
+  //   conferenceIdInput.value = ''
+  // }
+}
 
 // 회의 생성 로직
 // 로그인하지 않았다면 모달
@@ -268,8 +246,9 @@ let submitConferenceId = () => {
 //   }
 // };
 
-let generateMeeting = () => {
-  router.push('/meeting/host')
+const createMeeting = () => {
+  router.push('/mainmeeting/host')
+
   // if (isLogin.value) {
   //   router.push('#') // 회의 리다이렉트(예정)
   // } else {
@@ -277,12 +256,12 @@ let generateMeeting = () => {
   // }
 }
 
-let toTop = () => {
+const toTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: "smooth",
-  });
-};
+    behavior: 'smooth'
+  })
+}
 </script>
 
 <style scoped></style>
