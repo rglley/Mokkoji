@@ -22,13 +22,14 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
     //create, read, update, delete
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
     private final RecordRepository recordRepository;
     private final JwtUtil jwtService;
 
+    @Override
     public UpdatePageDto readUpdatePage(String provider, String email) {
         log.info("회원 정보 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
@@ -57,6 +58,7 @@ public class UserService {
         return updatePageDto;
     }
 
+    @Override
     public MyPageDto readMypage(String provider, String email) {
         log.info("회원 정보 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
@@ -86,6 +88,7 @@ public class UserService {
         return myPageDto;
     }
 
+    @Override
     public void createUser(String provider, String email, SignupDto signupDto) {
         log.info("회원 중복 체크(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail
@@ -115,6 +118,7 @@ public class UserService {
         }
     }
 
+    @Override
     public void updateUser(String provider, String email, UpdateDto modifyDto) {
         log.info("회원 정보 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
@@ -144,6 +148,7 @@ public class UserService {
         }
     }
 
+    @Override
     public User deleteUser(String provider, String email) {
         User deleteUser = getByProviderAndEmail(provider, email);
         log.info("회원 탈퇴 진행");
@@ -153,6 +158,7 @@ public class UserService {
         return deleteUser;
     }
 
+    @Override
     public User getByProviderAndEmail(String provider, String email) {
         log.info("회원 조회(provider, email) : {}, {}", provider, email);
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);

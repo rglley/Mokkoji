@@ -52,7 +52,7 @@ public class Result {
     @OneToOne(mappedBy = "result", fetch = FetchType.LAZY)
     private Photomosaic photomosaic;
 
-    @OneToMany(mappedBy = "result")
+    @OneToMany(mappedBy = "resultId")
     private List<Photo> photoList;
 
     public Result(Event event) {

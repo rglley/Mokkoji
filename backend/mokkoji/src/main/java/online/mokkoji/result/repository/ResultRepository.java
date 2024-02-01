@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ResultRepository extends JpaRepository<Result, Long> {
-    List<Result> findAllByProviderAndEmailOrderByIdDesc(Provider provider, String email);
+    List<Result> findAllByUser_ProviderAndUser_EmailOrderByIdDesc(Provider provider, String email);
 }

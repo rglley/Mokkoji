@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PhotoReqDto {
 
-    //    @NotNull
-//    private MultipartFile photo;
     @NotNull
     private Long userId;
 

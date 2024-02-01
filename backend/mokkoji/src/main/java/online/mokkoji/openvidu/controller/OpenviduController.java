@@ -11,7 +11,7 @@ import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.service.UserService;
+import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class OpenviduController {
     private final EventService eventService;
     private final EventRepository eventRepository;
     private final JwtUtil jwtUtil;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final ResultService resultService;
 
 
@@ -52,7 +52,7 @@ public class OpenviduController {
                                                           HttpServletRequest req)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
@@ -85,7 +85,7 @@ public class OpenviduController {
 
         if (sessionReqDto.getAuthority().equals("sub")) return new ResponseEntity<>("참여자 회의 나감", HttpStatus.OK);
 
-        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
         sessionReqDto.setUserId(user.getId());
 
         Session activeSession = openvidu.getActiveSession(sessionId);

@@ -10,7 +10,7 @@ import online.mokkoji.user.dto.response.MyPageDto;
 import online.mokkoji.user.dto.response.UpdatePageDto;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.service.UserService;
+import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +21,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     //add, get, edit, remove
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final JwtUtil jwtService;
 
     @GetMapping("/update")
-    public ResponseEntity<?> mvToUpdate(HttpServletRequest req) {
+    public ResponseEntity<UpdatePageDto> mvToUpdate(HttpServletRequest req) {
         log.info("회원 정보 수정으로 이동 요청");
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        UpdatePageDto updatePageDto = userService.readUpdatePage(provider, email);
+        UpdatePageDto updatePageDto = userServiceImpl.readUpdatePage(provider, email);
         log.info("회원 정보 수정으로 이동 성공");
 
         return new ResponseEntity<>(updatePageDto, HttpStatus.OK);
@@ -42,7 +42,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        MyPageDto myPageDto = userService.readMypage(provider, email);
+        MyPageDto myPageDto = userServiceImpl.readMypage(provider, email);
         log.info("마이페이지로 이동 성공");
 
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        userService.createUser(provider, email, signupDto);
+        userServiceImpl.createUser(provider, email, signupDto);
         log.info("회원 가입 성공");
 
         return new ResponseEntity<>(signupDto, HttpStatus.CREATED);
@@ -66,7 +66,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        userService.updateUser(provider, email, modifyDto);
+        userServiceImpl.updateUser(provider, email, modifyDto);
         log.info("회원 정보 수정 완료");
 
         return new ResponseEntity<>(modifyDto, HttpStatus.OK);
@@ -78,7 +78,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        User removeUser = userService.deleteUser(provider, email);
+        User removeUser = userServiceImpl.deleteUser(provider, email);
         log.info("회원 탈퇴 완료");
 
         return new ResponseEntity<>(removeUser, HttpStatus.OK);

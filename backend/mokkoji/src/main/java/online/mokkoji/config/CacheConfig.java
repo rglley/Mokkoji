@@ -31,7 +31,6 @@ public class CacheConfig {
                 .writer(getPhotoMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
-                // TODO : 2024.01.31 실제로는 시간 분단위로 하기
                 .writeBehindDelay(60000));
     }
 
@@ -47,8 +46,6 @@ public class CacheConfig {
 
             @Override
             public void delete(Collection<String> keys) {
-                // TODO : 2024.01.31 url로 삭제 시 삭제되게 하고싶은데 이상함
-                keys.stream().forEach(photoRepository::deleteByUrl);
 
             }
         };
@@ -60,7 +57,6 @@ public class CacheConfig {
                 .writer(getMessageMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
-                // TODO : 2024.01.31 실제로는 시간 분단위로 하기
                 .writeBehindDelay(2000));
     }
 
@@ -76,10 +72,6 @@ public class CacheConfig {
 
             @Override
             public void delete(Collection<String> keys) {
-                // TODO : 2024.01.31 url로 삭제 시 삭제되게 하고싶은데 이상함
-//                keys.stream().forEach(key -> {
-//                    messageRepository.deleteByUrl(key);
-//                });
 
             }
         };

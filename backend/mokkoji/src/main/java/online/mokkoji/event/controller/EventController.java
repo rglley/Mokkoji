@@ -13,7 +13,7 @@ import online.mokkoji.result.domain.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.service.UserService;
+import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class EventController {
 
     private final EventRepository eventRepository;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final EventService eventService;
     private final S3ServiceImpl s3Service;
     private final JwtUtil jwtUtil;
@@ -45,7 +45,7 @@ public class EventController {
         String provider = jwtUtil.getProvider(req);
         String email = jwtUtil.getEmail(req);
 
-        User user = userService.getByProviderAndEmail(provider, email);
+        User user = userServiceImpl.getByProviderAndEmail(provider, email);
 
         Event event = eventRepository.findBySessionId(sessionId);
         Long resultId = event.getResult().getId();
@@ -73,7 +73,7 @@ public class EventController {
         String provider = jwtUtil.getProvider(req);
         String email = jwtUtil.getEmail(req);
 
-        User user = userService.getByProviderAndEmail(provider, email);
+        User user = userServiceImpl.getByProviderAndEmail(provider, email);
 
         Event event = eventRepository.findBySessionId(sessionId);
         Long paperId = event.getResult().getRollingpaper().getId();

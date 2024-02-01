@@ -41,7 +41,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Event> events = new ArrayList<>();
-    private List<Event> events;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserAccount userAccount;
