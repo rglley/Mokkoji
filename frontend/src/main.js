@@ -1,7 +1,7 @@
 // import '../src/style.css'
 // import './style.css'
 if (import.meta.env.MODE !== 'ssr') {
-    import('path-to-your/style.css').then((module) => {
+    import('./style.css').then((module) => {
         // You can use the `module` object if needed
     });
 }
