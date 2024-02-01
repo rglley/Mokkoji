@@ -1,5 +1,6 @@
 jwt:
-  secretKey: #JWT SecretKey 넣기
+
+  secretKey: ${JWT_SECRET}
 
   access:
     expiration: 3600000 # 1시간(60분) (밀리초, 1000 * 60 * 60)
@@ -8,4 +9,3 @@ jwt:
   refresh:
     expiration: 1209600000 #  (밀리초, 1000 * 60 * 60 * 24 * 14)
     header: Authorization-Refresh
-

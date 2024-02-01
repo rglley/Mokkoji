@@ -152,4 +152,18 @@ public class UserServiceImpl implements UserService{
 
         return deleteUser;
     }
+
+    @Override
+    public User getByProviderAndEmail(String provider, String email) {
+        log.info("회원 조회(provider, email) : {}, {}", provider, email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
+
+        if (findUser.isEmpty()) {
+            log.error("존재하지 않는 회원 정보. 탈퇴 불가능");
+            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
+        }
+
+        return findUser.get();
+    }
+
 }

@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -17,34 +19,37 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
-    private String redisHost;
+    private String host;
+
+    @Value("${spring.data.redis.password}")
+    private String password;
 
     @Value("${spring.data.redis.port}")
-    private int redisPort;
+    private int port;
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory(RedissonClient redissonClient) {
-        return new RedissonConnectionFactory(redissonClient);
+    private LettuceConnectionFactory createLettuceConnectionFactory(int database) {
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        redisStandaloneConfiguration.setPassword(password);
+        redisStandaloneConfiguration.setDatabase(database);
+
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
+        lettuceConnectionFactory.afterPropertiesSet();
+
+        return lettuceConnectionFactory;
     }
 
     @Bean
-    public RedissonClient redissonClient() {
-        Config config = new Config();
-        // TODO : 2024.01.30 ssl 환경에서는 rediss로 바꿔야 한다고 한다!! https://dkswnkk.tistory.com/711
-        config.useSingleServer().setAddress("redis://" + redisHost + ":" + redisPort);
-        return Redisson.create(config);
-    }
-
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-
-        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        redisTemplate.setEnableTransactionSupport(true);
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(createLettuceConnectionFactory(0));
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         return redisTemplate;
     }
+
+
 
 
 }

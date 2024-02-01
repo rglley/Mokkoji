@@ -59,6 +59,13 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
+    @Builder
+    public User(String email, String name, String image) {
+        this.email = email;
+        this.name = name;
+        this.image = image;
+    }
+
     @Builder(builderMethodName = "updateBuilder")
     public User(String name, String image) {
         this.name = name;
