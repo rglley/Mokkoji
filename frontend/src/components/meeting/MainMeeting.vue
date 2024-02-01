@@ -235,7 +235,7 @@
               <button
                 id="button-quit"
                 class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl text-r-md"
-                @click="leaveMeeting"
+                @click="leaveMainMeeting"
               >
                 나가기
               </button>
@@ -272,10 +272,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import html2canvas from 'html2canvas'
-import router from '../../router'
 import axios from 'axios'
 import UserList from './UserList.vue'
 import UserVideo from './UserVideo.vue'
@@ -302,7 +302,6 @@ import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
-import { useRouter } from 'vue-router'
 
 const props = defineProps({
   sessionId: {
@@ -312,10 +311,13 @@ const props = defineProps({
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
 
+const router = useRouter()
+
 const videoWidth = window.screen.width * 0.65
 const videoHeight = window.screen.height * 0.9
 
-const sessionId = ref()
+const sessionId = ref(null)
+
 const isGrid = ref(false)
 const isMic = ref(true)
 const isMicModal = ref(false)
@@ -432,7 +434,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: props.sessionId === 'host' ? '' : props.sessionId,
+  mySessionId: props.sessionId,
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -443,13 +445,55 @@ const state = reactive({
 
 // 세션 참가하기
 const joinSession = () => {
-  // 1) Openvidu 객체 생성
+  // 1) 세션 형식 확인
+  if (props.sessionId.slice(0, 4) !== 'ses_' || props.sessionId.length != 14) {
+    emit('leave-meeting')
+    router.push('/errorsession')
+  }
+
+  for (let idx = 4; idx < 14; idx++) {
+    if (props.sessionId.charCodeAt(idx) < 48) router.push('/errorsession')
+    else if (props.sessionId.charCodeAt(idx) > 57 && props.sessionId.charCodeAt(idx) < 65)
+      router.push('/errorsession')
+    else if (props.sessionId.charCodeAt(idx) > 90 && props.sessionId.charCodeAt(idx) < 97)
+      router.push('/errorsession')
+    else if (props.sessionId.charCodeAt(idx) > 122) router.push('/errorsession')
+  }
+
+  // 2) Openvidu 객체 생성
   state.OV = new OpenVidu()
 
-  // 2) 세션 시작
+  // 3) 세션 시작
   state.session = state.OV.initSession()
 
-  // 3) 세션에서 이벤트 발생 시 동작하는 행동 구체화
+  // 4) 유효한 사용자 토큰으로 세션에 연결하기
+
+  getToken(state.mySessionId)
+    .then((token) => {
+      state.session.connect(token, { clientData: state.myUserName }).then(() => {
+        let publisher = state.OV.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
+          allowTranscoding: true,
+          resolution: `${videoWidth}x${videoHeight}`,
+          frameRate: 30,
+          insertMode: 'APPEND',
+          mirror: false
+        })
+
+        state.mainStreamManager = publisher
+        state.publisher = publisher
+        state.subscribers.push(publisher)
+        sessionId.value = state.session.sessionId
+
+        state.session.host = state.session.publish(publisher)
+      })
+    })
+    .catch((error) => {
+      console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
+    })
 
   // 비동기 예외
   state.session.on('exception', ({ exception }) => {
@@ -485,48 +529,30 @@ const joinSession = () => {
   state.session.on('connectionCreated', (event) => {
     const user = {
       name: JSON.parse(event.connection.data).clientData,
-      connectionId: event.connection.connectionId
+      connection: event.connection
     }
     connectedUser.value.push(user)
   })
 
   // 소그룹 생성
   state.session.on('signal:group', (event) => {
-    router.push(`groupmeeting/${props.sessionId}`)
+    emit('create-group-meeting', { sessionId: sessionId.value, groupSessionId: event.data })
+
+    // 바로 route하면 안될듯
+    // router.push(`/groupmeeting/${event.data}`)
+
+    if (state.session) {
+      state.session.disconnect()
+
+      state.session = undefined
+      state.mainStreamManager = undefined
+      state.publisher = undefined
+      state.subscribers = []
+      state.OV = undefined
+    }
   })
 
-  // 4) 유효한 사용자 토큰으로 세션에 연결하기
-
-  getToken(state.mySessionId)
-    .then((token) => {
-      state.session.connect(token, { clientData: state.myUserName }).then(() => {
-        let publisher = state.OV.initPublisher(undefined, {
-          audioSource: undefined,
-          videoSource: undefined,
-          publishAudio: true,
-          publishVideo: true,
-          allowTranscoding: true,
-          resolution: `${videoWidth}x${videoHeight}`,
-          frameRate: 30,
-          insertMode: 'APPEND',
-          mirror: false
-        })
-
-        state.mainStreamManager = publisher
-        state.publisher = publisher
-        state.subscribers.push(publisher)
-        sessionId.value = state.session.sessionId
-
-        state.session.host = state.session.publish(publisher)
-      })
-    })
-    .catch((error) => {
-      console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
-    })
-
-  // OpenVidu 배포에서 토큰 가져오기
-
-  window.addEventListener('beforeunload', leaveMeeting)
+  window.addEventListener('beforeunload', leaveMainMeeting)
 }
 
 // 세션 생성
@@ -563,9 +589,9 @@ const getToken = async (mySessionId) => {
   return await createToken(sessionId)
 }
 
-const leaveMeeting = (event) => {
-  event.preventDefault()
-  event.returnValue = ''
+const leaveMainMeeting = (event) => {
+  // event.preventDefault()
+  // event.returnValue = ''
 
   if (state.session) {
     state.session.disconnect()
@@ -588,29 +614,37 @@ const updateMainVideoStreamManager = (stream) => {
   state.mainStreamManager = stream
 }
 
-const sendMessage = (event) => {
+const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
-    // OpenVidu 시그널링 서버를 통해 채팅 메시지를 보낸다.
+    // OpenVidu 시그널링 서버를 통해 채팅 메시지 보내기
     state.session.signal({
       data: chatMessage.value,
       to: [],
       type: 'chat' // 채팅 메시지 타입
     })
-    chatMessage.value = '' // 메시지 전송 후 입력 필드 비우기
+
+    chatMessage.value = ''
   }
 }
 
 const createGroupMeeting = (userList) => {
-  emit('create-group-meeting', { sessionId: sessionId.value })
+  // 소그룹 세션 생성
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+  let randomSession = 'group_ses_'
+
+  for (let idx = 0; idx < 10; idx++) {
+    randomSession += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
 
   connectedUser.value.forEach((user) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
     const userIndex = foundUser ? userList.value.indexOf(foundUser) : -1
 
     if (userIndex !== -1) {
-      console.log('find@@@@@@@@@@@@@')
       state.session.signal({
-        to: [user.connectionId],
+        data: randomSession,
+        to: [user.connection],
         type: 'group'
       })
     }
@@ -620,11 +654,7 @@ const createGroupMeeting = (userList) => {
 onMounted(() => {
   joinSession()
 
-  window.addEventListener('beforeunload', leaveMeeting)
-})
-
-onBeforeUnmount(() => {
-  window.addEventListener('beforeunload', leaveMeeting)
+  window.addEventListener('beforeunload', leaveMainMeeting)
 })
 </script>
 

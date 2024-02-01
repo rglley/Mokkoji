@@ -8,6 +8,7 @@ import MyDetail from '@/components/mypage/MyDetail.vue'
 import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
+import ErrorSession from '@/components/common/ErrorSession.vue'
 import EditPage from '@/views/EditView.vue'
 import HandleCallback from '@/components/common/HandleCallback.vue'
 
@@ -80,6 +81,11 @@ const router = createRouter({
       path: '/404',
       name: 'Error404',
       component: Error404
+    },
+    {
+      path: '/errorsession',
+      name: 'Errorsession',
+      component: ErrorSession
     }
   ]
 })

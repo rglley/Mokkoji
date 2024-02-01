@@ -216,7 +216,7 @@ const showModal = () => {
 const submitConferenceId = () => {
   console.log(conferenceIdInput.value)
 
-  router.push(`/meeting/${conferenceIdInput.value}`)
+  router.push(`/mainmeeting/${conferenceIdInput.value}`)
   // id input을 백엔드 서버로 axios 전송
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
@@ -238,7 +238,16 @@ const submitConferenceId = () => {
 }
 
 const createMeeting = () => {
-  router.push('/mainmeeting/host')
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+  let randomSession = 'ses_'
+
+  for (let idx = 0; idx < 10; idx++) {
+    randomSession += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+
+  router.push(`/mainmeeting/${randomSession}`)
+
   // if (isLogin.value) {
   //   router.push('/mainmeeting/host')
   // } else {

@@ -89,7 +89,6 @@ const handleUserChecked = (checkedUser) => {
         checkedUserList.value.splice(index, 1)
       }
     })
-    console.log(checkedUserList.value)
   }
 }
 

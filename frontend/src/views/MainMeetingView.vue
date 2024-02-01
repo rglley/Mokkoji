@@ -13,7 +13,8 @@ const router = useRouter()
 
 const createGroupMeeting = (payload) => {
   router.push({
-    path: `/groupmeeting/${payload.sessionId}`
+    path: `/groupmeeting/${payload.sessionId}`,
+    props: { groupSessionId: payload.groupSessionId }
   })
 }
 
