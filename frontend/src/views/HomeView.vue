@@ -19,7 +19,7 @@
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
           <div class="grid place-content-center my-20 w-2/3">
             <button
-              class="ml-2 py-2 rounded-xl hover:bg-spot-purple hover:text-white duration-300 w-60"
+              class="my-2 py-2 rounded-xl hover:bg-spot-purple hover:text-white duration-300 w-60"
               @click="createMeeting"
             >
               화상 모임 생성하기
@@ -35,12 +35,12 @@
                   @keyup.enter="submitConferenceId"
                   class="pl-10 w-60 border-2 border-slate-500 rounded-xl"
                 />
-                <div class="absolute top-2 right-2">
+                <div class="absolute -top-[0.5vh] right-1">
                   <button
                     @click="submitConferenceId"
                     class="rounded-full size-8 mt-2 z-10 bg-primary hover:bg-primary3 duration-300"
                   >
-                    <img src="@/assets/landing/send.png" class="ml-[6px]" />
+                    <img src="@/assets/landing/send.png" />
                   </button>
                 </div>
                 <ModalView v-if="isModal" :show-modal="isModal" @close-modal="showModal">
@@ -173,8 +173,10 @@
 
     <!--logo-->
     <section class="flex items-center justify-center py-20 bg-primary2">
-      <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요?</h1>
-      <button @click="toTop" class="animate-spin">처음으로 돌아가기</button>
+      <img src="@/assets/logo/mokkoji_logo.png" class="w-[25vh] px-[5vh]">
+
+      <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요? </h1>
+      <button @click="toTop" class="ml-[3vh] animate-bounce">처음으로 돌아가기</button>
     </section>
   </main>
 </template>

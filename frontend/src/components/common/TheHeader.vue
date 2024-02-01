@@ -1,6 +1,5 @@
 <template>
-  <header class="relative h-32 top-0 z-10 w-full bg-[#fbf8f4]">
-    <!-- <nav class="w-full bg-opacity-35 p-2 bg-primary flex pl-5"> -->
+  <header :class="{ 'transparent-header': isTransparent }" class="fixed h-32 z-10 my-auto w-full bg-transparent">
     <nav class="w-full flex pl-5">
       <a href="/" class="flex items-center rtl:l:space-x-reverse">
         <img
@@ -11,7 +10,7 @@
         <!-- <span id="title-bold">모꼬지</span> -->
       </a>
 
-      <div class="ml-auto mr-10 self-center">
+      <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <li>
             <button id="button-header"><a href="/">HOME</a></button>
@@ -26,14 +25,14 @@
           <li v-else>
             <button
               id="button-header"
-              data-dropdown-toggle="dropdownHover"
-              data-dropdown-trigger="hover"
+              data-dropdown-toggle="dropdown"
+              data-dropdown-trigger="click"
               to="/mypage"
             >
               내 서비스
             </button>
             <div
-              id="dropdownHover"
+              id="dropdown"
               class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
             >
               <ul aria-labelledby="dropdownHoverButton" class="w-50">
@@ -41,7 +40,7 @@
                   <router-link to="mypage">마이페이지</router-link>
                 </li>
                 <li id="li-dropdown">
-                  <a href="eventlist">내 결과물</a>
+                  <router-link to="eventlist">내 결과물</router-link>
                 </li>
                 <li id="li-dropdown">
                   <a @click="logout">로그아웃</a>
@@ -68,6 +67,7 @@ const store = useUserStore()
 
 const isLogin = ref(true)
 const isLoginModal = ref(false)
+const isTransparent = ref(false)
 
 const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
@@ -77,9 +77,27 @@ const logout = () => {
   isLogin.value = false
 }
 
+const limitHeight = 500;
+
+const handleScroll = () => {
+  if (scrollY > limitHeight)
+    isTransparent.value = true;
+  if (scrollY < limitHeight)
+    isTransparent.value = false;
+}
+
 onMounted(() => {
   initFlowbite()
+  window.addEventListener('scroll', handleScroll);
 })
 </script>
 
-<style></style>
+<style>
+.transparent-header {
+  @apply opacity-0 transition-opacity duration-500
+}
+
+li {
+  @apply m-2 p-5
+}
+</style>
