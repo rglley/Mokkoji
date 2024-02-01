@@ -27,7 +27,7 @@
           <div class="flex-auto w-max m-5">
             <label>
               <!-- <img id="image-profile" src="{{ image }}" /> -->
-              <img id="image-profile" src="@/assets/dummy_profile.jpg" />
+              <img id="image-profile" src="@/assets/landing/dummy_profile.jpg" />
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
