@@ -10,9 +10,9 @@ COPY package*.json .
 #COPY ./public ./public
 #COPY ./.next/static ./static
 
-ADD src .
+#ADD src .
 
-RUN npm install
+#RUN npm install
 
 # 시스템 사용자 및 그룹 설정
 #RUN addgroup --system --gid 1001 nodejs \
@@ -22,8 +22,8 @@ RUN npm install
 #USER nextjs
 
 # 애플리케이션에 할당할 포트
-EXPOSE 5173
-#EXPOSE 3000
+#EXPOSE 5173
+EXPOSE 3000
 
 # 애플리케이션 실행 명령어
 CMD ["node", "main.js"]

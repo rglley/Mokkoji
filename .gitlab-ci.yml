@@ -30,14 +30,8 @@ frontend-build:
   stage: frontend-build
   image: node:18-alpine
   script:
-    - pwd
-    - ls
     - cd frontend
-    - pwd
-    - ls
     - npm install
-    - pwd
-    - ls
     - npm run build
   #    - npm install -g pnpm
   #    - pnpm install --production=false
