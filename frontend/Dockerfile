@@ -12,6 +12,8 @@ COPY package*.json .
 
 ADD src .
 
+RUN npm install
+
 # 시스템 사용자 및 그룹 설정
 #RUN addgroup --system --gid 1001 nodejs \
 #    && adduser --system --uid 1001 nextjs
