@@ -74,10 +74,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String newRefreshToken = jwtUtil.createRefreshToken();
         loginUser.updateRefreshToken(newRefreshToken);
         userRepository.saveAndFlush(loginUser);
-        log.info("RefreshToken 갱신, {}", newRefreshToken);
 
         String newAccessToken = jwtUtil.createAccessToken(loginUser.getProvider().getKey(), loginUser.getEmail());
-        log.info("AccessToken 재발급, {}", newAccessToken);
 
         jwtUtil.sendAccessAndRefreshToken(response, newAccessToken, newRefreshToken);
     }
@@ -107,7 +105,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throw new JwtException("존재하지 않는 회원의 토큰입니다");
         }
 
-        log.info("인증 허가 저장");
         User varifyUSer = findUser.get();
         AuthUserDto authUser = AuthUserDto.builder()
                 .userNo(varifyUSer.getId())

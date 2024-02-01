@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    //add, get, edit, remove
+
     private final UserServiceImpl userServiceImpl;
     private final JwtUtil jwtService;
 
@@ -28,7 +28,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        UpdatePageResDto updatePageResDto = userServiceImpl.readUpdatePage(provider, email);
+        UpdatePageResDto updatePageResDto = userServiceImpl.getUpdatePage(provider, email);
 
         return new ResponseEntity<>(updatePageResDto, HttpStatus.OK);
     }
@@ -38,7 +38,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        MyPageResDto myPageResDto = userServiceImpl.readMypage(provider, email);
+        MyPageResDto myPageResDto = userServiceImpl.getMypage(provider, email);
 
         return new ResponseEntity<>(myPageResDto, HttpStatus.OK);
     }

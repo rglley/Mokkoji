@@ -19,14 +19,14 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     @Size(max = 30)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Size(max = 10)
     private String name;
 
@@ -42,6 +42,7 @@ public class User {
     private Record record;
 
     // TODO : reddis로 관리
+    @Column(length = 100)
     @Size(max = 100)
     private String refreshToken;
 
@@ -64,21 +65,13 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public User(String email, String name, String image) {
-        this.email = email;
+    @Builder(builderMethodName = "updateBuilder")
+    public User(String name, String image) {
         this.name = name;
         this.image = image;
     }
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    public void updateUser(String provider, String email, String name, String image, Authority authority) {
-        this.provider = Provider.valueOf(provider);
-        this.email = email;
-        this.name = name;
-        this.image = image;
-        this.authority = authority;
     }
 }

@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService{
     private final AccountRepository accountRepository;
     private final JwtUtil jwtService;
 
-    public UpdatePageResDto readUpdatePage(String provider, String email) {
+    @Override
+    public UpdatePageResDto getUpdatePage(String provider, String email) {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
@@ -44,7 +45,8 @@ public class UserServiceImpl implements UserService{
                 userAccount.getBank(), userAccount.getNumber());
     }
 
-    public MyPageResDto readMypage(String provider, String email) {
+    @Override
+    public MyPageResDto getMypage(String provider, String email) {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
@@ -64,6 +66,7 @@ public class UserServiceImpl implements UserService{
                 record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
     }
 
+    @Override
     public void createUser(String provider, String email, UserInputReqDto userInputReqDto) {
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
@@ -77,7 +80,15 @@ public class UserServiceImpl implements UserService{
         }
 
         String refreshToken = jwtService.createRefreshToken();
-        User newUser = new User(provider, email, userInputReqDto.getName(), userInputReqDto.getImage(), Authority.USER, refreshToken);
+
+        User newUser = User.builder()
+                .provider(provider)
+                .email(email)
+                .name(userInputReqDto.getName())
+                .image(userInputReqDto.getImage())
+                .authority(Authority.USER)
+                .refreshToken(refreshToken)
+                .build();
 
         userRepository.save(newUser);
 
@@ -85,13 +96,17 @@ public class UserServiceImpl implements UserService{
         String accountNumber = userInputReqDto.getAccountNumber();
 
         if (bank != null && accountNumber != null) {
-            UserAccount userAccount = newUser.getUserAccount();
-            userAccount.toEntity(newUser, bank, accountNumber);
+            UserAccount userAccount = UserAccount.builder()
+                    .user(newUser)
+                    .bank(bank)
+                    .number(accountNumber)
+                    .build();
 
             accountRepository.save(userAccount);
         }
     }
 
+    @Override
     public void updateUser(String provider, String email, UserInputReqDto modifyDto) {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
@@ -105,18 +120,26 @@ public class UserServiceImpl implements UserService{
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
-        updateUser.updateUser(provider, email, name, image, Authority.USER);
+        updateUser = User.updateBuilder()
+                .name(name)
+                .image(image)
+                .build();
+
 
         userRepository.save(updateUser);
 
         if (bank != null && accountNumber != null) {
-            UserAccount userAccount = new UserAccount();
-            userAccount.toEntity(findUser.get(), bank, accountNumber);
+            UserAccount userAccount = UserAccount.builder()
+                    .user(findUser.get())
+                    .bank(bank)
+                    .number(accountNumber)
+                    .build();
 
             accountRepository.save(userAccount);
         }
     }
 
+    @Override
     public User deleteUser(String provider, String email) {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 

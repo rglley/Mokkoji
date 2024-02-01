@@ -2,17 +2,13 @@ package online.mokkoji.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "account")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserAccount {
 
     @Id
@@ -24,20 +20,18 @@ public class UserAccount {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Size(max = 10)
     private String bank;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     @Size(max = 20)
     private String number;
 
-
-    public UserAccount toEntity(User user, String bank, String number) {
-        return UserAccount.builder()
-                .user(user)
-                .bank(bank)
-                .number(number)
-                .build();
+    @Builder
+    public UserAccount (User user, String bank, String number) {
+        this.user = user;
+        this.bank = bank;
+        this.number = number;
     }
 }
