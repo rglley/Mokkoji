@@ -480,6 +480,12 @@ const joinSession = () => {
     }
   })
 
+  // 소그룹 생성
+  state.session.on('create-group-meeting', ({ userList }) => {
+    console.log('groupMeetingCreated!!!!!!!!!!!!!!')
+    console.log(userList.value)
+  })
+
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
 
   getToken(state.mySessionId)
@@ -545,7 +551,6 @@ const createToken = async (sessionId) => {
 
 const getToken = async (mySessionId) => {
   const sessionId = await createSession(mySessionId)
-  console.log(sessionId)
   return await createToken(sessionId)
 }
 
@@ -585,8 +590,14 @@ const sendMessage = (event) => {
   }
 }
 
-const createGroupMeeting = () => {
+const createGroupMeeting = (userList) => {
   emit('create-group-meeting', { sessionId: sessionId.value })
+
+  state.session.signal({
+    userList: userList.value,
+    to: [],
+    type: 'userList'
+  })
 
   if (state.session) {
     state.session.disconnect()

@@ -26,12 +26,14 @@
             />
             <div class="w-full h-[80%] flex flex-col justify-start items-center">
               <user-list
-                v-for="sub in subscribers"
+                v-for="(sub, idx) in subscribers"
                 :key="sub"
+                :user-index="idx"
                 :stream-manager="sub"
                 :search-user-name="searchUserName"
                 :button-type="buttonType"
-                class="mb-[1vh] w-[95%] h-[20%] border-sm border-purple-300 rounded-r-md"
+                @user-checked="handleUserChecked"
+                @user-unchecked="handleUserChecked"
               />
             </div>
           </div>
@@ -47,9 +49,9 @@
       </div>
       <div class="h-[5%] flex justify-end">
         <button
-          id="submit-button"
+          id="create-button"
           class="w-[6vw] h-[6vh] bg-purple-200 font-bold text-r-sm text-center rounded-r-lg"
-          @click="$emit('create-group-meeting')"
+          @click="createGroupMeeting"
         >
           생성하기
         </button>
@@ -72,9 +74,28 @@ const props = defineProps({
   }
 })
 
-defineEmits(['remove-group-modal']['create-group-meeting'])
+const emit = defineEmits(['remove-group-modal']['create-group-meeting'])
 
 const searchUserName = ref('')
+const checkedUserList = ref([])
+
+const handleUserChecked = (checkedUser) => {
+  if (checkedUser.userName !== undefined) {
+    checkedUserList.value.push(checkedUser)
+    console.log(checkedUserList.value)
+  } else {
+    checkedUserList.value.forEach((user, index) => {
+      if (user.userIndex === checkedUser.userIndex) {
+        checkedUserList.value.splice(index, 1)
+      }
+    })
+    console.log(checkedUserList.value)
+  }
+}
+
+const createGroupMeeting = () => {
+  emit('create-group-meeting', checkedUserList)
+}
 </script>
 
 <style>
