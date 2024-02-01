@@ -3,24 +3,17 @@ package online.mokkoji.common.auth.oauth2.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
-import online.mokkoji.common.auth.oauth2.OAuth2Config;
 import online.mokkoji.common.auth.oauth2.dto.response.UserInfoResDto;
 import online.mokkoji.common.auth.oauth2.service.OAuth2Service;
 import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
-import java.util.UUID;
 
 
 @RestController
@@ -49,7 +42,7 @@ public class OAuth2Controller {
             }
 
             String refreshToken = jwtUtil.createRefreshToken();
-            User loginUser = userRepository.findByProviderAndEmail(Provider.naver, email).get();
+            User loginUser = userRepository.findByProviderAndEmail(Provider.NAVER, email).get();
             loginUser.updateRefreshToken(refreshToken);
             userRepository.save(loginUser);
 

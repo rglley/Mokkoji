@@ -1,14 +1,9 @@
 package online.mokkoji.common.auth.oauth2.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
-import online.mokkoji.common.auth.jwt.util.JwtUtil;
-import online.mokkoji.common.auth.oauth2.OAuth2Config;
+import online.mokkoji.common.auth.oauth2.config.OAuth2Config;
 import online.mokkoji.common.auth.oauth2.dto.response.UserInfoResDto;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.CommonErrorCode;
@@ -17,7 +12,6 @@ import online.mokkoji.user.domain.Authority;
 import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,14 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +30,6 @@ public class Oauth2ServiceImpl implements OAuth2Service {
     private final OAuth2Config oAuth2Config;
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
-
     @Override
     public UserInfoResDto getNaverUserInfo(String authorizationCode) throws Exception {
         if(authorizationCode == null)
@@ -80,12 +66,12 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         String image = profileJSON.get("profile_image").asText();
 
 
-        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.naver, email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.NAVER, email);
 
         if(findUser.isEmpty()) {
             User guestUser = User.builder()
                     .authority(Authority.GUEST)
-                    .provider(Provider.naver)
+                    .provider(Provider.NAVER)
                     .email(email)
                     .name(name)
                     .image(image)

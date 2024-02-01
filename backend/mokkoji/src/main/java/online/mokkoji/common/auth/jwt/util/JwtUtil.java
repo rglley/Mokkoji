@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.config.JwtConfig;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -53,13 +54,6 @@ public class JwtUtil {
                 .sign(Algorithm.HMAC512(jwtConfig.getSecretKey()));
     }
 
-    public void sendAccessToken(HttpServletResponse response, String accessToken) {
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        response.setHeader(jwtConfig.getAccessHeader(), accessToken);
-        log.info("AccessToken 재발급, 재발급된 Access Token : {}", accessToken);
-    }
-
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
 
@@ -78,14 +72,12 @@ public class JwtUtil {
 
     public Optional<String> extractProvider(String accessToken) {
         try {
-            // 토큰 유효성 검사에 사용할 알고리즘이 있는 JWT verifier builder 반환
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(jwtConfig.getSecretKey()))
-                    .build() //JWT verifier 생성
+                    .build()
                     .verify(accessToken)
                     .getClaim(PROVIDER_CLAIM)
                     .asString());
         } catch (Exception e) {
-            log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
     }
@@ -98,7 +90,6 @@ public class JwtUtil {
                     .getClaim(EMAIL_CLAIM)
                     .asString());
         } catch (Exception e) {
-            log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
     }
@@ -112,10 +103,26 @@ public class JwtUtil {
     }
 
     public String getProvider(HttpServletRequest req) {
+        if(extractAccessToken(req).isEmpty()) {
+            throw new JwtException("accessToken을 찾을 수 없습니다.");
+        }
+
+        if(extractProvider(extractAccessToken(req).get()).isEmpty()) {
+            throw new JwtException("provider를 찾을 수 없습니다.");
+        }
+
         return extractProvider(extractAccessToken(req).get()).get();
     }
 
     public String getEmail(HttpServletRequest req) {
+        if(extractAccessToken(req).isEmpty()) {
+            throw new JwtException("accessToken을 찾을 수 없습니다.");
+        }
+
+        if(extractEmail(extractAccessToken(req).get()).isEmpty()) {
+            throw new JwtException("email을 찾을 수 없습니다.");
+        }
+
         return extractEmail(extractAccessToken(req).get()).get();
     }
 }

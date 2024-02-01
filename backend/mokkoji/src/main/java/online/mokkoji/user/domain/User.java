@@ -11,9 +11,9 @@ import java.util.List;
 @Table(name = "users") //h2만 user 사용 불가능
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(of = {"id", "email", "name", "image"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -36,9 +36,6 @@ public class User {
     private Authority authority;
 
     private String image;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<Event> events;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserAccount userAccount;

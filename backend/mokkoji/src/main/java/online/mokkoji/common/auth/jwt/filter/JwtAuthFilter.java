@@ -27,17 +27,14 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-//OncePerRequestFilter : 요청당 한 번만 필터 적용되게 하는 Spring Security 추상 클래스
 public class JwtAuthFilter extends OncePerRequestFilter {
-    //토큰 인증이 필요 없는 요청 : 회의참가(추가 필요)
     private static final String MAIN_URL = "/";
     private static final String JOIN_URL = "/signup";
-    private static final String LOGIN_URL = "/users/login";
+    private static final String LOGIN_URL = "/oauth2/login";
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-    //Spring Security 사용자 인증 권한 매퍼
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
@@ -45,8 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
                 request.getRequestURI().equals(LOGIN_URL)){
-            log.info("JWT 인증 불필요한 요청 접수, JwtAuthFilter 종료");
-            filterChain.doFilter(request, response); //JwtAuthFilter 다음 필터 호출
+            filterChain.doFilter(request, response);
             return;
         }
 
@@ -55,15 +51,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .orElse(null);
 
         if (refreshToken != null) {
-            log.info("AccessToken 재발급 요청, 검증 진행 X RefreshToken : {}", refreshToken);
             checkAndUpdateToken(response, refreshToken);
             filterChain.doFilter(request, response);
             return;
         }
 
         if (refreshToken == null) {
-            log.info("AccessToken 검증");
-            checkValidity(request, response, filterChain);
+            checkValidity(request);
             filterChain.doFilter(request, response);
         }
     }
@@ -73,7 +67,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Optional<User> findUser = userRepository.findByRefreshToken(refreshToken);
 
         if (findUser.isEmpty()) {
-            log.error("RefreshToken에 해당하는 회원 정보 존재 X, AccessToken 재발급 불가능");
             throw new JwtException("RefreshToken is not valid");
         }
 
@@ -90,14 +83,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
 
-    public void checkValidity(HttpServletRequest req, HttpServletResponse resp,
-                              FilterChain filterChain) throws ServletException, IOException {
+    public void checkValidity(HttpServletRequest req) throws ServletException, IOException {
 
-        log.info("AccessToken 유효성 검사 진행");
         Optional<String> extractAccessToken = jwtUtil.extractAccessToken(req);
 
         if (extractAccessToken.isEmpty()) {
-            log.error("유효하지 않은 AccessToken!");
             throw new JwtException("헤더에서 AccessToken을 찾을 수 없습니다.");
         }
 
@@ -106,7 +96,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Optional<String> extractEmail = jwtUtil.extractEmail(accessToken);
 
         if (extractEmail.isEmpty() || extractProvider.isEmpty()) {
-            log.error("유효하지 않은 AccessToken!");
             throw new JwtException("AccessToken claim이 올바르지 않습니다");
         }
 
@@ -115,7 +104,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
         if (findUser.isEmpty()) {
-            log.error("회원 정보를 찾을 수 없습니다!");
             throw new JwtException("존재하지 않는 회원의 토큰입니다");
         }
 
@@ -132,20 +120,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     public void saveAuthentication(AuthUserDto user) {
-        //UserDetails : Spring Security의 사용자 세부 정보를 나타내는 인터페이스
         UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getProvider())
                 .roles(user.getRole())
                 .build();
 
-        //Authentication : 사용자 인증 정보를 나타내는 인터페이스
         Authentication authentication =
-                //UsernamePasswordAuthenticationToken : 사용자 이름, 비밀번호를 사용해 인증을 나타내는 가장 일반적인 형태
                 new UsernamePasswordAuthenticationToken(userDetailsUser, user.getProvider(),
                         authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
-        //인증 정보가 Authentication에, Authentication이 SecurityContext에, SecutiryContext가 SecurityContextHolder에 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

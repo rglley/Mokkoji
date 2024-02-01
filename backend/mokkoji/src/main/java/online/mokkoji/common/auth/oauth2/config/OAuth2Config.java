@@ -1,4 +1,4 @@
-package online.mokkoji.common.auth.oauth2;
+package online.mokkoji.common.auth.oauth2.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
