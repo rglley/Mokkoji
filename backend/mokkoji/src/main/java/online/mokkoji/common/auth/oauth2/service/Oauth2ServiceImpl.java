@@ -91,10 +91,10 @@ public class Oauth2ServiceImpl implements OAuth2Service {
                     .image(image)
                     .build();
 
-            return new UserInfoResDto("naver", email, name, image, false);
+            return new UserInfoResDto("naver", email, name, image, true);
         }
 
-        return new UserInfoResDto("naver", email, name, image, true);
+        return new UserInfoResDto("naver", email, name, image, false);
     }
 
     @Override
