@@ -1,5 +1,10 @@
 // import '../src/style.css'
-import './style.css'
+// import './style.css'
+if (import.meta.env.MODE !== 'ssr') {
+    import('path-to-your/style.css').then((module) => {
+        // You can use the `module` object if needed
+    });
+}
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'
