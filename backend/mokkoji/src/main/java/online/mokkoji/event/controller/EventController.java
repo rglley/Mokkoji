@@ -59,7 +59,7 @@ public class EventController {
         log.info("photo : {}", photoToRedis.toString());
         resultService.createPhoto(photoToRedis);
 
-        return new ResponseEntity<>("사진 저장 완료", HttpStatus.OK);
+        return new ResponseEntity<>("사진 업로드 완료", HttpStatus.OK);
     }
 
     //롤링페이퍼 저장

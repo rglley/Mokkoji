@@ -2,19 +2,17 @@ package online.mokkoji.result.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.user.domain.User;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"title", "content", "status"})
+@ToString(of = {"name", "content", "status"})
 public class Result {
 
     @Id
@@ -30,7 +28,7 @@ public class Result {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(nullable = false, length = 15)
+    @Column(length = 15)
     @Size(max = 15)
     private String name;
 
@@ -38,7 +36,7 @@ public class Result {
     @Size(max = 40)
     private String content;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     @Size(max = 100)
     private String image;
 
@@ -53,10 +51,12 @@ public class Result {
     private Photomosaic photomosaic;
 
     @OneToMany(mappedBy = "resultId")
-    private List<Photo> photoList;
+    private List<Photo> photoList = new LinkedList<>();
 
+    @Builder
     public Result(Event event) {
         this.event = event;
+        event.setResult(this);
     }
 
 

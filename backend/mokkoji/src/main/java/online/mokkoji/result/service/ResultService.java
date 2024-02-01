@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface ResultService {
     //create, read, update, delete
-    Map<String, Object> readResult(String provider, String email);
+    Map<String, Object> getResultMap(String provider, String email);
 
     void createPhoto(Photo photo);
 
@@ -16,4 +16,6 @@ public interface ResultService {
     void saveRemainingPhotos();
 
     void saveRemainingMessages();
+
+    Map<String, Object> getPhotoAndMessageMap(Long resultId);
 }

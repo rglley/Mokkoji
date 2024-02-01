@@ -3,11 +3,14 @@ package online.mokkoji.result.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.common.exception.RestApiException;
+import online.mokkoji.common.exception.errorCode.ResultErrorCode;
 import online.mokkoji.result.domain.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.dto.response.MemoryResDto;
 import online.mokkoji.result.dto.response.RecollectionResDto;
+import online.mokkoji.result.dto.response.RollingpaperResDto;
 import online.mokkoji.result.repository.MessageRepository;
 import online.mokkoji.result.repository.PhotoRepository;
 import online.mokkoji.result.repository.ResultRepository;
@@ -16,10 +19,7 @@ import org.redisson.api.RMapCache;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -34,7 +34,7 @@ public class ResultServiceImpl implements ResultService {
     private final MessageRepository messageRepository;
 
     @Override
-    public Map<String, Object> readResult(String provider, String email) {
+    public Map<String, Object> getResultMap(String provider, String email) {
         List<Result> resultList = resultRepository.findAllByUser_ProviderAndUser_EmailOrderByIdDesc(Provider.valueOf(provider), email);
 
         if (resultList.isEmpty())
@@ -76,7 +76,7 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public void createPhoto(Photo photo) {
-        photoRMapCache.put(photo.getUrl(), photo);
+        photoRMapCache.put(photo.getPhotoPath(), photo);
     }
 
     @Override
@@ -100,6 +100,28 @@ public class ResultServiceImpl implements ResultService {
             photoRMapCache.remove(entry);
 
         }
+    }
+
+    @Override
+    public Map<String, Object> getPhotoAndMessageMap(Long resultId) {
+        Result result = resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
+        Map<String, Object> resultMap = new HashMap<>();
+
+        RollingpaperResDto rollingpaperDto = new RollingpaperResDto();
+        rollingpaperDto.setBackgroundTemplate(result.getRollingpaper().getBackgroundTemplate());
+        rollingpaperDto.setPostitTemplate(result.getRollingpaper().getPostitTemplate());
+
+        List<String> photoPathList = new LinkedList<>();
+        for (Photo photo : result.getPhotoList()) {
+            photoPathList.add(photo.getPhotoPath());
+        }
+
+        resultMap.put("rollingpaperTemplate", rollingpaperDto);
+        resultMap.put("photoPathList", photoPathList);
+
+        return resultMap;
+
     }
 
 

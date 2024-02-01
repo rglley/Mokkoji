@@ -52,7 +52,6 @@ public class User {
     @Size(max = 100)
     private String refreshToken;
 
-    // TODO : 2024.01.29 생성자->빌더로 refactoring 필요
     public User(String provider, String email, String name, String image, Authority authority) {
         this.builder()
                 .provider(Provider.valueOf(provider))
@@ -74,13 +73,19 @@ public class User {
                 .build();
     }
 
+    @Builder(builderClassName = "builder1", builderMethodName = "shortCon")
     public User(String email, String name, String image) {
-        this.builder()
-                .email(email)
-                .name(name)
-                .image(image)
-                .build();
+//        this.builder()
+//                .email(email)
+//                .name(name)
+//                .image(image)
+//                .build();
+
+        this.email = email;
+        this.name = name;
+        this.image = image;
     }
+
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;

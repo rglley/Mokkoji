@@ -19,6 +19,14 @@ public class RollingPaper {
     @JoinColumn(name = "result_id")
     private Result result;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "background_id")
+    private BackgroundTemplate backgroundTemplate;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postit_id")
+    private PostitTemplate postitTemplate;
+
     @Column(nullable = false)
     @ColumnDefault("false")
     private boolean isEdited;

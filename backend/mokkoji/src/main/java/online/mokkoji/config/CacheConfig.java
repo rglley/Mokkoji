@@ -31,7 +31,7 @@ public class CacheConfig {
                 .writer(getPhotoMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
-                .writeBehindDelay(60000));
+                .writeBehindDelay(1000));
     }
 
     private MapWriter<String, Photo> getPhotoMapWriter() {
@@ -57,7 +57,7 @@ public class CacheConfig {
                 .writer(getMessageMapWriter())
                 .writeMode(MapOptions.WriteMode.WRITE_BEHIND)
                 .writeBehindBatchSize(5000)
-                .writeBehindDelay(2000));
+                .writeBehindDelay(1000));
     }
 
     private MapWriter<String, Message> getMessageMapWriter() {

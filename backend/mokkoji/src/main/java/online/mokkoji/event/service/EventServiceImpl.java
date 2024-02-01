@@ -48,16 +48,17 @@ public class EventServiceImpl implements EventService {
     @Override
     public String createSession(SessionReqDto sessionDto) {
 
-        User dump = new User("email", "name", "image");
-        userRepository.save(dump);
-
         //User 객체 가져오기
         // userId 없을 경우
         User user = userRepository.findById(sessionDto.getUserId())
                 .orElseThrow(() -> new RestApiException(OpenviduErrorCode.NO_USER_ID));
 
         // Event 객체 생성
-        Event event = new Event(user, sessionDto.getSessionId(), sessionDto.getStartTime());
+        Event event = Event.createSession()
+                .user(user)
+                .sessionId(sessionDto.getSessionId())
+                .startTime(sessionDto.getStartTime())
+                .build();
 
         // repository에 저장
         Event savedEvent = eventRepository.save(event);
