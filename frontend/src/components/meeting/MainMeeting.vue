@@ -302,6 +302,7 @@ import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   sessionId: {
@@ -332,6 +333,7 @@ const isChat = ref(false)
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
+const connectedUser = ref([])
 const groupVideo = ref(null)
 
 const captureScreen = () => {
@@ -480,10 +482,17 @@ const joinSession = () => {
     }
   })
 
+  state.session.on('connectionCreated', (event) => {
+    const user = {
+      name: JSON.parse(event.connection.data).clientData,
+      connectionId: event.connection.connectionId
+    }
+    connectedUser.value.push(user)
+  })
+
   // 소그룹 생성
-  state.session.on('create-group-meeting', ({ userList }) => {
-    console.log('groupMeetingCreated!!!!!!!!!!!!!!')
-    console.log(userList.value)
+  state.session.on('signal:group', (event) => {
+    router.push(`groupmeeting/${props.sessionId}`)
   })
 
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
@@ -575,6 +584,7 @@ const leaveMeeting = (event) => {
 
 const updateMainVideoStreamManager = (stream) => {
   if (state.mainStreamManager === stream) return
+  console.log('changed')
   state.mainStreamManager = stream
 }
 
@@ -593,21 +603,18 @@ const sendMessage = (event) => {
 const createGroupMeeting = (userList) => {
   emit('create-group-meeting', { sessionId: sessionId.value })
 
-  state.session.signal({
-    userList: userList.value,
-    to: [],
-    type: 'userList'
+  connectedUser.value.forEach((user) => {
+    const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
+    const userIndex = foundUser ? userList.value.indexOf(foundUser) : -1
+
+    if (userIndex !== -1) {
+      console.log('find@@@@@@@@@@@@@')
+      state.session.signal({
+        to: [user.connectionId],
+        type: 'group'
+      })
+    }
   })
-
-  if (state.session) {
-    state.session.disconnect()
-
-    state.session = undefined
-    state.mainStreamManager = undefined
-    state.publisher = undefined
-    state.subscribers = []
-    state.OV = undefined
-  }
 }
 
 onMounted(() => {
