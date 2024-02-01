@@ -4,20 +4,20 @@
       <div class="absolute y-0 right-0 size-2/4">
         <img src="@/assets/landing/wedding.svg" />
       </div>
-      <div id="container" class="mt-52 flex flex-col">
+      <div id="container" class="mt-52 flex flex-col w-1/2">
         <div
-          class="text-justify ml-12 flex flex-col w-2/3 animate-in fade-in-10 delay-1000 duration-1000"
+          class="text-justify ml-12 flex flex-col  animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-normal"
         >
           <!-- <div class="text-center"> -->
-          <h1 id="title-bold" class="ml-8 text-8xl">모꼬지</h1>
+          <h1 id="title">모꼬지</h1>
           <br />
           <p>
             화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
             없이 참여해보세요.
-          </p>
+          </p><br>
           <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
-          <div class="grid place-content-center my-20 w-2/3">
+          <div class="grid place-content-center ml-[10vh] my-20 w-2/3 text-base">
             <button
               class="my-2 py-2 rounded-xl hover:bg-purple-500 text-white duration-300 w-60 bg-purple-400"
               @click="createMeeting"
@@ -70,7 +70,9 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="mx-5 px-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의</h1>
+          <h1 id="title-sub-bold">한 마디를 간직하세요.</h1>
+
           <br />
           <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
           <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
@@ -102,7 +104,9 @@
           <img class="pl-0" src="@/assets/landing/main2.png" />
         </div>
         <div class="text-center">
-          <h2 id="title-sub-bold">포토 모자이크로 사진들을 한 눈에 구경하세요.</h2>
+          <h2 id="title-sub-bold">포토 모자이크로 사진들을</h2>
+          <h2 id="title-sub-bold">한 눈에 구경하세요.</h2>
+
           <br />
           <p id="p-main">
             포토 모자이크 기능은 서로 다른 사진들을 조합하여 하나의 이미지를 표현합니다.
@@ -130,7 +134,9 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="mx-5 text-center">
-          <h1 id="title-sub-bold">소그룹을 형성하여 친구들과 자유롭게 소통하세요.</h1>
+          <h1 id="title-sub-bold">소그룹을 형성하여 친구들과</h1>
+          <h1 id="title-sub-bold">자유롭게 소통하세요.</h1>
+
           <br />
           <p id="p-main">소그룹 기능을 이용하여 소통하고 싶은 다른 참여자들과</p>
           <p id="p-main">사적인 공간에서 자유롭게 이야기 할 수 있습니다.</p>
@@ -162,7 +168,9 @@
           <img src="@/assets/landing/main4.png" />
         </div>
         <div class="mx-5 px-5 text-center">
-          <h1 id="title-sub-bold">QR코드를 통해 축하금을 간편하게 보내세요.</h1>
+          <h1 id="title-sub-bold">QR코드를 통해 축하금을</h1>
+          <h1 id="title-sub-bold">간편하게 보내세요.</h1>
+
           <br />
           <p id="p-main">화상 모임 내에서 주최자의 계좌와 연동된 QR코드가 제공됩니다.</p>
           <p id="p-main">메세지로 다 담지 못한 축하하는 마음을 전달해보세요.</p>
@@ -175,7 +183,7 @@
     <section class="flex items-center justify-center py-20 bg-primary2">
       <img src="@/assets/logo/mokkoji_logo.png" class="w-[25vh] px-[5vh]">
 
-      <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요? </h1>
+      <h1 class="text-4xl font-bold">모꼬지를 사용하고 싶으신가요? </h1>
       <button @click="toTop" 
       class="animate-bounce duration-700 my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
       >처음으로 돌아가기</button>
