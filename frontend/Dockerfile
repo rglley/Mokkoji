@@ -10,7 +10,7 @@ COPY package.json .
 #COPY ./public ./public
 #COPY ./.next/static ./static
 
-ADD . .
+ADD src .
 
 # 시스템 사용자 및 그룹 설정
 #RUN addgroup --system --gid 1001 nodejs \
