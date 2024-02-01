@@ -12,12 +12,14 @@ const props = defineProps({
   }
 })
 
-// 사용자 데이터 가져오기
+const videoElement = ref(null)
+
 const clientData = () => {
   const { clientData } = getConnectionData()
   return clientData
 }
 
+// 사용자 데이터 가져오기
 const getConnectionData = () => {
   const { connection } = props.streamManager.stream
   return JSON.parse(connection.data)
@@ -43,11 +45,11 @@ const onSaveAs = (uri, filename) => {
   document.body.removeChild(link)
 }
 
-const videoElement = ref(null)
-
 onMounted(() => {
   if (videoElement.value && props.streamManager) {
     props.streamManager.addVideoElement(videoElement.value)
   }
 })
 </script>
+
+<style></style>

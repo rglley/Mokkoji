@@ -2,11 +2,11 @@
   <div>!!!!!!!!!!!!!</div>
 </template>
 
-<script >
+<script>
 import { onMounted } from 'vue'
-import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import axios from 'axios'
 
 export default {
   setup() {
@@ -98,5 +98,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style></style>

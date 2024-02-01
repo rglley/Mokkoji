@@ -49,12 +49,12 @@
             :key="fileName"
             class="text-gray-800 w-36 mr-2 p-1 border-2 rounded-lg flex items-center"
           >
-            <img src="@/assets/clip.png" alt="파일 클립 이미지" class="mr-1 w-4" />
+            <img src="@/assets/meeting/clip.png" alt="파일 클립 이미지" class="mr-1 w-4" />
             <span class="basis-3/4 whitespace-nowrap overflow-hidden">
               {{ fileName }}
             </span>
             <img
-              src="@/assets/delete.png"
+              src="@/assets/meeting/delete.png"
               alt="삭제 버튼 이미지"
               class="w-4 ml-auto"
               @click="removeFile(index)"

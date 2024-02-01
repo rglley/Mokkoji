@@ -52,9 +52,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const isLogin = ref(false);
+const isLogin = ref(false)
 </script>
 
-<style scoped></style>
+<style></style>

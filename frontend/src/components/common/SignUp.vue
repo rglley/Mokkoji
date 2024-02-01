@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <button class="float-right" @click="signup">회원가입</button>
+      <button class="float-right" @click="signUp">회원가입</button>
     </div>
   </div>
 </template>
@@ -65,8 +65,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const router = useRouter()
 const store = useUserStore()
@@ -74,7 +74,6 @@ const store = useUserStore()
 const name = ref('')
 const image = ref('')
 const email = ref('')
-
 const fileName = ref('')
 
 const getFileName = async (files) => {
@@ -106,7 +105,7 @@ const banks = ['KB', '농협', '기업', '카카오뱅크']
 const bank = ref('')
 const accountNumber = ref('')
 
-const signup = async () => {
+const signUp = async () => {
   await axios({
     url: 'http://localhost:8080/users',
     method: 'POST',
@@ -129,4 +128,4 @@ const signup = async () => {
 }
 </script>
 
-<style scoped></style>
+<style></style>

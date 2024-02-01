@@ -12,9 +12,9 @@ const props = defineProps({
   }
 })
 
-const mainSession = ref({ sessionId: props.mainSessionId })
-
 const emit = defineEmits(['create-meeting'])
+
+const mainSession = ref({ sessionId: props.mainSessionId })
 
 onMounted(() => {
   emit('create-meeting')

@@ -17,13 +17,9 @@
             <button id="button-header"><a href="/">HOME</a></button>
           </li>
           <li v-if="!isLogin">
-          <!-- <li v-if="store.isLogin"> -->
+            <!-- <li v-if="store.isLogin"> -->
             <button id="button-header" @click="showLoginModal">로그인</button>
-            <ModalView
-              v-if="isLoginModal"
-              :show-modal="isLoginModal"
-              @close-modal="showLoginModal"
-            >
+            <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
@@ -64,17 +60,13 @@
 import { ref, onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useUserStore } from '@/stores/user'
-
-import ModalView from '@/views/ModalView.vue'
-import LoginModal from '@/components/modal/LoginModal.vue'
 import router from '@/router'
-const store = useUserStore();
+import ModalView from '@/views/ModalView.vue'
+import LoginModal from '@/components/modal/home/LoginModal.vue'
 
-onMounted(() => {
-  initFlowbite()
-})
+const store = useUserStore()
+
 const isLogin = ref(true)
-
 const isLoginModal = ref(false)
 
 const showLoginModal = () => {
@@ -84,6 +76,10 @@ const showLoginModal = () => {
 const logout = () => {
   isLogin.value = false
 }
+
+onMounted(() => {
+  initFlowbite()
+})
 </script>
 
-<style scoped></style>
+<style></style>

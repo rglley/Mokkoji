@@ -1,7 +1,11 @@
 <template>
   <form action="" class="flex items-center">
     <div v-if="streamManager && userName.includes(props.searchUserName)" class="flex items-center">
-      <img src="@/assets/dummy_profile.jpg" alt="" class="ml-[0.5vw] w-[3vw] rounded-full" />
+      <img
+        src="@/assets/landing/dummy_profile.jpg"
+        alt=""
+        class="ml-[0.5vw] w-[3vw] rounded-full"
+      />
       <div class="ml-[1vw] text-r-sm">
         {{ userName }}
       </div>
@@ -33,12 +37,12 @@ const props = defineProps({
 
 const userName = ref('')
 
-// 사용자 데이터 가져오기
 const clientData = () => {
   const { clientData } = getConnectionData()
   userName.value = clientData
 }
 
+// 사용자 데이터 가져오기
 const getConnectionData = () => {
   const { connection } = props.streamManager.stream
   return JSON.parse(connection.data)

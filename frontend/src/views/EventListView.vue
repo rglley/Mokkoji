@@ -38,7 +38,7 @@
       <div v-if="isHoveredPhotoMosaic" data-aos="fade-up" data-aos-duration="2000">
         <div class="flex">
           <div class="w-1/4 pl-5">
-            <img src="@/assets/eventlist_page/photomosaic_ex.png" class="pt-10" />
+            <img src="@/assets/eventlist/photomosaic_ex.png" class="pt-10" />
           </div>
           <div class="w-3/4 pl-2">
             <p class="pt-20">여러 장의 사진을 색상에 맞게 배열해</p>
@@ -50,7 +50,7 @@
       <div v-if="isHoveredRollingPaper" data-aos="fade-up" data-aos-duration="2000">
         <div class="flex">
           <div class="w-1/4 pl-5">
-            <img src="@/assets/eventlist_page/rollingpaper_ex.png" class="pt-10 w-24 h-40" />
+            <img src="@/assets/eventlist/rollingpaper_ex.png" class="pt-10 w-24 h-40" />
           </div>
           <div class="w-3/4 pl-2">
             <p class="pt-20">참여자가 남긴 텍스트, 영상, 음성 메시지를</p>
@@ -62,7 +62,7 @@
       <div v-if="isHoveredBeCareful" data-aos="fade-up" data-aos-duration="2000">
         <div class="flex">
           <div class="w-1/4 pl-5">
-            <img src="@/assets/eventlist_page/warning.png" class="pt-10 w-24 h-36" />
+            <img src="@/assets/eventlist/warning.png" class="pt-10 w-24 h-36" />
           </div>
           <div class="w-3/4">
             <p class="pt-20">편집 가능 기간 (모임 주최일로부터 한 달)이 지나면</p>
@@ -118,7 +118,7 @@
           </button>
           <div>
             <img
-              src="@/assets/eventlist_page/recollection_ex.png"
+              src="@/assets/eventlist/recollection_ex.png"
               class="absolute bottom-24 right-12 w-32 h-42"
             />
           </div>
@@ -132,14 +132,13 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import IconFlowers from '@/icons/result/IconFlowers.vue'
 import IconFlowersColored from '@/icons/result/IconFlowersColored.vue'
 import MemoryList from '@/components/myevent/MemoryList.vue'
 import MemoryData from '@/temp/memory.json'
 import RecollectionData from '@/temp/recollection.json'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
-
-import { ref, onMounted } from 'vue'
 
 const isHoveredPhotoMosaic = ref(false)
 const isHoveredRollingPaper = ref(false)
@@ -151,7 +150,6 @@ const isShownTwo = ref(false)
 const isNotShownTwo = ref(true)
 
 const hoverPhotomosaic = () => {
-  console.log('showmodalone')
   isHoveredPhotoMosaic.value = true
   isHoveredRollingPaper.value = false
   isHoveredBeCareful.value = false
@@ -169,16 +167,10 @@ const hoverBeCareful = () => {
   isHoveredBeCareful.value = true
 }
 
-const showModalTwo = () => {
-  isOpenTwo.value = !isOpenTwo.value
-}
-
 const setShow = () => {
   setTimeout(() => {
     isShown.value = true
     isNotShown.value = false
-    console.log(isShown.value)
-    console.log(isNotShown.value)
   }, 500)
 }
 
@@ -186,18 +178,16 @@ const setShowTwo = () => {
   setTimeout(() => {
     isShownTwo.value = true
     isNotShownTwo.value = false
-    console.log(isShown.value)
-    console.log(isNotShown.value)
   }, 1000)
 }
 
 onMounted(() => {
   setShow()
   setShowTwo()
-  console.log('onmounted working')
 })
 </script>
-<style scoped>
+
+<style>
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.3s ease-in-out;

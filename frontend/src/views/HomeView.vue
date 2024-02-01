@@ -20,7 +20,7 @@
           <div class="grid place-content-center my-20 w-2/3">
             <button
               class="ml-2 py-2 rounded-xl hover:bg-spot-purple hover:text-white duration-300 w-60"
-              @click="generateMeeting"
+              @click="createMeeting"
             >
               화상 모임 생성하기
             </button>
@@ -40,14 +40,14 @@
                     @click="submitConferenceId"
                     class="rounded-full size-8 mt-2 z-10 bg-primary hover:bg-primary3 duration-300"
                   >
-                    <img src="@/icons/send.png" class="ml-[6px]" />
+                    <img src="@/assets/landing/send.png" class="ml-[6px]" />
                   </button>
                 </div>
-                <ModalView v-if="showModal" :show-modal="showModal" @close-modal="toggleModal">
+                <ModalView v-if="isModal" :show-modal="isModal" @close-modal="showModal">
                   <MeetingJoinModal :conferenceIdInput="conferenceIdInput" />
                 </ModalView>
               </div>
-              <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
+              <p v-if="isInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
             </div>
           </div>
         </div>
@@ -182,23 +182,19 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-const router = useRouter()
-// toast : custom alert
-
-// eslint-disable-next-line no-unused-vars
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import ModalView from './ModalView.vue'
-import MeetingJoinModal from '../components/modal/MeetingJoinModal.vue'
+import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 
+const router = useRouter()
 const conferenceIdInput = ref('')
-const ifInputError = ref(false)
+const isInputError = ref(false)
 const isLogin = ref(false)
+const isModal = ref(false)
 
-const showModal = ref(false)
-
-const toggleModal = () => {
-  showModal.value = !showModal.value
+const showModal = () => {
+  isModal.value = !isModal.value
 }
 
 const submitConferenceId = () => {
@@ -214,40 +210,28 @@ const submitConferenceId = () => {
     // 로그인하지 않았다면 모달
     if (!isLogin.value) {
       // 모달 띄우고
-      showModal.value = true
+      isModal.value = true
     }
-    ifInputError.value = false
+    isInputError.value = false
     // 회의 이동
     router.push('/')
   } else {
-    ifInputError.value = true
+    isInputError.value = true
     conferenceIdInput.value = ''
   }
 }
 
-// 회의 생성 로직
-// 로그인하지 않았다면 모달
-// 로그인하지 않았으면 alert
-// const generateMeeting = () => {
-//   if (isLogin.value) {
-//     router.push("#"); // 회의 리다이렉트(예정)
-//   } else {
-//     toast("로그인이 필요합니다", {
-//       theme: "auto",
-//       type: "warning",
-//       transition: "flip",
-//       autoClose: 1000,
-//     });
-//   }
-// };
-
 const createMeeting = () => {
   router.push('/mainmeeting/host')
-
   // if (isLogin.value) {
-  //   router.push('#') // 회의 리다이렉트(예정)
+  //   router.push('/mainmeeting/host')
   // } else {
-  //   alert('로그인이 필요합니다')
+  //   toast('로그인이 필요합니다', {
+  //     theme: 'auto',
+  //     type: 'warning',
+  //     transition: 'flip',
+  //     autoClose: 1000
+  //   })
   // }
 }
 
@@ -259,4 +243,4 @@ const toTop = () => {
 }
 </script>
 
-<style scoped></style>
+<style></style>

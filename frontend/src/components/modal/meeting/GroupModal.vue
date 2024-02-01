@@ -73,6 +73,7 @@ const props = defineProps({
 })
 
 defineEmits(['remove-group-modal']['create-group-meeting'])
+
 const searchUserName = ref('')
 </script>
 

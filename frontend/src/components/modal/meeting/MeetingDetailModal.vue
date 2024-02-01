@@ -8,7 +8,7 @@
         <div class="text-white text-r-md">{{}}님의 회의 정보</div>
       </div>
       <div class="text-white text-r-sm">
-        회의 주소 | http://localhost:5173/meeting/{{ session.sessionId }}
+        회의 주소 | http://localhost:5173/mainmeeting/{{ session.sessionId }}
       </div>
       <div class="text-white text-r-sm">회의ID | {{ session.sessionId }}</div>
       <div class="text-white text-r-sm">주최자 | {{ session.host }}</div>

@@ -4,7 +4,7 @@
   >
     <div id="card-div">
       <div class="absolute -mt-28 mx-10 justify-center">
-        <img alt="프로필 사진" id="image-profile" src="@/assets/dummy_profile.jpg" />
+        <img alt="프로필 사진" id="image-profile" src="@/assets/landing/dummy_profile.jpg" />
       </div>
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
         <div class="flex flex-col w-6/12 ml-10">
@@ -36,9 +36,7 @@
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
             <div id="div-stat">
-              모꼬지 주최<br /><span class="text-purple-400">{{
-                eventCount
-              }}</span
+              모꼬지 주최<br /><span class="text-purple-400">{{ eventCount }}</span
               >번<br />
             </div>
             <div id="div-stat">
@@ -49,14 +47,12 @@
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
             <div id="div-stat">
               모꼬지 <br /><span class="text-purple-400">{{ totalTime }}</span
-              >시간 
+              >시간
               <!-- <span class="text-purple-400">{{ totalMin }}</span -->
               <!-- >분 -->
             </div>
             <div id="div-stat">
-              받은 메세지<br /><span class="text-purple-400">{{
-                totalMessage
-              }}</span
+              받은 메세지<br /><span class="text-purple-400">{{ totalMessage }}</span
               >개
             </div>
           </div>
@@ -76,35 +72,34 @@ const API_URI = ''
 
 const image = ref('')
 const name = ref('')
-const isAccountRegistered = ref(false);
+const isAccountRegistered = ref(false)
 const eventCount = ref(0)
 const totalTime = ref(0)
 const totalParticipant = ref(0)
-const	totalMessage = ref(0)
+const totalMessage = ref(0)
 
 // TODO : refresh token 처리
 const getUserDetail = () => {
   axios({
     url: API_URI + '/users/userinfo',
-    method: 'GET',
+    method: 'GET'
   })
-  .then((res) => {
-      res.name = name.value,
-      res.totalTime = totalTime.value,
-      res.image = image.value,
-      res.isAccountLinked = isAccountRegistered.value,
-      res.eventCount = eventCount.value,
-      res.totalParticipant = totalParticipant.value,
-      res.totalMessage = totalMessage.value
-  }).
-  catch((err) => {
-    console.log(err);
-  })
-  
+    .then((res) => {
+      ;(res.name = name.value),
+        (res.totalTime = totalTime.value),
+        (res.image = image.value),
+        (res.isAccountLinked = isAccountRegistered.value),
+        (res.eventCount = eventCount.value),
+        (res.totalParticipant = totalParticipant.value),
+        (res.totalMessage = totalMessage.value)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 onMounted(() => {
-  getUserDetail();
+  getUserDetail()
 })
 </script>
 

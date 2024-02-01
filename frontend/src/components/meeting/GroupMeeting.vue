@@ -384,10 +384,6 @@ const setCameraState = () => {
   }, 1000)
 }
 
-const showGroupModal = () => {
-  isGroupModal.value = !isGroupModal.value
-}
-
 const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
 }
@@ -475,7 +471,6 @@ const joinSession = () => {
   })
 
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
-
   getToken(state.mySessionId)
     .then((token) => {
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
@@ -503,8 +498,6 @@ const joinSession = () => {
     .catch((error) => {
       console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
     })
-
-  // OpenVidu 배포에서 토큰 가져오기
 
   window.addEventListener('beforeunload', leaveMeeting)
 }

@@ -11,9 +11,8 @@
 </template>
 
 <script setup>
-import getImages from '@/api/get_images'
-
 import { ref, onMounted, onUnmounted } from 'vue'
+import getImages from '@/api/get_images'
 
 const photos = ref(getImages(30))
 const scrollContainer = ref(null)
@@ -24,14 +23,6 @@ const loadMorePhotos = () => {
   photos.value.push(...newImages)
 }
 
-onMounted(() => {
-  scrollContainer.value.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  scrollContainer.value.removeEventListener('scroll', handleScroll)
-})
-
 const handleScroll = () => {
   let component = scrollComponent.value
   let container = scrollComponent.value
@@ -39,8 +30,16 @@ const handleScroll = () => {
     loadMorePhotos()
   }
 }
+
+onMounted(() => {
+  scrollContainer.value.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  scrollContainer.value.removeEventListener('scroll', handleScroll)
+})
 </script>
-<style scoped>
+<style>
 .custom-scroll-container {
   overflow-y: auto;
   height: 600px;

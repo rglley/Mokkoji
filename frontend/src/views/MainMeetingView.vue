@@ -4,10 +4,12 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import router from '../router'
+import { useRouter } from 'vue-router'
 import MainMeeting from '@/components/meeting/MainMeeting.vue'
 
 const emit = defineEmits(['create-meeting'])
+
+const router = useRouter()
 
 const createGroupMeeting = (payload) => {
   router.push({
