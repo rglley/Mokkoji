@@ -11,8 +11,9 @@ COPY package*.json .
 #COPY ./.next/static ./static
 
 #ADD src .
+ADD . .
 
-#RUN npm install
+RUN npm install
 
 # 시스템 사용자 및 그룹 설정
 #RUN addgroup --system --gid 1001 nodejs \
@@ -26,7 +27,8 @@ COPY package*.json .
 EXPOSE 3000
 
 # 애플리케이션 실행 명령어
-CMD ["node", "main.js"]
+#CMD ["node", "main.js"]
 #CMD ["node", "app.js"]
 #CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "dev"]
 #CMD ["node", "server.js"]
