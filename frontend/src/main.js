@@ -1,12 +1,11 @@
 // import '../src/style.css'
 // import './style.css'
 if (import.meta.env.MODE !== 'ssr') {
-    import('./style.css').then((module) => {
-        // You can use the `module` object if needed
-    });
+    import('./style.css')
     import('aos/dist/aos.css').then((module) => {
         AOS.init();
     });
+    import('./App.vue')
 }
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
