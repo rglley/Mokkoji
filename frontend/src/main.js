@@ -9,7 +9,7 @@ import 'aos/dist/aos.css'
 AOS.init()
 
 import App from './App.vue'
-import router from './router'
+import router from './router/index.js'
 import VueCookies from 'vue-cookies'
 
 const app = createApp(App)
