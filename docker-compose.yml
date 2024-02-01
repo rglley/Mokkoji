@@ -1,6 +1,6 @@
 version: '3'
 services:
-  app:
+  frontend:
     image: ${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest
     ports:
       - "5173:5173"
