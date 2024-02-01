@@ -101,7 +101,7 @@ public class UserService {
         }
 
         log.info("회원가입 진행");
-        // TODO: 2024.01.29 이름 null이면 랜덤 닉네임 부여?!?!?
+        // TODO: 2024.01.29 이름 null이면 랜덤 닉네임 부여
         String refreshToken = jwtService.createRefreshToken();
         User newUser = new User(provider, email, signupDto.getName(), signupDto.getImage(), Authority.USER, refreshToken);
 

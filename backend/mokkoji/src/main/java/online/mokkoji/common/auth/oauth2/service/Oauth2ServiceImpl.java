@@ -97,11 +97,6 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         return new UserInfoResDto("naver", email, name, image, false);
     }
 
-    @Override
-    public UserInfoResDto getGoogleUserInfo(String accessToken) throws Exception {
-        return null;
-    }
-
     private HttpEntity<MultiValueMap<String, String>> generateNaverTokenReq(String authorizationCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");

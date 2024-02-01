@@ -37,29 +37,24 @@ public class OAuth2Controller {
     public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code,
                                                       HttpServletResponse res) throws Exception {
 
-        if(provider.equals("naver")) {
-           UserInfoResDto userInfoResDto = oAuth2Service.getNaverUserInfo(code);
 
-           String email = userInfoResDto.getEmail();
-           String accessToken = jwtUtil.createAccessToken("naver", email);
+            UserInfoResDto userInfoResDto = oAuth2Service.getNaverUserInfo(code);
 
-           if(userInfoResDto.isFirst()) {
-               res.setHeader("Authorization", accessToken);
-               return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
-           }
+            String email = userInfoResDto.getEmail();
+            String accessToken = jwtUtil.createAccessToken("naver", email);
 
-           String refreshToken = jwtUtil.createRefreshToken();
-           User loginUser = userRepository.findByProviderAndEmail(Provider.naver, email).get();
-           loginUser.updateRefreshToken(refreshToken);
-           userRepository.save(loginUser);
+            if (userInfoResDto.isFirst()) {
+                res.setHeader("Authorization", accessToken);
+                return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
+            }
 
-           res.addHeader("Authorization", accessToken);
-           res.addHeader("Authorization-Refresh", refreshToken);
-           return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
-        }
+            String refreshToken = jwtUtil.createRefreshToken();
+            User loginUser = userRepository.findByProviderAndEmail(Provider.naver, email).get();
+            loginUser.updateRefreshToken(refreshToken);
+            userRepository.save(loginUser);
 
-        return null;
+            res.addHeader("Authorization", accessToken);
+            res.addHeader("Authorization-Refresh", refreshToken);
+            return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
-
-
 }

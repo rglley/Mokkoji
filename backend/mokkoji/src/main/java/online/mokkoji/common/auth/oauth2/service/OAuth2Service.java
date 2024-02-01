@@ -5,6 +5,4 @@ import org.springframework.http.ResponseEntity;
 
 public interface OAuth2Service {
     public UserInfoResDto getNaverUserInfo(String accessToken) throws Exception;
-
-    public UserInfoResDto getGoogleUserInfo(String accessToken) throws Exception;
 }
