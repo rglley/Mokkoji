@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.ResultErrorCode;
-import online.mokkoji.result.domain.Message;
+import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
+import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.result.dto.response.MemoryResDto;
 import online.mokkoji.result.dto.response.RecollectionResDto;
 import online.mokkoji.result.dto.response.RollingpaperResDto;
@@ -104,16 +105,19 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     public Map<String, Object> getPhotoAndMessageMap(Long resultId) {
-        Result result = resultRepository.findById(resultId)
-                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
         Map<String, Object> resultMap = new HashMap<>();
 
-        RollingpaperResDto rollingpaperDto = new RollingpaperResDto();
-        rollingpaperDto.setBackgroundTemplate(result.getRollingpaper().getBackgroundTemplate());
-        rollingpaperDto.setPostitTemplate(result.getRollingpaper().getPostitTemplate());
+        Result result = resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
+        RollingPaper rollingPaper = result.getRollingpaper();
 
+        RollingpaperResDto rollingpaperDto = new RollingpaperResDto();
+        rollingpaperDto.setBackgroundTemplate(rollingPaper.getBackgroundTemplate());
+        rollingpaperDto.setPostitTemplate(rollingPaper.getPostitTemplate());
+
+        List<Photo> photoList = photoRepository.findAllByResultId(resultId);
         List<String> photoPathList = new LinkedList<>();
-        for (Photo photo : result.getPhotoList()) {
+        for (Photo photo : photoList) {
             photoPathList.add(photo.getPhotoPath());
         }
 

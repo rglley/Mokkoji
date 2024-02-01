@@ -9,7 +9,7 @@ import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.RollingpaperReqDto;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
-import online.mokkoji.result.domain.Message;
+import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;

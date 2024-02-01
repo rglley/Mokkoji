@@ -1,16 +1,14 @@
 package online.mokkoji.result.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import online.mokkoji.result.domain.BackgroundTemplate;
-import online.mokkoji.result.domain.PostitTemplate;
+import lombok.*;
+import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
+import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class RollingpaperResDto {
     private BackgroundTemplate backgroundTemplate;
     private PostitTemplate postitTemplate;

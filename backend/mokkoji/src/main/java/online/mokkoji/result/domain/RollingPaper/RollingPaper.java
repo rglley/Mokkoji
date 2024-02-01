@@ -1,7 +1,8 @@
-package online.mokkoji.result.domain;
+package online.mokkoji.result.domain.RollingPaper;
 
 import jakarta.persistence.*;
 import lombok.*;
+import online.mokkoji.result.domain.Result;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
@@ -34,6 +35,8 @@ public class RollingPaper {
     public RollingPaper(Result result) {
         this.builder()
                 .result(result)
+                .backgroundTemplate(new BackgroundTemplate())
+                .postitTemplate(new PostitTemplate())
                 .build();
         result.setRollingpaper(this);
     }

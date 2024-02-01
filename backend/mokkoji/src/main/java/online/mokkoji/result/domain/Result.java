@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import online.mokkoji.event.domain.Event;
+import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.user.domain.User;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -50,8 +48,8 @@ public class Result {
     @OneToOne(mappedBy = "result", fetch = FetchType.LAZY)
     private Photomosaic photomosaic;
 
-    @OneToMany(mappedBy = "resultId")
-    private List<Photo> photoList = new LinkedList<>();
+//    @OneToMany(mappedBy = "resultId")
+//    private List<Photo> photoList = new LinkedList<>();
 
     @Builder
     public Result(Event event) {

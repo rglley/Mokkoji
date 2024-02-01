@@ -1,6 +1,6 @@
 package online.mokkoji.result.service;
 
-import online.mokkoji.result.domain.Message;
+import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 
 import java.util.Map;

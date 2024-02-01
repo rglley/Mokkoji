@@ -1,4 +1,4 @@
-package online.mokkoji.result.domain;
+package online.mokkoji.result.domain.RollingPaper;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -40,6 +40,6 @@ public class Message implements Serializable {
             else if (urlEntry.getKey().equals("video")) this.videoPath = urlEntry.getValue();
         }
     }
-    
+
 
 }

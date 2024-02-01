@@ -1,7 +1,7 @@
 package online.mokkoji.config;
 
 import lombok.AllArgsConstructor;
-import online.mokkoji.result.domain.Message;
+import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.repository.MessageRepository;
 import online.mokkoji.result.repository.PhotoRepository;
