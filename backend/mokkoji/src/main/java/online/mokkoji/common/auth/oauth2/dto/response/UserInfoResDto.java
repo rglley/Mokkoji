@@ -11,4 +11,5 @@ public class UserInfoResDto {
     private String email;
     private String name;
     private String image;
+    private boolean isFirst;
 }

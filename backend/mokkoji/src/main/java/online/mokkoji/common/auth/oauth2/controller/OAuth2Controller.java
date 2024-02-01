@@ -1,6 +1,8 @@
 package online.mokkoji.common.auth.oauth2.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.common.auth.oauth2.OAuth2Config;
 import online.mokkoji.common.auth.oauth2.dto.response.UserInfoResDto;
 import online.mokkoji.common.auth.oauth2.service.OAuth2Service;
@@ -23,13 +25,25 @@ import java.util.UUID;
 public class OAuth2Controller {
 
     private final OAuth2Service oAuth2Service;
+    private final JwtUtil jwtUtil;
 
     @GetMapping("/{provider}/{code}")
-    public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code) throws Exception {
+    public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code,
+                                                      HttpServletResponse res) throws Exception {
         if(provider.equals("naver")) {
-           UserInfoResDto result = oAuth2Service.getGoogleUserInfo(code);
+           UserInfoResDto userInfoResDto = oAuth2Service.getNaverUserInfo(code);
 
-           return new ResponseEntity<>(result, HttpStatus.OK);
+           String email = userInfoResDto.getEmail();
+           String accessToken = jwtUtil.createAccessToken("naver", email);
+
+           if(userInfoResDto.isFirst()) {
+               jwtUtil.sendAccessToken(res, accessToken);
+               return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
+           }
+
+           String refreshToken = jwtUtil.createRefreshToken();
+           jwtUtil.sendAccessAndRefreshToken(res, accessToken, refreshToken);
+           return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
         }
 
         return null;

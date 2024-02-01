@@ -91,7 +91,11 @@ public class UserService {
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if (!findUser.isPresent()) {
+        if(findUser.isEmpty()) {
+            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
+        }
+
+        if (findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
             log.error("이미 존재하는 회원. 회원가입 불가능");
             throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
