@@ -72,15 +72,15 @@ const router = createRouter({
       name: 'editpage',
       component: EditPage
     },
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   redirect: '404'
-    // },
-    // {
-    //   path: '/404',
-    //   name: 'Error404',
-    //   component: Error404
-    // }
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '404'
+    },
+    {
+      path: '/404',
+      name: 'Error404',
+      component: Error404
+    }
   ]
 })
 

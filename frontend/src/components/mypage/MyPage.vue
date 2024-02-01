@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '../../stores/user'
 import axios from 'axios'
 
@@ -82,7 +82,11 @@ const totalMessage = ref(0)
 const getUserDetail = () => {
   axios({
     url: API_URI + '/users/userinfo',
-    method: 'GET'
+    method: 'GET',
+    headers: {
+      // eslint-disable-next-line no-undef
+      'Authorization' : $cookies.get('token')
+    }
   })
     .then((res) => {
       ;(res.name = name.value),
@@ -98,7 +102,7 @@ const getUserDetail = () => {
     })
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   getUserDetail()
 })
 </script>

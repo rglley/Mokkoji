@@ -15,8 +15,8 @@
           <li>
             <button id="button-header"><a href="/">HOME</a></button>
           </li>
-          <li v-if="!isLogin">
-            <!-- <li v-if="store.isLogin"> -->
+          <!-- <li v-if="!isLogin"> -->
+            <li v-if="!store.isLogin">
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
@@ -43,8 +43,7 @@
                   <router-link to="eventlist">내 결과물</router-link>
                 </li>
                 <li id="li-dropdown">
-                  <a @click="logout">로그아웃</a>
-                  <!-- <a @click="store.logout">로그아웃</a> -->
+                  <a @click="store.logout">로그아웃</a>
                 </li>
               </ul>
             </div>
@@ -59,13 +58,11 @@
 import { ref, onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useUserStore } from '@/stores/user'
-import router from '@/router'
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/home/LoginModal.vue'
 
 const store = useUserStore()
 
-const isLogin = ref(true)
 const isLoginModal = ref(false)
 const isTransparent = ref(false)
 
@@ -73,9 +70,6 @@ const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
 }
 
-const logout = () => {
-  isLogin.value = false
-}
 
 const limitHeight = 500;
 

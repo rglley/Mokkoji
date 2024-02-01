@@ -26,8 +26,7 @@
         <div class="flex items-center space-x-4">
           <div class="flex-auto w-max m-5">
             <label>
-              <!-- <img id="image-profile" src="{{ image }}" /> -->
-              <img id="image-profile" src="@/assets/landing/dummy_profile.jpg" />
+              <img id="image-profile" :src="image" class="w-40"/>
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
@@ -63,17 +62,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { toast } from 'vue3-toastify/index'
 
 const router = useRouter()
 const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
-const email = ref('')
 const fileName = ref('')
 
 const getFileName = async (files) => {
@@ -113,18 +112,28 @@ const signUp = async () => {
       image: image.value,
       bank: bank.value,
       accountNumber: accountNumber.value
+    },
+    headers: {
+      // eslint-disable-next-line no-undef
+      Authorization: $cookies.get('token')
     }
-    // headers: {
-    //   Authorization: localStorage.getItem('access-token')
-    // }
   })
     .then(() => {
+      store.isLogin = true;
+      toast({
+        
+      })
       router.push('/')
     })
     .catch((err) => {
       console.log(err)
     })
 }
+
+onBeforeMount(() => {
+  name.value = store.name;
+  image.value = store.image;
+})
 </script>
 
 <style></style>

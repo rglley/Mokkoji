@@ -51,8 +51,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
 const { VITE_NAVER_CLIENT_ID, VITE_NAVER_REDIRECT_URI } = import.meta.env
 
 const naverApiRequestURI = `https://nid.naver.com/oauth2.0/authorize?client_id=`+ VITE_NAVER_CLIENT_ID + '&redirect_uri=' + VITE_NAVER_REDIRECT_URI + '&state=mokkoji&response_type=code';

@@ -8,7 +8,6 @@ const setup = () => {
       const token = TokenService.getLocalAccessToken()
       if (token) {
         if (TokenService.expiredToken(token)) {
-          // refesh token 요청
           const refreshToken = TokenService.getLocalRefreshToken()
 
           config.headers['Authorization-Refresh'] = refreshToken
@@ -33,8 +32,8 @@ const setup = () => {
 
   axiosInstance.interceptors.response.use(
     (res) => {
-      const accessToken = res.headers.get('Authorization')
-      const refreshToken = res.headers.get('Authorizatoin-Refresh')
+      const accessToken = res.headers.get('authorization')
+      const refreshToken = res.headers.get('authorizatoin-Refresh')
       if (accessToken != null) tokenService.setLocalAccessToken(accessToken)
       if (refreshToken != null) tokenService.setLocalRefreshToken(refreshToken)
 

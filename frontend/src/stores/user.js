@@ -5,7 +5,7 @@ import axios from 'axios'
 import tokenService from '@/services/token.service'
 
 export const useUserStore = defineStore('user', () => {
-  const API_URI = 'localhost:8080'
+  const API_URI = 'http://localhost:8080'
   const router = useRouter()
   const name = ref('')
   const email = ref('')
@@ -67,6 +67,12 @@ export const useUserStore = defineStore('user', () => {
       })
   }
 
+  const logout = () => {
+    isLogin.value = false;
+    // eslint-disable-next-line no-undef
+    $cookies.removeItem()
+  }
+
   return {
     name,
     email,
@@ -74,6 +80,7 @@ export const useUserStore = defineStore('user', () => {
     API_URI,
     isLogin,
     login,
-    withdraw
+    withdraw,
+    logout,
   }
 })
