@@ -5,7 +5,7 @@ FROM node:18-alpine
 WORKDIR /usr/src/app
 
 # 빌드된 파일들을 이미지로 복사
-COPY package.json .
+COPY package*.json .
 #COPY ./.next/standalone ./
 #COPY ./public ./public
 #COPY ./.next/static ./static
