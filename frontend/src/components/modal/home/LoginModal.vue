@@ -32,9 +32,8 @@
         <a
           type="button"
           class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2"
-          href="http://localhost:8080/oauth2/authorization/naver"
-          redirect_uri="http://localhost:5173/oauth2/redirect"
-        >
+          :href="naverApiRequestURI"
+>
           <img
             src="@/assets/logo/logoN_naver.svg"
             class="w-4 h-43 inline-block mb-2 ml-2 mt-1 mr-2"
@@ -54,7 +53,13 @@
 <script setup>
 import { ref } from 'vue'
 
-const isLogin = ref(false)
+const { VITE_NAVER_CLIENT_ID, VITE_NAVER_REDIRECT_URI } = import.meta.env
+
+const naverApiRequestURI = `https://nid.naver.com/oauth2.0/authorize?client_id=`+ VITE_NAVER_CLIENT_ID + '&redirect_uri=' + VITE_NAVER_REDIRECT_URI + '&state=mokkoji&response_type=code';
+
+console.log(naverApiRequestURI)
+
+
 </script>
 
 <style></style>

@@ -2,11 +2,18 @@
   <main id="main-landing">
     <section class="pt-52 z-2 h-max" id="main-gradient2">
       <div class="absolute y-0 right-0 size-2/4">
-        <img src="@/assets/landing/wedding.svg" />
+        <!-- <img src="@/assets/landing/wedding.svg" /> -->
+        <Swiper
+        class="w-[400px] h-[400px] overflow-visible absolute top-0"
+        >
+         <swiper-slide v-for="photo in photos">
+          <img :src="`src/assets/landing/${photo}`">
+         </swiper-slide> 
+        </Swiper>
       </div>
       <div id="container" class="mt-52 flex flex-col w-1/2">
         <div
-          class="text-justify ml-12 flex flex-col  animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-normal"
+          class="text-justify ml-12 flex flex-col animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-normal"
         >
           <!-- <div class="text-center"> -->
           <h1 id="title">모꼬지</h1>
@@ -14,7 +21,8 @@
           <p>
             화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
             없이 참여해보세요.
-          </p><br>
+          </p>
+          <br />
           <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
           <div class="grid place-content-center ml-[10vh] my-20 w-2/3 text-base">
@@ -181,12 +189,15 @@
 
     <!--logo-->
     <section class="flex items-center justify-center py-20 bg-primary2">
-      <img src="@/assets/logo/mokkoji_logo.png" class="w-[25vh] px-[5vh]">
+      <img src="@/assets/logo/mokkoji_logo.png" class="w-[25vh] px-[5vh]" />
 
-      <h1 class="text-4xl font-bold">모꼬지를 사용하고 싶으신가요? </h1>
-      <button @click="toTop" 
-      class="animate-bounce duration-700 my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
-      >처음으로 돌아가기</button>
+      <h1 class="text-4xl font-bold">모꼬지를 사용하고 싶으신가요?</h1>
+      <button
+        @click="toTop"
+        class="animate-bounce duration-700 my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
+      >
+        처음으로 돌아가기
+      </button>
     </section>
   </main>
 </template>
@@ -195,7 +206,9 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'vue3-toastify/dist/index.css'
+import 'swiper/css'
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 
@@ -253,6 +266,13 @@ const toTop = () => {
     behavior: 'smooth'
   })
 }
+
+const photos = [
+  "main1.png",
+  "main2.png",
+  "main3.png",
+  "main4.png",
+]
 </script>
 
 <style></style>
