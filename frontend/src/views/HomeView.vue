@@ -19,7 +19,7 @@
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
           <div class="grid place-content-center my-20 w-2/3">
             <button
-              class="my-2 py-2 rounded-xl hover:bg-spot-purple hover:text-white duration-300 w-60"
+              class="my-2 py-2 rounded-xl hover:bg-purple-500 text-white duration-300 w-60 bg-purple-400"
               @click="createMeeting"
             >
               화상 모임 생성하기
@@ -176,7 +176,9 @@
       <img src="@/assets/logo/mokkoji_logo.png" class="w-[25vh] px-[5vh]">
 
       <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요? </h1>
-      <button @click="toTop" class="ml-[3vh] animate-bounce">처음으로 돌아가기</button>
+      <button @click="toTop" 
+      class="my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
+      >처음으로 돌아가기</button>
     </section>
   </main>
 </template>
