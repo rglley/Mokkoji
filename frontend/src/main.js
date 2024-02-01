@@ -4,14 +4,17 @@ if (import.meta.env.MODE !== 'ssr') {
     import('./style.css').then((module) => {
         // You can use the `module` object if needed
     });
+    import('aos/dist/aos.css').then((module) => {
+        AOS.init();
+    });
 }
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'
 //scroll animation
 import AOS from 'aos'
-import 'aos/dist/aos.css'
-AOS.init()
+// import 'aos/dist/aos.css'
+// AOS.init()
 
 import App from './App.vue'
 import router from './router/index.js'
