@@ -14,21 +14,5 @@
     "participants": 3,
     "eventType": "",
     "description": ""
-  },
-  {
-    "eventId": 13,
-    "eventDay": "2024-01-19",
-    "eventRunTime": "05:29:50",
-    "participants": 135,
-    "eventType": "",
-    "description": ""
-  },
-  {
-    "eventId": 14,
-    "eventDay": "2024-01-21",
-    "eventRunTime": "07:29:50",
-    "participants": 44,
-    "eventType": "",
-    "description": ""
   }
 ]

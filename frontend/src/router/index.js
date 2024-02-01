@@ -10,10 +10,15 @@ import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
+import HandleCallback from '@/components/common/HandleCallback.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/oauth2/redirect',
+      component: HandleCallback
+    },
     {
       path: '/',
       name: 'home',
@@ -25,7 +30,6 @@ const router = createRouter({
       component: () => import('@/components/common/SignUp.vue')
     },
     {
-      // path: '/${userId}',
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
@@ -39,21 +43,6 @@ const router = createRouter({
           path: 'detail',
           name: 'mydetail',
           component: MyDetail
-        },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
-        },
-        {
-          path: 'detail',
-          name: 'mydetail',
-          component: MyDetail
-        },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
         }
       ]
     },
@@ -83,6 +72,15 @@ const router = createRouter({
       path: '/editpage',
       name: 'editpage',
       component: EditPage
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '404'
+    },
+    {
+      path: '/404',
+      name: 'Error404',
+      component: Error404
     }
   ]
 })

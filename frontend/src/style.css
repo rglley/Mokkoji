@@ -122,7 +122,7 @@ pre {
   }
 
   #title-sub {
-    @apply text-3xl tracking-tighter p-2;
+    @apply text-3xl tracking-tighter p-3 m-2;
   }
 
   #li-dropdown {
@@ -132,6 +132,7 @@ pre {
   #main-gradient {
     background-image: linear-gradient(
       to top,
+
       #c8b6ff,
       #d5c1fe,
       #e0cdfe,
@@ -184,7 +185,6 @@ pre {
     @apply bg-transparent text-black text-lg hover:underline;
   }
 
-  /* TODO : INPUT BOX 예쁘게 만들기 */
   input {
     @apply h-10 items-center justify-center rounded-md bg-white text-sm font-medium text-black px-6 my-3 ml-2 border-2 border-slate-200;
   }

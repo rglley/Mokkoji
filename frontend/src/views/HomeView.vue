@@ -1,22 +1,8 @@
 <template>
-  <!-- <section class="carousel" aria-label="Gallery">
-    <ol class="carousel__viewport">
-      <li id="carousel__slide1" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-      <li id="carousel__slide2" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-      <li id="carousel__slide3" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-    </ol>
-  </section> -->
   <main id="main-landing">
-    <!-- <section class="pb-12 pt-32 bg-[url('/src/assets/main_banner2.png')] mb-10"> -->
     <section class="pt-52 z-2 h-max" id="main-gradient2">
-      <div class="absolute y-0 right-0">
-        <img src="@/assets/wedding.svg" />
+      <div class="absolute y-0 right-0 size-2/4">
+        <img src="@/assets/landing/wedding.svg" />
       </div>
       <div id="container" class="mt-52 flex flex-col">
         <div
@@ -32,7 +18,12 @@
           <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
           <div class="grid place-content-center my-20 w-2/3">
-            <button class="rounded-2xl" @click="createMeeting">화상 모임 생성하기</button>
+            <button
+              class="ml-2 py-2 rounded-xl hover:bg-spot-purple hover:text-white duration-300 w-60"
+              @click="generateMeeting"
+            >
+              화상 모임 생성하기
+            </button>
 
             <!-- TODO : submit 버튼 + invalid input 렌더링 -->
             <div>
@@ -45,9 +36,11 @@
                   class="pl-10 w-60 border-2 border-slate-500 rounded-xl"
                 />
                 <div class="absolute top-2 right-2">
-                  <button @click="submitConferenceId" class="rounded-full size-8 mt-2">
-                    123123
-                    <img src="@/icons/send.png" class="" />
+                  <button
+                    @click="submitConferenceId"
+                    class="rounded-full size-8 mt-2 z-10 bg-primary hover:bg-primary3 duration-300"
+                  >
+                    <img src="@/icons/send.png" class="ml-[6px]" />
                   </button>
                 </div>
                 <ModalView v-if="showModal" :show-modal="showModal" @close-modal="toggleModal">
@@ -56,7 +49,6 @@
               </div>
               <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
             </div>
-            <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
           </div>
         </div>
       </div>
@@ -84,7 +76,7 @@
           <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
         </div>
         <div class="items-center">
-          <img src="@/assets/main1.png" />
+          <img src="@/assets/landing/main1.png" />
         </div>
       </div>
       <div id="space"></div>
@@ -107,7 +99,7 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="justify-self-end mr-20">
-          <img class="pl-0" src="@/assets/main2.png" />
+          <img class="pl-0" src="@/assets/landing/main2.png" />
         </div>
         <div class="text-center">
           <h2 id="title-sub-bold">포토 모자이크로 사진들을 한 눈에 구경하세요.</h2>
@@ -138,13 +130,13 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="mx-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">소그룹을 형성하여 친구들과 자유롭게 소통하세요.</h1>
           <br />
-          <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
-          <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
+          <p id="p-main">소그룹 기능을 이용하여 소통하고 싶은 다른 참여자들과</p>
+          <p id="p-main">사적인 공간에서 자유롭게 이야기 할 수 있습니다.</p>
         </div>
         <div class="flex-col items-center">
-          <img src="@/assets/main3.png" />
+          <img src="@/assets/landing/main3.png" />
         </div>
       </div>
       <div id="space"></div>
@@ -167,13 +159,13 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="justify-self-end mr-20">
-          <img src="@/assets/main4.png" />
+          <img src="@/assets/landing/main4.png" />
         </div>
         <div class="mx-5 px-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">QR코드를 통해 축하금을 간편하게 보내세요.</h1>
           <br />
-          <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
-          <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
+          <p id="p-main">화상 모임 내에서 주최자의 계좌와 연동된 QR코드가 제공됩니다.</p>
+          <p id="p-main">메세지로 다 담지 못한 축하하는 마음을 전달해보세요.</p>
         </div>
       </div>
       <div id="space"></div>
@@ -190,16 +182,19 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+const router = useRouter()
 // toast : custom alert
+
+// eslint-disable-next-line no-unused-vars
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '../components/modal/MeetingJoinModal.vue'
-const router = useRouter()
 
 const conferenceIdInput = ref('')
 const ifInputError = ref(false)
 const isLogin = ref(false)
+
 const showModal = ref(false)
 
 const toggleModal = () => {
@@ -214,26 +209,26 @@ const submitConferenceId = () => {
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
   // 임시로 만든 올바른 id ='qwer'
-  // let validId = 'qwer'
-  // if (conferenceIdInput.value == validId) {
-  //   // 로그인하지 않았다면 모달
-  //   if (!isLogin.value) {
-  //     // 모달 띄우고
-  //     showModal.value = true
-  //   }
-  //   ifInputError.value = false
-  //   // 회의 이동
-  //   router.push('/')
-  // } else {
-  //   ifInputError.value = true
-  //   conferenceIdInput.value = ''
-  // }
+  const validId = 'qwer'
+  if (conferenceIdInput.value == validId) {
+    // 로그인하지 않았다면 모달
+    if (!isLogin.value) {
+      // 모달 띄우고
+      showModal.value = true
+    }
+    ifInputError.value = false
+    // 회의 이동
+    router.push('/')
+  } else {
+    ifInputError.value = true
+    conferenceIdInput.value = ''
+  }
 }
 
 // 회의 생성 로직
 // 로그인하지 않았다면 모달
 // 로그인하지 않았으면 alert
-// let generateMeeting = () => {
+// const generateMeeting = () => {
 //   if (isLogin.value) {
 //     router.push("#"); // 회의 리다이렉트(예정)
 //   } else {

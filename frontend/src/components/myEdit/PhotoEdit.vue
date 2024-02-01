@@ -74,21 +74,21 @@
 </template>
 
 <script setup>
-import IconPhotoList from '@/icons/IconPhotoList.vue'
-import IconPhotoAdd from '@/icons/IconPhotoAdd.vue'
-import IconQuestionMark from '@/icons/IconQuestionMark.vue'
-import IconLightBulb from '@/icons/IconLightBulb.vue'
-import IconMarkPhoto from '@/icons/IconMarkPhoto.vue'
+import IconPhotoList from '@/icons/result/IconPhotoList.vue'
+import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
+import IconQuestionMark from '@/icons/result/IconQuestionMark.vue'
+import IconLightBulb from '@/icons/result/IconLightBulb.vue'
+import IconMarkPhoto from '@/icons/result/IconMarkPhoto.vue'
 import Gallery from '@/components/myedit/Gallery.vue'
 import { ref } from 'vue'
 
-let isOpenFive = ref(false)
+const isOpenFive = ref(false)
 
-let openModalFive = () => {
+const openModalFive = () => {
   isOpenFive.value = !isOpenFive.value
 }
 
-let closeModalFive = () => {
+const closeModalFive = () => {
   isOpenFive.value = false
 }
 </script>

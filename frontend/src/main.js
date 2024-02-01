@@ -9,6 +9,7 @@ AOS.init()
 
 import App from './App.vue'
 import router from './router'
+import VueCookies from 'vue-cookies'
 
 const app = createApp(App)
 
@@ -18,3 +19,11 @@ app.use(router)
 app.mount('#app')
 
 app.config.globalProperties.$axios = axios
+
+// cookie
+app.use(VueCookies, { expires: '7d' })
+
+// axios interceptor
+import setupInterceptors from './services/setupInterceptors'
+
+setupInterceptors()
