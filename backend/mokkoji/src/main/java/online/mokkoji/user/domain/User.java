@@ -9,12 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users") //h2만 user 사용 불가능
 @Getter
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @ToString(of = {"id", "email", "name", "image"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -22,75 +19,60 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     @Size(max = 30)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Size(max = 10)
     private String name;
 
-    //enum이 낫지 않을까?
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Authority authority;
 
     private String image;
 
     @OneToMany(mappedBy = "user")
     private List<Event> events = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserAccount userAccount;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Record record;
 
-    //차후 Reddis로 넣을 예정
+    // TODO : reddis로 관리
+    @Column(length = 100)
     @Size(max = 100)
     private String refreshToken;
 
-    // TODO : 2024.01.29 생성자->빌더로 refactoring 필요
-    public User(String provider, String email, String name, String image, Role role) {
-        this.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(name)
-                .image(image)
-                .role(role)
-                .build();
+    @Builder
+    public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
+        this.provider = Provider.valueOf(provider);
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        this.authority = authority;
+        this.refreshToken = refreshToken;
     }
 
-    public User(String provider, String email, String name, String image, Role role, String refreshToken) {
-        this.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(name)
-                .image(image)
-                .role(role)
-                .refreshToken(refreshToken)
-                .build();
-    }
-
+    @Builder
     public User(String email, String name, String image) {
         this.email = email;
         this.name = name;
         this.image = image;
     }
 
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public void updateUser(String provider, String email, String name, String image, Role role) {
-        this.provider = Provider.valueOf(provider);
-        this.email = email;
+    @Builder(builderMethodName = "updateBuilder")
+    public User(String name, String image) {
         this.name = name;
         this.image = image;
-        this.role = role;
+    }
 
-
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

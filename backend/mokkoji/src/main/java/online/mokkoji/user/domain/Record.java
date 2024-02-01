@@ -8,8 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "eventCount", "totalTime", "totalParticipant", "totalMessage"})
 public class Record {
 
@@ -18,7 +18,7 @@ public class Record {
     @Column(name = "record_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 

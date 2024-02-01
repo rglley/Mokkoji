@@ -4,13 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import online.mokkoji.user.dto.request.SignupDto;
-import online.mokkoji.user.dto.request.UpdateDto;
-import online.mokkoji.user.dto.response.MyPageDto;
-import online.mokkoji.user.dto.response.UpdatePageDto;
+import online.mokkoji.user.dto.request.UserInputReqDto;
+import online.mokkoji.user.dto.response.MyPageResDto;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.service.UserService;
+import online.mokkoji.user.dto.response.UpdatePageResDto;
+import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     //add, get, edit, remove
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final JwtUtil jwtService;
 
     @GetMapping("/update")
@@ -30,27 +29,27 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        UpdatePageDto updatePageDto = userService.readUpdatePage(provider, email);
+        UpdatePageResDto updatePageDto = userService.getUpdatePage(provider, email);
         log.info("회원 정보 수정으로 이동 성공");
 
         return new ResponseEntity<>(updatePageDto, HttpStatus.OK);
     }
 
     @GetMapping("/mypage")
-    public ResponseEntity<MyPageDto> mvToMypage(HttpServletRequest req) {
-        log.info("마이페이지로 이동 요청");
+    public ResponseEntity<MyPageResDto> getMyPage(HttpServletRequest req) {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        MyPageDto myPageDto = userService.readMypage(provider, email);
-        log.info("마이페이지로 이동 성공");
+        MyPageResDto myPageResDto = userService.getMypage(provider, email);
 
-        return new ResponseEntity<>(myPageDto, HttpStatus.OK);
+        return new ResponseEntity<>(myPageResDto, HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<SignupDto> addUser(HttpServletRequest req, @Valid @RequestBody SignupDto signupDto) {
-        log.info("회원 가입 요청, signupDto : {}", signupDto.toString());
+
+
+    @PostMapping
+    public ResponseEntity<UserInputReqDto> addUser(HttpServletRequest req,
+                                                   @Valid @RequestBody UserInputReqDto signupDto) {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
@@ -60,9 +59,9 @@ public class UserController {
         return new ResponseEntity<>(signupDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<UpdateDto> editUser(HttpServletRequest req, @Valid @RequestBody UpdateDto modifyDto) {
-        log.info("회원 정보 수정 요청, modifyDto : {}", modifyDto.toString());
+    @PutMapping
+    public ResponseEntity<UserInputReqDto> editUser(HttpServletRequest req,
+                                                    @Valid @RequestBody UserInputReqDto modifyDto) {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
@@ -72,9 +71,8 @@ public class UserController {
         return new ResponseEntity<>(modifyDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/withdrawal")
+    @DeleteMapping
     public ResponseEntity<User> removeUser(HttpServletRequest req) {
-        log.info("회원 탈퇴 요정");
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 

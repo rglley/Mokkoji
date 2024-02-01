@@ -9,13 +9,14 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User save(User user);
-
-    void delete(User user);
+    // TODO : 기본이니까 지워도 될 것 같음
+//    User save(User user);
+//
+//    void delete(User user);
 
     Optional<User> findByRefreshToken(String refreshToken);
 
-    Optional<User> findByEmail(String email);
-
     Optional<User> findByProviderAndEmail(Provider provider, String email);
+
+
 }

@@ -7,9 +7,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 @AllArgsConstructor
-public class MyPageDto {
+public class MyPageResDto {
 
     @NotBlank
     private String image;
