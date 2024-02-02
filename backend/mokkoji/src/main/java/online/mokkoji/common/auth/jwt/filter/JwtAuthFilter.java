@@ -91,7 +91,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String accessToken = extractAccessToken.get();
-        Optional<String> extractProvider = jwtUtil.extractEmail(accessToken);
+        Optional<String> extractProvider = jwtUtil.extractProvider(accessToken);
         Optional<String> extractEmail = jwtUtil.extractEmail(accessToken);
 
         if (extractEmail.isEmpty() || extractProvider.isEmpty()) {
@@ -99,7 +99,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String provider = extractProvider.get();
-        String email = extractProvider.get();
+        String email = extractEmail.get();
 
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
         if (findUser.isEmpty()) {
