@@ -12,6 +12,7 @@ import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.user.domain.UserAccount;
 import online.mokkoji.user.repository.AccountRepository;
+import online.mokkoji.user.repository.RecordRepository;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+    private final RecordRepository recordRepository;
     private final JwtUtil jwtService;
 
     @Override
@@ -80,8 +82,17 @@ public class UserServiceImpl implements UserService{
         User newUser = findUser.get();
         newUser.updateAuthority();
 
-        userRepository.save(newUser);
+        Record record = Record.builder()
+                .user(newUser)
+                .eventCount(0)
+                .totalMessage(0)
+                .totalParticipant(0)
+                .totalTime(0)
+                .build();
 
+        userRepository.save(newUser);
+        recordRepository.save(record);
+        
         String bank = userInputReqDto.getBank();
         String accountNumber = userInputReqDto.getAccountNumber();
 

@@ -84,6 +84,8 @@ public class OAuth2ServiceImpl implements OAuth2Service {
                     .build();
 
             userRepository.save(guestUser);
+
+
             UserInfoResDto userInfoResDto = new UserInfoResDto("naver", email, name, image, true);
 
             resultMap.put("userInfo", userInfoResDto);

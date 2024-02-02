@@ -7,8 +7,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "eventCount", "totalTime", "totalParticipant", "totalMessage"})
 public class Record {
@@ -38,13 +36,12 @@ public class Record {
     @ColumnDefault("0")
     private int totalMessage;
 
+    @Builder
     public Record(User user, int eventCount, int totalTime, int totalParticipant, int totalMessage) {
-        this.builder()
-                .user(user)
-                .eventCount(eventCount)
-                .totalTime(totalTime)
-                .totalParticipant(totalParticipant)
-                .totalMessage(totalMessage)
-                .build();
+        this.user = user;
+        this.eventCount = eventCount;
+        this.totalTime = totalTime;
+        this.totalParticipant = totalParticipant;
+        this.totalMessage = totalMessage;
     }
 }
