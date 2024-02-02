@@ -82,8 +82,8 @@ public class UserServiceImpl implements UserService{
         String refreshToken = jwtService.createRefreshToken();
 
         User newUser = User.builder()
-                .provider(provider)
-                .email(email)
+                .provider(findUser.get().getProvider())
+                .email(findUser.get().getEmail())
                 .name(userInputReqDto.getName())
                 .image(userInputReqDto.getImage())
                 .authority(Authority.USER)
@@ -120,12 +120,7 @@ public class UserServiceImpl implements UserService{
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
-        updateUser = User.updateBuilder()
-                .name(name)
-                .image(image)
-                .build();
-
-
+        updateUser.updateUser(name, image);
         userRepository.save(updateUser);
 
         if (bank != null && accountNumber != null) {

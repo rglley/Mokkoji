@@ -70,11 +70,13 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         if(findUser.isEmpty()) {
             User guestUser = User.builder()
                     .authority(Authority.GUEST)
-                    .provider("NAVER")
+                    .provider(Provider.NAVER)
                     .email(email)
                     .name(name)
                     .image(image)
                     .build();
+
+            userRepository.save(guestUser);
 
             return new UserInfoResDto("naver", email, name, image, true);
         }

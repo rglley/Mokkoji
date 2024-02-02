@@ -47,8 +47,8 @@ public class User {
     private String refreshToken;
 
     @Builder(builderMethodName = "nonTokenBuilder")
-    public User(String provider, String email, String name, String image, Authority authority) {
-        this.provider = Provider.valueOf(provider.toUpperCase());
+    public User(Provider provider, String email, String name, String image, Authority authority) {
+        this.provider = provider;
         this.email = email;
         this.name = name;
         this.image = image;
@@ -56,8 +56,8 @@ public class User {
     }
 
     @Builder
-    public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
-        this.provider = Provider.valueOf(provider.toUpperCase());
+    public User(Provider provider, String email, String name, String image, Authority authority, String refreshToken) {
+        this.provider = provider;
         this.email = email;
         this.name = name;
         this.image = image;
@@ -65,10 +65,9 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    @Builder(builderMethodName = "updateBuilder")
-    public User(String name, String image) {
+    public void updateUser(String name, String email) {
         this.name = name;
-        this.image = image;
+        this.email = email;
     }
 
     public void updateRefreshToken(String refreshToken) {
