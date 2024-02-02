@@ -46,8 +46,8 @@ public class ResultController {
     @PatchMapping("/{resultId}/memories/rollingpaper")
     public ResponseEntity<String> updateRollingpaper(@PathVariable Long resultId,
                                                      @RequestBody RollingPaperReqDto rollingPaperReqDto) {
-        resultService.updateRollingpaper(resultId, rollingPaperReqDto);
 
+        resultService.updateRollingpaper(resultId, rollingPaperReqDto);
 
         return new ResponseEntity<>("편집 완료", HttpStatus.OK);
     }
