@@ -277,7 +277,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUpdated } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import html2canvas from 'html2canvas'
@@ -661,6 +661,10 @@ const createGroupMeeting = (userList) => {
 onMounted(() => {
   joinSession()
 
+  window.addEventListener('beforeunload', leaveMainMeeting)
+})
+
+onBeforeUnmount(() => {
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
 </script>

@@ -11,7 +11,7 @@
     <div
       class="absolute top-[80%] left-[3%] w-[35%] h-[15%] flex justify-center items-center bg-black rounded-r-xl"
     >
-      <span class="text-white text-opacity-none text-r-sm">{{ clientData() }}</span>
+      <span class="text-white text-opacity-none text-[2vh]">{{ clientData() }}</span>
     </div>
     <video ref="videoElement" autoplay class="w-full h-full rounded-[3vb]" />
   </div>

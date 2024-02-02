@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-[10%] h-[8%] top-[2%] left-[50%]">
+  <div class="fixed w-[10%] h-[8%] top-[2%] left-[45%]">
     <div
       v-if="isCamera"
       id="gift-container"
