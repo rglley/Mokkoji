@@ -26,8 +26,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Column(nullable = false, length = 10)
-    @Size(max = 10)
+    @Column(nullable = false, length = 6)
+    @Size(max = 6)
     private String name;
 
     @Enumerated(EnumType.STRING)
