@@ -2,6 +2,7 @@
   <div id="main-gradient2" class="py-20">
     <div class="mx-auto w-1/3 bg-white rounded-lg shadow-md p-20 pb-5">
       <div class="space-y-2 text-center">
+        {{ email }}
         <h1 class="text-3xl font-bold">{{ name }}님의 정보</h1>
         <p class="text-slate-400">회원정보를 수정해요</p>
       </div>
@@ -56,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '../../stores/user'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -70,35 +71,30 @@ const fileName = ref('')
 const banks = ['KB', '농협', '기업', '카카오뱅크']
 const bank = ref('')
 const accountNumber = ref('')
+const email = ref('')
 
 const update = () => {
+  console.log(email.value)
   axios
-    .post({
-      URL: store.API_URI + '/update',
+    .put('http://localhost:8080/users', {
+      name: name.value,
+      image: image.value,
+      bank: bank.value,
+      accountNumber: accountNumber.value,
+      email : email.value
+    }, {
       headers: {
-        Authorization: localStorage.getItem('access-token')
-      },
-      data: {
-        name: name.value,
-        image: image.value,
-        bank: bank.value,
-        accountNumber: accountNumber.value
+        Authorization: $cookies.get('token')
       }
     })
     .then(() => {
-      alert('회원 정보 수정!')
-      router.go(-1)
+      alert('회원 정보 수정!');
+      router.go(-1);
     })
     .catch((err) => {
-      alert(err.errorMsg)
-      // switch(err.status) {
-      //   case(401):
-      //     alert('Invalid token');
-      //     break;
-      //   case(403):
-      // }
-    })
-}
+      alert(err);
+    });
+};
 
 const getFileName = async (files) => {
   fileName.value = files[0].name
@@ -117,19 +113,22 @@ const base64 = (file) => {
   })
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   axios
-    .get({
-      URL: store.API_URI + '/update',
+    .get('http://localhost:8080/users/userinfo', {
       headers: {
-        Authorization: localStorage.getItem('access-token')
+        Authorization: $cookies.get('token')
       }
     })
     .then((res) => {
-      res.name = name.value
-      res.image = image.value
-      if (res.bank != null) res.bank = bank.value
-      if (res.accountNumber != null) res.accountNumber = accountNumber.value
+      name.value = res.data.name
+      email.value = res.data.email
+      bank.value = res.data.bank
+      accountNumber.value = res.data.accountNumber
+      image.value = res.data.image
+    })
+    .catch((error) => {
+      console.error(error)
     })
 })
 </script>

@@ -10,7 +10,7 @@
           <label class="text-sm font-medium text-slate-500" for="email"> 이메일 </label>
           <input
             class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            v-model="store.email"
+            v-model="email"
             disabled
           />
         </div>
@@ -26,12 +26,7 @@
         <div class="flex items-center space-x-4">
           <div class="flex-auto w-max m-5">
             <label>
-<<<<<<< HEAD
-              <img id="image-profile" :src="image" class="w-40"/>
-=======
-              <!-- <img id="image-profile" src="{{ image }}" /> -->
-              <img id="image-profile" src="@/assets/landing/dummy_profile.jpg" />
->>>>>>> origin/frontend-deploy
+              <img id="image-profile" :src="image" class="w-40" />
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
@@ -70,14 +65,16 @@
 import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 import axios from 'axios'
-import { toast } from 'vue3-toastify/index'
+import tokenService from '@/services/token.service'
 
 const router = useRouter()
 const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
+const email = ref('')
 const fileName = ref('')
 
 const getFileName = async (files) => {
@@ -124,20 +121,24 @@ const signUp = async () => {
     }
   })
     .then(() => {
-      store.isLogin = true;
-      toast({
-        
-      })
+      store.isLogin = true
+
       router.push('/')
     })
     .catch((err) => {
-      console.log(err)
+      toast(err.message, {
+        theme: 'auto',
+        type: 'default',
+        dangerouslyHTMLString: true
+      })
     })
 }
 
 onBeforeMount(() => {
   name.value = store.name;
   image.value = store.image;
+  email.value = store.email;
+  console.log($cookies.get('token'))
 })
 </script>
 

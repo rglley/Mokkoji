@@ -1,14 +1,14 @@
 <template>
   <header :class="{ 'transparent-header': isTransparent }" class="fixed h-32 z-10 my-auto w-full bg-transparent">
     <nav class="w-full flex pl-5">
-      <a href="/" class="flex items-center rtl:l:space-x-reverse">
+      <router-link to="/" class="h-28 flex items-center rtl:l:space-x-reverse">
         <img
           src="/src/assets/logo/mokkoji_logo.png"
-          class="h-28 mx-5 transition ease-in-out hover:animate-pulse"
+          class="h-24 mx-5 transition ease-in-out hover:animate-pulse"
           alt="모꼬지 로고"
         />
         <!-- <span id="title-bold">모꼬지</span> -->
-      </a>
+      </router-link>
 
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
@@ -27,13 +27,12 @@
               id="button-header"
               data-dropdown-toggle="dropdown"
               data-dropdown-trigger="click"
-              to="/mypage"
             >
               내 서비스
             </button>
             <div
               id="dropdown"
-              class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
+              class="z-10  bg-white divide-y divide-slate-200 rounded-lg w-32"
             >
               <ul aria-labelledby="dropdownHoverButton" class="w-50">
                 <li id="li-dropdown">
@@ -62,7 +61,6 @@ import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/home/LoginModal.vue'
 
 const store = useUserStore()
-
 const isLoginModal = ref(false)
 const isTransparent = ref(false)
 
@@ -70,28 +68,25 @@ const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
 }
 
-
-const limitHeight = 500;
+const limitHeight = 500
 
 const handleScroll = () => {
-  if (scrollY > limitHeight)
-    isTransparent.value = true;
-  if (scrollY < limitHeight)
-    isTransparent.value = false;
+  if (scrollY > limitHeight) isTransparent.value = true
+  if (scrollY < limitHeight) isTransparent.value = false
 }
+initFlowbite()
 
 onMounted(() => {
-  initFlowbite()
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll)
 })
 </script>
 
 <style>
 .transparent-header {
-  @apply opacity-0 transition-opacity duration-500
+  @apply opacity-0 transition-opacity duration-500;
 }
 
 li {
-  @apply m-2 p-5
+  @apply m-2 p-5;
 }
 </style>

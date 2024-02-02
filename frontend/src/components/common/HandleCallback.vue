@@ -1,31 +1,26 @@
 <template>
-  <div>!!!!!!!!!!!!!</div>
+  <div class="flex space-x-2 justify-center items-center h-screen" id="main-gradient">
+    <div class="flex rounded-full bg-white w-[50vh] h-[50vh] items-center justify-center">
+    <span class="sr-only">Loading...</span>
+    <div class="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+    <div class="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+    <div class="h-8 w-8 bg-black rounded-full animate-bounce"></div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { onMounted, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { toast } from 'vue3-toastify'
 import axios from 'axios'
+import tokenService from '@/services/token.service'
 
 const router = useRouter()
 const route = useRoute()
-const store = useUserStore();
+const store = useUserStore()
 const naverquerycode = ref('')
-
-const parseJwt = (token) => {
-  const base64Url = token.split('.')[1]
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      })
-      .join('')
-  )
-  return JSON.parse(jsonPayload)
-}
 
 onBeforeMount(() => {
   naverquerycode.value = route.query.code
@@ -35,28 +30,32 @@ onMounted(() => {
   axios({
     method: 'GET',
     url: 'http://localhost:8080/oauth2/naver/' + naverquerycode.value,
-  }).then((res) => {
-    const token = res.headers['authorization']
-    const decodedToken = parseJwt(token);
-    const exp = new Date(decodedToken['exp'] * 1000);
-    // eslint-disable-next-line no-undef
-    $cookies.set('token', token, exp)
-     // res 받고 store에 저장해서 기존/신규회원 구분 후 라우팅
-     store.name = res.data.name;
-     store.email = res.data.email;
-     store.image= res.data.image;
-
-     if (res.data.first == true) {
-      router.push('/signup')
-    } else {
-      store.isLogin = true;
-      alert('로그인이 완료!')
-      router.push('/')
-    }
+  
   })
-  .catch((err) => {
-    console.log(err)
-  })
+    .then((res) => {
+      const token = res.headers['authorization']
+      tokenService.setLocalAccessToken(token);
+      tokenService.setUser(res.data)
+      store.name = res.data.name;
+      store.email = res.data.email;
+      store.image = res.data.image;
+      if (res.data.first == true) {
+        router.push('/signup')
+      } else {
+        store.isLogin = true
+        const refreshToken = res.headers['authorization-refresh']
+        tokenService.setLocalRefreshToken(refreshToken);
+        alert('로그인이 완료!')
+        router.push('/')
+      }
+    })
+    .catch((err) => {
+      toast(err.message, {
+        theme: 'auto',
+        type: 'default',
+        dangerouslyHTMLString: true.valueOf,
+      })
+    })
 })
 </script>
 

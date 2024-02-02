@@ -9,7 +9,6 @@ if (import.meta.env.MODE !== 'ssr') {
 }
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import axios from 'axios'
 //scroll animation
 import AOS from 'aos'
 // import 'aos/dist/aos.css'
@@ -23,15 +22,10 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-
-app.mount('#app')
-
-app.config.globalProperties.$axios = axios
-
-// cookie
 app.use(VueCookies, { expires: '7d' })
 
+app.mount('#app')
 // axios interceptor
-import setupInterceptors from './services/setupInterceptors.js'
+// import setupInterceptors from './services/setupInterceptors.js'
 
-setupInterceptors()
+// setupInterceptors()

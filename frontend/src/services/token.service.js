@@ -9,30 +9,29 @@ class TokenService {
   }
 
   setLocalRefreshToken = (token) => {
-    this.$cookie.set('refresh-token', token);
+    $cookies.set('refresh-token', token);
   }
 
   setLocalAccessToken = (token) => {
-    this.$cookie.set('access-token', token);
+    $cookies.set('token', token);
   }
 
   updateLocalAccessToken = (token) => {
-    this.$cookie.set('access-token', token);
+    $cookies.set('token', token);
   }
 
   getUser = () => {
-    return JSON.parse(sessionStorage.getItem('user'))
+    return $cookies.get('user')
   }
 
   setUser = (user) => {
-    console.log(JSON.stringify(user))
-    this.$cookie.set('user', JSON.stringify(user))
+    $cookies.set('user', user)
   }
 
   removeUser = () => {
-    this.$cookie.remove('user');
-    this.$cookie.remove('access-token');
-    this.$cookie.remove('refresh-token');
+    $cookies.remove('user');
+    $cookies.remove('token');
+    $cookies.remove('refresh-token');
   }
 
   parseJwt = (token) => {
@@ -50,7 +49,7 @@ class TokenService {
   }
 
   expiredToken = () => {
-    return this.parseJwt(this.accessToken).exp * 1000 <= Date.now()
+    return parseJwt(this.accessToken).exp * 1000 <= Date.now()
   }
 }
 

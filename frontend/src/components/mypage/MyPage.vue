@@ -9,12 +9,12 @@
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
         <div class="flex flex-col w-6/12 ml-10">
           <span class="flex flex-col mt-10 max-md:mt-10"
-            ><div class="text-black text-3xl font-bold self-stretch">{{ store.name }}님</div>
-            <div class="text-black text-xl self-stretch mt-2.5">{{ store.email }}</div>
+            ><div class="text-black text-3xl font-bold self-stretch">{{ name }}님</div>
+            <div class="text-black text-xl self-stretch mt-2.5">{{ email }}</div>
             <span class="mt-16 pl-2 pr-4"
               ><div class="text-black text-3xl">
                 계좌 등록
-                <a class="text-2xl text-red-500" v-if="store.isAccountLinked">O</a>
+                <a class="text-2xl text-red-500" v-if="isAccountRegistered">O</a>
                 <a class="text-2xl text-red-500" v-else>X </a>
               </div>
             </span>
@@ -22,7 +22,7 @@
               계좌를 등록하시면 참가자들의 마음을 받을 수 있어요
             </div>
             <div class="mt-20">
-              <router-link to="/mypage/detail" id="button-submit">회원정보 수정</router-link>
+              <a href="/mypage/detail" id="button-submit">회원정보 수정</a>
             </div>
           </span>
         </div>
@@ -63,12 +63,8 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue'
-import { useUserStore } from '../../stores/user'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
-
-const store = useUserStore()
-const API_URI = ''
 
 const image = ref('')
 const name = ref('')
@@ -77,32 +73,38 @@ const eventCount = ref(0)
 const totalTime = ref(0)
 const totalParticipant = ref(0)
 const totalMessage = ref(0)
+const email = ref('')
 
-// TODO : refresh token 처리
-const getUserDetail = () => {
-  axios({
-    url: API_URI + '/users/userinfo',
-    method: 'GET',
-    headers: {
-      // eslint-disable-next-line no-undef
-      'Authorization' : $cookies.get('token')
-    }
-  })
+const getInfo = () => {
+  axios
+    .get('http://localhost:8080/users/mypage', {
+      headers: {
+        Authorization: $cookies.get('token')
+      }
+    })
     .then((res) => {
-      ;(res.name = name.value),
-        (res.totalTime = totalTime.value),
-        (res.image = image.value),
-        (res.isAccountLinked = isAccountRegistered.value),
-        (res.eventCount = eventCount.value),
-        (res.totalParticipant = totalParticipant.value),
-        (res.totalMessage = totalMessage.value)
+      console.log(res);
     })
-    .catch((err) => {
-      console.log(err)
-    })
-}
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
-onBeforeMount(() => {
+const getUserDetail = async () => {
+  try {
+    const res = await axios.get('http://localhost:8080/users/mypage', {
+      headers: {
+        Authorization: $cookies.get('token')
+      }
+    })
+    console.log(res)
+    email.value = res.data.email
+  } catch (err) {
+    console.error(err)
+  }
+}
+onMounted(() => {
+  getInfo()
   getUserDetail()
 })
 </script>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import tokenService from '@/services/token.service'
@@ -18,7 +18,6 @@ export const useUserStore = defineStore('user', () => {
       method: 'GET'
     })
       .then((res) => {
-        console.log(res)
         isLogin.value = true
         const token = res.headers.get('Authorization')
         // cookie에 token 및 user 정보 저장
@@ -68,10 +67,24 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const logout = () => {
-    isLogin.value = false;
     // eslint-disable-next-line no-undef
-    $cookies.removeItem()
+    tokenService.removeUser()
+    isLogin.value = false
+    router.push('/')
   }
+
+  onBeforeMount(() => {
+      try {
+        const user = tokenService.getUser()
+        console.log(user)
+        user.name = name.value
+        user.email = email.value
+        user.image = image.value
+        isLogin.value = true
+      } catch (err) {
+        console.log(err)
+      }
+    })
 
   return {
     name,
@@ -81,6 +94,6 @@ export const useUserStore = defineStore('user', () => {
     isLogin,
     login,
     withdraw,
-    logout,
+    logout
   }
 })

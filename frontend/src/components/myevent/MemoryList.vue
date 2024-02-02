@@ -176,8 +176,6 @@ const lastDayToEdit = computed(() => {
   let currentDate = new Date()
   let expireDate = new Date(expireYear, expireMonth - 1, expireDay)
 
-  console.log(expireDate)
-
   let editablePeriod = Math.abs(expireDate.getTime() - currentDate.getTime())
   editablePeriod = Math.ceil(editablePeriod / (1000 * 60 * 60 * 24))
   return {
