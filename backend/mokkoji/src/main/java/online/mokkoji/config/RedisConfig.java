@@ -19,6 +19,10 @@ public class RedisConfig {
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
+    @Value("${spring.data.redis.password}")
+    private String password;
+
+
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
@@ -31,7 +35,7 @@ public class RedisConfig {
     public RedissonClient redissonClient() {
         Config config = new Config();
         // TODO : 2024.01.30 ssl 환경에서는 rediss로 바꿔야 한다고 한다!! https://dkswnkk.tistory.com/711
-        config.useSingleServer().setAddress("redis://" + redisHost + ":" + redisPort);
+        config.useSingleServer().setAddress("redis://" + redisHost + ":" + redisPort).setPassword(password);
         return Redisson.create(config);
     }
 

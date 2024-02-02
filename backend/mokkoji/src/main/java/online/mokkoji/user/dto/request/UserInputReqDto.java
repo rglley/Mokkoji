@@ -1,20 +1,19 @@
-package online.mokkoji.user.dto.response;
+package online.mokkoji.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 @AllArgsConstructor
-public class SignupPageDto {
-    @NotBlank
-    private String email;
+public class UserInputReqDto {
 
     @NotBlank
     private String name;
 
     @NotBlank
     private String image;
+
+    private String bank;
+    private String accountNumber;
 }
