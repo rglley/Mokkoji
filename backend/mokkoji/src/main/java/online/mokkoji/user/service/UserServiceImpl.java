@@ -77,14 +77,8 @@ public class UserServiceImpl implements UserService{
 
         String refreshToken = jwtService.createRefreshToken();
 
-        User newUser = User.builder()
-                .provider(Provider.valueOf(provider))
-                .email(email)
-                .name(userInputReqDto.getName())
-                .image(userInputReqDto.getImage())
-                .authority(Authority.USER)
-                .refreshToken(refreshToken)
-                .build();
+        User newUser = findUser.get();
+        newUser.updateAuthority();
 
         userRepository.save(newUser);
 

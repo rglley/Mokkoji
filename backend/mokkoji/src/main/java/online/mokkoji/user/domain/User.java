@@ -71,4 +71,7 @@ public class User {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+    public void updateAuthority() {
+        this.authority = Authority.USER;
+    }
 }
