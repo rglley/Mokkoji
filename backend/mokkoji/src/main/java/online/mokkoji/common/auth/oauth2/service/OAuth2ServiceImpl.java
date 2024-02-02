@@ -3,6 +3,7 @@ package online.mokkoji.common.auth.oauth2.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.oauth2.config.OAuth2Config;
 import online.mokkoji.common.auth.oauth2.dto.response.UserInfoResDto;
 import online.mokkoji.common.exception.RestApiException;
@@ -23,9 +24,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class Oauth2ServiceImpl implements OAuth2Service {
+public class OAuth2ServiceImpl implements OAuth2Service {
 
     private final OAuth2Config oAuth2Config;
     private final ObjectMapper objectMapper;
@@ -57,13 +59,11 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         );
 
         JsonNode profileJSON = objectMapper.readTree(profileResponse.getBody());
-        if(!(tokenJSON.has("email") && tokenJSON.has("name")
-                && tokenJSON.has("profile_image")))
-            throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
+        log.info(profileJSON.toString());
 
-        String email = profileJSON.get("email").asText();
-        String name = profileJSON.get("name").asText();
-        String image = profileJSON.get("profile_image").asText();
+        String email = profileJSON.path("response").path("email").asText();
+        String name = profileJSON.path("response").path("name").asText();
+        String image = profileJSON.path("response").path("profile_image").asText();
 
 
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.NAVER, email);
@@ -71,7 +71,7 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         if(findUser.isEmpty()) {
             User guestUser = User.builder()
                     .authority(Authority.GUEST)
-                    .provider("naver")
+                    .provider("NAVER")
                     .email(email)
                     .name(name)
                     .image(image)
@@ -83,7 +83,8 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         return new UserInfoResDto("naver", email, name, image, false);
     }
 
-    private HttpEntity<MultiValueMap<String, String>> generateNaverTokenReq(String authorizationCode) {
+    @Override
+    public HttpEntity<MultiValueMap<String, String>> generateNaverTokenReq(String authorizationCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -96,7 +97,8 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         return new HttpEntity<>(params, headers);
     }
 
-    private HttpEntity<MultiValueMap<String, String>> generateGoogleTokenReq(String authorizationCode) {
+    @Override
+    public HttpEntity<MultiValueMap<String, String>> generateGoogleTokenReq(String authorizationCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
@@ -109,14 +111,16 @@ public class Oauth2ServiceImpl implements OAuth2Service {
         return new HttpEntity<>(params, headers);
     }
 
-    private HttpEntity<MultiValueMap<String, String>> generateNaverProfileReq(String accessToken) {
+    @Override
+    public HttpEntity<MultiValueMap<String, String>> generateNaverProfileReq(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         return new HttpEntity<>(headers);
     }
 
-    private ResponseEntity<String> requestNaverProfile(HttpEntity request) {
+    @Override
+    public ResponseEntity<String> requestNaverProfile(HttpEntity request) {
         RestTemplate restTemplate = new RestTemplate();
 
         return restTemplate.exchange(oAuth2Config.getNaverProfileUrl(), HttpMethod.POST, request, String.class);

@@ -2,9 +2,11 @@ package online.mokkoji.common.auth.oauth2.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.common.auth.oauth2.dto.response.UserInfoResDto;
 import online.mokkoji.common.auth.oauth2.service.OAuth2Service;
+import online.mokkoji.common.auth.oauth2.service.OAuth2ServiceImpl;
 import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
@@ -15,13 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/oauth2")
 public class OAuth2Controller {
 
-    private final OAuth2Service oAuth2Service;
+    private final OAuth2ServiceImpl oAuth2Service;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
@@ -29,8 +31,6 @@ public class OAuth2Controller {
     @GetMapping("/{provider}/{code}")
     public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code,
                                                       HttpServletResponse res) throws Exception {
-
-
             UserInfoResDto userInfoResDto = oAuth2Service.getNaverUserInfo(code);
 
             String email = userInfoResDto.getEmail();

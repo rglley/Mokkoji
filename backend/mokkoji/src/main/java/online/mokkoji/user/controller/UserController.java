@@ -43,8 +43,6 @@ public class UserController {
         return new ResponseEntity<>(myPageResDto, HttpStatus.OK);
     }
 
-
-
     @PostMapping
     public ResponseEntity<UserInputReqDto> addUser(HttpServletRequest req,
                                                    @Valid @RequestBody UserInputReqDto userInputReqDto) {
