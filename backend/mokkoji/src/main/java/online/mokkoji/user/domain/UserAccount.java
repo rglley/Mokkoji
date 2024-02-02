@@ -16,7 +16,7 @@ public class UserAccount {
     @Column(name = "account_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

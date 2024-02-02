@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @ToString(of = {"id", "email", "name", "image"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -35,10 +34,10 @@ public class User {
 
     private String image;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private UserAccount userAccount;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.PERSIST, optional = false)
     private Record record;
 
     // TODO : reddis로 관리
