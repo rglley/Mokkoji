@@ -9,12 +9,19 @@ import test from '@/components/myEdit/ImgUpload.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
 import Meeting from '@/components/meeting/Meeting.vue'
 import MeetingView from '@/views/MeetingView.vue'
+import MainMeetingView from '@/views/MainMeetingView.vue'
+import GroupMeetingView from '@/views/GroupMeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
+import HandleCallback from '@/components/common/HandleCallback.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/oauth2/redirect',
+      component: HandleCallback
+    },
     {
       path: '/',
       name: 'home',
@@ -26,7 +33,6 @@ const router = createRouter({
       component: () => import('@/components/common/SignUp.vue')
     },
     {
-      // path: '/${userId}',
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
@@ -40,28 +46,19 @@ const router = createRouter({
           path: 'detail',
           name: 'mydetail',
           component: MyDetail
-        },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
-        },
-        {
-          path: 'detail',
-          name: 'mydetail',
-          component: MyDetail
-        },
-        {
-          path: 'account',
-          name: 'account',
-          component: MyAccount
         }
       ]
     },
     {
-      path: '/meeting/:accessType',
-      name: 'meeting',
-      component: MeetingView,
+      path: '/mainmeeting/:sessionId',
+      name: 'mainmeeting',
+      component: MainMeetingView,
+      props: true
+    },
+    {
+      path: '/groupmeeting/:mainSessionId',
+      name: 'groupmeeting',
+      component: GroupMeetingView,
       props: true
     },
     {

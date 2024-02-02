@@ -10,6 +10,7 @@
   </div>
 </template>
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import getImages from '@/api/get_images'
 
 const pageSize = 30
@@ -54,8 +55,16 @@ const handleScroll = () => {
     loadMorePhotos()
   }
 }
+
+onMounted(() => {
+  scrollContainer.value.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  scrollContainer.value.removeEventListener('scroll', handleScroll)
+})
 </script>
-<style scoped>
+<style>
 .custom-scroll-container {
   overflow-y: scroll;
   height: 800px;

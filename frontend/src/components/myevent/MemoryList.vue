@@ -141,7 +141,6 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-
 import IconCalen from '@/icons/result/IconCalen.vue'
 import IconClock from '@/icons/result/IconClock.vue'
 import IconPeople from '@/icons/result/IconPeople.vue'
@@ -150,7 +149,7 @@ import IconCheckMark from '@/icons/result/IconCheckMark.vue'
 import IconWarning from '@/icons/result/IconWarning.vue'
 import IconSingleFlower from '@/icons/result/IconSingleFlower.vue'
 
-
+const props = defineProps(['memory'])
 
 const { VITE_MEMORY_IMG_COUNT } = import.meta.env
 const isRollingDone = true
@@ -158,15 +157,11 @@ const isPhotoDone = false
 const isOpenWarningModal = ref(false)
 const isOpenInputModal = ref(false)
 
-const props = defineProps(['memory'])
-
 //기억 카드 무작위 행사 이미지 배치
 const imgNo = computed(() => {
   let no = props.memory.eventId % VITE_MEMORY_IMG_COUNT
-  console.log(no)
   return no === 0 ? VITE_MEMORY_IMG_COUNT : no
 })
-console.log(imgNo)
 
 const lastDayToEdit = computed(() => {
   let eventDate = new Date(props.memory.eventDay) //편집 마감 기한 계산하기
@@ -193,11 +188,11 @@ const lastDayToEdit = computed(() => {
 })
 
 
-let showWarningModal = () => {
+const showWarningModal = () => {
   isOpenWarningModal.value = !isOpenWarningModal.value
 }
 
-let showInputModal = () => {
+const showInputModal = () => {
   isOpenWarningModal.value = false
   isOpenInputModal.value = !isOpenInputModal.value
 

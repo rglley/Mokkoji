@@ -105,6 +105,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 import PhotoCard from '@/temp/result/photocard.json'
 import IconPeople from '@/icons/result/IconPeople.vue'
@@ -114,7 +115,6 @@ import IconVideo from '@/icons/result/IconVideo.vue'
 import IconAudio from '@/icons/result/IconAudio.vue'
 import IconMailBox from '@/icons/result/IconMailBox.vue'
 import IconLightBulb from '@/icons/result/IconLightBulb.vue'
-import { ref } from 'vue'
 
 const photocard = PhotoCard
 const design = 'basic'
@@ -171,4 +171,4 @@ const optShare = (value) => {
 }
 </script>
 
-<style scoped></style>
+<style></style>

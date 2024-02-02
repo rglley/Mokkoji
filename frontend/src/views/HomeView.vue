@@ -1,41 +1,27 @@
 <template>
-  <!-- <section class="carousel" aria-label="Gallery">
-    <ol class="carousel__viewport">
-      <li id="carousel__slide1" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-      <li id="carousel__slide2" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-      <li id="carousel__slide3" tabindex="0" class="carousel__slide">
-        <div class="carousel__snapper"></div>
-      </li>
-    </ol>
-  </section> -->
   <main id="main-landing">
-    <!-- <section class="pb-12 pt-32 bg-[url('/src/assets/main_banner2.png')] mb-10"> -->
     <section class="pt-52 z-2 h-max" id="main-gradient2">
-      <div class="absolute y-0 right-0">
-        <img src="@/assets/wedding.svg" />
+      <div class="absolute y-0 right-0 size-2/4">
+        <img src="@/assets/landing/wedding.svg" />
       </div>
-      <div id="container" class="mt-52 flex flex-col">
+      <div id="container" class="mt-52 flex flex-col w-1/2">
         <div
-          class="text-justify ml-12 flex flex-col w-2/3 animate-in fade-in-10 delay-1000 duration-1000"
+          class="text-justify ml-12 flex flex-col  animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-normal"
         >
           <!-- <div class="text-center"> -->
-          <h1 id="title-bold" class="ml-8 text-8xl">모꼬지</h1>
+          <h1 id="title">모꼬지</h1>
           <br />
           <p>
-            화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를
-            공간적인 제약 없이 참여해보세요.
-          </p>
-          <p>
-            순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을
-            제공합니다.
-          </p>
+            화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
+            없이 참여해보세요.
+          </p><br>
+          <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
-          <div class="grid place-content-center my-20 w-2/3">
-            <button class="rounded-2xl" @click="generateMeeting">
+          <div class="grid place-content-center ml-[10vh] my-20 w-2/3 text-base">
+            <button
+              class="my-2 py-2 rounded-xl hover:bg-purple-500 text-white duration-300 w-60 bg-purple-400"
+              @click="createMeeting"
+            >
               화상 모임 생성하기
             </button>
 
@@ -49,22 +35,20 @@
                   @keyup.enter="submitConferenceId"
                   class="pl-10 w-60 border-2 border-slate-500 rounded-xl"
                 />
-                <div class="absolute top-2 right-2">
-                  <button @click="submitConferenceId" class="rounded-full size-8 mt-2">
-                    <img src="@/icons/send.png" class="" />
+                <div class="absolute -top-[0.5vh] right-1">
+                  <button
+                    @click="submitConferenceId"
+                    class="rounded-full size-8 mt-2 z-10 bg-primary hover:bg-primary3 duration-300"
+                  >
+                    <img src="@/assets/landing/send.png" />
                   </button>
                 </div>
-                <ModalView
-                  v-if="showModal"
-                  :show-modal="showModal"
-                  @close-modal="toggleModal"
-                >
+                <ModalView v-if="isModal" :show-modal="isModal" @close-modal="showModal">
                   <MeetingJoinModal :conferenceIdInput="conferenceIdInput" />
                 </ModalView>
               </div>
-              <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
+              <p v-if="isInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
             </div>
-            <p v-if="ifInputError" style="color: red">올바른 회의 ID가 아닙니다</p>
           </div>
         </div>
       </div>
@@ -86,17 +70,15 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="mx-5 px-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의</h1>
+          <h1 id="title-sub-bold">한 마디를 간직하세요.</h1>
+
           <br />
-          <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
-          </p>
-          <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
-          </p>
+          <p id="p-main">모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.</p>
+          <p id="p-main">참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.</p>
         </div>
         <div class="items-center">
-          <img src="@/assets/main1.png" />
+          <img src="@/assets/landing/main1.png" />
         </div>
       </div>
       <div id="space"></div>
@@ -119,10 +101,12 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="justify-self-end mr-20">
-          <img class="pl-0" src="@/assets/main2.png" />
+          <img class="pl-0" src="@/assets/landing/main2.png" />
         </div>
         <div class="text-center">
-          <h2 id="title-sub-bold">포토 모자이크로 사진들을 한 눈에 구경하세요.</h2>
+          <h2 id="title-sub-bold">포토 모자이크로 사진들을</h2>
+          <h2 id="title-sub-bold">한 눈에 구경하세요.</h2>
+
           <br />
           <p id="p-main">
             포토 모자이크 기능은 서로 다른 사진들을 조합하여 하나의 이미지를 표현합니다.
@@ -150,17 +134,15 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="mx-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">소그룹을 형성하여 친구들과</h1>
+          <h1 id="title-sub-bold">자유롭게 소통하세요.</h1>
+
           <br />
-          <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
-          </p>
-          <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
-          </p>
+          <p id="p-main">소그룹 기능을 이용하여 소통하고 싶은 다른 참여자들과</p>
+          <p id="p-main">사적인 공간에서 자유롭게 이야기 할 수 있습니다.</p>
         </div>
         <div class="flex-col items-center">
-          <img src="@/assets/main3.png" />
+          <img src="@/assets/landing/main3.png" />
         </div>
       </div>
       <div id="space"></div>
@@ -183,17 +165,15 @@
       </div>
       <div class="mt-5 grid grid-cols-2 gap-2 items-center" data-aos="fade-up">
         <div class="justify-self-end mr-20">
-          <img src="@/assets/main4.png" />
+          <img src="@/assets/landing/main4.png" />
         </div>
         <div class="mx-5 px-5 text-center">
-          <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의 한 마디를 간직하세요.</h1>
+          <h1 id="title-sub-bold">QR코드를 통해 축하금을</h1>
+          <h1 id="title-sub-bold">간편하게 보내세요.</h1>
+
           <br />
-          <p id="p-main">
-            모꼬지만의 템플릿을 이용하여 롤링페이퍼를 디자인하고 추억하세요.
-          </p>
-          <p id="p-main">
-            참여자는 모임중 언제나 텍스트, 음성, 영상 메시지를 기록할 수 있습니다.
-          </p>
+          <p id="p-main">화상 모임 내에서 주최자의 계좌와 연동된 QR코드가 제공됩니다.</p>
+          <p id="p-main">메세지로 다 담지 못한 축하하는 마음을 전달해보세요.</p>
         </div>
       </div>
       <div id="space"></div>
@@ -201,88 +181,78 @@
 
     <!--logo-->
     <section class="flex items-center justify-center py-20 bg-primary2">
-        <h1 id="title-sub-bold" class="">모꼬지를 사용하고 싶으신가요?</h1>
-        <button @click="toTop" class="animate-spin">처음으로 돌아가기</button>
+      <img src="@/assets/logo/mokkoji_logo.png" class="w-[25vh] px-[5vh]">
+
+      <h1 class="text-4xl font-bold">모꼬지를 사용하고 싶으신가요? </h1>
+      <button @click="toTop" 
+      class="animate-bounce duration-700 my-2 py-2 rounded-xl hover:bg-blue-500 text-white duration-300 w-fit px-[2vh] mx-[2vh] bg-blue-400"
+      >처음으로 돌아가기</button>
     </section>
   </main>
 </template>
 
 <script setup>
-// TODO : 비회원 사용자 회의 시작 시 안내 모달 띄워주기
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import ModalView from './ModalView.vue'
+import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 
-// toast : custom alert
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+const router = useRouter()
+const conferenceIdInput = ref('')
+const isInputError = ref(false)
+const isLogin = ref(false)
+const isModal = ref(false)
 
-import ModalView from "./ModalView.vue";
-import MeetingJoinModal from "../components/modal/MeetingJoinModal.vue";
+const showModal = () => {
+  isModal.value = !isModal.value
+}
 
-let conferenceIdInput = ref("");
-let ifInputError = ref(false);
-let isLogin = ref(false); // 나중에 store에서 받을 예정
+const submitConferenceId = () => {
+  console.log(conferenceIdInput.value)
 
-let showModal = ref(false);
-
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
-
-let submitConferenceId = () => {
-  console.log(conferenceIdInput.value);
+  router.push(`/meeting/${conferenceIdInput.value}`)
   // id input을 백엔드 서버로 axios 전송
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람
   // 임시로 만든 올바른 id ='qwer'
-  let validId = "qwer";
+  const validId = 'qwer'
   if (conferenceIdInput.value == validId) {
     // 로그인하지 않았다면 모달
     if (!isLogin.value) {
       // 모달 띄우고
-      showModal.value = true;
+      isModal.value = true
     }
-    ifInputError.value = false;
+    isInputError.value = false
     // 회의 이동
-    router.push("/");
+    router.push('/')
   } else {
-    ifInputError.value = true;
-    conferenceIdInput.value = "";
+    isInputError.value = true
+    conferenceIdInput.value = ''
   }
-};
+}
 
-// 회의 생성 로직
-// 로그인하지 않았다면 모달
-// 로그인하지 않았으면 alert
-// let generateMeeting = () => {
-//   if (isLogin.value) {
-//     router.push("#"); // 회의 리다이렉트(예정)
-//   } else {
-//     toast("로그인이 필요합니다", {
-//       theme: "auto",
-//       type: "warning",
-//       transition: "flip",
-//       autoClose: 1000,
-//     });
-//   }
-// };
-
-let generateMeeting = () => {
-  router.push('/meeting/host')
+const createMeeting = () => {
+  router.push('/mainmeeting/host')
   // if (isLogin.value) {
-  //   router.push('#') // 회의 리다이렉트(예정)
+  //   router.push('/mainmeeting/host')
   // } else {
-  //   alert('로그인이 필요합니다')
+  //   toast('로그인이 필요합니다', {
+  //     theme: 'auto',
+  //     type: 'warning',
+  //     transition: 'flip',
+  //     autoClose: 1000
+  //   })
   // }
 }
 
-let toTop = () => {
+const toTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: "smooth",
-  });
-};
+    behavior: 'smooth'
+  })
+}
 </script>
 
-<style scoped></style>
+<style></style>

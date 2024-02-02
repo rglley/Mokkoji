@@ -14,7 +14,12 @@
       /> -->
     <div class="flex justify-center items-center">
       <a href="">
-        <img src="@/assets/mokkoji_logo_with_bg.png" alt="unregistered" height="180" width="180" />
+        <img
+          src="@/assets/logo/mokkoji_logo_with_bg.png"
+          alt="unregistered"
+          height="180"
+          width="180"
+        />
       </a>
     </div>
     <div class="mt-5 text-center text-black">
@@ -31,9 +36,12 @@
 
 <script setup>
 import { computed } from 'vue'
+
 const props = defineProps(['recollection'])
+
 const description = props.recollection.description
 const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
+
 //액자, 미정
 let imgNo = computed(() => {
   let no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
@@ -42,7 +50,7 @@ let imgNo = computed(() => {
 </script>
 
 <style>
-.effect-purple {
+.effect {
   box-shadow: inset 0 -5px 0 #f6d8fd;
   color: black;
 }

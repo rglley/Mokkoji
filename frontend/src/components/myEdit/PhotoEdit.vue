@@ -74,13 +74,13 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import IconPhotoList from '@/icons/result/IconPhotoList.vue'
 import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
 import IconQuestionMark from '@/icons/result/IconQuestionMark.vue'
 import IconLightBulb from '@/icons/result/IconLightBulb.vue'
 import IconMarkPhoto from '@/icons/result/IconMarkPhoto.vue'
 import Gallery from '@/components/myedit/Gallery.vue'
-import { ref } from 'vue'
 
 const isOpenFive = ref(false)
 
@@ -93,7 +93,7 @@ const closeModalFive = () => {
 }
 </script>
 
-<style scoped>
+<style>
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.3s ease-in-out;

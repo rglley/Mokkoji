@@ -11,20 +11,20 @@
     </div>
     <div class="text-[50px] flex justify-center items-center pt-10">
       <div
-        class="w-[450px] rounded-3xl border-solid border-[#ffbbd2] p-10 shadow-lg shadow-[#ffbbd2] hover:cursor-pointer"
+        class="w-[450px] rounded-3xl border-solid border-[#ffbbd2] p-10 shadow-lg shadow-[#ffbbd2] hover:cursor-pointer flex flex-col justify-center items-center"
         id="btn"
         @click="scrollToRollingPaper"
       >
-        <p><IconLoveLetterColored /></p>
+        <p class="mb-[1vh]"><IconLoveLetterColored /></p>
         <button>롤링페이퍼 편집</button>
       </div>
       <div class="mx-16"></div>
       <div
-        class="w-[450px] rounded-3xl border-solid border-[#ba44de] p-10 shadow-lg shadow-[#b95fd4] hover:cursor-pointer"
+        class="w-[450px] rounded-3xl border-solid border-[#ba44de] p-10 shadow-lg shadow-[#b95fd4] hover:cursor-pointer flex flex-col justify-center items-center"
         id="btn"
         @click="scrollToPhotoMosaic"
       >
-        <p><IconGalleryColored /></p>
+        <p class="mb-[1vh]"><IconGalleryColored /></p>
         <button>포토모자이크 편집</button>
       </div>
     </div>
@@ -129,12 +129,12 @@
 
     <div class="w-2/3 flex justify-center items-center">
       <img
-        :src="`src/assets/rolling_template/${design}.png`"
+        :src="`src/assets/rollingtemplate/${design}.png`"
         :alt="`template_${design}`"
         class="z-10"
       />
       <img
-        :src="`src/assets/rolling_note/${color}.png`"
+        :src="`src/assets/rollingnote/${color}.png`"
         :alt="`template_${color}`"
         class="absolute z-20"
         width="700px"
@@ -255,8 +255,6 @@ import IconCheckMark from '@/icons/result/IconCheck.vue'
 import IconSearch from '@/icons/result/IconSearch.vue'
 import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconQuestionMark from '@/icons/result/IconQuestionMark.vue'
-import IconQuestionMarkBold from '@/icons/result/IconQuestionMarkBold.vue'
-
 import IconCheckSkyBlue from '@/icons/result/IconCheckSkyBlue.vue'
 import IconCheckBlue from '@/icons/result/IconCheckBlue.vue'
 import Gallery from '@/components/myEdit/Gallery.vue'
@@ -468,6 +466,7 @@ const selectOptTwo = (value) => {
       break
   }
 }
+
 //처음으로
 onMounted(() => {
   window.scrollTo(0, 0)

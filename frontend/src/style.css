@@ -4,34 +4,108 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 초기 세팅 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: 'SUITE', sans-serif;
 }
+
 button {
   background: none;
   color: inherit;
   border: none;
   cursor: pointer;
   outline: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 li {
   list-style: none;
 }
+
 a {
   color: inherit;
   text-decoration: none;
 }
+
 input:focus {
   outline: none;
 }
-/** pre , 텍스트에 사용된 여백과 줄바꿈이 모두 그대로 브라우저 화면에 나타납니다.*/
+
 pre {
   font-family: 'SUITE', sans-serif;
+}
+
+:root {
+  --font-size-lg: 1.5vw;
+  --font-size-md: 1.3vw;
+  --font-size-sm: 1vw;
+  --margin-left-sm: 0.5vw;
+  --padding-left-md: 1vw;
+  --padding-right-md: 1vw;
+  --padding-left-sm: 0.5vw;
+  --padding-right-sm: 0.5vw;
+  --border-line-sm: 0.2vw;
+  --border-radius-md: 0.5vb;
+  --border-radius-lg: 1vb;
+  --border-radius-xl: 4vb;
+}
+
+.button-text {
+  font-size: var(--font-size-sm);
+}
+
+.text-r-lg {
+  font-size: var(--font-size-lg);
+}
+
+.text-r-md {
+  font-size: var(--font-size-md);
+}
+
+.text-r-sm {
+  font-size: var(--font-size-sm);
+}
+
+.ml-sm {
+  margin-left: var(--margin-left-sm);
+}
+
+.ml-md {
+  margin-left: var(--margin-left-md);
+}
+
+.px-sm {
+  padding-left: var(--padding-left-sm);
+  padding-right: var(--padding-right-sm);
+}
+
+.px-md {
+  padding-left: var(--padding-left-md);
+  padding-right: var(--padding-right-md);
+}
+
+.border-sm {
+  border-width: var(--border-line-sm);
+}
+
+.rounded-r-md {
+  border-radius: var(--border-radius-md);
+}
+
+.rounded-r-lg {
+  border-radius: var(--border-radius-lg);
+}
+
+.rounded-r-xl {
+  border-radius: var(--border-radius-xl);
 }
 
 @layer components {
@@ -40,15 +114,19 @@ pre {
   }
 
   #title {
-    @apply text-8xl tracking-tighter p-2;
+    @apply text-7xl font-bold tracking-wider p-3;
   }
 
   #title-sub-bold {
-    @apply text-3xl font-bold tracking-tighter;
+    @apply text-5xl font-bold tracking-tighter;
   }
 
   #title-sub {
-    @apply text-3xl tracking-tighter p-2;
+    @apply text-3xl tracking-tighter p-3 m-2 whitespace-pre-wrap;
+  }
+
+  #p-main {
+    @apply text-xl whitespace-pre-line
   }
 
   #li-dropdown {
@@ -98,10 +176,6 @@ pre {
   #card-div {
     @apply rounded-md shadow-lg bg-primary0 p-4 pb-10 flex flex-col mt-24 mb-40 border-2 border-slate-200;
   }
-
-  /* button {
-    @apply ml-2 h-10 items-center p-2 inline-block rounded-md bg-primary3 text-sm text-white transition duration-300 ease-in-out hover:bg-yellow-100 hover:text-black;
-  } */
 
   #button-submit {
     @apply ml-2 h-10 items-center justify-center rounded-md;
