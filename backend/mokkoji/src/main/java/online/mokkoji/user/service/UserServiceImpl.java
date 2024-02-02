@@ -71,8 +71,8 @@ public class UserServiceImpl implements UserService{
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if(findUser.isPresent()) {
-            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
+        if(findUser.isPresent() && findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
+            throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
 
         String refreshToken = jwtService.createRefreshToken();
