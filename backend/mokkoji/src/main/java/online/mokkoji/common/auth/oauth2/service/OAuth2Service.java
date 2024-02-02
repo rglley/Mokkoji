@@ -5,14 +5,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Map;
+
 public interface OAuth2Service {
-    UserInfoResDto getNaverUserInfo(String accessToken) throws Exception;
+
 
     HttpEntity<MultiValueMap<String, String>> generateNaverTokenReq(String authorizationCode) throws Exception;
 
-    HttpEntity<MultiValueMap<String, String>> generateGoogleTokenReq(String authorizationCode) throws Exception;
-
     HttpEntity<MultiValueMap<String, String>> generateNaverProfileReq(String accessToken) throws Exception;
 
-    ResponseEntity<String> requestNaverProfile(HttpEntity request) throws Exception;
+    Map<String, Object> getNaverUserInfo(String accessToken) throws Exception;
+
 }
+

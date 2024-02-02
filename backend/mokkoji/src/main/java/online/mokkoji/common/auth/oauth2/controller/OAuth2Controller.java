@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,26 +28,23 @@ public class OAuth2Controller {
 
     private final OAuth2ServiceImpl oAuth2Service;
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
 
 
     @GetMapping("/{provider}/{code}")
     public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code,
                                                       HttpServletResponse res) throws Exception {
-            UserInfoResDto userInfoResDto = oAuth2Service.getNaverUserInfo(code);
+            Map<String, Object> result = oAuth2Service.getNaverUserInfo(code);
 
-            String email = userInfoResDto.getEmail();
-            String accessToken = jwtUtil.createAccessToken("naver", email);
+            UserInfoResDto userInfoResDto = (UserInfoResDto) result.get("userInfo");
 
-            if (userInfoResDto.isFirst()) {
-                res.setHeader("Authorization", accessToken);
-                return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
+            String accessToken = (String) result.get("accessToken");
+            res.addHeader("Authorization", accessToken);
+
+            if(result.containsKey("refreshToken")) {
+                String refreshToken = (String) result.get("refreshToken");
+                res.addHeader("Authorization-Refresh", refreshToken);
             }
 
-            String refreshToken = jwtUtil.createRefreshToken();
-
-            res.addHeader("Authorization", accessToken);
-            res.addHeader("Authorization-Refresh", refreshToken);
             return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
 }

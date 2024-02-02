@@ -69,17 +69,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public void createUser(String provider, String email, UserInputReqDto userInputReqDto) {
         Optional<User> findUser = userRepository.findByProviderAndEmail
-                (Provider.valueOf(provider.toUpperCase()), email);
+                (Provider.valueOf(provider), email);
 
         if(findUser.isPresent()) {
             throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
         }
 
         String refreshToken = jwtService.createRefreshToken();
-        log.info(refreshToken);
 
         User newUser = User.builder()
-                .provider(Provider.valueOf(provider.toUpperCase()))
+                .provider(Provider.valueOf(provider))
                 .email(email)
                 .name(userInputReqDto.getName())
                 .image(userInputReqDto.getImage())
@@ -87,7 +86,6 @@ public class UserServiceImpl implements UserService{
                 .refreshToken(refreshToken)
                 .build();
 
-        log.info(newUser.getRefreshToken());
         userRepository.save(newUser);
 
         String bank = userInputReqDto.getBank();
@@ -106,7 +104,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void updateUser(String provider, String email, UserInputReqDto modifyDto) {
-        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider.toUpperCase()), email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
             throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
@@ -134,7 +132,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User deleteUser(String provider, String email) {
-        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider.toUpperCase()), email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
             throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
