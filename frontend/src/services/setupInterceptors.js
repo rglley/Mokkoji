@@ -1,6 +1,6 @@
-import axiosInstance from '@/services/api'
-import tokenService from '@/services/token.service'
-import TokenService from '@/services/token.service'
+import axiosInstance from '@/services/api.js'
+import tokenService from '@/services/token.service.js'
+import TokenService from '@/services/token.service.js'
 
 const setup = () => {
   axiosInstance.interceptors.request.use(

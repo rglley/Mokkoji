@@ -214,9 +214,10 @@ const showModal = () => {
 }
 
 const submitConferenceId = () => {
-  console.log(conferenceIdInput.value)
-
-  router.push(`/api/sessions`)
+  router.push({
+    path: '/meetings',
+    props: { sessionId: conferenceIdInput.value }
+  })
   // id input을 백엔드 서버로 axios 전송
   // axios 반응이 정상이면 input값 id로 참가
   // 아니면 알람

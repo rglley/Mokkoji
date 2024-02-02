@@ -240,7 +240,7 @@
               <button
                 id="button-quit"
                 class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl text-r-md"
-                @click="leaveMainMeeting"
+                @click="getSession"
               >
                 나가기
               </button>
@@ -442,7 +442,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: '',
+  mySessionId: 'ses_Moi5edZdKv',
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -569,6 +569,7 @@ const joinSession = () => {
 
 // 세션 생성
 const createSession = async (sessionId) => {
+  console.log('start@@@@@@@@@@@@@@@@@@@@@@@')
   const response = await axios.post(
     APPLICATION_SERVER_URL + 'meetings/api/sessions',
     { customSessionId: sessionId },
@@ -576,6 +577,7 @@ const createSession = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
+  console.log(response.data)
   return response.data // sessionId
 }
 
