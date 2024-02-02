@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
 import online.mokkoji.event.domain.Event;
-import online.mokkoji.event.dto.request.RollingpaperReqDto;
+import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.result.repository.ResultRepository;
@@ -96,16 +96,16 @@ public class EventServiceImpl implements EventService {
 
     // 롤링페이퍼 파일 받아서 유효성 검사
     @Override
-    public Map<String, MultipartFile> createRollingpaperFileMap(RollingpaperReqDto rollingpaperReqDto) {
+    public Map<String, MultipartFile> createRollingpaperFileMap(MessageReqDto messageReqDto) {
 
         Map<String, MultipartFile> fileMap = new HashMap<>();
         // 음성이 있는 경우 map에 저장
-        MultipartFile voice = rollingpaperReqDto.getVoice();
+        MultipartFile voice = messageReqDto.getVoice();
         if (voice != null && !voice.isEmpty()) {
             fileMap.put("voice", voice);
         }
         // 영상이 있는 경우 map에 저장
-        MultipartFile video = rollingpaperReqDto.getVideo();
+        MultipartFile video = messageReqDto.getVideo();
         if (video != null && !video.isEmpty()) {
             fileMap.put("video", video);
         }

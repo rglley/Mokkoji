@@ -9,6 +9,7 @@ import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.domain.RollingPaper.RollingPaper;
+import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.MemoryResDto;
 import online.mokkoji.result.dto.response.RecollectionResDto;
 import online.mokkoji.result.dto.response.RollingpaperResDto;
@@ -126,6 +127,24 @@ public class ResultServiceImpl implements ResultService {
 
         return resultMap;
 
+    }
+
+    @Override
+    public void updateRollingpaper(Long resultId, RollingPaperReqDto rollingPaperReqDto) {
+        Result result = resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
+
+        RollingPaper rollingpaper = result.getRollingpaper();
+
+        String backgroundName = rollingPaperReqDto.getBackgroundName();
+        switch (backgroundName) {
+            case "basic":
+                break;
+            case "wedding": {
+                // TODO : 2024.02.02 이 단어에 해당하는 데이터 찾아서 바꾸기
+
+            }
+        }
     }
 
 

@@ -44,4 +44,11 @@ public class ResultController {
 
         return new ResponseEntity<>(photoAndMessageMap, HttpStatus.OK);
     }
+
+    // 롤링페이퍼 편집 완료
+//    @PatchMapping("/{resultId}/memories/rollingpaper")
+//    public ResponseEntity<String> updateRollingpaper(@PathVariable Long resultId,
+//                                                     @RequestBody RollingPaperReqDto rollingPaperReqDto) {
+//        resultService.updateRollingpaper(resultId, rollingPaperReqDto);
+//    }
 }
