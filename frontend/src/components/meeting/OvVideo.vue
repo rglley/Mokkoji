@@ -1,5 +1,20 @@
 <template>
-  <video ref="videoElement" autoplay />
+  <div v-if="mainStream" class="relative">
+    <div
+      class="absolute top-[90%] left-[3%] w-[20%] h-[8%] flex justify-center items-center text-white bg-black opacity-100 rounded-r-xl text-r-md"
+    >
+      {{ clientData() }}
+    </div>
+    <video ref="videoElement" autoplay class="w-full h-full rounded-[5.5vb]" />
+  </div>
+  <div v-else class="relative">
+    <div
+      class="absolute top-[80%] left-[3%] w-[35%] h-[15%] flex justify-center items-center bg-black rounded-r-xl"
+    >
+      <span class="text-white text-opacity-none text-r-sm">{{ clientData() }}</span>
+    </div>
+    <video ref="videoElement" autoplay class="w-full h-full rounded-[3vb]" />
+  </div>
 </template>
 
 <script setup>
@@ -9,8 +24,13 @@ import html2canvas from 'html2canvas'
 const props = defineProps({
   streamManager: {
     type: Object
+  },
+  mainStream: {
+    type: Boolean
   }
 })
+
+console.log(props.streamManager)
 
 const videoElement = ref(null)
 

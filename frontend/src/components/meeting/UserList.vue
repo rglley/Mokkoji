@@ -1,18 +1,19 @@
 <template>
-  <form
+  <div
+    v-if="streamManager && userName.includes(props.searchUserName)"
     action="/ses_AucL2KJFyW"
     name="group-user-list"
     accept-charset="utf-8"
     class="mb-[1vh] w-[95%] h-[20%] border-sm border-purple-300 rounded-r-md flex items-center"
   >
-    <div
-      v-if="streamManager && userName.includes(props.searchUserName)"
-      class="w-full flex items-center"
-    >
+    <div class="w-full flex items-center">
       <img src="@/assets/landing/profile_icon.jpg" alt="" class="ml-[0.5vw] w-[3vw] rounded-full" />
       <div class="ml-[1vw] text-r-sm">
         {{ userName }}
       </div>
+      <div v-if="buttonType === 'user-list' && userName === myName" class="ml-[0.3vw]">(나)</div>
+      <div v-if="buttonType === 'user-list'">마이크</div>
+      <div v-if="buttonType === 'user-list'">카메라</div>
       <div class="mr-[1vw] w-full h-full flex justify-end">
         <input
           type="checkbox"
@@ -30,7 +31,7 @@
         </label>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <script setup>
@@ -44,6 +45,9 @@ const props = defineProps({
   streamManager: {
     type: Object
   },
+  myName: {
+    type: String
+  },
   searchUserName: {
     type: String
   },
@@ -51,6 +55,8 @@ const props = defineProps({
     type: String
   }
 })
+
+console.log(props.myName)
 
 const emit = defineEmits(['user-checked']['user-unchecked'])
 

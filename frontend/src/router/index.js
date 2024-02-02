@@ -7,6 +7,7 @@ import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
+import WaitingRoom from '@/components/meeting/WaitingRoom.vue'
 import Error404 from '@/components/common/Error404.vue'
 import ErrorSession from '@/components/common/ErrorSession.vue'
 import EditPage from '@/views/EditView.vue'
@@ -53,10 +54,15 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/groupmeeting/:mainSessionId',
+      path: '/groupmeeting/:mainSessionId/:groupNumber',
       name: 'groupmeeting',
       component: GroupMeetingView,
       props: true
+    },
+    {
+      path: '/waitingroom',
+      name: 'waitingroom',
+      component: WaitingRoom
     },
     {
       path: '/resultpage',

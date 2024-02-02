@@ -13,15 +13,17 @@
               v-for="sub in state.subscribers"
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
+              :main-stream="false"
               @click.native="updateMainVideoStreamManager(sub)"
-              class="h-1/3 flex-none rounded-[3vb]"
+              class="h-1/3 flex-none"
             />
           </div>
           <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
             <user-Video
               id="main-video"
               :stream-manager="state.mainStreamManager"
-              class="px-sm w-full h-full rounded-[5.5vb]"
+              :main-stream="true"
+              class="px-sm w-full h-full"
             />
           </div>
         </div>
@@ -36,7 +38,8 @@
           v-for="sub in state.subscribers"
           :key="sub.stream.connection.connectionId"
           :stream-manager="sub"
-          class="w-full rounded-[3vb]"
+          :main-stream="false"
+          class="w-full"
         />
       </div>
       <!-- 참여자 목록, 채팅방-->
@@ -297,9 +300,6 @@ import LeaveGroupModal from '@/components/modal/meeting/LeaveGroupModal.vue'
 const props = defineProps({
   session: {
     type: Object
-  },
-  groupSessionId: {
-    type: String
   }
 })
 
@@ -308,6 +308,9 @@ const emit = defineEmits(['leave-meeting'])
 const router = useRouter()
 const videoWidth = window.screen.width * 0.65
 const videoHeight = window.screen.height * 0.9
+
+const sessionId = ref(props.session.sessionId)
+const groupNumber = ref(props.session.groupNumber)
 
 const isGrid = ref(false)
 const isMic = ref(true)
@@ -325,7 +328,10 @@ const isLeaveGroupModal = ref(false)
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
+const userList = ref([])
 const groupVideo = ref(null)
+
+console.log(props.session)
 
 const captureScreen = () => {
   const target = groupVideo.value
@@ -423,7 +429,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: props.groupSessionId,
+  mySessionId: props.session.sessionId + groupNumber.value,
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -435,6 +441,19 @@ const state = reactive({
 // 세션 참가하기
 const joinSession = () => {
   // 1) 세션 형식 확인
+  if (sessionId.value.slice(0, 4) !== 'ses_' || sessionId.value.length != 14) {
+    emit('leave-meeting')
+    router.push('/errorsession')
+  }
+
+  for (let idx = 4; idx < 14; idx++) {
+    if (sessionId.value.charCodeAt(idx) < 48) router.push('/errorsession')
+    else if (sessionId.value.charCodeAt(idx) > 57 && sessionId.value.charCodeAt(idx) < 65)
+      router.push('/errorsession')
+    else if (sessionId.value.charCodeAt(idx) > 90 && sessionId.value.charCodeAt(idx) < 97)
+      router.push('/errorsession')
+    else if (sessionId.value.charCodeAt(idx) > 122) router.push('/errorsession')
+  }
 
   // 2) Openvidu 객체 생성
   state.OV = new OpenVidu()
@@ -460,7 +479,6 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
-        state.subscribers.push(publisher)
 
         state.session.host = state.session.publish(publisher)
       })

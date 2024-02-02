@@ -13,15 +13,17 @@
               v-for="sub in state.subscribers"
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
+              :main-stream="false"
               @click.native="updateMainVideoStreamManager(sub)"
-              class="h-1/3 flex-none rounded-[3vb]"
+              class="h-1/3 flex-none"
             />
           </div>
           <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
             <user-Video
               id="main-video"
               :stream-manager="state.mainStreamManager"
-              class="px-sm w-full h-full rounded-[5.5vb]"
+              :main-stream="true"
+              class="px-sm w-full h-full"
             />
           </div>
         </div>
@@ -32,10 +34,11 @@
         class="w-full h-full basis-3/4 grid grid-cols-3 gap-[1vh] overflow-y-scroll items-center"
       >
         <user-Video
-          id="sub-video"
-          v-for="sub in state.subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
+          id="user-video"
+          v-for="user in userList"
+          :key="user.stream.connection.connectionId"
+          :stream-manager="user"
+          :main-stream="false"
           class="w-full rounded-[3vb]"
         />
       </div>
@@ -62,10 +65,12 @@
           </div>
           <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-hidden">
             <user-list
-              v-for="sub in state.subscribers"
-              :key="sub.stream.connection.connectionId"
-              :stream-manager="sub"
+              v-for="user in userList"
+              :key="user.stream.connection.connectionId"
+              :stream-manager="user"
               :search-user-name="searchUserName"
+              :my-name="state.myUserName"
+              :button-type="'user-list'"
               class="bg-white w-[90%] h-[10vh] rounded-r-lg text-r-sm flex justify-center items-center font-semibold"
             />
           </div>
@@ -272,7 +277,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUpdated } from 'vue'
 import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import html2canvas from 'html2canvas'
@@ -335,7 +340,10 @@ const isChat = ref(false)
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
+const userList = ref([])
 const connectedUser = ref([])
+const groupNumber = ref(0)
+const groupList = ref([])
 const groupVideo = ref(null)
 
 const captureScreen = () => {
@@ -485,8 +493,8 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
-        state.subscribers.push(publisher)
         sessionId.value = state.session.sessionId
+        userList.value.unshift(publisher)
 
         state.session.host = state.session.publish(publisher)
       })
@@ -504,6 +512,7 @@ const joinSession = () => {
   state.session.on('streamCreated', ({ stream }) => {
     console.log('새로운 참가자 입장')
     const subscriber = state.session.subscribe(stream, undefined)
+    userList.value.push(subscriber)
     state.subscribers.push(subscriber)
   })
 
@@ -535,11 +544,10 @@ const joinSession = () => {
   })
 
   // 소그룹 생성
-  state.session.on('signal:group', (event) => {
-    emit('create-group-meeting', { sessionId: sessionId.value, groupSessionId: event.data })
+  state.session.on('signal:group', () => {
+    emit('create-group-meeting', { sessionId: sessionId.value, groupNumber: groupNumber.value })
 
-    // 바로 route하면 안될듯
-    // router.push(`/groupmeeting/${event.data}`)
+    groupNumber.value++
 
     if (state.session) {
       state.session.disconnect()
@@ -550,6 +558,10 @@ const joinSession = () => {
       state.subscribers = []
       state.OV = undefined
     }
+  })
+
+  state.session.on('signal:else-group', () => {
+    groupNumber.value++
   })
 
   window.addEventListener('beforeunload', leaveMainMeeting)
@@ -628,24 +640,19 @@ const sendMessage = () => {
 }
 
 const createGroupMeeting = (userList) => {
-  // 소그룹 세션 생성
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-
-  let randomSession = 'group_ses_'
-
-  for (let idx = 0; idx < 10; idx++) {
-    randomSession += characters.charAt(Math.floor(Math.random() * characters.length))
-  }
-
   connectedUser.value.forEach((user) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
     const userIndex = foundUser ? userList.value.indexOf(foundUser) : -1
 
     if (userIndex !== -1) {
       state.session.signal({
-        data: randomSession,
         to: [user.connection],
         type: 'group'
+      })
+    } else {
+      state.session.signal({
+        to: [],
+        type: 'else-group'
       })
     }
   })
