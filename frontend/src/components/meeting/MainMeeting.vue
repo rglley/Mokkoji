@@ -434,7 +434,7 @@ const showChat = () => {
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const APPLICATION_SERVER_URL = 'http://localhost:5000/'
+const APPLICATION_SERVER_URL = 'http://localhost:8080/'
 
 const state = reactive({
   OV: undefined,
@@ -442,7 +442,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: props.sessionId,
+  mySessionId: '',
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -454,19 +454,19 @@ const state = reactive({
 // 세션 참가하기
 const joinSession = () => {
   // 1) 세션 형식 확인
-  if (props.sessionId.slice(0, 4) !== 'ses_' || props.sessionId.length != 14) {
-    emit('leave-meeting')
-    router.push('/errorsession')
-  }
+  // if (props.sessionId.slice(0, 4) !== 'ses_' || props.sessionId.length != 14) {
+  //   emit('leave-meeting')
+  //   router.push('/errorsession')
+  // }
 
-  for (let idx = 4; idx < 14; idx++) {
-    if (props.sessionId.charCodeAt(idx) < 48) router.push('/errorsession')
-    else if (props.sessionId.charCodeAt(idx) > 57 && props.sessionId.charCodeAt(idx) < 65)
-      router.push('/errorsession')
-    else if (props.sessionId.charCodeAt(idx) > 90 && props.sessionId.charCodeAt(idx) < 97)
-      router.push('/errorsession')
-    else if (props.sessionId.charCodeAt(idx) > 122) router.push('/errorsession')
-  }
+  // for (let idx = 4; idx < 14; idx++) {
+  //   if (props.sessionId.charCodeAt(idx) < 48) router.push('/errorsession')
+  //   else if (props.sessionId.charCodeAt(idx) > 57 && props.sessionId.charCodeAt(idx) < 65)
+  //     router.push('/errorsession')
+  //   else if (props.sessionId.charCodeAt(idx) > 90 && props.sessionId.charCodeAt(idx) < 97)
+  //     router.push('/errorsession')
+  //   else if (props.sessionId.charCodeAt(idx) > 122) router.push('/errorsession')
+  // }
 
   // 2) Openvidu 객체 생성
   state.OV = new OpenVidu()
@@ -570,7 +570,7 @@ const joinSession = () => {
 // 세션 생성
 const createSession = async (sessionId) => {
   const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions',
+    APPLICATION_SERVER_URL + 'meetings/api/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }

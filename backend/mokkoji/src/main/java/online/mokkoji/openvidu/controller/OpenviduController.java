@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4443")
+@CrossOrigin(origins = {"http://localhost:4443", "http://localhost:5173"})
 @RestController
 @RequiredArgsConstructor
 public class OpenviduController {
@@ -45,7 +45,7 @@ public class OpenviduController {
     }
 
     // Session 생성
-    @PostMapping("/api/sessions")
+    @PostMapping("/meetings/api/sessions")
     public ResponseEntity<Map<String, String>> addSession(@RequestBody(required = false) Map<String, Object> params
 //                                                          HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {

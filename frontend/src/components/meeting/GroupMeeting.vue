@@ -421,7 +421,7 @@ const showLeaveGroupModal = () => {
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const APPLICATION_SERVER_URL = 'http://localhost:5000/'
+const APPLICATION_SERVER_URL = 'http://localhost:8080/'
 
 const state = reactive({
   OV: undefined,

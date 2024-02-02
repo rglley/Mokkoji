@@ -48,14 +48,14 @@ const router = createRouter({
       ]
     },
     {
-      path: '/mainmeeting/:sessionId',
-      name: 'mainmeeting',
+      path: '/meetings',
+      name: 'meetings',
       component: MainMeetingView,
       props: true
     },
     {
-      path: '/groupmeeting/:mainSessionId/:groupNumber',
-      name: 'groupmeeting',
+      path: '/meeting/:mainSessionId/:groupNumber',
+      name: 'meeting',
       component: GroupMeetingView,
       props: true
     },
