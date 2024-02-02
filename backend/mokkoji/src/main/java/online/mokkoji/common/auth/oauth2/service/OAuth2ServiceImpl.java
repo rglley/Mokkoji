@@ -47,6 +47,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         );
 
         JsonNode tokenJSON = objectMapper.readTree(tokenResponse.getBody());
+
         if(!tokenJSON.has("access_token"))
             throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
 
