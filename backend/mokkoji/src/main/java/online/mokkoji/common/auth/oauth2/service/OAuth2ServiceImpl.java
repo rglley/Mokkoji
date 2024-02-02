@@ -59,7 +59,6 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         );
 
         JsonNode profileJSON = objectMapper.readTree(profileResponse.getBody());
-        log.info(profileJSON.toString());
 
         String email = profileJSON.path("response").path("email").asText();
         String name = profileJSON.path("response").path("name").asText();
