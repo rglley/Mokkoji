@@ -63,9 +63,9 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    public void updateUser(String name, String email) {
+    public void updateUser(String name, String image) {
         this.name = name;
-        this.email = email;
+        this.image = image;
     }
 
     public void updateRefreshToken(String refreshToken) {

@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(newUser);
         recordRepository.save(record);
-        
+
         String bank = userInputReqDto.getBank();
         String accountNumber = userInputReqDto.getAccountNumber();
 
