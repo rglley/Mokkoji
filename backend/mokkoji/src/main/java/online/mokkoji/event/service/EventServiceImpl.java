@@ -5,10 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
+import online.mokkoji.common.exception.errorCode.ResultErrorCode;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.repository.EventRepository;
+import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
+import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
 import online.mokkoji.result.domain.RollingPaper.RollingPaper;
+import online.mokkoji.result.repository.BackgroundTemplateRepository;
+import online.mokkoji.result.repository.PostitRepository;
 import online.mokkoji.result.repository.ResultRepository;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.domain.Result;
@@ -32,6 +37,8 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final ResultRepository resultRepository;
     private final RollingPaperRepository rollingPaperRepository;
+    private final BackgroundTemplateRepository backgroundTemplateRepository;
+    private final PostitRepository postitRepository;
 
     //userId 받기
     @Override
@@ -67,7 +74,13 @@ public class EventServiceImpl implements EventService {
         Result result = new Result(savedEvent);
         Result savedResult = resultRepository.save(result);
         // 빈 rollingpaper 생성
-        RollingPaper rollingPaper = RollingPaper.buildWithResult().result(savedResult).build();
+        PostitTemplate postitTemplate = postitRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.NO_POSTIT_ID));
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.NO_BACKGROUND_ID));
+        RollingPaper rollingPaper = RollingPaper.buildWithResult()
+                .result(savedResult)
+                .backgroundTemplate(backgroundTemplate)
+                .postitTemplate(postitTemplate)
+                .build();
         rollingPaperRepository.save(rollingPaper);
 
         return savedEvent.getSessionId();

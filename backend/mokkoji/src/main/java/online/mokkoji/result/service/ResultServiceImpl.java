@@ -5,14 +5,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.ResultErrorCode;
-import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
+import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
+import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.MemoryResDto;
 import online.mokkoji.result.dto.response.RecollectionResDto;
 import online.mokkoji.result.dto.response.RollingpaperResDto;
+import online.mokkoji.result.repository.BackgroundTemplateRepository;
 import online.mokkoji.result.repository.MessageRepository;
 import online.mokkoji.result.repository.PhotoRepository;
 import online.mokkoji.result.repository.ResultRepository;
@@ -34,6 +36,7 @@ public class ResultServiceImpl implements ResultService {
     private final RMapCache<String, Message> messageRMapCache;
     private final PhotoRepository photoRepository;
     private final MessageRepository messageRepository;
+    private final BackgroundTemplateRepository backgroundTemplateRepository;
 
     @Override
     public Map<String, Object> getResultMap(String provider, String email) {
@@ -138,15 +141,36 @@ public class ResultServiceImpl implements ResultService {
 
         RollingPaper rollingpaper = result.getRollingpaper();
 
+        // 요철 들어온 이름에 맞는 템플릿 찾기
         String backgroundName = rollingPaperReqDto.getBackgroundName();
+        int bgId = rollingpaper.getBackgroundTemplate().getId();
         switch (backgroundName) {
-            case "basic":
+            case "basic": {
+                bgId = 1;
                 break;
+            }
             case "wedding": {
-                // TODO : 2024.02.02 이 단어에 해당하는 데이터 찾아서 바꾸기
-
+                bgId = 2;
+                break;
+            }
+            case "school": {
+                bgId = 3;
+                break;
+            }
+            case "lunar": {
+                bgId = 4;
+                break;
+            }
+            case "baby": {
+                bgId = 5;
+                break;
             }
         }
+
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(bgId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_BACKGROUND_ID));
+
+        rollingpaper.setBackgroundTemplate(backgroundTemplate);
     }
 
 

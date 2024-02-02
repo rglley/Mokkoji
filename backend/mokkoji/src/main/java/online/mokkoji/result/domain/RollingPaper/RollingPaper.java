@@ -22,11 +22,11 @@ public class RollingPaper {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "background_id")
-    private BackgroundTemplate backgroundTemplate = new BackgroundTemplate(BackgroundName.BASIC, "url");
+    private BackgroundTemplate backgroundTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postit_id")
-    private PostitTemplate postitTemplate = new PostitTemplate(PostitName.RAINBOW, "url");
+    private PostitTemplate postitTemplate;
 
     @Column(nullable = false)
     @ColumnDefault("false")
@@ -34,11 +34,19 @@ public class RollingPaper {
 
 
     @Builder(builderMethodName = "buildWithResult")
-    public RollingPaper(Result result) {
+    public RollingPaper(Result result, BackgroundTemplate backgroundTemplate, PostitTemplate postitTemplate) {
         this.result = result;
-        this.backgroundTemplate = new BackgroundTemplate(BackgroundName.BASIC, "url"); //TODO : 진짜 url 넣기
-        this.postitTemplate = new PostitTemplate(PostitName.RAINBOW, "url"); //TODO : 진짜 url 넣기
+        setBackgroundTemplate(backgroundTemplate);
+        setPostitTemplate(postitTemplate);
         result.setRollingpaper(this);
-        
+
+    }
+
+    public void setBackgroundTemplate(BackgroundTemplate backgroundTemplate) {
+        this.backgroundTemplate = backgroundTemplate;
+    }
+
+    public void setPostitTemplate(PostitTemplate postitTemplate) {
+        this.postitTemplate = postitTemplate;
     }
 }
