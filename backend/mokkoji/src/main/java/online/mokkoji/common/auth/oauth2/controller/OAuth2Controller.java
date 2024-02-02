@@ -42,9 +42,6 @@ public class OAuth2Controller {
             }
 
             String refreshToken = jwtUtil.createRefreshToken();
-            User loginUser = userRepository.findByProviderAndEmail(Provider.NAVER, email).get();
-            loginUser.updateRefreshToken(refreshToken);
-            userRepository.save(loginUser);
 
             res.addHeader("Authorization", accessToken);
             res.addHeader("Authorization-Refresh", refreshToken);

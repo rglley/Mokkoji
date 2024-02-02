@@ -46,7 +46,6 @@ public class JwtUtil {
     }
 
     public String createRefreshToken() {
-        log.info("RefreshToken 생성");
         Date now = new Date();
         return JWT.create()
                 .withSubject(REFRESH_TOKEN_SUBJECT)
