@@ -24,8 +24,6 @@ public class ResultController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/lists")
-
-    // result 전체 조회
     public ResponseEntity<Map<String, Object>> getResult(HttpServletRequest req) {
         log.info("행사 리스트 상세 요청");
         String provider = jwtUtil.getProvider(req);
@@ -35,6 +33,8 @@ public class ResultController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
 
     // 기억 편집화면
     @GetMapping("/{resultId}/memories")
