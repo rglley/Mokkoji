@@ -51,6 +51,7 @@ public class ResultServiceImpl implements ResultService {
 
             if (result.getStatus().getKey().equals("memory")) {
                 MemoryResDto memoryResDto = MemoryResDto.builder()
+                        .id(result.getId())
                         .date(date)
                         .participantCount(result.getEvent().getParticipantCount())
                         .isPaperEdited(result.getRollingpaper().isEdited())
@@ -62,6 +63,7 @@ public class ResultServiceImpl implements ResultService {
             }
 
             RecollectionResDto recollectionResDto = RecollectionResDto.builder()
+                    .id(result.getId())
                     .date(date)
                     .image(result.getImage())
                     .name(result.getName())
