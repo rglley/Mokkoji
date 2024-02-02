@@ -5,6 +5,7 @@ import MyPage from '@/components/mypage/MyPage.vue'
 import EventListPage from '@/views/EventListView.vue'
 import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
+import test from '@/components/myEdit/ImgUpload.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
 import Meeting from '@/components/meeting/Meeting.vue'
 import MeetingView from '@/views/MeetingView.vue'
@@ -77,6 +78,15 @@ const router = createRouter({
       path: '/editpage',
       name: 'editpage',
       component: EditPage
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '404'
+    },
+    {
+      path: '/404',
+      name: 'Error404',
+      component: Error404
     }
   ]
 })

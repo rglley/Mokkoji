@@ -12,12 +12,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@ballcat/vue-cropper": "^1.0.6",
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.1.1",
     "@vueuse/components": "^10.7.2",
     "@vueuse/core": "^10.7.2",
     "aos": "^3.0.0-beta.6",
     "axios": "^1.6.5",
+    "cropperjs": "^1.6.1",
     "eventemitter3": "^5.0.1",
     "events": "^3.3.0",
     "flowbite": "^2.2.1",
@@ -29,6 +31,7 @@
     "swiper": "^11.0.5",
     "tailwindcss-animate": "^1.0.7",
     "vue": "^3.3.11",
+    "vue-image-crop-upload": "^3.0.3",
     "vue-router": "^4.2.5",
     "vue3-toastify": "^0.2.1"
   },

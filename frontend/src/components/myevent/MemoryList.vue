@@ -27,7 +27,7 @@
         </p>
         <p class="flex  justify-center items-center"> 모꼬지 진행 시간 <IconClock />: {{ memory.eventRunTime }}</p>
         <p class="flex justify-center items-center"> 참여 인원 수 <IconPeople />: {{ memory.participants }}</p>
-        <p>편집 가능 기간 : <a class="effect"> {{ lastDayToEdit.expireDay }}</a></p>
+        <p>편집 가능 기간 : <a class="effect-yellow"> {{ lastDayToEdit.expireDay }}</a></p>
         <p class="text-center mt-8">
           편집 가능 기간이 <strong> {{ lastDayToEdit.editablePeriod }}일 </strong> 남았어요
         </p>
@@ -78,7 +78,7 @@
         </p>
         <p class="flex  justify-center items-center"> 모꼬지 진행 시간 <IconClock />: {{ memory.eventRunTime }}</p>
         <p class="flex justify-center items-center"> 참여 인원 수 <IconPeople />: {{ memory.participants }}</p>
-        <p>편집 가능 기간 : <a class="effect"> {{ lastDayToEdit.expireDay }}</a></p>
+        <p>편집 가능 기간 : <a class="effect-yellow"> {{ lastDayToEdit.expireDay }}</a></p>
         <p class="text-center mt-8">
           편집 가능 기간이 <strong> {{ lastDayToEdit.editablePeriod }}일 </strong> 남았어요
         </p>
@@ -123,7 +123,7 @@
   >
     <div v-if="isOpenInputModal" class="">
       <div class="bg-violet-50 fixed top-[100px] w-[600px] h-[500px] rounded-lg custom-background">
-        <p class="absolute top-[20px] text-3xl left-[110px] font-bold effect">행사 정보를 추가로 입력해주세요</p>
+        <p class="absolute top-[20px] text-3xl left-[110px] font-bold effect-yellow">행사 정보를 추가로 입력해주세요</p>
         <p class="absolute top-[60px] text-xl left-[150px] text-gray-500">
           입력하신 내용은 추억 카드에 기록됩니다.
         </p>
@@ -219,7 +219,7 @@ let showInputModal = () => {
 }
 
 
-.effect {
+.effect-yellow {
   box-shadow: inset 0 -5px 0 #f9ef99;
   color: black;
 }

@@ -2,7 +2,7 @@
   <!--섹션 1/3, 유저 이름 -->
   <div class="text-[50px] flex px-2 h-[500px] items-center pl-32 bg-violet-50">
     <a v-if="isNotShown" class=""><strong>이진영</strong>님의 모꼬지</a>
-    <a v-if="isShown" class="effect"><strong>이진영</strong>님의 모꼬지</a>
+    <a v-if="isShown" class="effect-pink"><strong>이진영</strong>님의 모꼬지</a>
     <div class="flex">
       <div v-if="isNotShownTwo" class=""><IconFlowers /></div>
       <div v-if="isShownTwo" class=""><IconFlowersColored /></div>
@@ -217,7 +217,7 @@ span {
     color 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
 }
-.effect {
+.effect-pink {
   box-shadow: inset 0 -10px 0 #d486fe;
   color: black;
 }

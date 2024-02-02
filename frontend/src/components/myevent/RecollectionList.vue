@@ -1,7 +1,7 @@
 <template>
   <div class="h-[22rem] w-72 mx-8 my-4 rounded-xl bg-white border-2 border-[#ff81c8]">
     <p class="pl-2 pt-2 pb-2 text-black">
-      <strong class="effect-pink">{{ recollection.eventDay }}</strong>
+      <strong class="effect-purple">{{ recollection.eventDay }}</strong>
     </p>
 
     <!--액자, 미정-->
@@ -19,7 +19,7 @@
     </div>
     <div class="mt-5 text-center text-black">
       <p class="text-lg mb-2">
-        <strong class="effect">{{ recollection.eventType }}</strong>
+        <strong class="effect-purple">{{ recollection.eventType }}</strong>
       </p>
       <pre
         class="text-base whitespace-pre-wrap w-[284px] h-[72px] custom-border flex justify-center items-center"
@@ -41,8 +41,8 @@ let imgNo = computed(() => {
 })
 </script>
 
-<style scoped>
-.effect {
+<style>
+.effect-purple {
   box-shadow: inset 0 -5px 0 #f6d8fd;
   color: black;
 }
