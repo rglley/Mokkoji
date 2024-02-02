@@ -114,15 +114,19 @@ pre {
   }
 
   #title {
-    @apply text-8xl tracking-tighter p-2;
+    @apply text-7xl font-bold tracking-wider p-3;
   }
 
   #title-sub-bold {
-    @apply text-3xl font-bold tracking-tighter;
+    @apply text-5xl font-bold tracking-tighter;
   }
 
   #title-sub {
-    @apply text-3xl tracking-tighter p-3 m-2;
+    @apply text-3xl tracking-tighter p-3 m-2 whitespace-pre-wrap;
+  }
+
+  #p-main {
+    @apply text-xl whitespace-pre-line
   }
 
   #li-dropdown {
