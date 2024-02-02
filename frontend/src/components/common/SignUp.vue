@@ -26,7 +26,12 @@
         <div class="flex items-center space-x-4">
           <div class="flex-auto w-max m-5">
             <label>
+<<<<<<< HEAD
               <img id="image-profile" :src="image" class="w-40"/>
+=======
+              <!-- <img id="image-profile" src="{{ image }}" /> -->
+              <img id="image-profile" src="@/assets/landing/dummy_profile.jpg" />
+>>>>>>> origin/frontend-deploy
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
