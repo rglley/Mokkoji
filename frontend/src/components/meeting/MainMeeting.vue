@@ -321,8 +321,6 @@ const router = useRouter()
 const videoWidth = window.screen.width * 0.65
 const videoHeight = window.screen.height * 0.9
 
-const sessionId = ref(null)
-
 const isGrid = ref(false)
 const isMic = ref(true)
 const isMicModal = ref(false)
@@ -442,7 +440,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: '',
+  mySessionId: 'test',
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -493,7 +491,6 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
-        sessionId.value = state.session.sessionId
         userList.value.unshift(publisher)
 
         state.session.host = state.session.publish(publisher)
@@ -569,22 +566,21 @@ const joinSession = () => {
 
 // 세션 생성
 const createSession = async (sessionId) => {
-  console.log('start@@@@@@@@@@@@@@@@@@@@@@@')
   const response = await axios.post(
-    APPLICATION_SERVER_URL + 'meetings/api/sessions',
+    // APPLICATION_SERVER_URL
+    '/api/meetings/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }
     }
   )
-  console.log(response.data)
   return response.data // sessionId
 }
 
 // 토큰 생성
 const createToken = async (sessionId) => {
   const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+    '/api/meetings/sessions/' + sessionId + '/connections',
     {
       role: 'MODERATOR'
     },
@@ -592,7 +588,7 @@ const createToken = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
-  return response.data // 토큰
+  return response.data.connectionToken // 토큰
 }
 
 /* APPLICATION SERVER로부터 토큰 얻기

@@ -202,7 +202,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '@/components/modal/home/MeetingJoinModal.vue'
-import { findSession } from '@/stores/meeting'
+import { useSessionStore } from '@/stores/meeting'
 
 const router = useRouter()
 const conferenceIdInput = ref('')
@@ -210,15 +210,18 @@ const isInputError = ref(false)
 const isLogin = ref(false)
 const isModal = ref(false)
 
+const store = useSessionStore()
+
 const showModal = () => {
   isModal.value = !isModal.value
 }
 
 const submitConferenceId = () => {
-  const response = findSession(conferenceIdInput)
-  if (response) {
+  const response = store.findSession(conferenceIdInput.value)
+  console.log(response)
+  if (response === 'success') {
     isInputError.value = false
-    router.push('/')
+    router.push('/meetings')
   } else {
     isInputError.value = true
     conferenceIdInput.value = ''
@@ -231,7 +234,7 @@ const submitConferenceId = () => {
 }
 
 const createMeeting = () => {
-  router.push('/meeting')
+  router.push('/meetings')
 
   // if (isLogin.value) {
   //   router.push('/meeting')

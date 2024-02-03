@@ -5,6 +5,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
+import online.mokkoji.common.exception.RestApiException;
+import online.mokkoji.common.exception.errorCode.CommonErrorCode;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
@@ -16,13 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:4443"})
+@CrossOrigin(origins = {"http://localhost:4443", "http://localhost:5173"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meetings")
+@RequestMapping("/api/meetings")
 public class OpenviduController {
 
     private final EventService eventService;
@@ -47,7 +50,7 @@ public class OpenviduController {
 
     // Session 생성
     @PostMapping("/sessions")
-    public ResponseEntity<Map<String, String>> addSession(@RequestBody(required = false) Map<String, Object> params
+    public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params
 //                                                          HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
@@ -67,21 +70,30 @@ public class OpenviduController {
 //        eventService.createSession(sessionReqDto);
 
         // 리턴값(sessionId) 담는 map 생성
-        Map<String, String> response = new HashMap<>();
+//        Map<String, Session> response = new HashMap<>();
 
 //        // map에 담기
-        response.put("sessionId", session.getSessionId());
+//        response.put("session", session);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
 
     // 세션 정보 받기
     @GetMapping("/sessions/{sessionId}")
-    public ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId) {
+    public ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId)
+            throws OpenViduJavaClientException, OpenViduHttpException {
 
-        Session activeSession = openvidu.getActiveSession(sessionId);
 
-        return new ResponseEntity<>(activeSession, HttpStatus.OK);
+        openvidu.fetch();
+        List<Session> activeSessions = openvidu.getActiveSessions();
+        for (Session session : activeSessions) {
+            if (session.getSessionId().equals(sessionId)) {
+
+                return new ResponseEntity<>(session, HttpStatus.OK);
+            }
+        }
+
+        throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
     }
 
 
