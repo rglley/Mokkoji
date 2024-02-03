@@ -45,7 +45,7 @@ public class OpenviduController {
     }
 
     // Session 생성
-    @PostMapping("/meetings/api/sessions")
+    @PostMapping("/meeting/api/sessions")
     public ResponseEntity<Map<String, String>> addSession(@RequestBody(required = false) Map<String, Object> params
 //                                                          HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
