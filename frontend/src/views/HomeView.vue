@@ -216,8 +216,9 @@ const showModal = () => {
   isModal.value = !isModal.value
 }
 
-const submitConferenceId = () => {
-  const response = store.findSession(conferenceIdInput.value)
+const submitConferenceId = async () => {
+  await store.findSession(conferenceIdInput.value)
+  const response = store.findResult
   console.log(response)
   if (response === 'success') {
     isInputError.value = false
