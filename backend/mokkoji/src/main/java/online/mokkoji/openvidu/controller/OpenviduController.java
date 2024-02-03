@@ -11,6 +11,8 @@ import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.service.ResultService;
+import online.mokkoji.user.domain.User;
+import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ public class OpenviduController {
     private final JwtUtil jwtUtil;
     private final UserServiceImpl userServiceImpl;
     private final ResultService resultService;
+    private final UserRepository userRepository;
 
 
     @Value("${OPENVIDU_URL}")
@@ -55,6 +58,8 @@ public class OpenviduController {
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
 //        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User dummy = User.testBuilder().name("name").email("email").image("image").build();
+        User user = userRepository.save(dummy);
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
@@ -64,16 +69,16 @@ public class OpenviduController {
         Session session = openvidu.createSession(properties);
 
         // DB에 저장할 Dto 생성
-//        SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
+        SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
 
         // DB에 저장
-//        eventService.createSession(sessionReqDto);
+        eventService.createSession(sessionReqDto);
 
         // 리턴값(sessionId) 담는 map 생성
-//        Map<String, Session> response = new HashMap<>();
+        Map<String, Session> response = new HashMap<>();
 
-//        // map에 담기
-//        response.put("session", session);
+        // map에 담기
+        response.put("session", session);
 
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }

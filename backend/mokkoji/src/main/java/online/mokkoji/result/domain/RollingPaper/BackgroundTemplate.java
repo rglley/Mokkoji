@@ -12,8 +12,7 @@ public class BackgroundTemplate {
     @Column(name = "background_id")
     private int id;
 
-    @Enumerated(EnumType.STRING)
-    private BackgroundName backgroundName;
+    private String backgroundName;
     private String backgroundPath;
 
 }
