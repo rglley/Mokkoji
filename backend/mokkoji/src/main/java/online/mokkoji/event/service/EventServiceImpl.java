@@ -4,14 +4,20 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
-import online.mokkoji.common.exception.errorCode.OpenviduErrorCode;
+import online.mokkoji.common.exception.errorCode.EventErrorCode;
+import online.mokkoji.common.exception.errorCode.ResultErrorCode;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.repository.EventRepository;
-import online.mokkoji.result.domain.RollingPaper.RollingPaper;
-import online.mokkoji.result.repository.ResultRepository;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.domain.Result;
+import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
+import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
+import online.mokkoji.result.domain.RollingPaper.RollingPaper;
+import online.mokkoji.result.repository.BackgroundTemplateRepository;
+import online.mokkoji.result.repository.PostitTemplateRepository;
+import online.mokkoji.result.repository.ResultRepository;
 import online.mokkoji.result.repository.RollingPaperRepository;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
@@ -32,13 +38,15 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final ResultRepository resultRepository;
     private final RollingPaperRepository rollingPaperRepository;
+    private final BackgroundTemplateRepository backgroundTemplateRepository;
+    private final PostitTemplateRepository postitTemplateRepository;
 
     //userId 받기
     @Override
     public Long getUserId(Map<String, Object> params) {
         if (!params.containsKey("userId")) {
             log.error("유저 아이디 없음");
-            throw new RestApiException(OpenviduErrorCode.NO_USER_ID);
+            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
         }
 
         return (Long) params.get("userId");
@@ -51,7 +59,7 @@ public class EventServiceImpl implements EventService {
         //User 객체 가져오기
         // userId 없을 경우
         User user = userRepository.findById(sessionDto.getUserId())
-                .orElseThrow(() -> new RestApiException(OpenviduErrorCode.NO_USER_ID));
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
 
         // Event 객체 생성
         Event event = Event.createSession()
@@ -67,7 +75,13 @@ public class EventServiceImpl implements EventService {
         Result result = new Result(savedEvent);
         Result savedResult = resultRepository.save(result);
         // 빈 rollingpaper 생성
-        RollingPaper rollingPaper = RollingPaper.buildWithResult().result(savedResult).build();
+        PostitTemplate postitTemplate = postitTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
+        RollingPaper rollingPaper = RollingPaper.buildWithResult()
+                .result(savedResult)
+                .backgroundTemplate(backgroundTemplate)
+                .postitTemplate(postitTemplate)
+                .build();
         rollingPaperRepository.save(rollingPaper);
 
         return savedEvent.getSessionId();
@@ -82,7 +96,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findBySessionId(sessionId);
         if (!event.getUser().getId().equals(sessionReqDto.getUserId())) {
             log.error("호스트Id가 아님"); //임시로 하는 거.
-            throw new RestApiException(OpenviduErrorCode.NOT_HOST_USER_ID);
+            throw new RestApiException(EventErrorCode.HOST_NOT_FOUND);
         }
 
         //session의 status를 CLOSED로 변경

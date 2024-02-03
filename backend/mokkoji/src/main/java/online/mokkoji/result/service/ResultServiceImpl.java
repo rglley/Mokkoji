@@ -5,17 +5,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.ResultErrorCode;
-import online.mokkoji.result.domain.RollingPaper.Message;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
+import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
+import online.mokkoji.result.domain.RollingPaper.Message;
+import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
 import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.MemoryResDto;
 import online.mokkoji.result.dto.response.RecollectionResDto;
 import online.mokkoji.result.dto.response.RollingpaperResDto;
-import online.mokkoji.result.repository.MessageRepository;
-import online.mokkoji.result.repository.PhotoRepository;
-import online.mokkoji.result.repository.ResultRepository;
+import online.mokkoji.result.repository.*;
 import online.mokkoji.user.domain.Provider;
 import org.redisson.api.RMapCache;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,11 @@ public class ResultServiceImpl implements ResultService {
     private final RMapCache<String, Message> messageRMapCache;
     private final PhotoRepository photoRepository;
     private final MessageRepository messageRepository;
+    private final BackgroundTemplateRepository backgroundTemplateRepository;
+    private final PostitTemplateRepository postitTemplateRepository;
+    private final RollingPaperRepository rollingPaperRepository;
 
+    // 사진과 메시지 리스트로 담는 메서드
     @Override
     public Map<String, Object> getResultMap(String provider, String email) {
         List<Result> resultList = resultRepository.findAllByUser_ProviderAndUser_EmailOrderByIdDesc(Provider.valueOf(provider), email);
@@ -78,16 +82,19 @@ public class ResultServiceImpl implements ResultService {
         return resultMap;
     }
 
+    // 사진 redis로 저장
     @Override
     public void createPhoto(Photo photo) {
         photoRMapCache.put(photo.getPhotoPath(), photo);
     }
 
+    // 메시지 redis로 저장
     @Override
     public void createMessage(Message message) {
         messageRMapCache.put(message.getWriter(), message);
     }
 
+    // 사진 db에 저장
     @Override
     public void saveRemainingPhotos() {
         for (Map.Entry<String, Photo> entry : photoRMapCache.entrySet()) {
@@ -97,6 +104,7 @@ public class ResultServiceImpl implements ResultService {
 
     }
 
+    // 메시지 db에 저장
     @Override
     public void saveRemainingMessages() {
         for (Map.Entry<String, Message> entry : messageRMapCache.entrySet()) {
@@ -106,18 +114,21 @@ public class ResultServiceImpl implements ResultService {
         }
     }
 
+    // 기억 편집 화면에서 필요한 사진과 메시지 불러오는 메서드
     @Override
     public Map<String, Object> getPhotoAndMessageMap(Long resultId) {
         Map<String, Object> resultMap = new HashMap<>();
 
-        Result result = resultRepository.findById(resultId)
-                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
+        // result를 통해 롤링페이퍼 가져옴
+        Result result = getResult(resultId);
         RollingPaper rollingPaper = result.getRollingpaper();
 
+        // 롤링페이퍼 설정된 템플릿 가져옴
         RollingpaperResDto rollingpaperDto = new RollingpaperResDto();
         rollingpaperDto.setBackgroundTemplate(rollingPaper.getBackgroundTemplate());
         rollingpaperDto.setPostitTemplate(rollingPaper.getPostitTemplate());
 
+        // 사진 루트 가져옴
         List<Photo> photoList = photoRepository.findAllByResultId(resultId);
         List<String> photoPathList = new LinkedList<>();
         for (Photo photo : photoList) {
@@ -131,22 +142,54 @@ public class ResultServiceImpl implements ResultService {
 
     }
 
+    // 롤링페이퍼 템플릿 변경
     @Override
     public void updateRollingpaper(Long resultId, RollingPaperReqDto rollingPaperReqDto) {
-        Result result = resultRepository.findById(resultId)
-                .orElseThrow(() -> new RestApiException(ResultErrorCode.NO_RESULT_ID));
-
+        Result result = getResult(resultId);
         RollingPaper rollingpaper = result.getRollingpaper();
 
-        String backgroundName = rollingPaperReqDto.getBackgroundName();
-        switch (backgroundName) {
-            case "basic":
-                break;
-            case "wedding": {
-                // TODO : 2024.02.02 이 단어에 해당하는 데이터 찾아서 바꾸기
+        // 요철 들어온 이름에 맞는 템플릿 찾기
+        Map<String, Integer> backgroundNameToId = Map.of(
+                "basic", 1,
+                "wedding", 2,
+                "school", 3,
+                "lunar", 4,
+                "baby", 5
+        );
 
-            }
-        }
+        Map<String, Integer> postitNameToId = Map.of(
+                "rainbow", 1,
+                "green", 2,
+                "blue", 3,
+                "pink", 4,
+                "yellow", 5
+        );
+
+
+        // id에 맞는 템플릿 선택 후 추가
+        String backgroundName = rollingPaperReqDto.getBackgroundName();
+        int bgId = backgroundNameToId.getOrDefault(backgroundName, rollingpaper.getBackgroundTemplate().getId());
+
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(bgId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
+
+        String postitName = rollingPaperReqDto.getPostitName();
+        int postitId = postitNameToId.getOrDefault(postitName, rollingpaper.getPostitTemplate().getId());
+
+        PostitTemplate postitTemplate = postitTemplateRepository.findById(postitId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
+
+        rollingpaper.setBackgroundTemplate(backgroundTemplate);
+        rollingpaper.setPostitTemplate(postitTemplate);
+
+        // 변경내용 수정
+        rollingPaperRepository.save(rollingpaper);
+    }
+
+    // 결과 가져오는 메서드
+    private Result getResult(Long resultId) {
+        return resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
     }
 
 

@@ -45,7 +45,7 @@ public class OpenviduController {
     }
 
     // Session 생성
-    @PostMapping("/meetings/api/sessions")
+    @PostMapping("/api/meetings/sessions")
     public ResponseEntity<Map<String, String>> addSession(@RequestBody(required = false) Map<String, Object> params
 //                                                          HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -72,6 +72,15 @@ public class OpenviduController {
         response.put("sessionId", session.getSessionId());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 세션 정보 받기
+    @GetMapping("/api/sessions/{sessionId}")
+    public ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId) {
+
+        Session activeSession = openvidu.getActiveSession(sessionId);
+
+        return new ResponseEntity<>(activeSession, HttpStatus.OK);
     }
 
 

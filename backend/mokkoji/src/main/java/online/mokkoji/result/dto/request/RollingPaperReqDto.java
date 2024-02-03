@@ -12,4 +12,5 @@ import lombok.Setter;
 public class RollingPaperReqDto {
 
     private String backgroundName;
+    private String postitName;
 }

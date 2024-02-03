@@ -4,13 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
+import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.service.ResultService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -35,7 +33,6 @@ public class ResultController {
     }
 
 
-
     // 기억 편집화면
     @GetMapping("/{resultId}/memories")
     public ResponseEntity<Map<String, Object>> getRollingpaperAndPhotoEdit(@PathVariable Long resultId) {
@@ -46,9 +43,12 @@ public class ResultController {
     }
 
     // 롤링페이퍼 편집 완료
-//    @PatchMapping("/{resultId}/memories/rollingpaper")
-//    public ResponseEntity<String> updateRollingpaper(@PathVariable Long resultId,
-//                                                     @RequestBody RollingPaperReqDto rollingPaperReqDto) {
-//        resultService.updateRollingpaper(resultId, rollingPaperReqDto);
-//    }
+    @PatchMapping("/{resultId}/memories/rollingpaper")
+    public ResponseEntity<String> updateRollingpaper(@PathVariable Long resultId,
+                                                     @RequestBody RollingPaperReqDto rollingPaperReqDto) {
+
+        resultService.updateRollingpaper(resultId, rollingPaperReqDto);
+
+        return new ResponseEntity<>("편집 완료", HttpStatus.OK);
+    }
 }
