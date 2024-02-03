@@ -434,7 +434,7 @@ const showChat = () => {
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const APPLICATION_SERVER_URL = 'http://localhost:5000/'
+const APPLICATION_SERVER_URL = 'http://localhost:8080/'
 
 const state = reactive({
   OV: undefined,
@@ -567,11 +567,11 @@ const joinSession = () => {
   window.addEventListener('beforeunload', leaveMainMeeting)
 }
 
-// 세션 생성(참가자는 할 필요 없음)
+// 세션 생성
 const createSession = async (sessionId) => {
   console.log('start@@@@@@@@@@@@@@@@@@@@@@@')
   const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions',
+    APPLICATION_SERVER_URL + 'meetings/api/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }
@@ -581,7 +581,7 @@ const createSession = async (sessionId) => {
   return response.data // sessionId
 }
 
-// 토큰 생성(참가자도 해야함)
+// 토큰 생성
 const createToken = async (sessionId) => {
   const response = await axios.post(
     APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
