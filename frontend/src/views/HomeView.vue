@@ -215,27 +215,18 @@ const showModal = () => {
 }
 
 const submitConferenceId = () => {
-  router.push({
-    path: '/meetings',
-    props: { sessionId: conferenceIdInput.value }
-  })
-  // id input을 백엔드 서버로 axios 전송
-  // axios 반응이 정상이면 input값 id로 참가
-  // 아니면 알람
-  // 임시로 만든 올바른 id ='qwer'
-  const validId = 'qwer'
-  if (conferenceIdInput.value == validId) {
-    // 로그인하지 않았다면 모달
-    if (!isLogin.value) {
-      // 모달 띄우고
-      isModal.value = true
-    }
+  const response = findSession(conferenceIdInput)
+  if (response) {
     isInputError.value = false
-    // 회의 이동
     router.push('/')
   } else {
     isInputError.value = true
     conferenceIdInput.value = ''
+  }
+  // 로그인하지 않았다면 모달
+  if (!isLogin.value) {
+    // 모달 띄우고
+    isModal.value = true
   }
 }
 
