@@ -19,9 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:4443", "http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:4443"})
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/meetings")
 public class OpenviduController {
 
     private final EventService eventService;
@@ -45,7 +46,7 @@ public class OpenviduController {
     }
 
     // Session 생성
-    @PostMapping("/api/meetings/sessions")
+    @PostMapping("/sessions")
     public ResponseEntity<Map<String, String>> addSession(@RequestBody(required = false) Map<String, Object> params
 //                                                          HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
@@ -75,7 +76,7 @@ public class OpenviduController {
     }
 
     // 세션 정보 받기
-    @GetMapping("/api/sessions/{sessionId}")
+    @GetMapping("/sessions/{sessionId}")
     public ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId) {
 
         Session activeSession = openvidu.getActiveSession(sessionId);
@@ -85,7 +86,7 @@ public class OpenviduController {
 
 
     // Session 삭제
-    @DeleteMapping("/api/sessions/{sessionId}")
+    @DeleteMapping("/sessions/{sessionId}")
     public ResponseEntity<String> deleteSession(@PathVariable("sessionId") String sessionId,
 //                                                HttpServletRequest req,
                                                 @RequestBody(required = false) SessionReqDto sessionReqDto)
@@ -111,7 +112,7 @@ public class OpenviduController {
 
 
     // Session에 Connect
-    @PostMapping("/api/sessions/{sessionId}/connections")
+    @PostMapping("/sessions/{sessionId}/connections")
     public ResponseEntity<Map<String, String>> addConnection(@PathVariable("sessionId") String sessionId,
                                                              @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
