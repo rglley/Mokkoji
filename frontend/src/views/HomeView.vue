@@ -202,6 +202,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '@/components/modal/home/MeetingJoinModal.vue'
+import { findSession } from '@/stores/meeting'
 
 const router = useRouter()
 const conferenceIdInput = ref('')
@@ -239,18 +240,10 @@ const submitConferenceId = () => {
 }
 
 const createMeeting = () => {
-  // const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-
-  // let randomSession = 'ses_'
-
-  // for (let idx = 0; idx < 10; idx++) {
-  //   randomSession += characters.charAt(Math.floor(Math.random() * characters.length))
-  // }
-
-  router.push('/meetings')
+  router.push('/meeting')
 
   // if (isLogin.value) {
-  //   router.push('/mainmeeting/host')
+  //   router.push('/meeting')
   // } else {
   //   toast('로그인이 필요합니다', {
   //     theme: 'auto',
