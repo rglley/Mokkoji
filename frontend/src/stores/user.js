@@ -47,21 +47,20 @@ export const useUserStore = defineStore('user', () => {
         console.log(err)
       })
   }
-  
+
   const withdraw = async () => {
     try {
-      const res = await axios.delete('http://localhost:8080/users', {
+      await axios.delete('http://localhost:8080/users', {
         headers: {
           Authorization: $cookies.get('token')
         }
       })
-      .then((res) => {
-        console.log(res)
+      .then(() => {
         isLogin.value = false;
+        $cookies.remove('token');
         router.push('/')
       })
     } catch (err) {
-      alert(err.errorMsg)
       console.error(err)
     }
   }
