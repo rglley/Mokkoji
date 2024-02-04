@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService{
 
         User newUser = findUser.get();
         newUser.updateAuthority();
+        newUser.updateRefreshToken(refreshToken);
 
         Record record = Record.builder()
                 .user(newUser)
@@ -96,15 +97,13 @@ public class UserServiceImpl implements UserService{
         String bank = userInputReqDto.getBank();
         String accountNumber = userInputReqDto.getAccountNumber();
 
-        if (bank != null && accountNumber != null) {
-            UserAccount userAccount = UserAccount.builder()
-                    .user(newUser)
-                    .bank(bank)
-                    .number(accountNumber)
-                    .build();
+        UserAccount userAccount = UserAccount.builder()
+                .user(newUser)
+                .bank(bank)
+                .number(accountNumber)
+                .build();
 
-            accountRepository.save(userAccount);
-        }
+        accountRepository.save(userAccount);
     }
 
     @Override
@@ -124,15 +123,14 @@ public class UserServiceImpl implements UserService{
         updateUser.updateUser(name, image);
         userRepository.save(updateUser);
 
-        if (bank != null && accountNumber != null) {
-            UserAccount userAccount = UserAccount.builder()
-                    .user(findUser.get())
-                    .bank(bank)
-                    .number(accountNumber)
-                    .build();
+        Optional<UserAccount> findAccount =
+                accountRepository.findByUser_ProviderAndUser_Email(updateUser.getProvider(), updateUser.getEmail());
 
-            accountRepository.save(userAccount);
-        }
+        UserAccount userAccount = findAccount.get();
+        userAccount.updateAccount(bank, accountNumber);
+
+        accountRepository.save(userAccount);
+
     }
 
     @Override
