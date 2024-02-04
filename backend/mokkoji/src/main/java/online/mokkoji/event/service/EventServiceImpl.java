@@ -41,16 +41,6 @@ public class EventServiceImpl implements EventService {
     private final BackgroundTemplateRepository backgroundTemplateRepository;
     private final PostitTemplateRepository postitTemplateRepository;
 
-    //userId 받기
-    @Override
-    public Long getUserId(Map<String, Object> params) {
-        if (!params.containsKey("userId")) {
-            log.error("유저 아이디 없음");
-            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
-        }
-
-        return (Long) params.get("userId");
-    }
 
     // 호스트 Session 생성
     @Override

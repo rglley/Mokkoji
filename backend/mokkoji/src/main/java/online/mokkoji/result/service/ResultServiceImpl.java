@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.ResultErrorCode;
+import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
@@ -13,11 +14,12 @@ import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
 import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.MemoryResDto;
+import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.dto.response.RecollectionResDto;
 import online.mokkoji.result.dto.response.RollingpaperResDto;
 import online.mokkoji.result.repository.*;
 import online.mokkoji.user.domain.Provider;
-import org.redisson.api.RMapCache;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,8 +32,6 @@ import java.util.*;
 public class ResultServiceImpl implements ResultService {
 
     private final ResultRepository resultRepository;
-    private final RMapCache<String, Photo> photoRMapCache;
-    private final RMapCache<String, Message> messageRMapCache;
     private final PhotoRepository photoRepository;
     private final MessageRepository messageRepository;
     private final BackgroundTemplateRepository backgroundTemplateRepository;
@@ -82,40 +82,29 @@ public class ResultServiceImpl implements ResultService {
         return resultMap;
     }
 
-    // 사진 redis로 저장
+    // 사진 저장
     @Override
-    public void createPhoto(Photo photo) {
-        photoRMapCache.put(photo.getPhotoPath(), photo);
+    public void createPhoto(PhotoResDto photoResDto) {
+        Photo photo = Photo.builder().resultId(photoResDto.getResultId()).photoPath(photoResDto.getPhotoPath()).build();
+        photoRepository.save(photo);
     }
 
-    // 메시지 redis로 저장
+    // 메시지 저장
     @Override
-    public void createMessage(Message message) {
-        messageRMapCache.put(message.getWriter(), message);
+    public void createMessage(MessageResDto messageResDto) {
+        Message message = Message.builder().paperId(messageResDto.getPaperId())
+                .writer(messageResDto.getWriter())
+                .text(messageResDto.getText())
+                .voicePath(messageResDto.getVoicePath())
+                .videoPath(messageResDto.getVideoPath())
+                .build();
+        messageRepository.save(message);
     }
 
-    // 사진 db에 저장
-    @Override
-    public void saveRemainingPhotos() {
-        for (Map.Entry<String, Photo> entry : photoRMapCache.entrySet()) {
-            photoRepository.save(entry.getValue());
-            photoRMapCache.remove(entry);
-        }
-
-    }
-
-    // 메시지 db에 저장
-    @Override
-    public void saveRemainingMessages() {
-        for (Map.Entry<String, Message> entry : messageRMapCache.entrySet()) {
-            messageRepository.save(entry.getValue());
-            photoRMapCache.remove(entry);
-
-        }
-    }
 
     // 기억 편집 화면에서 필요한 사진과 메시지 불러오는 메서드
     @Override
+    @Cacheable(cacheNames = "photoList", key = "#resultId", cacheManager = "cacheManager")
     public Map<String, Object> getPhotoAndMessageMap(Long resultId) {
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -186,7 +175,7 @@ public class ResultServiceImpl implements ResultService {
         rollingPaperRepository.save(rollingpaper);
     }
 
-    // 결과 가져오는 메서드
+    // 결과객체 가져오는 메서드
     private Result getResult(Long resultId) {
         return resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));

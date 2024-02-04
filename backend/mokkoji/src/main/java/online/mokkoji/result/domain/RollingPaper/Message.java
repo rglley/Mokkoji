@@ -8,13 +8,10 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Map;
 
 @Getter
 @Entity
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @ToString
 public class Message implements Serializable {
 
@@ -31,15 +28,12 @@ public class Message implements Serializable {
     @Nullable
     private String videoPath;
 
-    public Message(Long paperId, String writer, String text, Map<String, String> urlMap) {
+    @Builder
+    public Message(Long paperId, String writer, @Nullable String text, @Nullable String voicePath, @Nullable String videoPath) {
         this.paperId = paperId;
         this.writer = writer;
         this.text = text;
-        for (Map.Entry<String, String> urlEntry : urlMap.entrySet()) {
-            if (urlEntry.getKey().equals("voice")) this.voicePath = urlEntry.getValue();
-            else if (urlEntry.getKey().equals("video")) this.videoPath = urlEntry.getValue();
-        }
+        this.voicePath = voicePath;
+        this.videoPath = videoPath;
     }
-
-
 }
