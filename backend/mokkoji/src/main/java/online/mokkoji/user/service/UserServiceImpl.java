@@ -59,13 +59,27 @@ public class UserServiceImpl implements UserService{
         UserAccount userAccount = readUser.getUserAccount();
         Record record = readUser.getRecord();
 
-        if (userAccount == null) {
-            return new MyPageResDto(readUser.getEmail(), readUser.getName(), false,
-                    record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
+        if (userAccount.getBank() == null && userAccount.getNumber() == null) {
+            return MyPageResDto.builder()
+                    .image(readUser.getImage())
+                    .name(readUser.getName())
+                    .isAccountRegistered(false)
+                    .eventCount(record.getEventCount())
+                    .totalTime(record.getTotalTime())
+                    .totalParticipant(record.getTotalParticipant())
+                    .totalMessage(record.getTotalMessage())
+                    .build();
         }
 
-        return new MyPageResDto(readUser.getEmail(), readUser.getName(), true,
-                record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
+        return MyPageResDto.builder()
+                .image(readUser.getImage())
+                .name(readUser.getName())
+                .isAccountRegistered(true)
+                .eventCount(record.getEventCount())
+                .totalTime(record.getTotalTime())
+                .totalParticipant(record.getTotalParticipant())
+                .totalMessage(record.getTotalMessage())
+                .build();
     }
 
     @Override
