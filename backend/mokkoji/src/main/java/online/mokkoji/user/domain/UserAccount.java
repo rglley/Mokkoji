@@ -16,7 +16,7 @@ public class UserAccount {
     @Column(name = "account_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -29,9 +29,14 @@ public class UserAccount {
     private String number;
 
     @Builder
-    public UserAccount (User user, String bank, String number) {
+    public UserAccount(User user, String bank, String number) {
         this.user = user;
         this.bank = bank;
         this.number = number;
+    }
+
+    public void updateAccount(String bank, String accountNumber) {
+        this.bank = bank;
+        this.number = accountNumber;
     }
 }
