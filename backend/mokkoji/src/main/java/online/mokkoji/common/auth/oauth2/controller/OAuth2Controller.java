@@ -27,8 +27,6 @@ import java.util.Optional;
 public class OAuth2Controller {
 
     private final OAuth2ServiceImpl oAuth2Service;
-    private final JwtUtil jwtUtil;
-
 
     @GetMapping("/{provider}/{code}")
     public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code,
