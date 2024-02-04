@@ -60,7 +60,7 @@
 import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '../../stores/user'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import axios from '@/services/api'
 
 const router = useRouter()
 const store = useUserStore()
@@ -75,16 +75,12 @@ const email = ref('')
 
 const update = () => {
   axios
-    .put('http://localhost:8080/users', {
+    .put('/users', {
       name: name.value,
       image: image.value,
       bank: bank.value,
       accountNumber: accountNumber.value,
       email : email.value
-    }, {
-      headers: {
-        Authorization: $cookies.get('token')
-      }
     })
     .then(() => {
       alert('회원 정보 수정!');
@@ -114,13 +110,8 @@ const base64 = (file) => {
 
 const withdraw = async () => {
     try {
-      const res = await axios.delete('http://localhost:8080/users', {
-        headers: {
-          Authorization: $cookies.get('token')
-        }
-      })
-      .then((res) => {
-        console.log(res)
+      await axios.delete('/users')
+      .then(() => {
         store.isLogin.value = false;
         router.push('/')
       })
@@ -133,13 +124,8 @@ const withdraw = async () => {
 
 onBeforeMount(() => {
   axios
-    .get('http://localhost:8080/users/userinfo', {
-      headers: {
-        Authorization: $cookies.get('token')
-      }
-    })
+    .get('/users/userinfo')
     .then((res) => {
-      console.log(res);
       name.value = res.data.name
       email.value = res.data.email
       bank.value = res.data.bank

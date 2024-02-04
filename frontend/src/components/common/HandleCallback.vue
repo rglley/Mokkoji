@@ -30,7 +30,6 @@ onMounted(() => {
   axios({
     method: 'GET',
     url: 'http://localhost:8080/oauth2/naver/' + naverquerycode.value,
-  
   })
     .then((res) => {
       const token = res.headers['authorization']

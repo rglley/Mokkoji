@@ -4,12 +4,14 @@
   >
     <div id="card-div">
       <div class="absolute -mt-28 mx-10 justify-center">
-        <img alt="프로필 사진" id="image-profile" :src=userData.image />
+        <img alt="프로필 사진" id="image-profile" :src="userData.image" />
       </div>
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
         <div class="flex flex-col w-6/12 ml-10">
           <span class="flex flex-col mt-10 max-md:mt-10"
-            ><div class="text-black text-3xl font-bold self-stretch">{{ userData.name }}님</div>
+            ><div class="text-black text-3xl font-bold self-stretch">
+              {{ userData.name }}님
+            </div>
             <div class="text-black text-xl self-stretch mt-2.5">{{ userData.email }}</div>
             <span class="mt-16 pl-2 pr-4"
               ><div class="text-black text-3xl">
@@ -36,11 +38,15 @@
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
             <div id="div-stat">
-              모꼬지 주최<br /><span class="text-purple-400">{{ userData.eventCount }}</span
+              모꼬지 주최<br /><span class="text-purple-400">{{
+                userData.eventCount
+              }}</span
               >번<br />
             </div>
             <div id="div-stat">
-              참여자 수<br /><span class="text-purple-400">{{ userData.totalParticipant }}</span
+              참여자 수<br /><span class="text-purple-400">{{
+                userData.totalParticipant
+              }}</span
               >명
             </div>
           </div>
@@ -52,7 +58,9 @@
               <!-- >분 -->
             </div>
             <div id="div-stat">
-              받은 메세지<br /><span class="text-purple-400">{{ userData.totalMessage }}</span
+              받은 메세지<br /><span class="text-purple-400">{{
+                userData.totalMessage
+              }}</span
               >개
             </div>
           </div>
@@ -64,24 +72,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from '@/services/api'
 
 const userData  = ref({})
 
-const getUserDetail = async () => {
-  try {
-    const res = await axios.get('http://localhost:8080/users/mypage', {
-      headers: {
-        Authorization: $cookies.get('token')
-      }
-    })
+const getUserDetail = () => {
+-    axios.get('/users/mypage')
     .then((res) => {
-      console.log(res)
       userData.value = res.data;
     })
-  } catch (err) {
+  .catch((err) => {
     console.error(err)
-  }
+  })
 }
 
 onMounted(() => {

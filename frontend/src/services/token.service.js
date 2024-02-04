@@ -1,11 +1,25 @@
+const parseJwt = (token) => {
+  const base64Url = token.split('.')[1]
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      })
+      .join('')
+  )
+  return JSON.parse(jsonPayload)
+}
+
 class TokenService {
 
   getLocalRefreshToken = () => {
-    return sessionStorage.getItem('user') ? this.refreshToken : null
+    return $cookies.get('user') ? $cookies.get('refresh-token') : null
   }
 
   getLocalAccessToken = () => {
-    return sessionStorage.getItem('user') ? this.accessToken : null
+    return $cookies.get('user') ? $cookies.get('token') : null
   }
 
   setLocalRefreshToken = (token) => {
@@ -31,25 +45,16 @@ class TokenService {
   removeUser = () => {
     $cookies.remove('user');
     $cookies.remove('token');
-    $cookies.remove('refresh-token');
-  }
-
-  parseJwt = (token) => {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        })
-        .join('')
-    )
-    return JSON.parse(jsonPayload)
+    try{
+      $cookies.remove('refresh-token');
+    }
+    catch(err) {
+      alert('err')
+    }
   }
 
   expiredToken = () => {
-    return parseJwt(this.accessToken).exp * 1000 <= Date.now()
+    return parseJwt($cookies.get('token')).exp * 1000 <= Date.now()
   }
 }
 

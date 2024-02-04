@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import '../src/style.css'
 // import './style.css'
 if (import.meta.env.MODE !== 'ssr') {
@@ -11,9 +12,6 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 //scroll animation
 import AOS from 'aos'
-// import 'aos/dist/aos.css'
-// AOS.init()
-
 import App from './App.vue'
 import router from './router/index.js'
 import VueCookies from 'vue-cookies'
@@ -25,7 +23,3 @@ app.use(router)
 app.use(VueCookies, { expires: '7d' })
 
 app.mount('#app')
-// axios interceptor
-// import setupInterceptors from './services/setupInterceptors.js'
-
-// setupInterceptors()
