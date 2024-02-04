@@ -23,21 +23,17 @@ public class SecurityConfig {
                 .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.disable())
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
 
-                //h2 테스트
                 .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
 
-                //jwt는 세션 사용 X, 화상회의에서 쓰지 않나?
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                //URL 별 권한 관리
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico",
                                         "/h2-console/**").permitAll()
-                                //회의 참여 등 비회원 가능 url 추가 필요
-                                .requestMatchers("/signup", "/oauth2/login").permitAll()
-                                .anyRequest().hasAuthority("ROLE_USER")
+                                .requestMatchers("/signup", "/oauth2/**").permitAll()
+                                .anyRequest().authenticated()
                 )
 
                 .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

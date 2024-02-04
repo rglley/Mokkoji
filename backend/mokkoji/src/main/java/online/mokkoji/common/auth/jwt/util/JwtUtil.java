@@ -40,13 +40,12 @@ public class JwtUtil {
         return JWT.create() //Jwt 토큰 빌더 반환 메서드
                 .withSubject(ACCESS_TOKEN_SUBJECT)
                 .withExpiresAt(new Date(now.getTime() + jwtConfig.getAccessExpiration()))
-                .withClaim(PROVIDER_CLAIM, provider)
+                .withClaim(PROVIDER_CLAIM, provider.toUpperCase())
                 .withClaim(EMAIL_CLAIM, email)
                 .sign(Algorithm.HMAC512(jwtConfig.getSecretKey()));
     }
 
     public String createRefreshToken() {
-        log.info("RefreshToken 생성");
         Date now = new Date();
         return JWT.create()
                 .withSubject(REFRESH_TOKEN_SUBJECT)

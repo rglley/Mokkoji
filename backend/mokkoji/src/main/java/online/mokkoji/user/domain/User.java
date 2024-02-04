@@ -26,8 +26,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @Column(nullable = false, length = 10)
-    @Size(max = 10)
+    @Column(nullable = false, length = 6)
+    @Size(max = 6)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -38,20 +38,28 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Event> events = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private UserAccount userAccount;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, optional = false)
     private Record record;
 
     // TODO : reddis로 관리
-    @Column(length = 100)
-    @Size(max = 100)
+    @Column(length = 65535)
     private String refreshToken;
 
+    @Builder(builderMethodName = "nonTokenBuilder")
+    public User(Provider provider, String email, String name, String image, Authority authority) {
+        this.provider = provider;
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        this.authority = authority;
+    }
+
     @Builder
-    public User(String provider, String email, String name, String image, Authority authority, String refreshToken) {
-        this.provider = Provider.valueOf(provider);
+    public User(Provider provider, String email, String name, String image, Authority authority, String refreshToken) {
+        this.provider = provider;
         this.email = email;
         this.name = name;
         this.image = image;
@@ -59,20 +67,16 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
-    @Builder
-    public User(String email, String name, String image) {
-        this.email = email;
-        this.name = name;
-        this.image = image;
-    }
-
-    @Builder(builderMethodName = "updateBuilder")
-    public User(String name, String image) {
+    public void updateUser(String name, String image) {
         this.name = name;
         this.image = image;
     }
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateAuthority() {
+        this.authority = Authority.USER;
     }
 }

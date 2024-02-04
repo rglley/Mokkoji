@@ -14,7 +14,7 @@ public interface UserService {
 
     void updateUser(String provider, String email, UserInputReqDto modifyDto);
 
-    User deleteUser(String provider, String email);
+    void deleteUser(String provider, String email);
 
     User getByProviderAndEmail(String provider, String email);
 }
