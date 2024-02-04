@@ -38,13 +38,13 @@ public class UserServiceImpl implements UserService{
         User readUser = findUser.get();
         UserAccount userAccount = readUser.getUserAccount();
 
-        if (userAccount == null) {
-            return new UpdatePageResDto(readUser.getEmail(), readUser.getImage(), readUser.getName(),
-                    null, null);
-        }
-
-        return new UpdatePageResDto(readUser.getEmail(), readUser.getImage(), readUser.getName(),
-                userAccount.getBank(), userAccount.getNumber());
+        return UpdatePageResDto.builder()
+                .email(readUser.getEmail())
+                .image(readUser.getImage())
+                .name(readUser.getName())
+                .bank(userAccount.getBank())
+                .accountNumber(userAccount.getNumber())
+                .build();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService{
         UserAccount userAccount = readUser.getUserAccount();
         Record record = readUser.getRecord();
 
-        if (userAccount.getBank() == null && userAccount.getNumber() == null) {
+        if (userAccount.getBank().equals("") || userAccount.getNumber().equals("")) {
             return MyPageResDto.builder()
                     .image(readUser.getImage())
                     .name(readUser.getName())
@@ -144,11 +144,10 @@ public class UserServiceImpl implements UserService{
         userAccount.updateAccount(bank, accountNumber);
 
         accountRepository.save(userAccount);
-
     }
 
     @Override
-    public User deleteUser(String provider, String email) {
+    public void deleteUser(String provider, String email) {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
@@ -157,7 +156,5 @@ public class UserServiceImpl implements UserService{
 
         User deleteUser = findUser.get();
         userRepository.delete(deleteUser);
-
-        return deleteUser;
     }
 }

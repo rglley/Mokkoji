@@ -70,8 +70,8 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
-        User removeUser = userServiceImpl.deleteUser(provider, email);
+        userServiceImpl.deleteUser(provider, email);
 
-        return new ResponseEntity<>(removeUser, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
