@@ -10,8 +10,6 @@ import java.util.Map;
 @Service
 public interface EventService {
 
-    // Session 생성 시 UserId 받기
-    Long getUserId(Map<String, Object> params);
 
     // Session 생성
     String createSession(SessionReqDto sessionReqDto);

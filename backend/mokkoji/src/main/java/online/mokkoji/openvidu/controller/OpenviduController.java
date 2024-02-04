@@ -2,6 +2,7 @@ package online.mokkoji.openvidu.controller;
 
 import io.openvidu.java.client.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
@@ -13,6 +14,7 @@ import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
+import online.mokkoji.user.domain.User;
 import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,6 @@ import java.util.Map;
 public class OpenviduController {
 
     private final EventService eventService;
-    private final EventRepository eventRepository;
     private final JwtUtil jwtUtil;
     private final UserServiceImpl userServiceImpl;
     private final ResultService resultService;
@@ -74,12 +75,6 @@ public class OpenviduController {
         // DB에 저장
         eventService.createSession(sessionReqDto);
 
-        // 리턴값(sessionId) 담는 map 생성
-        Map<String, Session> response = new HashMap<>();
-
-        // map에 담기
-        response.put("session", session);
-
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
 
@@ -105,24 +100,19 @@ public class OpenviduController {
     // Session 삭제
     @DeleteMapping("/sessions/{sessionId}")
     public ResponseEntity<String> deleteSession(@PathVariable("sessionId") String sessionId,
-//                                                HttpServletRequest req,
+                                                HttpServletRequest req,
                                                 @RequestBody(required = false) SessionReqDto sessionReqDto)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-//        if (sessionReqDto.getAuthority().equals("sub")) return new ResponseEntity<>("참여자 회의 나감", HttpStatus.OK);
 
-//        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
-//        sessionReqDto.setUserId(user.getId());
+        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        sessionReqDto.setUserId(user.getId());
 
         Session activeSession = openvidu.getActiveSession(sessionId);
-//        eventService.deleteSession(sessionId, sessionReqDto);
+        eventService.deleteSession(sessionId, sessionReqDto);
 
         activeSession.close();
 
-
-        // TODO: 2024.01.31 아직 작성 중인 사람은?
-//        resultService.saveRemainingPhotos();
-//        resultService.saveRemainingMessages();
 
         return new ResponseEntity<>("세션 삭제 완료", HttpStatus.NO_CONTENT);
     }

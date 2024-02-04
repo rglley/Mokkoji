@@ -41,7 +41,7 @@
 //    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 //            throws ServletException, IOException {
 //        if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
-//                request.getRequestURI().equals(LOGIN_URL)){
+//                request.getRequestURI().equals(LOGIN_URL)) {
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
