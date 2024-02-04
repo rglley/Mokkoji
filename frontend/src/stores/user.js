@@ -47,24 +47,26 @@ export const useUserStore = defineStore('user', () => {
         console.log(err)
       })
   }
-
-  const withdraw = () => {
-    axios
-      .post({
-        url: API_URI + '/withdraw'
+  
+  const withdraw = async () => {
+    try {
+      const res = await axios.delete('http://localhost:8080/users', {
+        headers: {
+          Authorization: $cookies.get('token')
+        }
       })
-      .then(() => {
-        // cookie 정보 삭제
-        tokenService.removeUser()
-        alert('회원 탈퇴!')
-        isLogin.value = false
+      .then((res) => {
+        console.log(res)
+        isLogin.value = false;
         router.push('/')
       })
-      .catch((err) => {
-        alert(err.errorMsg)
-        console.log(err)
-      })
+    } catch (err) {
+      alert(err.errorMsg)
+      console.error(err)
+    }
   }
+  
+
 
   const logout = () => {
     // eslint-disable-next-line no-undef

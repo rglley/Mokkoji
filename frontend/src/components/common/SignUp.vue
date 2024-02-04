@@ -138,7 +138,6 @@ onBeforeMount(() => {
   name.value = store.name;
   image.value = store.image;
   email.value = store.email;
-  console.log($cookies.get('token'))
 })
 </script>
 

@@ -4,17 +4,17 @@
   >
     <div id="card-div">
       <div class="absolute -mt-28 mx-10 justify-center">
-        <img alt="프로필 사진" id="image-profile" src="@/assets/landing/dummy_profile.jpg" />
+        <img alt="프로필 사진" id="image-profile" :src=userData.image />
       </div>
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
         <div class="flex flex-col w-6/12 ml-10">
           <span class="flex flex-col mt-10 max-md:mt-10"
-            ><div class="text-black text-3xl font-bold self-stretch">{{ name }}님</div>
-            <div class="text-black text-xl self-stretch mt-2.5">{{ email }}</div>
+            ><div class="text-black text-3xl font-bold self-stretch">{{ userData.name }}님</div>
+            <div class="text-black text-xl self-stretch mt-2.5">{{ userData.email }}</div>
             <span class="mt-16 pl-2 pr-4"
               ><div class="text-black text-3xl">
                 계좌 등록
-                <a class="text-2xl text-red-500" v-if="isAccountRegistered">O</a>
+                <a class="text-2xl text-red-500" v-if="userData.accountRegistered">O</a>
                 <a class="text-2xl text-red-500" v-else>X </a>
               </div>
             </span>
@@ -36,23 +36,23 @@
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
             <div id="div-stat">
-              모꼬지 주최<br /><span class="text-purple-400">{{ eventCount }}</span
+              모꼬지 주최<br /><span class="text-purple-400">{{ userData.eventCount }}</span
               >번<br />
             </div>
             <div id="div-stat">
-              참여자 수<br /><span class="text-purple-400">{{ totalParticipant }}</span
+              참여자 수<br /><span class="text-purple-400">{{ userData.totalParticipant }}</span
               >명
             </div>
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
             <div id="div-stat">
-              모꼬지 <br /><span class="text-purple-400">{{ totalTime }}</span
+              모꼬지 <br /><span class="text-purple-400">{{ userData.totalTime }}</span
               >시간
               <!-- <span class="text-purple-400">{{ totalMin }}</span -->
               <!-- >분 -->
             </div>
             <div id="div-stat">
-              받은 메세지<br /><span class="text-purple-400">{{ totalMessage }}</span
+              받은 메세지<br /><span class="text-purple-400">{{ userData.totalMessage }}</span
               >개
             </div>
           </div>
@@ -66,29 +66,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
-const image = ref('')
-const name = ref('')
-const isAccountRegistered = ref(false)
-const eventCount = ref(0)
-const totalTime = ref(0)
-const totalParticipant = ref(0)
-const totalMessage = ref(0)
-const email = ref('')
-
-const getInfo = () => {
-  axios
-    .get('http://localhost:8080/users/mypage', {
-      headers: {
-        Authorization: $cookies.get('token')
-      }
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+const userData  = ref({})
 
 const getUserDetail = async () => {
   try {
@@ -97,14 +75,16 @@ const getUserDetail = async () => {
         Authorization: $cookies.get('token')
       }
     })
-    console.log(res)
-    email.value = res.data.email
+    .then((res) => {
+      console.log(res)
+      userData.value = res.data;
+    })
   } catch (err) {
     console.error(err)
   }
 }
+
 onMounted(() => {
-  getInfo()
   getUserDetail()
 })
 </script>

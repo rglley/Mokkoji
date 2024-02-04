@@ -49,7 +49,7 @@
       >
         정보 수정하기
       </button>
-      <button class="w-fit rounded-xl text-red-400 my-10 p-2" @click="store.withdraw">
+      <button class="w-fit rounded-xl text-red-400 my-10 p-2" @click="withdraw">
         회원 탈퇴
       </button>
     </div>
@@ -74,7 +74,6 @@ const accountNumber = ref('')
 const email = ref('')
 
 const update = () => {
-  console.log(email.value)
   axios
     .put('http://localhost:8080/users', {
       name: name.value,
@@ -113,6 +112,25 @@ const base64 = (file) => {
   })
 }
 
+const withdraw = async () => {
+    try {
+      const res = await axios.delete('http://localhost:8080/users', {
+        headers: {
+          Authorization: $cookies.get('token')
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        store.isLogin.value = false;
+        router.push('/')
+      })
+    } catch (err) {
+      alert(err.errorMsg)
+      console.error(err)
+    }
+  }
+
+
 onBeforeMount(() => {
   axios
     .get('http://localhost:8080/users/userinfo', {
@@ -121,6 +139,7 @@ onBeforeMount(() => {
       }
     })
     .then((res) => {
+      console.log(res);
       name.value = res.data.name
       email.value = res.data.email
       bank.value = res.data.bank
