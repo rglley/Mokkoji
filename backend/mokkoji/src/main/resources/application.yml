@@ -8,12 +8,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         # show_sql: true
         format_sql: true
-#        dialect: org.hibernate.dialect.H2Dialect
+    #        dialect: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
 
   data:
@@ -36,7 +36,7 @@ spring:
 
 # OpenVidu
 OPENVIDU_URL: http://localhost:4443/
-OPENVIDU_SECRET: MOKKOJI_SECRET
+OPENVIDU_SECRET: MY_SECRET
 
 # server
 server:
@@ -59,3 +59,5 @@ cloud:
     stack:
       auto: false
 
+api:
+  version: /api/vi

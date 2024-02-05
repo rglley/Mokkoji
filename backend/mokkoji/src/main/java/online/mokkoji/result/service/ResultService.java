@@ -1,19 +1,20 @@
 package online.mokkoji.result.service;
 
-import online.mokkoji.result.domain.Message;
-import online.mokkoji.result.domain.Photo;
+import online.mokkoji.event.dto.response.PhotoResDto;
+import online.mokkoji.result.dto.request.RollingPaperReqDto;
+import online.mokkoji.result.dto.response.MessageResDto;
 
 import java.util.Map;
 
 public interface ResultService {
     //create, read, update, delete
-    Map<String, Object> readResult(String provider, String email);
+    Map<String, Object> getResultMap(String provider, String email);
 
-    void createPhoto(Photo photo);
+    void createPhoto(PhotoResDto photoResDto);
 
-    void createMessage(Message message);
+    void createMessage(MessageResDto message);
 
-    void saveRemainingPhotos();
+    Map<String, Object> getPhotoAndMessageMap(Long resultId);
 
-    void saveRemainingMessages();
+    void updateRollingpaper(Long resultId, RollingPaperReqDto rollingPaperReqDto);
 }

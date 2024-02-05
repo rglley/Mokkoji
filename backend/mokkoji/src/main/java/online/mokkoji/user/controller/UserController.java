@@ -4,11 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import online.mokkoji.user.dto.request.UserInputReqDto;
-import online.mokkoji.user.dto.response.MyPageResDto;
-import online.mokkoji.user.dto.response.UpdatePageResDto;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.dto.request.UserInputReqDto;
+import online.mokkoji.user.dto.response.MyPageResDto;
 import online.mokkoji.user.dto.response.UpdatePageResDto;
 import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("${api.version}/users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
@@ -43,7 +42,6 @@ public class UserController {
 
         return new ResponseEntity<>(myPageResDto, HttpStatus.OK);
     }
-
 
 
     @PostMapping
