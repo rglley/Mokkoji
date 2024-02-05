@@ -31,6 +31,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private static final String MAIN_URL = "/";
     private static final String JOIN_URL = "/signup";
     private static final String LOGIN_URL = "/oauth2";
+    private static final String TEST_URL = "/api/v1";
+
 
 
     private final JwtUtil jwtUtil;
@@ -42,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
-                request.getRequestURI().startsWith(LOGIN_URL)){
+                request.getRequestURI().startsWith(LOGIN_URL)|| request.getRequestURI().startsWith(TEST_URL)){
             filterChain.doFilter(request, response);
             return;
         }

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:4443", "http://localhost:5173"})
+@CrossOrigin(origins = {"http://mokkoji.online:5443"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.version}/meetings")
@@ -35,10 +35,10 @@ public class OpenviduController {
     private final UserServiceImpl userServiceImpl;
 
 
-    @Value("${OPENVIDU_URL}")
+    @Value("${openvidu.url}")
     private String openviduUrl;
 
-    @Value("${OPENVIDU_SECRET}")
+    @Value("${openvidu.secret}")
     private String openviduSecret;
 
     private OpenVidu openvidu;
