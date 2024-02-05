@@ -10,7 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-@Builder
 public class Photo implements Serializable {
 
     @Id
@@ -20,10 +19,11 @@ public class Photo implements Serializable {
     private Long resultId;
 
     @Column(nullable = false)
-    private String url;
+    private String photoPath;
 
-    public Photo(Long resultId, String url) {
+    @Builder
+    public Photo(Long resultId, String photoPath) {
         this.resultId = resultId;
-        this.url = url;
+        this.photoPath = photoPath;
     }
 }

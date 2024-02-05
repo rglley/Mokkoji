@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RollingpaperReqDto {
+public class MessageReqDto {
 
     private String writer;
     @Size(max = 100)

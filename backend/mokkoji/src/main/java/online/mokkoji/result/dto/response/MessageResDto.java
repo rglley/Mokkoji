@@ -1,27 +1,17 @@
-package online.mokkoji.result.domain;
+package online.mokkoji.result.dto.response;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Map;
 
 @Getter
-@Entity
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@ToString
-public class Message implements Serializable {
+@Setter
+@NoArgsConstructor
+public class MessageResDto {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "message_id")
-    private Long id;
     private Long paperId;
     private String writer;
     @Nullable
@@ -31,7 +21,7 @@ public class Message implements Serializable {
     @Nullable
     private String videoPath;
 
-    public Message(Long paperId, String writer, String text, Map<String, String> urlMap) {
+    public MessageResDto(Long paperId, String writer, String text, Map<String, String> urlMap) {
         this.paperId = paperId;
         this.writer = writer;
         this.text = text;
@@ -40,6 +30,4 @@ public class Message implements Serializable {
             else if (urlEntry.getKey().equals("video")) this.videoPath = urlEntry.getValue();
         }
     }
-    
-
 }
