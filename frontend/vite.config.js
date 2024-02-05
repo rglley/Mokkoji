@@ -14,8 +14,8 @@ export default defineConfig({
     include: ['events']
   },
   server: {
-    proxy: {
-      '/api': 'http://localhost:8080'
-    }
+    // proxy: {
+    //   '/api': 'https://mokkoji.online'
+    // }
   }
 })

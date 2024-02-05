@@ -422,7 +422,8 @@ const showLeaveGroupModal = () => {
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const APPLICATION_SERVER_URL = 'http://localhost:8080/'
+const { VITE_API_URL } = import.meta.env
+const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
   OV: undefined,
@@ -510,7 +511,7 @@ const joinSession = () => {
 // 세션 생성
 const createSession = async (sessionId) => {
   const response = await axios.post(
-    '/api/v1/meetings/sessions',
+    VITE_API_URL + VITE_SERVER + '/meetings/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }
@@ -522,7 +523,8 @@ const createSession = async (sessionId) => {
 // 토큰 생성
 const createToken = async (sessionId) => {
   const response = await axios.post(
-    '/api/v1/meetings/sessions/' + sessionId + '/connections',
+    VITE_API_URL + VITE_SERVER + '/meetings/sessions',
+    +sessionId + '/connections',
     {
       role: 'MODERATOR'
     },
