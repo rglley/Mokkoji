@@ -33,6 +33,8 @@ create-env:
     #    - echo "NODE_ENV = ${NODE_ENV}" >> .env
     - echo "DOCKER_USERNAME = ${DOCKER_USERNAME}" >> .env
     - echo "DOCKER_REPO = ${DOCKER_REPO}" >> .env
+    - echo "OPENVIDU_URL = ${OPENVIDU_URL}" >> .env
+    - echo "OPENVIDU_SECRET = ${OPENVIDU_SECRET}" >> .env
   artifacts:
     paths:
       - .env
