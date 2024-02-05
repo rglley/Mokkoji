@@ -37,10 +37,10 @@
                   @keyup.enter="submitConferenceId"
                   class="mx-0 pl-10 w-60 border-2 border-slate-500 rounded-xl"
                 />
-                <div class="absolute top-[1.5vh] right-1">
+                <div class="absolute flex justify-center items-center top-[3lvh] right-[1.5lvh]">
                   <button
                     @click="submitConferenceId"
-                    class="rounded-full size-8 mt-2 z-10 bg-primary hover:bg-primary3 duration-300"
+                    class="rounded-full size-8 z-10 bg-primary hover:bg-primary3 duration-300"
                   >
                     <img src="@/assets/landing/send.png" />
                   </button>
