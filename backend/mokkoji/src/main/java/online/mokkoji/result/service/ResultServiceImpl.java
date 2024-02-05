@@ -108,6 +108,22 @@ public class ResultServiceImpl implements ResultService {
                 .build();
     }
 
+    @Override
+    public void createRecollection(Long resultId) {
+        Optional<Result> findResult = resultRepository.findById(resultId);
+
+        if(findResult.isEmpty())
+            throw new RestApiException(ResultErrorCode.RESULT_NOT_FOUND);
+
+        Result result = findResult.get();
+
+        if(result.getStatus().getKey().equals("recollection"))
+            throw new RestApiException(ResultErrorCode.ALREADY_RECOLLECTION);
+
+        result.updateStatus();
+        resultRepository.save(result);
+    }
+
     // 사진 저장
     @Override
     public void createPhoto(PhotoResDto photoResDto) {

@@ -14,6 +14,8 @@ public interface ResultService {
 
     ResultResDto getResult(Long resultId, Pageable pageable);
 
+    void createRecollection(Long resultId);
+
     void createPhoto(PhotoResDto photoResDto);
 
     void createMessage(MessageResDto message);

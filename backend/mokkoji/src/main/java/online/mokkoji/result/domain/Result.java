@@ -54,7 +54,10 @@ public class Result {
         event.setResult(this);
     }
 
-    //setter는 안쓰는게 맞지 않는지?
+    public void updateStatus() {
+        this.status = Status.RECOLLECTION;
+    }
+
     public void setRollingpaper(RollingPaper rollingPaper) {
         this.rollingpaper = rollingPaper;
     }

@@ -35,10 +35,22 @@ public class ResultController {
     }
 
     @GetMapping("/recollections/{resultId}")
-    public ResponseEntity<?> getResult(@PathVariable Long resultId, @PageableDefault(page = 0, size = 9) Pageable pageable) {
+    public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, @PageableDefault(page = 0, size = 9) Pageable pageable) {
         ResultResDto resultResDto = resultService.getResult(resultId, pageable);
 
         return new ResponseEntity<>(resultResDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{resultId}")
+    public ResponseEntity<Map<String, Object>> addRecollection(@PathVariable Long resultId, HttpServletRequest req) {
+        resultService.createRecollection(resultId);
+
+        String provider = jwtUtil.getProvider(req);
+        String email = jwtUtil.getEmail(req);
+
+        Map<String, Object> result = resultService.getResultList(provider, email);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // 기억 편집화면
