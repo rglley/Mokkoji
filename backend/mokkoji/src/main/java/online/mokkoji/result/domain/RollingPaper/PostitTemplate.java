@@ -15,4 +15,8 @@ public class PostitTemplate {
     private String postitName;
     private String postitPath;
 
+    public PostitTemplate(String postitName, String postitPath) {
+        this.postitName = postitName;
+        this.postitPath = postitPath;
+    }
 }
