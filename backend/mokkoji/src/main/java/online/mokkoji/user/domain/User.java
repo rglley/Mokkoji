@@ -45,8 +45,7 @@ public class User {
     private Record record;
 
     // TODO : reddis로 관리
-    @Column(length = 100)
-    @Size(max = 100)
+    @Column(length = 65535)
     private String refreshToken;
 
     @Builder

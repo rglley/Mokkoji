@@ -1,17 +1,16 @@
 package online.mokkoji.result.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Getter
-public class RecollectionResDto {
+public class RecollectionInfoResDto {
 
     @NotBlank
-    private Long id;
+    private Long resultId;
 
     @NotBlank
     private LocalDate date;
@@ -26,8 +25,8 @@ public class RecollectionResDto {
     private String content;
 
     @Builder
-    public RecollectionResDto(Long id, LocalDate date, String image, String name, String content) {
-        this.id = id;
+    public RecollectionInfoResDto(Long resultId, LocalDate date, String image, String name, String content) {
+        this.resultId = resultId;
         this.date = date;
         this.image = image;
         this.name = name;

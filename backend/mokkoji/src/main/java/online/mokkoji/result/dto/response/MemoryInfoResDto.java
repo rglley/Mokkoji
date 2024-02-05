@@ -1,18 +1,16 @@
 package online.mokkoji.result.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Getter
-@Builder
-public class MemoryResDto {
+public class MemoryInfoResDto {
 
     @NotBlank
-    private Long id;
+    private Long resultId;
 
     @NotBlank
     private LocalDate date;
@@ -27,8 +25,8 @@ public class MemoryResDto {
     private boolean isMosaicCreated;
 
     @Builder
-    public MemoryResDto (Long id, LocalDate date, int participantCount, boolean isPaperEdited, boolean isMosaicCreated) {
-        this.id = id;
+    public MemoryInfoResDto(Long resultId, LocalDate date, int participantCount, boolean isPaperEdited, boolean isMosaicCreated) {
+        this.resultId = resultId;
         this.date = date;
         this.participantCount = participantCount;
         this.isPaperEdited = isPaperEdited;

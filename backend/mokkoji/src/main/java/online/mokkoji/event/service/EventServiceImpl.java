@@ -65,8 +65,8 @@ public class EventServiceImpl implements EventService {
         Result result = new Result(savedEvent);
         Result savedResult = resultRepository.save(result);
         // 빈 rollingpaper 생성
-        PostitTemplate postitTemplate = postitTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
-        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
+        PostitTemplate postitTemplate = postitTemplateRepository.findById(1L).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(1L).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
         RollingPaper rollingPaper = RollingPaper.buildWithResult()
                 .result(savedResult)
                 .backgroundTemplate(backgroundTemplate)

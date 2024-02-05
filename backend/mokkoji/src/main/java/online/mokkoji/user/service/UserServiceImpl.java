@@ -125,7 +125,6 @@ public class UserServiceImpl implements UserService{
                 .image(image)
                 .build();
 
-
         userRepository.save(updateUser);
 
         if (bank != null && accountNumber != null) {

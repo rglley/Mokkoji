@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
+import online.mokkoji.result.dto.response.ResultResDto;
 import online.mokkoji.result.service.ResultService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +25,21 @@ public class ResultController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/lists")
-    public ResponseEntity<Map<String, Object>> getResult(HttpServletRequest req) {
-        log.info("행사 리스트 상세 요청");
+    public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
         String provider = jwtUtil.getProvider(req);
         String email = jwtUtil.getEmail(req);
 
-        Map<String, Object> result = resultService.getResultMap(provider, email);
+        Map<String, Object> result = resultService.getResultList(provider, email);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/recollections/{resultId}")
+    public ResponseEntity<?> getResult(@PathVariable Long resultId, @PageableDefault(page = 0, size = 9) Pageable pageable) {
+        ResultResDto resultResDto = resultService.getResult(resultId, pageable);
+
+        return new ResponseEntity<>(resultResDto, HttpStatus.OK);
+    }
 
     // 기억 편집화면
     @GetMapping("/{resultId}/memories")
