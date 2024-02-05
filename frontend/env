@@ -3,3 +3,11 @@ VITE_MEMORY_IMG_COUNT = 25
 
 # 추억 결과물 랜덤 액자 개수
 VITE_RECOLLECTION_FRAME_COUNT = 5
+
+VITE_NAVER_CLIENT_ID = "Y_veSn1KXI8bYwTv29AA"
+
+VITE_NAVER_REDIRECT_URI = "http://localhost:5173/oauth2/login"
+
+VITE_API_URL = 'http://localhost:8080/'
+
+VITE_SERVER = 'api/v1'

@@ -11,7 +11,7 @@
       </button>
     </div>
     <div class="w-full h-1/2 flex items-center">
-      <button class="w-full h-full font-bold text-r-sm" @click="$emit('leave-meeting')">
+      <button class="w-full h-full font-bold text-r-sm" @click="$emit('leave-main-meeting')">
         회의 종료
       </button>
     </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-defineEmits(['leave-meeting']['leave-group-meeting'])
+defineEmits(['leave-main-meeting']['leave-group-meeting'])
 </script>
 
 <style>

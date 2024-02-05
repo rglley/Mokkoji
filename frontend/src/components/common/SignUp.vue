@@ -10,7 +10,7 @@
           <label class="text-sm font-medium text-slate-500" for="email"> 이메일 </label>
           <input
             class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            v-model="store.email"
+            v-model="email"
             disabled
           />
         </div>
@@ -26,8 +26,7 @@
         <div class="flex items-center space-x-4">
           <div class="flex-auto w-max m-5">
             <label>
-              <!-- <img id="image-profile" src="{{ image }}" /> -->
-              <img id="image-profile" src="@/assets/dummy_profile.jpg" />
+              <img id="image-profile" :src="image" class="w-40" />
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
@@ -63,69 +62,78 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref, onBeforeMount } from "vue";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import axios from "@/services/api";
 
-const router = useRouter()
-const store = useUserStore()
+const router = useRouter();
+const store = useUserStore();
 
-const name = ref('')
-const image = ref('')
-const email = ref('')
-const fileName = ref('')
+const name = ref("");
+const image = ref("");
+const email = ref("");
+const fileName = ref("");
 
 const getFileName = async (files) => {
-  const maxFileSize = 1024 * 1024 * 2
+  const maxFileSize = 1024 * 1024 * 2;
   if (files[0].size > maxFileSize) {
-    alert('파일 크기가 2MB를 초과했습니다')
-    return
+    alert("파일 크기가 2MB를 초과했습니다");
+    return;
   }
 
-  fileName.value = files[0].name
-  await base64(files[0])
-}
+  fileName.value = files[0].name;
+  await base64(files[0]);
+};
 
 const base64 = (file) => {
   return new Promise((resolve) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
-      resolve(e.target.result)
-      const previewImage = document.getElementById('image-profile')
-      previewImage.src = e.target.result
-      console.log(previewImage)
-      image.value = previewImage.src
-    }
-    reader.readAsDataURL(file)
-  })
-}
+      resolve(e.target.result);
+      const previewImage = document.getElementById("image-profile");
+      previewImage.src = e.target.result;
+      image.value = previewImage.src;
+    };
+    reader.readAsDataURL(file);
+  });
+};
 
-const banks = ['KB', '농협', '기업', '카카오뱅크']
-const bank = ref('')
-const accountNumber = ref('')
+const banks = ["KB", "농협", "기업", "카카오뱅크"];
+const bank = ref("");
+const accountNumber = ref("");
 
 const signUp = async () => {
   await axios({
-    url: 'http://localhost:8080/users',
-    method: 'POST',
+    url: "/users",
+    method: "POST",
     data: {
       name: name.value,
       image: image.value,
       bank: bank.value,
-      accountNumber: accountNumber.value
-    }
-    // headers: {
-    //   Authorization: localStorage.getItem('access-token')
-    // }
+      accountNumber: accountNumber.value,
+    },
   })
     .then(() => {
-      router.push('/')
+      store.isLogin = true;
+      toast("회원가입을 완료했습니다")
+      router.push("/");
     })
     .catch((err) => {
-      console.log(err)
-    })
-}
+      toast(err.message, {
+        theme: "auto",
+        type: "default",
+        dangerouslyHTMLString: true,
+      });
+    });
+};
+
+onBeforeMount(() => {
+  name.value = store.name;
+  image.value = store.image;
+  email.value = store.email;
+});
 </script>
 
 <style></style>

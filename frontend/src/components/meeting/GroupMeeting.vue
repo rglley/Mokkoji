@@ -13,15 +13,17 @@
               v-for="sub in state.subscribers"
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
+              :main-stream="false"
               @click.native="updateMainVideoStreamManager(sub)"
-              class="h-1/3 flex-none rounded-[3vb]"
+              class="h-1/3 flex-none"
             />
           </div>
           <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
             <user-Video
               id="main-video"
               :stream-manager="state.mainStreamManager"
-              class="px-sm w-full h-full rounded-[5.5vb]"
+              :main-stream="true"
+              class="px-sm w-full h-full"
             />
           </div>
         </div>
@@ -36,7 +38,8 @@
           v-for="sub in state.subscribers"
           :key="sub.stream.connection.connectionId"
           :stream-manager="sub"
-          class="w-full rounded-[3vb]"
+          :main-stream="false"
+          class="w-full"
         />
       </div>
       <!-- 참여자 목록, 채팅방-->
@@ -228,7 +231,7 @@
             <div class="w-[80%] h-full flex items-center">
               <button
                 id="button-quit"
-                class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl button-text"
+                class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl text-r-md"
                 @click="showLeaveGroupModal"
               >
                 나가기
@@ -256,7 +259,7 @@
     <transition-group name="up">
       <LeaveGroupModal
         v-if="isLeaveGroupModal"
-        @leave-meeting="leaveMeeting"
+        @leave-main-meeting="leaveMainMeeting"
         @leave-group-meeting="leaveGroupMeeting"
       />
     </transition-group>
@@ -264,10 +267,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import html2canvas from 'html2canvas'
-import router from '../../router'
 import axios from 'axios'
 import UserList from './UserList.vue'
 import UserVideo from './UserVideo.vue'
@@ -302,8 +305,13 @@ const props = defineProps({
 
 const emit = defineEmits(['leave-meeting'])
 
+const router = useRouter()
+
 const videoWidth = window.screen.width * 0.65
 const videoHeight = window.screen.height * 0.9
+
+// const sessionId = ref(props.session.sessionId)
+const groupNumber = ref(props.session.groupNumber)
 
 const isGrid = ref(false)
 const isMic = ref(true)
@@ -311,7 +319,6 @@ const isMicModal = ref(false)
 const isCamera = ref(true)
 const isCameraModal = ref(false)
 const isMeetingDetailModal = ref(false)
-const isGroupModal = ref(false)
 const isLetterModal = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -322,7 +329,10 @@ const isLeaveGroupModal = ref(false)
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
+const userList = ref([])
 const groupVideo = ref(null)
+
+console.log(props.session)
 
 const captureScreen = () => {
   const target = groupVideo.value
@@ -412,7 +422,7 @@ const showLeaveGroupModal = () => {
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const APPLICATION_SERVER_URL = 'http://localhost:5000/'
+const APPLICATION_SERVER_URL = 'http://localhost:8080/'
 
 const state = reactive({
   OV: undefined,
@@ -420,7 +430,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: props.sessionId === 'host' ? '' : props.sessionId,
+  mySessionId: props.session.sessionId + groupNumber.value,
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -431,13 +441,37 @@ const state = reactive({
 
 // 세션 참가하기
 const joinSession = () => {
-  // 1) Openvidu 객체 생성
+  // 2) Openvidu 객체 생성
   state.OV = new OpenVidu()
 
-  // 2) 세션 시작
+  // 3) 세션 시작
   state.session = state.OV.initSession()
 
-  // 3) 세션에서 이벤트 발생 시 동작하는 행동 구체화
+  // 4) 유효한 사용자 토큰으로 세션에 연결하기
+  getToken(state.mySessionId)
+    .then((token) => {
+      state.session.connect(token, { clientData: state.myUserName }).then(() => {
+        let publisher = state.OV.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
+          allowTranscoding: true,
+          resolution: `${videoWidth}x${videoHeight}`,
+          frameRate: 30,
+          insertMode: 'APPEND',
+          mirror: false
+        })
+
+        state.mainStreamManager = publisher
+        state.publisher = publisher
+
+        state.session.host = state.session.publish(publisher)
+      })
+    })
+    .catch((error) => {
+      console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
+    })
 
   // 비동기 예외
   state.session.on('exception', ({ exception }) => {
@@ -470,42 +504,13 @@ const joinSession = () => {
     }
   })
 
-  // 4) 유효한 사용자 토큰으로 세션에 연결하기
-  getToken(state.mySessionId)
-    .then((token) => {
-      state.session.connect(token, { clientData: state.myUserName }).then(() => {
-        let publisher = state.OV.initPublisher(undefined, {
-          audioSource: undefined,
-          videoSource: undefined,
-          publishAudio: true,
-          publishVideo: true,
-          allowTranscoding: true,
-          resolution: `${videoWidth}x${videoHeight}`,
-          frameRate: 30,
-          insertMode: 'APPEND',
-          mirror: false
-        })
-
-        state.mainStreamManager = publisher
-        state.publisher = publisher
-        state.subscribers.push(publisher)
-
-        console.log(publisher.resolution)
-
-        state.session.host = state.session.publish(publisher)
-      })
-    })
-    .catch((error) => {
-      console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
-    })
-
-  window.addEventListener('beforeunload', leaveMeeting)
+  window.addEventListener('beforeunload', leaveMainMeeting)
 }
 
 // 세션 생성
 const createSession = async (sessionId) => {
   const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions',
+    '/api/v1/meetings/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }
@@ -517,7 +522,7 @@ const createSession = async (sessionId) => {
 // 토큰 생성
 const createToken = async (sessionId) => {
   const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+    '/api/v1/meetings/sessions/' + sessionId + '/connections',
     {
       role: 'MODERATOR'
     },
@@ -525,7 +530,7 @@ const createToken = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
-  return response.data // 토큰
+  return response.data.connectionToken // 토큰
 }
 
 /* APPLICATION SERVER로부터 토큰 얻기
@@ -536,7 +541,7 @@ const getToken = async (mySessionId) => {
   return await createToken(sessionId)
 }
 
-const leaveMeeting = () => {
+const leaveMainMeeting = () => {
   if (state.session) {
     state.session.disconnect()
 
@@ -561,7 +566,7 @@ const leaveGroupMeeting = () => {
     state.subscribers = []
     state.OV = undefined
 
-    router.push(`/mainmeeting/${props.session.sessionId}`)
+    router.push(`/meetings`)
   }
 }
 
@@ -585,7 +590,11 @@ const sendMessage = (event) => {
 onMounted(() => {
   joinSession()
 
-  window.addEventListener('beforeunload', leaveMeeting)
+  window.addEventListener('beforeunload', leaveMainMeeting)
+})
+
+onBeforeUnmount(() => {
+  window.addEventListener('beforeunload', leaveMainMeeting)
 })
 </script>
 
