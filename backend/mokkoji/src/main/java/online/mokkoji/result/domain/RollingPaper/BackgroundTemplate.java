@@ -1,6 +1,7 @@
 package online.mokkoji.result.domain.RollingPaper;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -10,9 +11,19 @@ public class BackgroundTemplate {
     @Id
     @GeneratedValue
     @Column(name = "background_id")
-    private int id;
+    private Long id;
 
-    private String backgroundName;
-    private String backgroundPath;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rollingpaper_id")
+    private RollingPaper rollingPaper;
+
+    //enum이 맞지 않나
+    @Column(nullable = false, length = 15)
+    @Size(max = 15)
+    private String name;
+
+    @Column(nullable = false, length = 100)
+    @Size(max = 100)
+    private String path;
 
 }
