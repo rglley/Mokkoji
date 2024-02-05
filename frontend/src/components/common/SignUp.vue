@@ -94,6 +94,7 @@ const base64 = (file) => {
       resolve(e.target.result)
       const previewImage = document.getElementById('image-profile')
       previewImage.src = e.target.result
+      console.log(previewImage)
       image.value = previewImage.src
     }
     reader.readAsDataURL(file)
