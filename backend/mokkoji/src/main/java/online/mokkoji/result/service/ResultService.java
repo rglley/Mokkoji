@@ -16,11 +16,18 @@ public interface ResultService {
 
     void createRecollection(Long resultId);
 
+    // 사진 db 저장
     void createPhoto(PhotoResDto photoResDto);
 
+    // 메시지 db 저장
     void createMessage(MessageResDto message);
 
+    // 기억 편집 화면에서 필요한 사진과 메시지 불러오는 메서드
     Map<String, Object> getPhotoAndMessageMap(Long resultId);
 
+    // 롤링페이퍼 템플릿 변경
     void updateRollingpaper(Long resultId, RollingPaperReqDto rollingPaperReqDto);
+
+    // 대표이미지 설정
+    void updateThumbnail(Long resultId, String url);
 }

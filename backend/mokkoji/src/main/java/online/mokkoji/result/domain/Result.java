@@ -38,8 +38,7 @@ public class Result {
     @Size(max = 40)
     private String content;
 
-    @Column(length = 100)
-    @Size(max = 100)
+    @Column
     private String image;
 
     @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
@@ -61,4 +60,5 @@ public class Result {
     public void setRollingpaper(RollingPaper rollingPaper) {
         this.rollingpaper = rollingPaper;
     }
+    public void setImage(String url) {this.image=url;}
 }
