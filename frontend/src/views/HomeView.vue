@@ -37,7 +37,7 @@
                   @keyup.enter="submitConferenceId"
                   class="mx-0 pl-10 w-60 border-2 border-slate-500 rounded-xl"
                 />
-                <div class="absolute flex justify-center items-center top-[3lvh] right-[1.5lvh]">
+                <div class="absolute flex justify-center items-center top-4 right-2">
                   <button
                     @click="submitConferenceId"
                     class="rounded-full size-8 z-10 bg-primary hover:bg-primary3 duration-300"
