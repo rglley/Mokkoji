@@ -35,8 +35,8 @@ spring:
 
 
 # OpenVidu
-OPENVIDU_URL: ${openvidu.url}
-OPENVIDU_SECRET: ${openvidu.secret}
+OPENVIDU_URL: ${OPENVIDU_URL}
+OPENVIDU_SECRET: ${OPENVIDU_SECRET}
 
 # server
 server:
