@@ -98,8 +98,8 @@ public class ResultServiceImpl implements ResultService {
         Photomosaic photomosaic = result.getPhotomosaic();
 
         return ResultResDto.builder()
-                .backgroundTemplate(rollingPaper.getBackgroundTemplate().getPath())
-                .postitTemplate(rollingPaper.getPostitTemplate().getPath())
+                .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundPath())
+                .postitTemplate(rollingPaper.getPostitTemplate().getPostitPath())
                 .messageList(messageList)
                 .photomosaic(photomosaic == null ? "" : photomosaic.getPath())
                 .build();
@@ -121,14 +121,14 @@ public class ResultServiceImpl implements ResultService {
         resultRepository.save(result);
     }
 
-    // 사진 저장
+    // 사진 db 저장
     @Override
     public void createPhoto(PhotoResDto photoResDto) {
         Photo photo = Photo.builder().resultId(photoResDto.getResultId()).photoPath(photoResDto.getPhotoPath()).build();
         photoRepository.save(photo);
     }
 
-    // 메시지 저장
+    // 메시지 db 저장
     @Override
     public void createMessage(MessageResDto messageResDto) {
         Long paperId = messageResDto.getPaperId();
@@ -181,7 +181,7 @@ public class ResultServiceImpl implements ResultService {
         Result result = getResultById(resultId);
         RollingPaper rollingpaper = result.getRollingpaper();
 
-        // 요철 들어온 이름에 맞는 템플릿 찾기
+        // 요청 들어온 이름에 맞는 템플릿 찾기
         BackgroundName backgroundName = BackgroundName.valueOf(rollingPaperReqDto.getBackgroundName().toUpperCase());
         BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findByBackgroundName(backgroundName)
                 .orElseThrow(()->new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
@@ -197,6 +197,14 @@ public class ResultServiceImpl implements ResultService {
 
         // 변경내용 수정
         rollingPaperRepository.save(rollingpaper);
+    }
+
+    // 대표이미지 설정
+    @Override
+    public void updateThumbnail(Long resultId, String url) {
+        Result result = getResultById(resultId);
+        result.setImage(url);
+        resultRepository.save(result);
     }
 
     // 결과객체 가져오는 메서드

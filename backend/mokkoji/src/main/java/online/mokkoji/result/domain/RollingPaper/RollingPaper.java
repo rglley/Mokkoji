@@ -25,11 +25,14 @@ public class RollingPaper {
     @ColumnDefault("false")
     private boolean isEdited;
 
-    @OneToOne(mappedBy = "rollingPaper", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "background_id")
     private BackgroundTemplate backgroundTemplate;
 
-    @OneToOne(mappedBy = "rollingPaper", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postit_id")
     private PostitTemplate postitTemplate;
+
 
     @Builder(builderMethodName = "buildWithResult")
     public RollingPaper(Result result, BackgroundTemplate backgroundTemplate, PostitTemplate postitTemplate) {
