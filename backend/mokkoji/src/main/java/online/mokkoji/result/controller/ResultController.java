@@ -50,7 +50,7 @@ public class ResultController {
 
         Map<String, Object> result = resultService.getResultList(provider, email);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     // 기억 편집화면
