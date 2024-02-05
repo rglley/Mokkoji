@@ -1,7 +1,6 @@
 package online.mokkoji.result.domain.RollingPaper;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter

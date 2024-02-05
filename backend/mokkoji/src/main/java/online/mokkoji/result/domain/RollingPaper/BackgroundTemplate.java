@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class BackgroundTemplate {
 
     @Id
@@ -26,4 +27,8 @@ public class BackgroundTemplate {
     @Size(max = 100)
     private String path;
 
+    public BackgroundTemplate(String backgroundName, String backgroundPath) {
+        this.backgroundName = backgroundName;
+        this.backgroundPath = backgroundPath;
+    }
 }
