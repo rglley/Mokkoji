@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -15,8 +14,8 @@ export default defineConfig({
     include: ['events']
   },
   server: {
-    // 모든 네트워크 인터페이스에서 수신 대기하도록 설정
-    host: '0.0.0.0'
+    proxy: {
+      '/api': 'http://localhost:8080'
+    }
   }
 })
-

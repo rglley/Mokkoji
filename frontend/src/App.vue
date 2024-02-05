@@ -1,7 +1,11 @@
 <template>
   <main>
     <TheHeader v-if="!isMeeting" />
-    <RouterView @create-meeting="createMeeting" @leave-meeting="leaveMeeting" />
+    <RouterView
+      @create-meeting="createMeeting"
+      @leave-meeting="leaveMeeting"
+      @waiting-room="createMeeting"
+    />
     <TheFooter v-if="!isMeeting" />
   </main>
 </template>

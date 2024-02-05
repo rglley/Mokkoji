@@ -1,5 +1,5 @@
 <template>
-  <GroupMeeting :session="mainSession" />
+  <GroupMeeting :session="sessions" />
 </template>
 
 <script setup>
@@ -9,12 +9,18 @@ import GroupMeeting from '@/components/meeting/GroupMeeting.vue'
 const props = defineProps({
   mainSessionId: {
     type: String
+  },
+  groupNumber: {
+    type: String
   }
 })
 
 const emit = defineEmits(['create-meeting'])
 
-const mainSession = ref({ sessionId: props.mainSessionId })
+const sessions = ref({ sessionId: props.mainSessionId, groupNumber: props.groupNumber })
+
+console.log(props)
+console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
 
 onMounted(() => {
   emit('create-meeting')

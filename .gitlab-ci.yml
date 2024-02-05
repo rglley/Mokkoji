@@ -25,7 +25,6 @@ create-env:
   only:
     - frontend-deploy
 
-
 frontend-build:
   stage: frontend-build
   image: node:18-alpine
