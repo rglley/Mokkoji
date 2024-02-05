@@ -3,17 +3,17 @@ import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
 import EventListPage from '@/views/EventListView.vue'
-import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
-import test from '@/components/myEdit/ImgUpload.vue'
-import MyAccount from '@/components/mypage/MyAccount.vue'
-import Meeting from '@/components/meeting/Meeting.vue'
-import MeetingView from '@/views/MeetingView.vue'
+import Meeting from '@/components/meeting/MainMeeting.vue'
+import MeetingView from '@/views/MainMeetingView.vue'
 import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
 import EditPage from '@/views/EditView.vue'
 import HandleCallback from '@/components/common/HandleCallback.vue'
+import RollingPaper from '@/views/RollingPaper.vue'
+import PhotoMosaic from '@/views/PhotoMosaic.vue'
+import Test from '@/views/Test.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,11 +61,7 @@ const router = createRouter({
       component: GroupMeetingView,
       props: true
     },
-    {
-      path: '/resultpage',
-      name: 'resultpage',
-      component: ResultPage
-    },
+
     {
       path: '/eventlist',
       name: 'eventlist',
@@ -84,6 +80,21 @@ const router = createRouter({
       path: '/404',
       name: 'Error404',
       component: Error404
+    },
+    {
+      path: '/rollingpaper',
+      name: 'rollingpaper',
+      component: RollingPaper
+    },
+    {
+      path: '/photomosaic',
+      name: 'photomosaic',
+      component: PhotoMosaic
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: Test
     }
   ]
 })

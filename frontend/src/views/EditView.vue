@@ -163,7 +163,7 @@
     </div>
   </div>
   <!-- 섹션 5/6 포토모자이크 편집 -->
-  <div class="bg-primary2 h-[2000px]" ref="photomosaic">
+  <div class="bg-primary2 h-[1600px]" ref="photomosaic">
     <div class="text-[25px] flex items-center justify-end pt-5 pr-5" v-if="isNotHoveredHelp">
       <p class="flex hover:cursor-pointer" @mouseover="onHelp">도움말<IconQuestionMark /></p>
     </div>
@@ -174,39 +174,14 @@
     </div>
 
     <div class="h-[350px] flex">
-      <div class="w-1/3">
+      <div class="mx-auto">
         <p class="flex items-center justify-center pt-[70px]"><IconGalleryColored /></p>
-        <p class="flex items-center text-[40px] justify-center">대표 이미지를 지정하고</p>
-        <div class="flex items-center text-[40px] justify-center">포토 모자이크를 생성해주세요</div>
-      </div>
-
-      <div class="w-2/3 flex pb-4">
-        <div
-          class="opacity-70 border-2 border-[#5da2bd] rounded-lg w-64 my-auto mx-auto hover:cursor-pointer hover:opacity-100 effect-button-two"
-        >
-          <p class="text-[30px] justify-center ml-2 flex">미리보기 <IconSearch /></p>
-        </div>
-        <div
-          class="opacity-70 border-2 rounded-lg border-[#5da2bd] w-64 my-auto mx-auto hover:cursor-pointer hover:opacity-100 effect-button-two"
-          @click="showSaved('대표이미지')"
-        >
-          <p class="text-[30px] justify-center ml-2 flex">대표 이미지만 설정</p>
-        </div>
-        <div
-          class="opacity-70 border-2 rounded-lg border-[#5da2bd] w-64 my-auto mx-auto hover:cursor-pointer hover:opacity-100 effect-button-two"
-          @click="showSaved('포토모자이크')"
-        >
-          <p class="text-[30px] justify-center ml-2 flex">포토 모자이크 생성</p>
-        </div>
+        <p class="flex items-center text-[45px] justify-center pt-5">대표 이미지를 지정하고</p>
+        <div class="flex items-center text-[45px] justify-center">포토 모자이크를 생성해주세요</div>
       </div>
     </div>
-    <button
-      class="opacity-70 text-sm border-[#5da2bd] flex pt-1 rounded-lg hover:opacity-100 border-2 border-solid ml-[710px] mb-5 px-2 py-1 effect-button-two"
-      @click="showPhotoUploadModal"
-    >
-      <IconPhotoAdd /> 사진 추가
-    </button>
-    <div class="ml-4 w-[800px] h-[808px] border-2 rounded-lg border-[#5da2bd]">
+
+    <div class="">
       <Gallery />
     </div>
   </div>
@@ -215,31 +190,11 @@
     <div class="justify-center flex" @click="scrollToRollingPaper"><IconUpArrowPurple /></div>
     <div class="text-slate-500 justify-center flex" @click="scrollToTop">처음으로</div>
   </div>
-  <!-- 사진 업로드 모달 -->
-  <transition name="modal-fade">
-    <div
-      v-if="isPhotoUploadModal"
-      class="fixed bottom-0 left-[500px] w-full h-full flex content-center items-center z-20"
-    >
-      <div class="bg-white relative px-48 py-36 border-[#5da2bd] border-2 border-solid rounded-lg">
-        <div class="flex items-center">
-          <div class="">
-            <canvas ref="canvas" id="imgMosaic" class="pb-10"></canvas>
-            <input
-              class="mt-5 mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
-              type="file"
-              @change="getFileName($event.target.files)"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </transition>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
+
 import IconLoveLetterColored from '@/icons/result/IconLoveLetterColored.vue'
 import IconGalleryColored from '@/icons/result/IconGalleryColored.vue'
 import IconFlowersColoredTwo from '@/icons/result/IconFlowersColoredTwo.vue'
@@ -257,14 +212,11 @@ import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconQuestionMark from '@/icons/result/IconQuestionMark.vue'
 import IconCheckSkyBlue from '@/icons/result/IconCheckSkyBlue.vue'
 import IconCheckBlue from '@/icons/result/IconCheckBlue.vue'
-import Gallery from '@/components/myEdit/Gallery.vue'
-
-const alertText = ref('')
+import Gallery from '@/components/myedit/Gallery.vue'
 
 const isSaved = ref(false)
 const isHoveredHelp = ref(false)
 const isNotHoveredHelp = ref(true)
-const isPhotoUploadModal = ref(false)
 
 const rollingpaper = ref(null)
 const photomosaic = ref(null)
@@ -274,6 +226,7 @@ const canvas = ref(null)
 const design = ref('basic')
 const color = ref('rainbow')
 const fileName = ref('')
+const alertText = ref('')
 
 const isSelectedBasic = ref(true)
 const isSelectedBaby = ref(false)
@@ -307,10 +260,6 @@ const onHelp = () => {
 const outHelp = () => {
   isHoveredHelp.value = false
   isNotHoveredHelp.value = true
-}
-
-const showPhotoUploadModal = () => {
-  isPhotoUploadModal.value = !isPhotoUploadModal.value
 }
 
 const scrollToTop = () => {

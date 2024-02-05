@@ -17,6 +17,8 @@ export default defineConfig({
   server: {
     // 모든 네트워크 인터페이스에서 수신 대기하도록 설정
     host: '0.0.0.0'
+  },
+  define: {
+    global: {}
   }
 })
-

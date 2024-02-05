@@ -142,7 +142,7 @@ import RecollectionList from '@/components/myevent/RecollectionList.vue'
 
 const isHoveredPhotoMosaic = ref(false)
 const isHoveredRollingPaper = ref(false)
-const isHoveredBeCareful = ref(false)
+const isHoveredBeCareful = ref(true)
 const isOpenTwo = ref(false)
 const isShown = ref(false)
 const isNotShown = ref(true)

@@ -13,7 +13,7 @@
         width="200"
       /> -->
     <div class="flex justify-center items-center">
-      <a href="">
+      <a href="/rollingpaper">
         <img
           src="@/assets/logo/mokkoji_logo_with_bg.png"
           alt="unregistered"
