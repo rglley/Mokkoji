@@ -8,10 +8,7 @@ import online.mokkoji.common.exception.errorCode.ResultErrorCode;
 import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
-import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
-import online.mokkoji.result.domain.RollingPaper.Message;
-import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
-import online.mokkoji.result.domain.RollingPaper.RollingPaper;
+import online.mokkoji.result.domain.RollingPaper.*;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.MemoryResDto;
 import online.mokkoji.result.dto.response.MessageResDto;
@@ -138,35 +135,15 @@ public class ResultServiceImpl implements ResultService {
         RollingPaper rollingpaper = result.getRollingpaper();
 
         // 요철 들어온 이름에 맞는 템플릿 찾기
-        Map<String, Integer> backgroundNameToId = Map.of(
-                "basic", 1,
-                "wedding", 2,
-                "school", 3,
-                "lunar", 4,
-                "baby", 5
-        );
+        BackgroundName backgroundName = BackgroundName.valueOf(rollingPaperReqDto.getBackgroundName().toUpperCase());
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findByBackgroundName(backgroundName)
+                .orElseThrow(()->new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
 
-        Map<String, Integer> postitNameToId = Map.of(
-                "rainbow", 1,
-                "green", 2,
-                "blue", 3,
-                "pink", 4,
-                "yellow", 5
-        );
-
-
-        // id에 맞는 템플릿 선택 후 추가
-        String backgroundName = rollingPaperReqDto.getBackgroundName();
-        int bgId = backgroundNameToId.getOrDefault(backgroundName, rollingpaper.getBackgroundTemplate().getId());
-
-        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(bgId)
-                .orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
-
-        String postitName = rollingPaperReqDto.getPostitName();
-        int postitId = postitNameToId.getOrDefault(postitName, rollingpaper.getPostitTemplate().getId());
-
-        PostitTemplate postitTemplate = postitTemplateRepository.findById(postitId)
+        PostitName postitName = PostitName.valueOf(rollingPaperReqDto.getPostitName().toUpperCase());
+        PostitTemplate postitTemplate = postitTemplateRepository.findByPostitName(postitName)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
+
+
 
         rollingpaper.setBackgroundTemplate(backgroundTemplate);
         rollingpaper.setPostitTemplate(postitTemplate);
