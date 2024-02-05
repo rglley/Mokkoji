@@ -15,7 +15,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/': 'https://mokkoji.online'
+      '/api/v1': 'https://mokkoji.online'
     }
   }
 })
