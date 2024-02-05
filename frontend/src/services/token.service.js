@@ -49,7 +49,7 @@ class TokenService {
       $cookies.remove('refresh-token');
     }
     catch(err) {
-      alert('err')
+      console.log(err);
     }
   }
 

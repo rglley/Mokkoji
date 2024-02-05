@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', () => {
         user.image = image.value
         isLogin.value = true
       } catch (err) {
-        alert(err);
+        console.log(err);
       }
     })
 
