@@ -33,21 +33,19 @@ public class OpenviduController {
     private final EventService eventService;
     private final JwtUtil jwtUtil;
     private final UserServiceImpl userServiceImpl;
-    private final ResultService resultService;
-    private final UserRepository userRepository;
 
 
     @Value("${OPENVIDU_URL}")
-    private String OPENVIDU_URL;
+    private String openviduUrl;
 
     @Value("${OPENVIDU_SECRET}")
-    private String OPENVIDU_SECRET;
+    private String openviduSecret;
 
     private OpenVidu openvidu;
 
     @PostConstruct
     public void init() {
-        this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        this.openvidu = new OpenVidu(openviduUrl, openviduSecret);
     }
 
     // Session 생성
