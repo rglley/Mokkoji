@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@ToString
 public class BackgroundTemplate {
 
     @Id

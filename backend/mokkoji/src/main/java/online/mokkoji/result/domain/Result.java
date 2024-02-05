@@ -9,8 +9,8 @@ import online.mokkoji.user.domain.User;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"name", "content", "status"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Result {
 
     @Id
@@ -18,7 +18,7 @@ public class Result {
     @Column(name = "result_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -26,7 +26,11 @@ public class Result {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(length = 15)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.MEMORY;
+
+    @Column(length = 15, nullable = false)
     @Size(max = 15)
     private String name;
 
@@ -38,18 +42,11 @@ public class Result {
     @Size(max = 100)
     private String image;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status = Status.MEMORY;
-
-    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
     private RollingPaper rollingpaper;
 
-    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Photomosaic photomosaic;
-
-//    @OneToMany(mappedBy = "resultId")
-//    private List<Photo> photoList = new LinkedList<>();
 
     @Builder
     public Result(Event event) {
@@ -57,6 +54,9 @@ public class Result {
         event.setResult(this);
     }
 
+    public void updateStatus() {
+        this.status = Status.RECOLLECTION;
+    }
 
     public void setRollingpaper(RollingPaper rollingPaper) {
         this.rollingpaper = rollingPaper;

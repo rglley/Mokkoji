@@ -14,6 +14,7 @@ public class Photo implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "photo_id")
     private Long id;
 
     private Long resultId;

@@ -117,7 +117,8 @@ public class UserServiceImpl implements UserService{
                 .number(accountNumber)
                 .build();
 
-        accountRepository.save(userAccount);
+            accountRepository.save(userAccount);
+        }
     }
 
     @Override
@@ -134,6 +135,11 @@ public class UserServiceImpl implements UserService{
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
+        updateUser = User.updateBuilder()
+                .name(name)
+                .image(image)
+                .build();
+
         updateUser.updateUser(name, image);
         userRepository.save(updateUser);
 
