@@ -1,56 +1,60 @@
+const parseJwt = (token) => {
+  const base64Url = token.split('.')[1]
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      })
+      .join('')
+  )
+  return JSON.parse(jsonPayload)
+}
+
 class TokenService {
 
   getLocalRefreshToken = () => {
-    return sessionStorage.getItem('user') ? this.refreshToken : null
+    return $cookies.get('user') ? $cookies.get('refresh-token') : null
   }
 
   getLocalAccessToken = () => {
-    return sessionStorage.getItem('user') ? this.accessToken : null
+    return $cookies.get('user') ? $cookies.get('token') : null
   }
 
   setLocalRefreshToken = (token) => {
-    this.$cookie.set('refresh-token', token);
+    $cookies.set('refresh-token', token);
   }
 
   setLocalAccessToken = (token) => {
-    this.$cookie.set('access-token', token);
+    $cookies.set('token', token);
   }
 
   updateLocalAccessToken = (token) => {
-    this.$cookie.set('access-token', token);
+    $cookies.set('token', token);
   }
 
   getUser = () => {
-    return JSON.parse(sessionStorage.getItem('user'))
+    return $cookies.get('user')
   }
 
   setUser = (user) => {
-    console.log(JSON.stringify(user))
-    this.$cookie.set('user', JSON.stringify(user))
+    $cookies.set('user', user)
   }
 
   removeUser = () => {
-    this.$cookie.remove('user');
-    this.$cookie.remove('access-token');
-    this.$cookie.remove('refresh-token');
-  }
-
-  parseJwt = (token) => {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(function (c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        })
-        .join('')
-    )
-    return JSON.parse(jsonPayload)
+    $cookies.remove('user');
+    $cookies.remove('token');
+    try{
+      $cookies.remove('refresh-token');
+    }
+    catch(err) {
+      alert('err')
+    }
   }
 
   expiredToken = () => {
-    return this.parseJwt(this.accessToken).exp * 1000 <= Date.now()
+    return parseJwt($cookies.get('token')).exp * 1000 <= Date.now()
   }
 }
 

@@ -13,15 +13,15 @@ import HandleCallback from '@/components/common/HandleCallback.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/oauth2/redirect',
-      component: HandleCallback
-    },
+  routes: [ 
     {
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/oauth2/:pathMatch(.*)*',
+      component: HandleCallback
     },
     {
       path: '/signup',
