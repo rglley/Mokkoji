@@ -54,8 +54,8 @@
           </div>
         </div>
         <div class="relative -top-[10lvh] size-2/4">
-        <!-- <img src="@/assets/landing/wedding.svg" /> -->
-        <Swiper
+        <img src="@/assets/landing/wedding.svg" />
+        <!-- <Swiper
           :autoplay="{
             delay: 2500,
             disableOnInteraction: false
@@ -68,7 +68,7 @@
           <swiper-slide v-for="photo in photos">
             <img :src="`src/assets/landing/${photo}`" class="w-40 h-40"/>
           </swiper-slide>
-        </Swiper>
+        </Swiper> -->
       </div>
       </div>
     </section>
