@@ -68,7 +68,7 @@ const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
 }
 
-const limitHeight = 500
+const limitHeight = 200
 
 const handleScroll = () => {
   if (scrollY > limitHeight) isTransparent.value = true
