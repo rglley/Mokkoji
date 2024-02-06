@@ -38,9 +38,11 @@ public class ResultController {
 
     // 행사 리스트
     @GetMapping("/lists")
-    public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
+    public ResponseEntity<Map<String, Object>> getResultList(/*HttpServletRequest req*/) {
+//        String provider = jwtUtil.getProvider(req);
+
+        String provider = "NAVER";
+        String email = "";
 
         Map<String, Object> result = resultService.getResultList(provider, email);
 
@@ -95,10 +97,12 @@ public class ResultController {
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
 //        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
-        User user = userRepository.findByName("test");
+//        User user = userRepository.findByName("test");
 
+        log.info("업로드");
         // 사진 업로드
-        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
+//        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
+        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, 1L, resultId);
 
         // db에 저장
         for (PhotoResDto photoResDto : photoResDtoList) {
@@ -110,7 +114,7 @@ public class ResultController {
 
 
     // 대표이미지 설정
-    @PatchMapping("/results/{resultId}/memories/")
+    @PatchMapping("/results/{resultId}/memories")
     public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody String url) {
         resultService.updateThumbnail(resultId, url);
         return new ResponseEntity<>("대표이미지 설정 완료", HttpStatus.OK);

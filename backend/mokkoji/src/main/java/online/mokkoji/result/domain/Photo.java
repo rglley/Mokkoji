@@ -10,7 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class Photo implements Serializable {
+public class Photo {
 
     @Id
     @GeneratedValue

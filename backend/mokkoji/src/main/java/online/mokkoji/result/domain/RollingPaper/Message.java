@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class Message implements Serializable {
+public class Message {
 
     @Id
     @GeneratedValue

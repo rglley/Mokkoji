@@ -29,11 +29,11 @@ public class RollingPaper {
     @OneToMany(mappedBy = "rollingPaper")
     List<Message> messageList=new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "background_id")
     private BackgroundTemplate backgroundTemplate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "postit_id")
     private PostitTemplate postitTemplate;
 

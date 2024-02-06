@@ -79,6 +79,7 @@ public class ResultServiceImpl implements ResultService {
         return resultMap;
     }
 
+//    @Cacheable(cacheNames = "messageList", key = "#", cacheManager = "cacheManager")
     @Override
     public ResultResDto getResult(Long resultId, Pageable pageable) {
         Optional<Result> findResult = resultRepository.findById(resultId);
@@ -93,7 +94,7 @@ public class ResultServiceImpl implements ResultService {
         if(rollingPaper == null)
             throw new RestApiException(ResultErrorCode.ROLLINGPAPER_NOT_FOUND);
 
-        Page<Message> messageList = messageRepository.findAllByRollingPaper_Id(resultId, pageable);
+        Page<Message> messageList = messageRepository.findAllByRollingPaper_Id(rollingPaper.getId(), pageable);
 
         Photomosaic photomosaic = result.getPhotomosaic();
 

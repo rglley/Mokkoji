@@ -22,7 +22,7 @@ public interface ResultService {
     // 메시지 db 저장
     void createMessage(MessageResDto message);
 
-    // 기억 편집 화면에서 필요한 사진과 메시지 불러오는 메서드
+    // 기억 편집 화면에서 필요한 사진과 롤링페이퍼 템플릿 불러오는 메서드
     Map<String, Object> getPhotoAndMessageMap(Long resultId);
 
     // 롤링페이퍼 템플릿 변경
