@@ -48,6 +48,12 @@ public class User {
     @Column(length = 65535)
     private String refreshToken;
 
+    public User(String email, String name, String image) {
+        this.email = email;
+        this.name = name;
+        this.image = image;
+    }
+
     @Builder(builderMethodName = "nonTokenBuilder")
     public User(Provider provider, String email, String name, String image, Authority authority) {
         this.provider = provider;

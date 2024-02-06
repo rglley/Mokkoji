@@ -10,6 +10,7 @@ import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.ResultResDto;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,6 +34,7 @@ public class ResultController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final S3Service s3Service;
+    private final UserRepository userRepository;
 
     // 행사 리스트
     @GetMapping("/lists")
@@ -89,10 +91,11 @@ public class ResultController {
     // 사진첩 사진 추가
     @PostMapping("/{resultId}/memories/photos")
     public ResponseEntity<String> addPhotos(@PathVariable("resultId") Long resultId,
-                                           HttpServletRequest req,
+//                                           HttpServletRequest req,
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
-        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+//        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userRepository.findByName("test");
 
         // 사진 업로드
         List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);

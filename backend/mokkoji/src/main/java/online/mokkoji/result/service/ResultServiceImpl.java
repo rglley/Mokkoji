@@ -163,7 +163,7 @@ public class ResultServiceImpl implements ResultService {
 
         // 사진 루트 가져옴
         List<Photo> photoList = photoRepository.findAllByResultId(resultId);
-        List<String> photoPathList = new LinkedList<>();
+        List<String> photoPathList = new ArrayList<>();
         for (Photo photo : photoList) {
             photoPathList.add(photo.getPhotoPath());
         }

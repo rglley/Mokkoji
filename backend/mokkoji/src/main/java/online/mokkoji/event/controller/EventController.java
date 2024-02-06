@@ -59,7 +59,7 @@ public class EventController {
     @PostMapping("/rollingpapers/{sessionId}")
     public ResponseEntity<String> addRollingpaper(@PathVariable("sessionId") String sessionId,
                                                   HttpServletRequest req,
-                                                  @RequestPart(value = "voice", required = false) MultipartFile voice,
+                                                  @RequestPart(value = "audio", required = false) MultipartFile voice,
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
                                                   @RequestPart("writerAndText") MessageReqDto messageReqDto) throws IOException {
 

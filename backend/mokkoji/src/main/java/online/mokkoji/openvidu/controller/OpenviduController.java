@@ -11,6 +11,7 @@ import online.mokkoji.common.exception.errorCode.CommonErrorCode;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class OpenviduController {
     private final EventService eventService;
     private final JwtUtil jwtUtil;
     private final UserServiceImpl userServiceImpl;
+    private final UserRepository userRepository;
 
 
     @Value("${openvidu.url}")
@@ -51,8 +53,9 @@ public class OpenviduController {
     public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params,
                                              HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
-
         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+
+//        User user = userRepository.findByName("test");
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
@@ -80,7 +83,6 @@ public class OpenviduController {
         List<Session> activeSessions = openvidu.getActiveSessions();
         for (Session session : activeSessions) {
             if (session.getSessionId().equals(sessionId)) {
-
                 return new ResponseEntity<>(session, HttpStatus.OK);
             }
         }
@@ -92,13 +94,14 @@ public class OpenviduController {
     // Session 삭제
     @DeleteMapping("/sessions/{sessionId}")
     public ResponseEntity<String> deleteSession(@PathVariable("sessionId") String sessionId,
-                                                HttpServletRequest req,
+//                                                HttpServletRequest req,
                                                 @RequestBody(required = false) SessionReqDto sessionReqDto)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
-        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
-        sessionReqDto.setUserId(user.getId());
+//        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+//        sessionReqDto.setUserId(user.getId());
+        sessionReqDto.setUserId(userRepository.findByName("test").getId());
 
         Session activeSession = openvidu.getActiveSession(sessionId);
         eventService.deleteSession(sessionId, sessionReqDto);

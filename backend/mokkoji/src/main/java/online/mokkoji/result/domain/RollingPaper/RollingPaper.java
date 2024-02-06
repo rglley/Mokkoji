@@ -5,6 +5,7 @@ import lombok.*;
 import online.mokkoji.result.domain.Result;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,9 @@ public class RollingPaper {
     @Column(nullable = false)
     @ColumnDefault("false")
     private boolean isEdited;
+
+    @OneToMany(mappedBy = "rollingPaper")
+    List<Message> messageList=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "background_id")

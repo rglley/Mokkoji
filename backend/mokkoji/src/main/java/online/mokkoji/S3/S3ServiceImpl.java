@@ -43,7 +43,7 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public List<PhotoResDto> uploadPhotoList(List<MultipartFile> photoList, Long userId, Long resultId) {
 
-        List<PhotoResDto> dtoList = new LinkedList<>();
+        List<PhotoResDto> dtoList = new ArrayList<>();
 
         for (MultipartFile photo : photoList) {
             try {
