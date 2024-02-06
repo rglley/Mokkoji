@@ -262,7 +262,7 @@
       <AddressCopyModal v-if="isAddressCopyModal" />
     </transition-group>
     <transition-group name="up">
-      <sessionIdCopyModal v-if="isSessionIdCopyModal" />
+      <SessionIdCopyModal v-if="isSessionIdCopyModal" />
     </transition-group>
     <transition-group name="down">
       <MicModal v-if="isMicModal" :is-mic="isMic" />
@@ -316,7 +316,7 @@ import IconChat from '@/icons/meeting/IconChat.vue'
 import IconSendMessage from '@/icons/meeting/IconSendMessage.vue'
 import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
 import AddressCopyModal from '@/components/modal/meeting/AddressCopyModal.vue'
-import sessionIdCopyModal from '@/components/modal/meeting/sessionIdCopyModal.vue'
+import SessionIdCopyModal from '@/components/modal/meeting/SessionIdCopyModal.vue'
 import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
