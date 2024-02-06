@@ -32,7 +32,7 @@
             </button>
             <div
               id="dropdown"
-              class="z-10  bg-white divide-y divide-slate-200 rounded-lg w-32"
+              class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
             >
               <ul aria-labelledby="dropdownHoverButton" class="w-50">
                 <li id="li-dropdown">

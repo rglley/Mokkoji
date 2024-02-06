@@ -52,8 +52,8 @@
           </div>
         </div>
         <div class="relative -top-[10lvh] size-2/4">
-        <!-- <img src="@/assets/landing/wedding.svg" /> -->
-        <div class="ml-[10lvh] w-[70lvh] h-[70lvh] border-8 border-white cursor-grab">
+          <!-- <img src="@/assets/landing/wedding.svg" /> -->
+          <div class="ml-[10lvh] w-[70lvh] h-[70lvh] border-8 border-white cursor-grab">
             <swiper
               :spaceBetween="30"
               :autoplay="{
@@ -72,7 +72,7 @@
               </swiper-slide>
             </swiper>
           </div>
-      </div>
+        </div>
       </div>
     </section>
 
@@ -228,8 +228,6 @@ import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
-
-
 
 const store = useSessionStore()
 const router = useRouter()
