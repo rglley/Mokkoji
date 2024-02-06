@@ -199,11 +199,11 @@
             <button
               id="button-picture"
               :class="{ 'bg-purple-400': isCapture, 'bg-purple-200': !isCapture }"
-              @click="captureScreen"
+              @click="captureMyVideo"
             >
               <IconCamera class="size-[50%]" />
             </button>
-            <span @click="captureScreen" class="button-text">사진찍기</span>
+            <span @click="captureMyVideo" class="button-text">사진찍기</span>
           </div>
         </div>
         <div id="button-container-right" class="w-[25%] h-full flex">
@@ -242,7 +242,13 @@
       </div>
     </section>
     <transition-group name="up">
-      <MeetingDetailModal v-if="isMeetingDetailModal" :session="session" />
+      <MeetingDetailModal
+        v-if="isMeetingDetailModal"
+        :session="state.session"
+        @copy-address-info="showAddressCopyModal"
+        @copy-session-id-info="showSessionIdCopyModal"
+        @remove-detail-modal="showMeetingDetailModal"
+      />
     </transition-group>
     <transition-group name="down">
       <MicModal v-if="isMicModal" :is-mic="isMic" />
@@ -255,6 +261,9 @@
     </transition-group>
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
+    </transition-group>
+    <transition-group name="up">
+      <CaptureModal v-if="isCaptureModal" />
     </transition-group>
     <transition-group name="up">
       <LeaveGroupModal
@@ -310,7 +319,6 @@ const router = useRouter()
 const videoWidth = window.screen.width * 0.65
 const videoHeight = window.screen.height * 0.9
 
-// const sessionId = ref(props.session.sessionId)
 const groupNumber = ref(props.session.groupNumber)
 
 const isGrid = ref(false)
@@ -319,9 +327,11 @@ const isMicModal = ref(false)
 const isCamera = ref(true)
 const isCameraModal = ref(false)
 const isMeetingDetailModal = ref(false)
+const isAddressCopyModal = ref(false)
+const isSessionIdCopyModal = ref(false)
 const isLetterModal = ref(false)
 const isGiftModal = ref(false)
-const isCapture = ref(false)
+const isCaptureModal = ref(false)
 const isUserList = ref(false)
 const isChat = ref(false)
 const isLeaveGroupModal = ref(false)
@@ -330,11 +340,20 @@ const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
 const userList = ref([])
+const myVideo = ref(null)
 const groupVideo = ref(null)
 
-console.log(props.session)
+const captureMyVideo = () => {
+  const target = myVideo.value
+  if (!target) {
+    return alert('결과 저장 실패')
+  }
+  html2canvas(target).then((canvas) => {
+    onSaveAs(canvas.toDataURL('image/png'), 'test.png')
+  })
+}
 
-const captureScreen = () => {
+const captureGroupVideo = () => {
   const target = groupVideo.value
   if (!target) {
     return alert('결과 저장 실패')
@@ -356,6 +375,22 @@ const onSaveAs = (uri, filename) => {
 
 const showMeetingDetailModal = () => {
   isMeetingDetailModal.value = !isMeetingDetailModal.value
+}
+
+const showAddressCopyModal = () => {
+  isAddressCopyModal.value = true
+
+  setTimeout(() => {
+    isAddressCopyModal.value = false
+  }, 600)
+}
+
+const showSessionIdCopyModal = () => {
+  isSessionIdCopyModal.value = true
+
+  setTimeout(() => {
+    isSessionIdCopyModal.value = false
+  }, 600)
 }
 
 const setLayoutState = () => {
@@ -422,7 +457,8 @@ const showLeaveGroupModal = () => {
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const APPLICATION_SERVER_URL = 'http://localhost:8080/'
+const { VITE_API_URL } = import.meta.env
+const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
   OV: undefined,
@@ -430,7 +466,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: props.session.sessionId + groupNumber.value,
+  mySessionId: sessionStorage.getItem('sessionId') + groupNumber.value,
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -465,8 +501,6 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
-
-        state.session.host = state.session.publish(publisher)
       })
     })
     .catch((error) => {
@@ -510,7 +544,7 @@ const joinSession = () => {
 // 세션 생성
 const createSession = async (sessionId) => {
   const response = await axios.post(
-    '/api/v1/meetings/sessions',
+    VITE_API_URL + VITE_SERVER + '/meetings/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }
@@ -522,7 +556,7 @@ const createSession = async (sessionId) => {
 // 토큰 생성
 const createToken = async (sessionId) => {
   const response = await axios.post(
-    '/api/v1/meetings/sessions/' + sessionId + '/connections',
+    VITE_API_URL + VITE_SERVER + '/meetings/sessions/' + sessionId + '/connections',
     {
       role: 'MODERATOR'
     },
