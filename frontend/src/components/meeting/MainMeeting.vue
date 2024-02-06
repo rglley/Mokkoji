@@ -350,7 +350,6 @@ const isChat = ref(false)
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
-const groupVideo = ref(null)
 
 const captureMyVideo = () => {
   const target = myVideo.value
