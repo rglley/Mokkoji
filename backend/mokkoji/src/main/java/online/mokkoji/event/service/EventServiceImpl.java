@@ -22,6 +22,8 @@ import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,6 +67,8 @@ public class EventServiceImpl implements EventService {
         // 빈 rollingpaper 생성
         PostitTemplate postitTemplate = postitTemplateRepository.findByPostitName(PostitName.RAINBOW).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
         BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findByBackgroundName(BackgroundName.BASIC).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
+        
+        log.info("롤링페이퍼 저장");
         RollingPaper rollingPaper = RollingPaper.buildWithResult()
                 .result(savedResult)
                 .backgroundTemplate(backgroundTemplate)
@@ -86,6 +90,10 @@ public class EventServiceImpl implements EventService {
             log.error("호스트Id가 아님"); //임시로 하는 거.
             throw new RestApiException(EventErrorCode.HOST_NOT_FOUND);
         }
+
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+//        LocalDateTime endTime = LocalDateTime.U.parse(sessionReqDto.getEndTimeReq(), formatter);
+//        sessionReqDto.setEndTime(endTime);
 
         //session의 status를 CLOSED로 변경
         event.closeSession(sessionReqDto);

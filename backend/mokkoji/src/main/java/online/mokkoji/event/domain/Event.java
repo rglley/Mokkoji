@@ -26,7 +26,7 @@ import static online.mokkoji.event.domain.EventStatus.*;
 public class Event/* extends BaseEntity */ {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
     private Long id;
 

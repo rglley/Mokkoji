@@ -10,7 +10,7 @@ import lombok.Getter;
 public class Photomosaic {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photomosaic_id")
     private Long id;
 

@@ -1,5 +1,6 @@
 package online.mokkoji.openvidu.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,8 @@ public class SessionReqDto {
     private LocalDateTime startTime;
 
     private int participantCount;
+//    private String endTimeReq;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS][.SS][.S]")
     private LocalDateTime endTime;
 
     // Session 생성용 생성자

@@ -15,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Result {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "result_id")
     private Long id;
 
@@ -23,7 +23,7 @@ public class Result {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
 
@@ -42,10 +42,10 @@ public class Result {
     @Column(length = 255, columnDefinition = "varchar(255) default 'https://mokkoji-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8+%EC%82%AC%EC%A7%84/%EB%8C%80%ED%91%9C%EC%9D%B4%EB%AF%B8%EC%A7%80_%EA%B8%B0%EB%B3%B8.png'")
     private String image;
 
-    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private RollingPaper rollingpaper;
 
-    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "result", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Photomosaic photomosaic;
 
     @Builder

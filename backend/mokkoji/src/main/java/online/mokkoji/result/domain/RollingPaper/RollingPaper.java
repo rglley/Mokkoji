@@ -14,7 +14,7 @@ import java.util.List;
 public class RollingPaper {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rollingpaper_id")
     private Long id;
 
@@ -29,11 +29,11 @@ public class RollingPaper {
     @OneToMany(mappedBy = "rollingPaper")
     List<Message> messageList=new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "background_id")
     private BackgroundTemplate backgroundTemplate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "postit_id")
     private PostitTemplate postitTemplate;
 
