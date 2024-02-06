@@ -42,18 +42,14 @@ public class EventController {
                                            HttpServletRequest req,
                                            MultipartFile photo) throws IOException {
 
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
-        User user = userServiceImpl.getByProviderAndEmail(provider, email);
+        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         // 사진 업로드
         Event event = eventRepository.findBySessionId(sessionId);
         Long resultId = event.getResult().getId();
-        String url = s3Service.uploadImage(photo, user.getId(), resultId);
+        PhotoResDto photoResDto = s3Service.uploadOnePhoto(photo, user.getId(), resultId);
 
-        log.info("url : {}", url);
-
-        PhotoResDto photoResDto = new PhotoResDto(resultId, url);
+        // db에 저장
         resultService.createPhoto(photoResDto);
 
         return new ResponseEntity<>("사진 업로드 완료", HttpStatus.OK);
@@ -63,14 +59,11 @@ public class EventController {
     @PostMapping("/rollingpapers/{sessionId}")
     public ResponseEntity<String> addRollingpaper(@PathVariable("sessionId") String sessionId,
                                                   HttpServletRequest req,
-                                                  @RequestPart(value = "voice", required = false) MultipartFile voice,
+                                                  @RequestPart(value = "audio", required = false) MultipartFile voice,
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
                                                   @RequestPart("writerAndText") MessageReqDto messageReqDto) throws IOException {
 
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
-
-        User user = userServiceImpl.getByProviderAndEmail(provider, email);
+        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         Event event = eventRepository.findBySessionId(sessionId);
         Long paperId = event.getResult().getRollingpaper().getId();

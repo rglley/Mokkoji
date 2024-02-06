@@ -6,9 +6,3 @@ services:
       - '8080:8080'
     env_file:
       - ./.env
-  frontend:
-    image: ${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest
-    ports:
-      - '5173:5173'
-    env_file:
-      - ./.env

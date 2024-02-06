@@ -10,7 +10,6 @@ import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.CommonErrorCode;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
-import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserServiceImpl;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:4443", "http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:5443"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.version}/meetings")
@@ -33,21 +32,20 @@ public class OpenviduController {
     private final EventService eventService;
     private final JwtUtil jwtUtil;
     private final UserServiceImpl userServiceImpl;
-    private final ResultService resultService;
     private final UserRepository userRepository;
 
 
-    @Value("${OPENVIDU_URL}")
-    private String OPENVIDU_URL;
+    @Value("${openvidu.url}")
+    private String openviduUrl;
 
-    @Value("${OPENVIDU_SECRET}")
-    private String OPENVIDU_SECRET;
+    @Value("${openvidu.secret}")
+    private String openviduSecret;
 
     private OpenVidu openvidu;
 
     @PostConstruct
     public void init() {
-        this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+        this.openvidu = new OpenVidu(openviduUrl, openviduSecret);
     }
 
     // Session 생성
@@ -55,18 +53,18 @@ public class OpenviduController {
     public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params,
                                              HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
-
         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
 
-
         //세션 생성
         Session session = openvidu.createSession(properties);
 
-        // DB에 저장할 Dto 생성
+//         DB에 저장할 Dto 생성
         SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
+//        SessionReqDto sessionReqDto = new SessionReqDto(1L, session.getSessionId(), session.createdAt());
 
         // DB에 저장
         eventService.createSession(sessionReqDto);
@@ -84,7 +82,6 @@ public class OpenviduController {
         List<Session> activeSessions = openvidu.getActiveSessions();
         for (Session session : activeSessions) {
             if (session.getSessionId().equals(sessionId)) {
-
                 return new ResponseEntity<>(session, HttpStatus.OK);
             }
         }

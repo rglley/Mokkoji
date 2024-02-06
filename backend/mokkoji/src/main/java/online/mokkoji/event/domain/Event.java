@@ -26,7 +26,7 @@ import static online.mokkoji.event.domain.EventStatus.*;
 public class Event/* extends BaseEntity */ {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
     private Long id;
 
@@ -53,7 +53,7 @@ public class Event/* extends BaseEntity */ {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Result result;
 
     //==연관관계 메서드==//

@@ -35,8 +35,9 @@ spring:
 
 
 # OpenVidu
-OPENVIDU_URL: http://localhost:4443/
-OPENVIDU_SECRET: MOKKOJI_SECRET
+openvidu:
+  url: ${OPENVIDU_URL}
+  secret: ${OPENVIDU_SECRET}
 
 # server
 server:
@@ -60,4 +61,4 @@ cloud:
       auto: false
 
 api:
-  version: /api/vi
+  version: /api/v1

@@ -15,7 +15,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -47,6 +47,13 @@ public class User {
     // TODO : reddis로 관리
     @Column(length = 65535)
     private String refreshToken;
+
+    @Builder(builderMethodName = "initialBuilder")
+    public User(String email, String name, String image) {
+        this.email = email;
+        this.name = name;
+        this.image = image;
+    }
 
     @Builder(builderMethodName = "nonTokenBuilder")
     public User(Provider provider, String email, String name, String image, Authority authority) {
