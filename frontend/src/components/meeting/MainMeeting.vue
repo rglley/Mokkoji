@@ -240,7 +240,7 @@
               <button
                 id="button-quit"
                 class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl text-r-md"
-                @click="leaveMainMeeting"
+                @click="leaveMeeting"
               >
                 나가기
               </button>
@@ -595,9 +595,6 @@ const getToken = async (mySessionId) => {
 }
 
 const leaveMeeting = (event) => {
-  event.preventDefault()
-  event.returnValue = ''
-
   if (state.session) {
     state.session.disconnect()
 
@@ -610,7 +607,9 @@ const leaveMeeting = (event) => {
   emit('leave-meeting')
 
   router.push('/')
+  }
 }
+
 
 const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
@@ -654,11 +653,11 @@ const updateMainVideoStreamManager = (stream) => {
 onBeforeMount(() => {
   joinSession()
 
-  window.addEventListener('beforeunload', leaveMainMeeting)
+  window.addEventListener('beforeunload', leaveMeeting)
 })
 
 onBeforeUnmount(() => {
-  window.addEventListener('beforeunload', leaveMainMeeting)
+  window.addEventListener('beforeunload', leaveMeeting)
 })
 </script>
 
