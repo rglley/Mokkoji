@@ -55,20 +55,25 @@
         </div>
         <div class="relative -top-[10lvh] size-2/4">
         <!-- <img src="@/assets/landing/wedding.svg" /> -->
-        <Swiper
-          :autoplay="{
-            delay: 2500,
-            disableOnInteraction: false
-          }"
-          :pagination="{
-            clickable: true
-          }"
-          class="rounded-lg mx-[10lvh] size-3/4"
-        >
-          <swiper-slide v-for="photo in photos">
-            <img :src="`src/assets/landing/${photo}`" class="w-40 h-40"/>
-          </swiper-slide>
-        </Swiper>
+        <div class="ml-[10lvh] w-[70lvh] h-[70lvh] border-8 border-white cursor-grab">
+            <swiper
+              :spaceBetween="30"
+              :autoplay="{
+                delay: 2500,
+                pauseOnMouseEnter: true,
+                waitForTransition: 200
+              }"
+              :pagination="{
+                clickable: true
+              }"
+              :loop="true"
+              :modules="modules"
+            >
+              <swiper-slide v-for="photo in photos" :key="photo">
+                <img :src="`src/assets/landing/${photo}`" />
+              </swiper-slide>
+            </swiper>
+          </div>
       </div>
       </div>
     </section>
@@ -218,13 +223,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Autoplay, Pagination } from 'swiper/modules'
 import { useSessionStore } from '@/stores/meeting'
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 
 const store = useSessionStore()
 const router = useRouter()
@@ -278,8 +283,9 @@ const toTop = () => {
     behavior: 'smooth'
   })
 }
+const modules = [Autoplay, Pagination]
 
-const photos = ['wedding.jpg', 'wedding2.jpg']
+const photos = ['carousel1.png', 'carousel2.png', 'carousel3.png', 'carousel4.png']
 </script>
 
 <style></style>
