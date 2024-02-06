@@ -1,20 +1,22 @@
 <template>
   <main id="main-landing">
     <section class="pt-52 z-2 h-max pb-[20lvh]" id="main-gradient2">
+     
       <div id="flex" class="flex flex-row">
+       
         <div
           class="text-center ml-12 flex flex-col animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-prewrap"
         >
-          <div>
-            <h1 id="title">모꼬지</h1>
-            <br />
-
-            <p>
-              화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
-              없이 참여해보세요.
-            </p>
-            <br />
-            <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
+        <div>
+          <h1 id="title">모꼬지</h1>
+          <br />
+          
+          <p>
+            화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
+            없이 참여해보세요.
+          </p>
+          <br />
+          <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
           </div>
           <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
           <div class="grid place-content-center ml-[10vh] my-20 w-2/3 text-base">
@@ -52,8 +54,8 @@
           </div>
         </div>
         <div class="relative -top-[10lvh] size-2/4">
-          <img src="@/assets/landing/wedding.svg" />
-          <!-- <Swiper
+        <!-- <img src="@/assets/landing/wedding.svg" /> -->
+        <Swiper
           :autoplay="{
             delay: 2500,
             disableOnInteraction: false
@@ -66,8 +68,8 @@
           <swiper-slide v-for="photo in photos">
             <img :src="`src/assets/landing/${photo}`" class="w-40 h-40"/>
           </swiper-slide>
-        </Swiper> -->
-        </div>
+        </Swiper>
+      </div>
       </div>
     </section>
 
@@ -221,15 +223,14 @@ import ModalView from './ModalView.vue'
 import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/navigation'
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const store = useSessionStore()
 const router = useRouter()
 
 const conferenceIdInput = ref('')
 const isInputError = ref(false)
-const isLogin = ref(false)
 const isModal = ref(false)
 
 const showModal = () => {

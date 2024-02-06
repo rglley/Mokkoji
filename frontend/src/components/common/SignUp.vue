@@ -117,8 +117,7 @@ const signUp = async () => {
   })
     .then(() => {
       store.isLogin = true;
-      toast("회원가입을 완료했습니다")
-      router.push("/");
+      toast("회원가입 페이지로 이동합니다").then(router.push("/"));
     })
     .catch((err) => {
       toast(err.message, {
