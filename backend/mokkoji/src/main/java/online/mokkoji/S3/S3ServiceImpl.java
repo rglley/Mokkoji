@@ -113,7 +113,7 @@ public class S3ServiceImpl implements S3Service {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new RestApiException(EventErrorCode.NO_FILE_EXTENSION);
+            throw new RestApiException(EventErrorCode.FILE_EXTENSION_NOT_FOUND);
         }
     }
 }

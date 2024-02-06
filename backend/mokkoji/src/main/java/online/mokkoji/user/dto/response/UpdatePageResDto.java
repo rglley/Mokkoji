@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class UpdatePageResDto {
     @NotBlank
     private String email;
@@ -21,9 +20,11 @@ public class UpdatePageResDto {
     private String accountNumber;
 
     @Builder
-    public UpdatePageResDto(String email, String image, String name) {
+    public UpdatePageResDto(String email, String image, String name, String bank, String accountNumber) {
         this.email = email;
         this.image = image;
         this.name = name;
+        this.bank = bank;
+        this.accountNumber = accountNumber;
     }
 }

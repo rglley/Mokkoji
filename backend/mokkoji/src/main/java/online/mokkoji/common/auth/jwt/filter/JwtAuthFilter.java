@@ -30,7 +30,10 @@ import java.util.Optional;
 public class JwtAuthFilter extends OncePerRequestFilter {
     private static final String MAIN_URL = "/";
     private static final String JOIN_URL = "/signup";
-    private static final String LOGIN_URL = "/oauth2/login";
+    private static final String LOGIN_URL = "/oauth2";
+    private static final String TEST_URL = "/api/v1";
+
+
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
@@ -41,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
-                request.getRequestURI().equals(LOGIN_URL)){
+                request.getRequestURI().startsWith(LOGIN_URL)|| request.getRequestURI().startsWith(TEST_URL)){
             filterChain.doFilter(request, response);
             return;
         }
@@ -90,7 +93,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String accessToken = extractAccessToken.get();
-        Optional<String> extractProvider = jwtUtil.extractEmail(accessToken);
+        Optional<String> extractProvider = jwtUtil.extractProvider(accessToken);
         Optional<String> extractEmail = jwtUtil.extractEmail(accessToken);
 
         if (extractEmail.isEmpty() || extractProvider.isEmpty()) {
@@ -98,7 +101,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String provider = extractProvider.get();
-        String email = extractProvider.get();
+        String email = extractEmail.get();
 
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
         if (findUser.isEmpty()) {

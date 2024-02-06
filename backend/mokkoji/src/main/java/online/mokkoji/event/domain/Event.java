@@ -62,13 +62,17 @@ public class Event/* extends BaseEntity */ {
         user.getEvents().add(this);
     }
 
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+
     //==생성자==//
+    @Builder(builderMethodName = "createSession")
     public Event(User user, String sessionId, LocalDateTime startTime) {
-        this.builder()
-                .user(user)
-                .sessionId(sessionId)
-                .startTime(startTime)
-                .build();
+        this.user = user;
+        this.sessionId = sessionId;
+        this.startTime = startTime;
     }
 
     //==설정 메서드==//

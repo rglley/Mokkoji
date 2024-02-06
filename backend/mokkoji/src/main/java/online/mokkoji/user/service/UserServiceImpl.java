@@ -12,6 +12,7 @@ import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.user.domain.UserAccount;
 import online.mokkoji.user.repository.AccountRepository;
+import online.mokkoji.user.repository.RecordRepository;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+    private final RecordRepository recordRepository;
     private final JwtUtil jwtService;
 
     @Override
@@ -36,13 +38,13 @@ public class UserServiceImpl implements UserService{
         User readUser = findUser.get();
         UserAccount userAccount = readUser.getUserAccount();
 
-        if (userAccount == null) {
-            return new UpdatePageResDto(readUser.getEmail(), readUser.getImage(), readUser.getName(),
-                    null, null);
-        }
-
-        return new UpdatePageResDto(readUser.getEmail(), readUser.getImage(), readUser.getName(),
-                userAccount.getBank(), userAccount.getNumber());
+        return UpdatePageResDto.builder()
+                .email(readUser.getEmail())
+                .image(readUser.getImage())
+                .name(readUser.getName())
+                .bank(userAccount.getBank())
+                .accountNumber(userAccount.getNumber())
+                .build();
     }
 
     @Override
@@ -57,13 +59,27 @@ public class UserServiceImpl implements UserService{
         UserAccount userAccount = readUser.getUserAccount();
         Record record = readUser.getRecord();
 
-        if (userAccount == null) {
-            return new MyPageResDto(readUser.getEmail(), readUser.getName(), false,
-                    record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
+        if (userAccount.getBank().equals("") || userAccount.getNumber().equals("")) {
+            return MyPageResDto.builder()
+                    .image(readUser.getImage())
+                    .name(readUser.getName())
+                    .isAccountRegistered(false)
+                    .eventCount(record.getEventCount())
+                    .totalTime(record.getTotalTime())
+                    .totalParticipant(record.getTotalParticipant())
+                    .totalMessage(record.getTotalMessage())
+                    .build();
         }
 
-        return new MyPageResDto(readUser.getEmail(), readUser.getName(), true,
-                record.getEventCount(), record.getTotalTime(), record.getTotalParticipant(), record.getTotalMessage());
+        return MyPageResDto.builder()
+                .image(readUser.getImage())
+                .name(readUser.getName())
+                .isAccountRegistered(true)
+                .eventCount(record.getEventCount())
+                .totalTime(record.getTotalTime())
+                .totalParticipant(record.getTotalParticipant())
+                .totalMessage(record.getTotalMessage())
+                .build();
     }
 
     @Override
@@ -71,39 +87,37 @@ public class UserServiceImpl implements UserService{
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if(findUser.isEmpty()) {
-            throw new RestApiException(UserErrorCode.USER_NOT_FOUND);
-        }
-
-        if (findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
+        if(findUser.isPresent() && findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
             throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
 
         String refreshToken = jwtService.createRefreshToken();
 
-        User newUser = User.builder()
-                .provider(provider)
-                .email(email)
-                .name(userInputReqDto.getName())
-                .image(userInputReqDto.getImage())
-                .authority(Authority.USER)
-                .refreshToken(refreshToken)
+        User newUser = findUser.get();
+        newUser.updateAuthority();
+        newUser.updateRefreshToken(refreshToken);
+
+        Record record = Record.builder()
+                .user(newUser)
+                .eventCount(0)
+                .totalMessage(0)
+                .totalParticipant(0)
+                .totalTime(0)
                 .build();
 
         userRepository.save(newUser);
+        recordRepository.save(record);
 
         String bank = userInputReqDto.getBank();
         String accountNumber = userInputReqDto.getAccountNumber();
 
-        if (bank != null && accountNumber != null) {
-            UserAccount userAccount = UserAccount.builder()
-                    .user(newUser)
-                    .bank(bank)
-                    .number(accountNumber)
-                    .build();
+        UserAccount userAccount = UserAccount.builder()
+                .user(newUser)
+                .bank(bank)
+                .number(accountNumber)
+                .build();
 
-            accountRepository.save(userAccount);
-        }
+        accountRepository.save(userAccount);
     }
 
     @Override
@@ -120,27 +134,20 @@ public class UserServiceImpl implements UserService{
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
-        updateUser = User.updateBuilder()
-                .name(name)
-                .image(image)
-                .build();
-
-
+        updateUser.updateUser(name, image);
         userRepository.save(updateUser);
 
-        if (bank != null && accountNumber != null) {
-            UserAccount userAccount = UserAccount.builder()
-                    .user(findUser.get())
-                    .bank(bank)
-                    .number(accountNumber)
-                    .build();
+        Optional<UserAccount> findAccount =
+                accountRepository.findByUser_ProviderAndUser_Email(updateUser.getProvider(), updateUser.getEmail());
 
-            accountRepository.save(userAccount);
-        }
+        UserAccount userAccount = findAccount.get();
+        userAccount.updateAccount(bank, accountNumber);
+
+        accountRepository.save(userAccount);
     }
 
     @Override
-    public User deleteUser(String provider, String email) {
+    public void deleteUser(String provider, String email) {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
 
         if (findUser.isEmpty()) {
@@ -149,8 +156,6 @@ public class UserServiceImpl implements UserService{
 
         User deleteUser = findUser.get();
         userRepository.delete(deleteUser);
-
-        return deleteUser;
     }
 
     @Override

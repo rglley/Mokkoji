@@ -18,7 +18,6 @@ public class SessionReqDto {
 
     private int participantCount;
     private LocalDateTime endTime;
-    private String authority;
 
     // Session 생성용 생성자
     public SessionReqDto(Long userId, String sessionId, Long milli) {
