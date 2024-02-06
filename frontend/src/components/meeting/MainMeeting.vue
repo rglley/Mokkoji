@@ -240,7 +240,7 @@
               <button
                 id="button-quit"
                 class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl text-r-md"
-                @click="leaveMeeting"
+                @click="leaveMainMeeting"
               >
                 나가기
               </button>
@@ -262,7 +262,7 @@
       <AddressCopyModal v-if="isAddressCopyModal" />
     </transition-group>
     <transition-group name="up">
-      <SessionIdCopyModal v-if="isSessionIdCopyModal" />
+      <sessionIdCopyModal v-if="isSessionIdCopyModal" />
     </transition-group>
     <transition-group name="down">
       <MicModal v-if="isMicModal" :is-mic="isMic" />
@@ -316,7 +316,7 @@ import IconChat from '@/icons/meeting/IconChat.vue'
 import IconSendMessage from '@/icons/meeting/IconSendMessage.vue'
 import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
 import AddressCopyModal from '@/components/modal/meeting/AddressCopyModal.vue'
-import SessionIdCopyModal from '@/components/modal/meeting/SessionIdCopyModal.vue'
+import sessionIdCopyModal from '@/components/modal/meeting/sessionIdCopyModal.vue'
 import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
@@ -350,6 +350,11 @@ const isChat = ref(false)
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
+const userList = ref([])
+const connectedUser = ref([])
+const groupNumber = ref(0)
+const groupList = ref([])
+const myVideo = ref(null)
 
 const captureMyVideo = () => {
   const target = myVideo.value
@@ -464,7 +469,7 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: props.sessionId === 'host' ? '' : props.sessionId,
+  mySessionId: sessionStorage.getItem('sessionId'),
   myUserName: 'participant' + Math.floor(Math.random() * 100),
   openviduToken: undefined,
   isMic: true,
@@ -481,7 +486,33 @@ const joinSession = () => {
   // 2) 세션 시작
   state.session = state.OV.initSession()
 
-  // 3) 세션에서 이벤트 발생 시 동작하는 행동 구체화
+  // 3) 유효한 사용자 토큰으로 세션에 연결하기
+
+  getToken(state.mySessionId)
+    .then((token) => {
+      state.session.connect(token, { clientData: state.myUserName }).then(() => {
+        let publisher = state.OV.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
+          allowTranscoding: true,
+          resolution: `${videoWidth}x${videoHeight}`,
+          frameRate: 30,
+          insertMode: 'APPEND',
+          mirror: false
+        })
+
+        state.mainStreamManager = publisher
+        state.publisher = publisher
+        userList.value.unshift(publisher)
+
+        state.session.host = state.session.publish(publisher)
+      })
+    })
+    .catch((error) => {
+      console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
+    })
 
   // 비동기 예외
   state.session.on('exception', ({ exception }) => {
@@ -516,38 +547,30 @@ const joinSession = () => {
     }
   })
 
-  // 4) 유효한 사용자 토큰으로 세션에 연결하기
+  state.session.on('connectionCreated', (event) => {
+    const user = {
+      name: JSON.parse(event.connection.data).clientData,
+      connection: event.connection
+    }
+    connectedUser.value.push(user)
+  })
 
-  getToken(state.mySessionId)
-    .then((token) => {
-      state.session.connect(token, { clientData: state.myUserName }).then(() => {
-        let publisher = state.OV.initPublisher(undefined, {
-          audioSource: undefined,
-          videoSource: undefined,
-          publishAudio: true,
-          publishVideo: true,
-          allowTranscoding: true,
-          resolution: `${videoWidth}x${videoHeight}`,
-          frameRate: 30,
-          insertMode: 'APPEND',
-          mirror: false
-        })
-
-        state.mainStreamManager = publisher
-        state.publisher = publisher
-        state.subscribers.push(publisher)
-        sessionId.value = state.session.sessionId
-
-        state.session.host = state.session.publish(publisher)
-      })
-    })
-    .catch((error) => {
-      console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
+  // 소그룹 생성
+  state.session.on('signal:group', () => {
+    emit('create-group-meeting', {
+      groupNumber: groupNumber.value
     })
 
-  // OpenVidu 배포에서 토큰 가져오기
+    groupNumber.value++
 
-  window.addEventListener('beforeunload', leaveMeeting)
+    deleteSession()
+  })
+
+  state.session.on('signal:else-group', () => {
+    groupNumber.value++
+  })
+
+  window.addEventListener('beforeunload', leaveMainMeeting)
 }
 
 // 세션 생성
@@ -559,6 +582,8 @@ const createSession = async (sessionId) => {
       headers: { 'Content-Type': 'application/json' }
     }
   )
+  if (sessionStorage.getItem('isHost') && sessionStorage.getItem('sessionId') === '')
+    sessionStorage.sessionId = response.data
   return response.data // sessionId
 }
 
@@ -594,22 +619,22 @@ const getToken = async (mySessionId) => {
   return await createToken(sessionId)
 }
 
-const leaveMeeting = (event) => {
-  if (state.session) {
-    state.session.disconnect()
+const leaveMainMeeting = (event) => {
+  if (sessionStorage.getItem('isHost')) {
+    store.deleteSession
 
-    state.session = undefined
-    state.mainStreamManager = undefined
-    state.publisher = undefined
-    state.subscribers = []
-    state.OV = undefined
+    for (let idx = 0; idx < state.subscribers.length; idx++) {
+      state.session.forceDisconnect(state.subscribers[idx].stream.connection)
+    }
+  }
+
+  // delete sessionStorage.sessionId
+  // deleteSession()
 
   emit('leave-meeting')
 
   router.push('/')
-  }
 }
-
 
 const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
@@ -653,11 +678,11 @@ const updateMainVideoStreamManager = (stream) => {
 onBeforeMount(() => {
   joinSession()
 
-  window.addEventListener('beforeunload', leaveMeeting)
+  window.addEventListener('beforeunload', leaveMainMeeting)
 })
 
 onBeforeUnmount(() => {
-  window.addEventListener('beforeunload', leaveMeeting)
+  window.addEventListener('beforeunload', leaveMainMeeting)
 })
 </script>
 
