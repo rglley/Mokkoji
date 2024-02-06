@@ -52,8 +52,8 @@
           </div>
         </div>
         <div class="relative -top-[10lvh] size-2/4">
-          <img src="@/assets/landing/wedding.svg" />
-          <!-- <Swiper
+        <!-- <img src="@/assets/landing/wedding.svg" /> -->
+        <Swiper
           :autoplay="{
             delay: 2500,
             disableOnInteraction: false
@@ -66,8 +66,8 @@
           <swiper-slide v-for="photo in photos">
             <img :src="`src/assets/landing/${photo}`" class="w-40 h-40"/>
           </swiper-slide>
-        </Swiper> -->
-        </div>
+        </Swiper>
+      </div>
       </div>
     </section>
 
@@ -216,20 +216,18 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { useSessionStore } from '@/stores/meeting'
 import ModalView from './ModalView.vue'
 import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/navigation'
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const store = useSessionStore()
 const router = useRouter()
 
 const conferenceIdInput = ref('')
 const isInputError = ref(false)
-const isLogin = ref(false)
 const isModal = ref(false)
 
 const showModal = () => {
@@ -277,8 +275,9 @@ const toTop = () => {
     behavior: 'smooth'
   })
 }
+const modules = [Autoplay, Pagination]
 
-const photos = ['wedding.jpg', 'wedding2.jpg']
+const photos = ['carousel1.png', 'carousel2.png', 'carousel3.png', 'carousel4.png']
 </script>
 
 <style></style>
