@@ -3,15 +3,11 @@
 
   <div class="bg-violet-50 h-[600px] justify-center items-center" ref="top">
     <div class="text-[30px] justify-center items-center flex pb-10 pt-20">
-      <strong
-        ><p class="effect-black flex">
-          <IconFlowersColoredTwo />편집할 대상을 선택해주세요 <IconFlowersColoredTwo />
-        </p>
-      </strong>
+      <strong><p class="effect-black flex">편집할 대상을 선택해주세요</p> </strong>
     </div>
     <div class="text-[50px] flex justify-center items-center pt-10">
       <div
-        class="w-[450px] rounded-3xl border-solid border-[#ffbbd2] p-10 shadow-lg shadow-[#ffbbd2] hover:cursor-pointer flex flex-col justify-center items-center"
+        class="w-[450px] rounded-3xl border-solid border-[#D4ACDD] p-10 shadow-lg shadow-[#D4ACDD] hover:cursor-pointer flex flex-col justify-center items-center"
         id="btn"
         @click="scrollToRollingPaper"
       >
@@ -24,7 +20,7 @@
         id="btn"
         @click="scrollToPhotoMosaic"
       >
-        <p class="mb-[1vh]"><IconGalleryColored /></p>
+        <p class="mb-[1vh]"><IconGalleryTitle /></p>
         <button>포토모자이크 편집</button>
       </div>
     </div>
@@ -32,7 +28,7 @@
   <!-- 섹션 2/6 모꼬지 정보, 내려가기 -->
   <div class="bg-[#ffffff] h-[500px] pt-5">
     <div class="justify-center flex" @click="scrollToRollingPaper"><IconScrollDownGray /></div>
-    <p class="justify-center flex text-slate-500">롤링페이퍼 편집</p>
+    <p class="justify-center flex text-slate-500"><strong>롤링페이퍼 편집</strong></p>
     <p class="justify-center flex pt-20 text-[#c0aac7]"><IconVideoConference />Team MOKKOJI</p>
     <p class="justify-center flex pt-5 text-[#c0aac7]">
       <IconLocation />서울특별시 강남구 언주로 508
@@ -41,16 +37,16 @@
     <p class="justify-center flex pt-5 text-[#c0aac7]"><IconWifi />i10a401.p.ssafy.io</p>
   </div>
   <!-- 섹션 3/6 롤링페이퍼 편집 -->
-  <div class="bg-slate-100 h-[1200px] flex" ref="rollingpaper">
-    <div class="w-1/3">
+  <div class="bg-slate-100 h-[100vh] flex" ref="rollingpaper">
+    <div class="ml-[10vw] w-[40%]">
       <div class="h-[35%]">
         <p class="flex items-center justify-center pt-[70px]"><IconLoveLetterBlue /></p>
-        <p class="flex items-center text-[40px] justify-center">원하는 템플릿을 선택한 후</p>
-        <div class="flex items-center text-[40px] justify-center">'저장하기'를 눌러주세요</div>
+        <p class="flex items-center text-[35px] justify-center">원하는 템플릿을 선택한 후</p>
+        <div class="flex items-center text-[35px] justify-center">'저장하기'를 눌러주세요</div>
       </div>
-      <div class="h-[40%] flex">
+      <div class="h-[40%] flex mt-[5vh]">
         <div class="w-1/2">
-          <p class="justify-center flex text-[30px]">배경지</p>
+          <p class="justify-center flex text-[25px]">배경지</p>
           <div class="justify-center flex text-[25px] mt-5 hover:cursor-pointer">
             <p class="effect-blue flex" v-if="isSelectedBasic">기본 <IconCheckBlue /></p>
             <p class="highlight-blue" v-if="isNotSelectedBasic" @click="selectOpt('기본')">기본</p>
@@ -79,7 +75,7 @@
           </div>
         </div>
         <div class="w-1/2">
-          <p class="justify-center flex text-[30px]">속지</p>
+          <p class="justify-center flex text-[25px]">속지</p>
           <div class="justify-center flex text-[25px] mt-5 hover:cursor-pointer">
             <p class="effect-skyblue flex" v-if="isSelectedPastel">파스텔 <IconCheckSkyBlue /></p>
             <p class="highlight-skyblue" v-if="isNotSelectedPastel" @click="selectOptTwo('파스텔')">
@@ -119,26 +115,25 @@
           <p class="text-[30px] justify-center ml-2 flex">미리보기 <IconSearch /></p>
         </div> -->
         <div
-          class="opacity-70 border-2 rounded-lg w-64 mx-auto h-16 flex items-center justify-center hover:cursor-pointer hover:opacity-100 effect-button"
+          class="mt-[12+vh] opacity-70 border-2 rounded-lg w-40 mx-auto h-9 flex items-center justify-center hover:cursor-pointer hover:opacity-100 effect-button"
           @click="showSaved('템플릿')"
         >
-          <p class="text-[30px] justify-center ml-2 flex">저장하기 <IconCheckMark /></p>
+          <p class="text-[20px] justify-center ml-2 flex">저장하기 <IconCheckMark /></p>
         </div>
       </div>
     </div>
 
-    <div class="w-2/3 flex justify-center items-center">
+    <div class="mr-[7vw] w-2/3 flex justify-center items-center">
       <img
         :src="`src/assets/rollingtemplate/${design}.png`"
         :alt="`template_${design}`"
-        class="z-10"
+        class="z-10 h-[95vh]"
       />
       <img
         :src="`src/assets/rollingnote/${color}.png`"
         :alt="`template_${color}`"
         class="absolute z-20"
-        width="700px"
-        heigt="1000px"
+        width="450vw"
       />
     </div>
     <!-- 재확인 모달 ex. 저장되었습니다 -->
@@ -152,14 +147,16 @@
     </transition>
   </div>
   <!-- 섹션 4/6 도움말, 올라가기, 내려가기 -->
-  <div class="h-[900px] pt-5" ref="help">
+  <div class="h-[100vh] mt-5" ref="help">
     <div class="flex justify-center items-center h-[120px]">
       <div class="mr-5" @click="scrollToPhotoMosaic"><IconScrollDownBlue /></div>
       <div class="ml-5" @click="scrollToTop"><IconUpArrowPurple /></div>
     </div>
     <div class="flex justify-center items-center h-[20px]">
-      <div class="mr-20 text-slate-500" @click="scrollToPhotoMosaic">포토모자이크 편집</div>
-      <div class="mr-8 text-slate-500" @click="scrollToTop">처음으로</div>
+      <div class="mr-20 text-slate-500" @click="scrollToPhotoMosaic">
+        <strong>포토모자이크 편집</strong>
+      </div>
+      <div class="mr-8 text-slate-500" @click="scrollToTop"><strong>처음으로</strong></div>
     </div>
     <div class="h-[100px] flex items-center justify-center mt-40">
       <a class="mr-12"
@@ -226,7 +223,7 @@
             </p>
             <p class="">'자르기 + 사진 추가'를 통해 사진을 1:1 비율로 자르고 추가해 보세요.</p>
             <p class="">
-              '사진 여러 장 추가'를 통해 여러 장의 사진을 한 번에 추가할 수도 있습니다.
+              '0 추가'를 통해 여러 장의 사진을 한 번에 추가할 수도 있습니다.
             </p>
           </div>
         </div>
@@ -234,7 +231,7 @@
     </div>
   </div>
   <!-- 섹션 5/6 포토모자이크 편집 -->
-  <div class="bg-primary2 h-[1600px]" ref="photomosaic">
+  <div class="bg-primary2 h-[100vh]" ref="photomosaic">
     <div class="text-[25px] flex items-center justify-end pt-5 pr-5" v-if="isNotHoveredHelp">
       <p class="flex hover:cursor-pointer" @mouseover="onHelp">도움말<IconQuestionMark /></p>
     </div>
@@ -248,11 +245,11 @@
       </p>
     </div>
 
-    <div class="h-[350px] flex">
-      <div class="mx-auto">
-        <p class="flex items-center justify-center pt-[70px]"><IconGalleryColored /></p>
-        <p class="flex items-center text-[45px] justify-center pt-5">대표 이미지를 지정하고</p>
-        <div class="flex items-center text-[45px] justify-center">포토 모자이크를 생성해주세요</div>
+    <div class="h-[20vh] flex">
+      <div class="ml-[15vb]">
+        <p class="flex items-center justify-center"><IconGalleryColored /></p>
+        <p class="flex items-center text-[25px] justify-center pt-5">대표 이미지를 지정하고</p>
+        <div class="flex items-center text-[25px] justify-center">포토 모자이크를 생성해주세요</div>
       </div>
     </div>
 
@@ -263,7 +260,9 @@
   <!-- 섹션 6/6 올라가기 -->
   <div class="h-[200px]">
     <div class="justify-center flex" @click="scrollToRollingPaper"><IconUpArrowPurple /></div>
-    <div class="text-slate-500 justify-center flex" @click="scrollToTop">처음으로</div>
+    <div class="text-slate-500 justify-center flex" @click="scrollToTop">
+      <strong>처음으로</strong>
+    </div>
   </div>
 </template>
 
@@ -272,6 +271,7 @@ import { ref, onMounted } from 'vue'
 
 import IconLoveLetterColored from '@/icons/result/IconLoveLetterColored.vue'
 import IconGalleryColored from '@/icons/result/IconGalleryColored.vue'
+import IconGalleryTitle from '@/icons/result/IconGalleryTitle.vue'
 import IconFlowersColoredTwo from '@/icons/result/IconFlowersColoredTwo.vue'
 import IconScrollDownBlue from '@/icons/result/IconScrollDownBlue.vue'
 import IconUpArrowPurple from '@/icons/result/IconScrollUpPurple.vue'

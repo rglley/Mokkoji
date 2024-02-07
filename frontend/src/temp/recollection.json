@@ -7,6 +7,14 @@
     "eventType": "결혼식",
     "description": "검은 머리가 파뿌리가 될 때까지..."
   },
+  {
+    "eventId": 2,
+    "eventDay": "2023-01-11",
+    "eventRunTime": "02:29:50",
+    "participants": 35,
+    "eventType": "결혼식",
+    "description": "검은 머리가 파뿌리가 될 때까지..."
+  },
 
   {
     "eventId": 3,
