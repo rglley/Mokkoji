@@ -39,10 +39,9 @@ public class ResultController {
     // 행사 리스트
     @GetMapping("/lists")
     public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
-//        String provider = jwtUtil.getProvider(req);
 
-        String provider = "NAVER";
-        String email = "";
+//        String provider = "NAVER";
+//        String email = "";
 
         Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
@@ -93,14 +92,14 @@ public class ResultController {
     // 사진첩 사진 추가
     @PostMapping("/{resultId}/memories/photos")
     public ResponseEntity<String> addPhotos(@PathVariable("resultId") Long resultId,
-//                                           HttpServletRequest req,
+                                           HttpServletRequest req,
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
-//        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         // 사진 업로드
-//        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
-        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, 1L, resultId);
+        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
+//        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, 1L, resultId);
 
         // db에 저장
         resultService.createPhotoList(photoResDtoList);

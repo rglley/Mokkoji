@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.version}/events")
