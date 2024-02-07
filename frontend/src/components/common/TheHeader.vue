@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useUserStore } from '@/stores/user'
 import ModalView from '@/views/ModalView.vue'
@@ -76,7 +76,7 @@ const handleScroll = () => {
 }
 initFlowbite()
 
-onMounted(() => {
+onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
   store.getLoginStatus()
 })
