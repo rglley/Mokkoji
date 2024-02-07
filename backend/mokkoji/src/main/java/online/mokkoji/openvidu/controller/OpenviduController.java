@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@CrossOrigin(origins = {"http://mokkoji.online:5443"})
+@CrossOrigin(origins = {"http://mokkoji.online:5173"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.version}/meetings")
