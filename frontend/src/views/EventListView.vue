@@ -2,7 +2,7 @@
   <!--섹션 1/3, 유저 이름 -->
   <div class="text-[50px] flex px-2 h-[500px] items-center pl-32 bg-violet-50">
     <a v-if="isNotShown" class=""><strong>이진영</strong>님의 모꼬지</a>
-    <a v-if="isShown" class="effect"><strong>이진영</strong>님의 모꼬지</a>
+    <a v-if="isShown" class="effect-pink"><strong>이진영</strong>님의 모꼬지</a>
     <div class="flex">
       <div v-if="isNotShownTwo" class=""><IconFlowers /></div>
       <div v-if="isShownTwo" class=""><IconFlowersColored /></div>
@@ -10,7 +10,7 @@
   </div>
   <!-- 섹션 2/3, 기억: Memory -->
   <div class="flex">
-    <div class="justify-center h-[500px] mt-10 ml-24 w-1/3">
+    <div class="justify-center h-[500px] mt-10 ml-24 w-[40%]">
       <div class="flex">
         <strong class="text-[40px]">기억 </strong>
         <p class="text-3xl mt-3">: Memory</p>
@@ -19,7 +19,7 @@
       <p class="pt-2 text-[20px] pb-10">추억 생성을 통해 화상 모임을 추억으로 간직하세요.</p>
       <!-- 도움말 -->
       <a class="mr-4"
-        ><span class="text-[#610091] text-sm highlight-yellow" @mouseover="hoverPhotomosaic"
+        ><span class="text-[#610091] text-sm highlight-pink" @mouseover="hoverPhotomosaic"
           >포토 모자이크란?</span
         ></a
       >
@@ -71,13 +71,22 @@
         </div>
       </div>
     </div>
-
-    <div class="w-2/3 my-auto px-10 py-20">
-      <!--기억 컴포넌트-->
-      <div class="h-96 flex">
-        <MemoryList v-for="memory in MemoryData" :key="memory.eventId" :memory="memory" />
+    <div class="w-2/3 h-[400px] mt-12 mr-5 overflow-scroll" ref="verticalScrollWrap">
+      <!-- <div class="">
+        
+        <div class="inline-block"> -->
+      <div class="whitespace-nowrap flex">
+        <MemoryList
+          v-for="memory in MemoryData"
+          :key="memory.id"
+          :memory="memory"
+          class="inline-block"
+        >
+        </MemoryList>
       </div>
     </div>
+    <!-- </div>
+    </div> -->
   </div>
   <!-- 섹션 3/3, 추억: Recollection -->
   <div class="h-[600px] bg-[#ffeff8] pt-10">
@@ -133,6 +142,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+
+import { eventList } from '@/api/result'
 import IconFlowers from '@/icons/result/IconFlowers.vue'
 import IconFlowersColored from '@/icons/result/IconFlowersColored.vue'
 import MemoryList from '@/components/myevent/MemoryList.vue'
@@ -142,12 +153,20 @@ import RecollectionList from '@/components/myevent/RecollectionList.vue'
 
 const isHoveredPhotoMosaic = ref(false)
 const isHoveredRollingPaper = ref(false)
-const isHoveredBeCareful = ref(false)
-const isOpenTwo = ref(false)
+const isHoveredBeCareful = ref(true)
 const isShown = ref(false)
 const isNotShown = ref(true)
 const isShownTwo = ref(false)
 const isNotShownTwo = ref(true)
+
+const isMouseDown = ref(false)
+const startX = ref(0)
+const scrollLeft = ref(0)
+
+let memories = ref([])
+let recollections = []
+
+const verticalScrollWrap = ref(null)
 
 const hoverPhotomosaic = () => {
   isHoveredPhotoMosaic.value = true
@@ -181,9 +200,51 @@ const setShowTwo = () => {
   }, 1000)
 }
 
+const getEventList = () => {
+  console.log('user이름님의 event list 불러오기')
+  //API 호출
+  eventList(
+    (res) => {
+      memories.value = res.data.memoryList
+      recollections = res.data.recollectionList
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
+}
+
 onMounted(() => {
+  console.log("I'm here")
   setShow()
   setShowTwo()
+  getEventList()
+  window.onload = () => {
+    console.log("I'm here")
+    console.log(verticalScrollWrap.value)
+    verticalScrollWrap.value.addEventListener('mousedown', (e) => {
+      isMouseDown.value = true
+      startX.value = e.pageX - verticalScrollWrap.value.offsetLeft
+      scrollLeft.value = verticalScrollWrap.value.scrollLeft
+    })
+
+    verticalScrollWrap.value.addEventListener('mouseleave', () => {
+      isMouseDown.value = false
+    })
+
+    verticalScrollWrap.value.addEventListener('mouseup', () => {
+      isMouseDown.value = false
+    })
+
+    verticalScrollWrap.value.addEventListener('mousemove', (e) => {
+      if (!isMouseDown.value) return
+
+      e.preventDefault()
+      const x = e.pageX - verticalScrollWrap.value.offsetLeft
+      const beforeScrollLeft = (x - startX.value) * 1
+      verticalScrollWrap.value.scrollLeft = scrollLeft.value - beforeScrollLeft
+    })
+  }
 })
 </script>
 
@@ -207,7 +268,7 @@ span {
     color 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
 }
-.effect {
+.effect-pink {
   box-shadow: inset 0 -10px 0 #d486fe;
   color: black;
 }
@@ -217,35 +278,12 @@ span {
   color: black;
 }
 
-.highlight-yellow:hover {
-  box-shadow: inset 0 -3px 0 #f8ff79;
+.highlight-pink:hover {
+  box-shadow: inset 0 -3px 0 #ffa4dc;
   color: black;
 }
 .highlight-white:hover {
   box-shadow: inset 0 -3px 0 #bab9b9;
   color: black;
-}
-
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-
-  /* Center slide text vertically */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 </style>

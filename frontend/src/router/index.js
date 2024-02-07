@@ -3,19 +3,23 @@ import HomeView from '@/views/HomeView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPage from '@/components/mypage/MyPage.vue'
 import EventListPage from '@/views/EventListView.vue'
-import ResultPage from '@/views/ResultView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
+import test from '@/components/myEdit/ImgUpload.vue'
+import MyAccount from '@/components/mypage/MyAccount.vue'
+import MeetingView from '@/views/MeetingView.vue'
 import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
-import WaitingRoom from '@/components/meeting/WaitingRoom.vue'
 import Error404 from '@/components/common/Error404.vue'
 import ErrorSession from '@/components/common/ErrorSession.vue'
 import EditPage from '@/views/EditView.vue'
 import HandleCallback from '@/components/common/HandleCallback.vue'
+import RollingPaper from '@/views/RollingPaper.vue'
+import PhotoMosaic from '@/views/PhotoMosaic.vue'
+import Test from '@/views/Test.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [ 
+  routes: [
     {
       path: '/',
       name: 'home',
@@ -59,16 +63,7 @@ const router = createRouter({
       component: GroupMeetingView,
       props: true
     },
-    {
-      path: '/waitingroom',
-      name: 'waitingroom',
-      component: WaitingRoom
-    },
-    {
-      path: '/resultpage',
-      name: 'resultpage',
-      component: ResultPage
-    },
+
     {
       path: '/eventlist',
       name: 'eventlist',
@@ -89,9 +84,19 @@ const router = createRouter({
       component: Error404
     },
     {
-      path: '/errorsession',
-      name: 'Errorsession',
-      component: ErrorSession
+      path: '/rollingpaper',
+      name: 'rollingpaper',
+      component: RollingPaper
+    },
+    {
+      path: '/photomosaic',
+      name: 'photomosaic',
+      component: PhotoMosaic
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: Test
     }
   ]
 })
