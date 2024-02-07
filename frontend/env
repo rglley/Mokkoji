@@ -1,5 +1,0 @@
-# 기억 결과물 랜덤 이미지 개수
-VITE_MEMORY_IMG_COUNT = 25
-
-# 추억 결과물 랜덤 액자 개수
-VITE_RECOLLECTION_FRAME_COUNT = 5

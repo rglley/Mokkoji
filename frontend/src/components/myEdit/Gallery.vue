@@ -3,10 +3,19 @@
     <div class="w-[55%]">
       <div class="flex justify-end items-end">
         <button
-          class="opacity-70 text-lg border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
+          class="opacity-70 text-lg mr-5 border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
           @click="showPhotoUploadModal"
         >
-          <IconPhotoAdd /> 사진 추가
+          <IconPhotoAdd /> 사진 여러 장 추가
+        </button>
+        <button
+          class="opacity-70 text-lg border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
+          @click="showCutPhotoUploadModal"
+        >
+          <IconCrop /> 자르기 + 사진 추가
+        </button>
+        <button class="mb-6 ml-3" @click="callScrollToHelp">
+          <IconQuestionMarkBlue />
         </button>
       </div>
       <div class="ml-4 h-[808px] border-2 rounded-lg border-[#5da2bd]">
@@ -26,8 +35,10 @@
     </div>
     <div class="w-[5%]"></div>
     <div class="w-[35%] pt-[100px] h-[900px]">
-      <p class="flex justify-center items-center text-[40px]">선택한 사진</p>
-      <div class="flex justify-center items-center mt-5 mx-24 border-[10px] border-[#5da2bd]">
+      <div class="flex justify-center items-center text-[40px]">
+        <p class="flex">선택한 사진 <IconCheckBlue /></p>
+      </div>
+      <div class="flex justify-center items-center mt-5 mx-12 border-[10px] border-[#9f46c8]">
         <img
           :src="selectedImage"
           alt="Selected Image"
@@ -37,7 +48,7 @@
         />
       </div>
       <div class="">
-        <div class="flex justify-center items-center">
+        <!-- <div class="flex justify-center items-center">
           <div
             class="mt-12 opacity-70 border-2 justify-center items-center h-[100px] flex border-[#5da2bd] rounded-lg w-[150px] mr-5 hover:cursor-pointer hover:opacity-100"
           >
@@ -53,24 +64,24 @@
               포토모자이크 <br />미리보기 <IconSearch />
             </p>
           </div>
-        </div>
-        <div class="flex justify-center items-center">
-          <div
-            class="mt-10 opacity-70 border-2 rounded-lg border-[#5da2bd] justify-center items-center h-[100px] mr-5 flex w-[150px] hover:cursor-pointer hover:opacity-100"
-            @click="showSaved('대표이미지')"
-          >
-            <p class="text-[25px] justify-center flex text-center">
-              대표이미지 <br />
-              설정하기
-            </p>
-          </div>
+        </div> -->
 
-          <div
-            class="mt-10 opacity-70 border-2 rounded-lg border-[#5da2bd] justify-center items-center h-[100px] ml-5 flex w-[150px] hover:cursor-pointer hover:opacity-100"
-            @click="showSaved('포토모자이크')"
-          >
-            <p class="text-[25px] justify-center flex text-center">포토모자이크 <br />생성하기</p>
-          </div>
+        <div
+          class="mt-10 opacity-70 border-[3px] rounded-lg h-16 w-[340px] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          @click="showSaved('대표이미지')"
+        >
+          <p class="text-[30px] justify-center flex text-center">
+            대표이미지 설정하기 <IconMainPhoto />
+          </p>
+        </div>
+
+        <div
+          class="mt-10 opacity-70 border-[3px] rounded-lg h-16 w-[340px] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          @click="showSaved('포토모자이크')"
+        >
+          <p class="text-[30px] justify-center flex text-center">
+            포토모자이크 생성하기 <IconMosaic />
+          </p>
         </div>
       </div>
     </div>
@@ -84,17 +95,17 @@
       <p class="flex text-[30px]">{{ alertText }} <IconConfetti /></p>
     </div>
   </transition>
-  <!-- 사진 업로드 모달 -->
+  <!-- 사진 업로드 모달 - 자르기 -->
   <!-- <transition name="modal-fade"> -->
   <div
-    v-if="isPhotoUploadModal"
+    v-if="isCutPhotoUploadModal"
     class="fixed bg-white bottom-[100px] left-[500px] w-[800px] h-[500px] border-2 rounded-lg border-[#5da2bd] z-20 bg-[#f5fcff]"
   >
     <div class="flex">
-      <p class="text-lg my-5 ml-32">
+      <p class="text-lg my-5 ml-40">
         원하는 이미지를 정사각형 형태로 자른 뒤, 이미지 업로드를 진행해 주세요
       </p>
-      <button class="ml-32 mb-4" @click="showPhotoUploadModal"><IconClose /></button>
+      <button class="ml-24 mb-4" @click="showCutPhotoUploadModal"><IconClose /></button>
     </div>
     <div class="flex content-center items-center">
       <ImgUpload />
@@ -103,22 +114,58 @@
     </div>
   </div>
   <!-- </transition> -->
+  <!-- 사진 업로드 모달 - bulk -->
+  <div
+    v-if="isPhotoUploadModal"
+    class="fixed bottom-[30px] left-[200px] w-[1000px] h-[700px] border-2 rounded-lg border-[#5da2bd] z-20 bg-[#f5fcff]"
+  >
+    <button class="absolute right-[10px] top-[10px]" @click="showPhotoUploadModal">
+      <IconClose />
+    </button>
+    <div class="flex content-center items-center">
+      <ImgUploadBulk />
+    </div>
+    <div>
+      <button
+        class="absolute left-[430px] bottom-[-10px] opacity-70 text-[16px] border-[#5da2bd] flex pt-1 rounded-lg hover:opacity-100 border-2 border-solid mb-5 px-10 py-1"
+        @click="uploadImage"
+      >
+        이미지 업로드
+      </button>
+    </div>
+  </div>
+  <!-- 사진 업로드 설명 모달-->
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, defineProps } from 'vue'
 import getImages from '@/api/get_images'
 import { mainImageStore } from '@/stores/result.js'
 import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
 import IconClose from '@/icons/result/IconClose.vue'
 import ImgUpload from '@/components/myedit/ImgUpload.vue'
+import ImgUploadBulk from '@/components/myedit/ImgUploadBulk.vue'
+import IconCrop from '@/icons/result/IconCrop.vue'
+import IconQuestionMarkBlue from '@/icons/result/IconQuestionMarkBlue.vue'
+import IconMosaic from '@/icons/result/IconMosaic.vue'
+import IconMainPhoto from '@/icons/result/IconMainPhoto.vue'
+import IconCheckBlue from '@/icons/result/IconCheckMark.vue'
+
+const props = defineProps({
+  scrollToHelp: Function
+})
+
+const callScrollToHelp = () => {
+  props.scrollToHelp('사진 업로드 TIP')
+}
 
 const store = mainImageStore()
 const selectedImage = ref('src/assets/edit/no_image.png')
 
 const alertText = ref('')
 const isSaved = ref(false)
+const isCutPhotoUploadModal = ref(false)
 const isPhotoUploadModal = ref(false)
 
 const pageSize = 30
@@ -129,7 +176,13 @@ const scrollComponent = ref(null)
 const isPreviewOpen = ref(false)
 const previewPhoto = ref('')
 
+const showCutPhotoUploadModal = () => {
+  isPhotoUploadModal.value = false
+  isCutPhotoUploadModal.value = !isCutPhotoUploadModal.value
+}
+
 const showPhotoUploadModal = () => {
+  isCutPhotoUploadModal.value = false
   isPhotoUploadModal.value = !isPhotoUploadModal.value
 }
 
@@ -137,6 +190,10 @@ const loadPhotos = (count) => {
   const newImages = getImages(count)
   photos.value = newImages
   totalPhotos.value = newImages.length
+}
+
+const deletePhoto = (index) => {
+  this.photos.splice(index, 1)
 }
 
 const loadMorePhotos = () => {
@@ -191,6 +248,11 @@ onUnmounted(() => {
 })
 </script>
 <style>
+.highlight-yellow {
+  box-shadow: inset 0 -6px 0 #833c7e;
+  color: black;
+}
+
 .custom-scroll-container {
   overflow-y: scroll;
   height: 800px;
@@ -247,5 +309,10 @@ onUnmounted(() => {
   max-width: 90%;
   max-height: 90%;
   border-radius: 8px;
+}
+
+.effect-button:hover {
+  box-shadow: inset 0 -200px 0 #e7ebff;
+  color: black;
 }
 </style>

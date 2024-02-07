@@ -31,7 +31,7 @@
   </div>
   <!-- 섹션 2/6 모꼬지 정보, 내려가기 -->
   <div class="bg-[#ffffff] h-[500px] pt-5">
-    <div class="justify-center flex" @click="scrollToRollingPaper"><IconDownArrowGray /></div>
+    <div class="justify-center flex" @click="scrollToRollingPaper"><IconScrollDownGray /></div>
     <p class="justify-center flex text-slate-500">롤링페이퍼 편집</p>
     <p class="justify-center flex pt-20 text-[#c0aac7]"><IconVideoConference />Team MOKKOJI</p>
     <p class="justify-center flex pt-5 text-[#c0aac7]">
@@ -113,13 +113,13 @@
         </div>
       </div>
       <div class="h-[30%]">
-        <div
+        <!-- <div
           class="opacity-70 border-2 rounded-lg w-64 mx-auto hover:cursor-pointer hover:opacity-100 effect-button"
         >
           <p class="text-[30px] justify-center ml-2 flex">미리보기 <IconSearch /></p>
-        </div>
+        </div> -->
         <div
-          class="opacity-70 border-2 rounded-lg w-64 mx-auto mt-10 hover:cursor-pointer hover:opacity-100 effect-button"
+          class="opacity-70 border-2 rounded-lg w-64 mx-auto h-16 flex items-center justify-center hover:cursor-pointer hover:opacity-100 effect-button"
           @click="showSaved('템플릿')"
         >
           <p class="text-[30px] justify-center ml-2 flex">저장하기 <IconCheckMark /></p>
@@ -152,14 +152,85 @@
     </transition>
   </div>
   <!-- 섹션 4/6 도움말, 올라가기, 내려가기 -->
-  <div class="h-[800px] pt-5">
+  <div class="h-[900px] pt-5" ref="help">
     <div class="flex justify-center items-center h-[120px]">
-      <div class="mr-5" @click="scrollToPhotoMosaic"><IconDownArrowBlue /></div>
+      <div class="mr-5" @click="scrollToPhotoMosaic"><IconScrollDownBlue /></div>
       <div class="ml-5" @click="scrollToTop"><IconUpArrowPurple /></div>
     </div>
     <div class="flex justify-center items-center h-[20px]">
       <div class="mr-20 text-slate-500" @click="scrollToPhotoMosaic">포토모자이크 편집</div>
       <div class="mr-8 text-slate-500" @click="scrollToTop">처음으로</div>
+    </div>
+    <div class="h-[100px] flex items-center justify-center mt-40">
+      <a class="mr-12"
+        ><span class="text-slate-500 text-2xl highlight-pink" @mouseover="hoverMainImage"
+          >대표이미지란?</span
+        ></a
+      >
+      <a class="mr-12"
+        ><span class="text-slate-500 text-2xl highlight-green" @mouseover="hoverPhotomosaicTip"
+          >포토모자이크 생성 TIP</span
+        ></a
+      >
+      <a
+        ><span class="text-slate-500 text-2xl highlight-white" @mouseover="hoverPhotoUpload"
+          >사진 업로드 TIP</span
+        ></a
+      >
+      <p />
+    </div>
+    <div class="h-[300px] flex items-center justify-center">
+      <div v-if="isDefaultHelp">
+        <div class="mb-10 flex items-center justify-center">
+          <IconQuestionMarkGray />
+        </div>
+        <div>{{ direction }} 글씨 위에 마우스를 올려보세요!</div>
+      </div>
+
+      <div v-if="isHoveredMainImage" data-aos="fade-up" data-aos-duration="2000">
+        <div class="flex">
+          <div class="">
+            <img src="@/assets/eventlist/recollection_ex.png" class="pt-10 mr-10 w-48" />
+          </div>
+          <div class="ml-10 text-xl">
+            <p class="pt-32">추억 카드를 장식할 대표 이미지를 선택해 주세요.</p>
+            <p class="">선택한 대표 이미지는 포토 모자이크 생성에도 활용됩니다.</p>
+            <p class=""></p>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="isHoveredPhotoMosaicTip" data-aos="fade-up" data-aos-duration="2000">
+        <div class="flex">
+          <div class="">
+            <img src="@/assets/eventlist/photomosaic_ex.png" class="pt-10 mr-10 w-48" />
+          </div>
+          <div class="ml-10 text-xl">
+            <p class="pt-32">포토 모자이크 생성에는 최소 n 개, 최대 m 개의 사진이 필요합니다.</p>
+            <p class="">
+              멋진 포토 모자이크를 위해 다양한 색감의 사진들을 300 ~ 500장 준비해 주세요.
+            </p>
+            <p class=""></p>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="isHoveredPhotoUpload" data-aos="fade-up" data-aos-duration="2000">
+        <div class="flex">
+          <div class="">
+            <img src="@/assets/eventlist/img_crop_ex.png" class="ㅔt-10 mr-10 w-48" />
+          </div>
+          <div class="ml-10 text-xl">
+            <p class="pt-5">
+              원활한 포토 모자이크 생성을 위해 허용 이미지 크기를 1:1 비율로 제한하고 있어요.
+            </p>
+            <p class="">'자르기 + 사진 추가'를 통해 사진을 1:1 비율로 자르고 추가해 보세요.</p>
+            <p class="">
+              '사진 여러 장 추가'를 통해 여러 장의 사진을 한 번에 추가할 수도 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <!-- 섹션 5/6 포토모자이크 편집 -->
@@ -168,7 +239,11 @@
       <p class="flex hover:cursor-pointer" @mouseover="onHelp">도움말<IconQuestionMark /></p>
     </div>
     <div class="text-[25px] flex items-center justify-end pt-5 pr-5" v-if="isHoveredHelp">
-      <p class="effect flex hover:cursor-pointer" @mouseleave="outHelp">
+      <p
+        class="effect flex hover:cursor-pointer"
+        @mouseleave="outHelp"
+        @click="scrollToHelp('포토 모자이크 생성 TIP')"
+      >
         클릭!<IconQuestionMark />
       </p>
     </div>
@@ -182,7 +257,7 @@
     </div>
 
     <div class="">
-      <Gallery />
+      <Gallery :scrollToHelp="scrollToHelp" />
     </div>
   </div>
   <!-- 섹션 6/6 올라가기 -->
@@ -198,9 +273,9 @@ import { ref, onMounted } from 'vue'
 import IconLoveLetterColored from '@/icons/result/IconLoveLetterColored.vue'
 import IconGalleryColored from '@/icons/result/IconGalleryColored.vue'
 import IconFlowersColoredTwo from '@/icons/result/IconFlowersColoredTwo.vue'
-import IconDownArrowBlue from '@/icons/result/IconScrollDownBlue.vue'
+import IconScrollDownBlue from '@/icons/result/IconScrollDownBlue.vue'
 import IconUpArrowPurple from '@/icons/result/IconScrollUpPurple.vue'
-import IconDownArrowGray from '@/icons/result/IconScrollDownGray.vue'
+import IconScrollDownGray from '@/icons/result/IconScrollDownGray.vue'
 import IconInternet from '@/icons/result/IconInternet.vue'
 import IconVideoConference from '@/icons/result/IconVideoConference.vue'
 import IconLocation from '@/icons/result/IconLocation.vue'
@@ -213,15 +288,26 @@ import IconQuestionMark from '@/icons/result/IconQuestionMark.vue'
 import IconCheckSkyBlue from '@/icons/result/IconCheckSkyBlue.vue'
 import IconCheckBlue from '@/icons/result/IconCheckBlue.vue'
 import Gallery from '@/components/myedit/Gallery.vue'
+import IconCrop from '@/icons/result/IconCrop.vue'
+import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
+import IconQuestionMarkGray from '@/icons/result/IconQuestionMarkGray.vue'
 
 const isSaved = ref(false)
 const isHoveredHelp = ref(false)
 const isNotHoveredHelp = ref(true)
 
+const isDefaultHelp = ref(true)
+const isHoveredMainImage = ref(false)
+const isHoveredPhotoMosaicTip = ref(false)
+const isHoveredPhotoUpload = ref(false)
+
 const rollingpaper = ref(null)
 const photomosaic = ref(null)
+const help = ref(null)
 const top = ref(null)
 const canvas = ref(null)
+
+const direction = ref('대표이미지란?')
 
 const design = ref('basic')
 const color = ref('rainbow')
@@ -274,44 +360,32 @@ const scrollToPhotoMosaic = () => {
   photomosaic.value.scrollIntoView({ behavior: 'smooth' })
 }
 
-const getFileName = async (files) => {
-  const maxFileSize = 1024 * 1024 * 2
-  if (files[0].size > maxFileSize) {
-    alert('파일 크기가 2MB를 초과했습니다')
-    return
-  }
-
-  fileName.value = files[0].name
-  await base64(files[0])
+const scrollToHelp = (text) => {
+  console.log(text)
+  direction.value = text
+  help.value.scrollIntoView({ behavior: 'smooth' })
 }
 
-const base64 = (file) => {
-  return new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const image = new Image()
-      image.onload = () => {
-        const context = canvas.value.getContext('2d')
-        let size = 200
+const hoverPhotomosaicTip = () => {
+  console.log("I'm here")
+  isHoveredPhotoMosaicTip.value = true
+  isHoveredMainImage.value = false
+  isHoveredPhotoUpload.value = false
+  isDefaultHelp.value = false
+}
 
-        canvas.value.width = size
-        canvas.value.height = size
+const hoverPhotoUpload = () => {
+  isHoveredPhotoMosaicTip.value = false
+  isHoveredMainImage.value = false
+  isHoveredPhotoUpload.value = true
+  isDefaultHelp.value = false
+}
 
-        const x = image.width > image.height ? (image.width - size) / 2 : 0
-        const y = image.width > image.height ? 0 : (image.height - size) / 2
-
-        context.drawImage(image, x, y, size, size, 0, 0, size, size)
-      }
-      resolve(e.target.result)
-      // const previewImage = document.getElementById('imgMosaic')
-      // previewImage.src = e.target.result
-      // image.value = previewImage.src
-      image.src = e.target.result
-      const previewImage = document.getElementById('imgMosaic')
-      previewImage.src = e.target.result
-    }
-    reader.readAsDataURL(file)
-  })
+const hoverMainImage = () => {
+  isHoveredPhotoMosaicTip.value = false
+  isHoveredMainImage.value = true
+  isHoveredPhotoUpload.value = false
+  isDefaultHelp.value = false
 }
 
 const showSaved = (e) => {
@@ -434,7 +508,7 @@ onMounted(() => {
 }
 
 .effect-button:hover {
-  box-shadow: inset 0 -50px 0 #e7ebff;
+  box-shadow: inset 0 -200px 0 #e7ebff;
   color: black;
 }
 
@@ -445,6 +519,20 @@ onMounted(() => {
 
 .effect-blue {
   box-shadow: inset 0 -2px 0 hsl(257, 91%, 25%);
+  color: black;
+}
+
+.highlight-green:hover {
+  box-shadow: inset 0 -3px 0 hsl(123, 92%, 76%);
+  color: black;
+}
+
+.highlight-pink:hover {
+  box-shadow: inset 0 -3px 0 #ffa4dc;
+  color: black;
+}
+.highlight-white:hover {
+  box-shadow: inset 0 -3px 0 #bab9b9;
   color: black;
 }
 
