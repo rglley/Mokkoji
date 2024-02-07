@@ -50,11 +50,7 @@ onMounted(() => {
       }
     })
     .catch((err) => {
-      toast(err.message, {
-        theme: 'auto',
-        type: 'default',
-        dangerouslyHTMLString: true.valueOf
-      })
+      toast(err.message)
     })
 })
 </script>
