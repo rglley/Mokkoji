@@ -78,6 +78,7 @@ initFlowbite()
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  store.getLoginStatus()
 })
 </script>
 

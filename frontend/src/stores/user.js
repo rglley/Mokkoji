@@ -16,23 +16,29 @@ export const useUserStore = defineStore('user', () => {
     router.push('/')
   }
 
+  const getLoginStatus = () => {
+    try {
+      const user = tokenService.getUser()
+      user.name = name.value
+      user.email = email.value
+      user.image = image.value
+      isLogin.value = true
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   onMounted(() => {
-      try {
-        const user = tokenService.getUser()
-        user.name = name.value
-        user.email = email.value
-        user.image = image.value
-        isLogin.value = true
-      } catch (err) {
-        console.log(err);
-      }
-    })
+    getLoginStatus;
+  
+  })
 
   return {
     name,
     email,
     image,
     isLogin,
-    logout
+    logout,
+    getLoginStatus,
   }
 })
