@@ -77,7 +77,7 @@ import axios from '@/services/api'
 const userData  = ref({})
 
 const getUserDetail = () => {
--    axios.get(import.meta.env.VITE_SERVER + '/users/mypage')
+-    axios.get('/users/mypage')
     .then((res) => {
       userData.value = res.data;
     })

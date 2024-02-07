@@ -1,20 +1,12 @@
 import { defineStore } from 'pinia'
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onBeforeMount } from 'vue'
 import tokenService from '@/services/token.service'
 
 export const useUserStore = defineStore('user', () => {
-  const router = useRouter()
   const name = ref('')
   const email = ref('')
   const image = ref('')
   const isLogin = ref(false)
-
-  const logout = () => {
-    tokenService.removeUser()
-    isLogin.value = false
-    router.push('/')
-  }
 
   const getLoginStatus = () => {
     try {
@@ -28,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  onMounted(() => {
+  onBeforeMount(() => {
     getLoginStatus;
   
   })
@@ -38,7 +30,6 @@ export const useUserStore = defineStore('user', () => {
     email,
     image,
     isLogin,
-    logout,
     getLoginStatus,
   }
 })
