@@ -6,6 +6,7 @@ import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.dto.response.ResultResDto;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ResultService {
@@ -30,4 +31,7 @@ public interface ResultService {
 
     // 대표이미지 설정
     void updateThumbnail(Long resultId, String url);
+
+    // 사진첩 사진 추가
+    void createPhotoList(List<PhotoResDto> photoResDtoList);
 }

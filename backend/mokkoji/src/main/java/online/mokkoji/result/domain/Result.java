@@ -49,10 +49,16 @@ public class Result {
     private Photomosaic photomosaic;
 
     @Builder
-    public Result(Event event) {
+    public Result(Event event,User user) {
         this.event = event;
+        this.user=user;
         this.image="https://mokkoji-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8+%EC%82%AC%EC%A7%84/%EB%8C%80%ED%91%9C%EC%9D%B4%EB%AF%B8%EC%A7%80_%EA%B8%B0%EB%B3%B8.png";
         event.setResult(this);
+        user.getResults().add(this);
+    }
+
+    public Result(User user) {
+        this.user = user;
     }
 
     public void updateStatus() {

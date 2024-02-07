@@ -22,10 +22,14 @@ import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 @Slf4j
 @Service
@@ -47,7 +51,6 @@ public class EventServiceImpl implements EventService {
     public String createSession(SessionReqDto sessionDto) {
 
         //User 객체 가져오기
-        // userId 없을 경우
         User user = userRepository.findById(sessionDto.getUserId())
                 .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
 
@@ -61,14 +64,14 @@ public class EventServiceImpl implements EventService {
         // repository에 저장
         Event savedEvent = eventRepository.save(event);
 
-        // 빈 Result도 생성
-        Result result = new Result(savedEvent);
+        // 빈 result도 생성
+        Result result = new Result(savedEvent,user);
         Result savedResult = resultRepository.save(result);
         // 빈 rollingpaper 생성
         PostitTemplate postitTemplate = postitTemplateRepository.findByPostitName(PostitName.RAINBOW).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
         BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findByBackgroundName(BackgroundName.BASIC).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
-        
-        log.info("롤링페이퍼 저장");
+
+        // rollingpaper 저장
         RollingPaper rollingPaper = RollingPaper.buildWithResult()
                 .result(savedResult)
                 .backgroundTemplate(backgroundTemplate)
@@ -85,15 +88,12 @@ public class EventServiceImpl implements EventService {
     public void deleteSession(String sessionId, SessionReqDto sessionReqDto) {
 
         // 세션의 호스트Id와 지금 전달받은 userId가 맞는지 확인
-        Event event = eventRepository.findBySessionId(sessionId);
+        Event event = eventRepository.findBySessionId(sessionId)
+                .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
         if (!event.getUser().getId().equals(sessionReqDto.getUserId())) {
             log.error("호스트Id가 아님"); //임시로 하는 거.
             throw new RestApiException(EventErrorCode.HOST_NOT_FOUND);
         }
-
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-//        LocalDateTime endTime = LocalDateTime.U.parse(sessionReqDto.getEndTimeReq(), formatter);
-//        sessionReqDto.setEndTime(endTime);
 
         //session의 status를 CLOSED로 변경
         event.closeSession(sessionReqDto);

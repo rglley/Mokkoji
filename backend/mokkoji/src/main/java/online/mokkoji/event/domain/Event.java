@@ -91,7 +91,7 @@ public class Event/* extends BaseEntity */ {
 
         this.status = CLOSED;
         this.participantCount = sessionReqDto.getParticipantCount();
-        this.endTime = sessionReqDto.getEndTime();
+        this.endTime = LocalDateTime.now();
     }
 
 

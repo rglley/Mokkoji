@@ -38,13 +38,13 @@ public class ResultController {
 
     // 행사 리스트
     @GetMapping("/lists")
-    public ResponseEntity<Map<String, Object>> getResultList(/*HttpServletRequest req*/) {
+    public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
 //        String provider = jwtUtil.getProvider(req);
 
         String provider = "NAVER";
         String email = "";
 
-        Map<String, Object> result = resultService.getResultList(provider, email);
+        Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -97,17 +97,13 @@ public class ResultController {
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
 //        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
-//        User user = userRepository.findByName("test");
 
-        log.info("업로드");
         // 사진 업로드
 //        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
         List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, 1L, resultId);
 
         // db에 저장
-        for (PhotoResDto photoResDto : photoResDtoList) {
-            resultService.createPhoto(photoResDto);
-        }
+        resultService.createPhotoList(photoResDtoList);
 
         return new ResponseEntity<>("사진 업로드 완료", HttpStatus.OK);
     }

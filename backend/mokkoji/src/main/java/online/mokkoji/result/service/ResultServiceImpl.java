@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.ResultErrorCode;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Photomosaic;
@@ -14,6 +15,8 @@ import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.*;
 import online.mokkoji.result.repository.*;
 import online.mokkoji.user.domain.Provider;
+import online.mokkoji.user.domain.User;
+import online.mokkoji.user.repository.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +37,16 @@ public class ResultServiceImpl implements ResultService {
     private final RollingPaperRepository rollingPaperRepository;
     private final BackgroundTemplateRepository backgroundTemplateRepository;
     private final PostitTemplateRepository postitTemplateRepository;
+    private final UserRepository userRepository;
 
     // 사진과 메시지 리스트로 담는 메서드
     @Override
     public Map<String, Object> getResultList(String provider, String email) {
-        List<Result> resultList = resultRepository.findAllByUser_ProviderAndUser_EmailOrderByIdDesc(Provider.valueOf(provider), email);
+
+        User user = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
+
+        List<Result> resultList = user.getResults();
 
         if (resultList.isEmpty())
             return null;
@@ -158,9 +166,7 @@ public class ResultServiceImpl implements ResultService {
         RollingPaper rollingPaper = result.getRollingpaper();
 
         // 롤링페이퍼 설정된 템플릿 가져옴
-        RollingpaperEditResDto rollingpaperDto = new RollingpaperEditResDto();
-        rollingpaperDto.setBackgroundTemplate(rollingPaper.getBackgroundTemplate());
-        rollingpaperDto.setPostitTemplate(rollingPaper.getPostitTemplate());
+        RollingpaperEditResDto rollingpaperDto = new RollingpaperEditResDto(rollingPaper.getBackgroundTemplate(), rollingPaper.getPostitTemplate());
 
         // 사진 루트 가져옴
         List<Photo> photoList = photoRepository.findAllByResultId(resultId);
@@ -191,10 +197,7 @@ public class ResultServiceImpl implements ResultService {
         PostitTemplate postitTemplate = postitTemplateRepository.findByPostitName(postitName)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
 
-
-
-        rollingpaper.setBackgroundTemplate(backgroundTemplate);
-        rollingpaper.setPostitTemplate(postitTemplate);
+        rollingpaper.updateTemplate(backgroundTemplate,postitTemplate);
 
         // 변경내용 수정
         rollingPaperRepository.save(rollingpaper);
@@ -206,6 +209,14 @@ public class ResultServiceImpl implements ResultService {
         Result result = getResultById(resultId);
         result.setImage(url);
         resultRepository.save(result);
+    }
+
+    // 사진 여러개 저장(1개도 가능)
+    @Override
+    public void createPhotoList(List<PhotoResDto> photoResDtoList) {
+        for (PhotoResDto photoResDto : photoResDtoList) {
+            createPhoto(photoResDto);
+        }
     }
 
     // 결과객체 가져오는 메서드
