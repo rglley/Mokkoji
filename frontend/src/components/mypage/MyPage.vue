@@ -1,6 +1,7 @@
 <template>
   <div
-    class="bg-white flex mt-0 w-full flex-col justify-center items-center px-16 py-12 max-md:max-w-full max-md:px-5"
+    class="flex mt-0 w-full flex-col justify-center items-center px-16 py-12 max-md:max-w-full max-md:px-5"
+    id="main-gradient"
   >
     <div id="card-div">
       <div class="absolute -mt-28 mx-10 justify-center">
@@ -9,24 +10,22 @@
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
         <div class="flex flex-col w-6/12 ml-10">
           <span class="flex flex-col mt-10 max-md:mt-10"
-            ><div class="text-black text-3xl font-bold self-stretch">
-              {{ userData.name }}님
-            </div>
-            <div class="text-black text-xl self-stretch mt-2.5">{{ userData.email }}</div>
-            <span class="mt-16 pl-2 pr-4"
-              ><div class="text-black text-3xl">
-                계좌 등록
-                <a class="text-2xl text-red-500" v-if="userData.accountRegistered">O</a>
-                <a class="text-2xl text-red-500" v-else>X </a>
-              </div>
-            </span>
-            <div class="text-sm font-light m-2 text-wrap max-w-52">
-              계좌를 등록하시면 참가자들의 마음을 받을 수 있어요
-            </div>
-            <div class="mt-20">
-              <a href="/mypage/detail" id="button-submit">회원정보 수정</a>
+            ><div class="text-3xl font-bold">{{ userData.name }}님</div>
+          </span>
+          <div class="text-black text-xl self-stretch mt-2.5">{{ userData.email }}</div>
+          <span class="mt-16 pl-2 pr-4"
+            ><div class="text-black text-2xl">
+              계좌 등록
+              <a class="text-2xl text-red-500" v-if="userData.accountRegistered">O</a>
+              <a class="text-2xl text-red-500" v-else>X </a>
             </div>
           </span>
+          <div class="text-sm font-light m-2 max-w-[24lvh] mt-5">
+            계좌를 등록하시면 참가자들의 마음을 받을 수 있어요
+          </div>
+            <button @click="$router.push('mypage/detail')" id="button-submit" class="max-w-32 mt-10 self-center">
+              회원정보 수정
+            </button>
         </div>
         <div class="flex flex-col justify-around items-stretch mr-10">
           <div>
@@ -54,8 +53,6 @@
             <div id="div-stat">
               모꼬지 <br /><span class="text-purple-400">{{ userData.totalTime }}</span
               >시간
-              <!-- <span class="text-purple-400">{{ totalMin }}</span -->
-              <!-- >분 -->
             </div>
             <div id="div-stat">
               받은 메세지<br /><span class="text-purple-400">{{
@@ -71,24 +68,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from '@/services/api'
+import { ref, onMounted } from "vue";
+import axios from "@/services/api";
 
-const userData  = ref({})
+const userData = ref({});
 const num = 0;
 const getUserDetail = () => {
--    axios.get(import.meta.env.VITE_SERVER + '/users/mypage')
+  -axios
+    .get(import.meta.env.VITE_SERVER + "/users/mypage")
     .then((res) => {
       userData.value = res.data;
     })
-  .catch((err) => {
-    console.error(err)
-  })
-}
+    .catch((err) => {
+      console.error(err);
+    });
+};
 
 onMounted(() => {
-  getUserDetail()
-})
+  getUserDetail();
+});
 </script>
 
 <style></style>
