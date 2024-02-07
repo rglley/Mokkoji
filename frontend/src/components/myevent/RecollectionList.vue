@@ -1,31 +1,25 @@
 <template>
-  <div class="h-[22rem] w-72 mx-8 my-4 rounded-xl bg-white border-2 border-[#ff81c8]">
-    <p class="pl-2 pt-2 pb-2 text-black">
-      <strong class="effect-purple">{{ recollection.eventDay }}</strong>
+  <div class="h-[22rem] w-72 mx-8 my-4 rounded-xl bg-white border-2 border-slate-300">
+    <p class="pl-2 pt-2 pb-2 text-black flex">
+      <strong class="effect-pink-recollection">{{ recollection.eventDay }}</strong>
+      <button class="ml-40"><IconModify /></button>
     </p>
-
-    <!--액자, 미정-->
-    <!-- <img
-        :src="`src/assets/recollection/recollection_random_${imgNo}.png`"
-        alt="recollection-random"
-        class="m-auto z-0"
-        height="200"
-        width="200"
-      /> -->
-    <div class="flex justify-center items-center">
-      <a href="/rollingpaper">
-        <img
-          src="@/assets/logo/mokkoji_logo_with_bg.png"
-          alt="unregistered"
-          height="180"
-          width="180"
-        />
-      </a>
+    <div class="bg-custom">
+      <div class="flex justify-center items-center">
+        <a href="/rollingpaper">
+          <img
+            src="@/assets/eventlist/recollection_real.png"
+            alt="unregistered"
+            height="180"
+            width="180"
+          />
+        </a>
+      </div>
+      <p class="text-lg mt-2 text-center">
+        <strong class="effect-blacnk-recollection">{{ recollection.eventType }}</strong>
+      </p>
     </div>
     <div class="mt-5 text-center text-black">
-      <p class="text-lg mb-2">
-        <strong class="effect-purple">{{ recollection.eventType }}</strong>
-      </p>
       <pre
         class="text-base whitespace-pre-wrap w-[284px] h-[72px] custom-border flex justify-center items-center"
         >{{ description }}</pre
@@ -36,6 +30,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import IconModify from '@/icons/result/IconModify.vue'
 
 const props = defineProps(['recollection'])
 
@@ -50,18 +45,24 @@ let imgNo = computed(() => {
 </script>
 
 <style>
-.effect-purple {
-  box-shadow: inset 0 -5px 0 #f6d8fd;
+.effect-pink-recollection {
+  box-shadow: inset 0 -5px 0 #fcd8f0;
   color: black;
 }
 
-.effect-pink {
-  box-shadow: inset 0 -5px 0 #fea7d9;
+.effect-blacnk-recollection {
+  box-shadow: inset 0 -2px 0 #000000;
   color: black;
 }
 
 .custom-border {
   border-top: solid 2px;
-  border-color: #ff81c8;
+  border-color: #ffffff;
+}
+
+.bg-custom {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgb(255, 255, 255)),
+    url('src/assets/eventlist/recollection_background_2.png');
+  background-color: white;
 }
 </style>
