@@ -1,6 +1,6 @@
 if (import.meta.env.MODE !== 'ssr') {
   import('./style.css')
-  import('aos/dist/aos.css').then((module) => {
+  import('aos/dist/aos.css').then(() => {
     AOS.init()
   })
   import('./App.vue')

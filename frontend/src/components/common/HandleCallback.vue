@@ -1,10 +1,10 @@
 <template>
   <div class="flex space-x-2 justify-center items-center h-screen" id="main-gradient">
     <div class="flex rounded-full bg-white w-[50vh] h-[50vh] items-center justify-center">
-    <span class="sr-only">Loading...</span>
-    <div class="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-    <div class="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-    <div class="h-8 w-8 bg-black rounded-full animate-bounce"></div>
+      <span class="sr-only">Loading...</span>
+      <div class="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+      <div class="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+      <div class="h-8 w-8 bg-black rounded-full animate-bounce"></div>
     </div>
   </div>
 </template>
@@ -29,21 +29,21 @@ onBeforeMount(() => {
 onMounted(() => {
   axios({
     method: 'GET',
-    url: 'https://mokkoji.online/api/v1/oauth2/naver/' + naverquerycode.value,
+    url: 'https://mokkoji.online/api/v1/oauth2/naver/' + naverquerycode.value
   })
     .then((res) => {
       const token = res.headers['authorization']
-      tokenService.setLocalAccessToken(token);
+      tokenService.setLocalAccessToken(token)
       tokenService.setUser(res.data)
-      store.name = res.data.name;
-      store.email = res.data.email;
-      store.image = res.data.image;
+      store.name = res.data.name
+      store.email = res.data.email
+      store.image = res.data.image
       if (res.data.first == true) {
         router.push('/signup')
       } else {
         store.isLogin = true
         const refreshToken = res.headers['authorization-refresh']
-        tokenService.setLocalRefreshToken(refreshToken);
+        tokenService.setLocalRefreshToken(refreshToken)
         alert('로그인이 완료!')
         router.push('/')
       }
@@ -52,7 +52,7 @@ onMounted(() => {
       toast(err.message, {
         theme: 'auto',
         type: 'default',
-        dangerouslyHTMLString: true.valueOf,
+        dangerouslyHTMLString: true.valueOf
       })
     })
 })

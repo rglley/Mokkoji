@@ -1,6 +1,9 @@
 <template>
-  <header :class="{ 'transparent-header': isTransparent }" class="fixed h-32 z-10 my-auto w-full bg-transparent">
-    <nav class="w-full flex pl-5">
+  <header
+    :class="{ 'transparent-header': isTransparent }"
+    class="fixed h-32 z-10 my-auto w-full bg-transparent"
+  >
+    <nav class="w-full flex px-[2vw]">
       <router-link to="/" class="h-28 flex items-center rtl:l:space-x-reverse">
         <img
           src="/src/assets/logo/mokkoji_logo.png"
@@ -13,10 +16,10 @@
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <li>
-            <button id="button-header"><a href="/">HOME</a></button>
+            <button id="button-header">기능 소개<a href="/"></a></button>
           </li>
           <!-- <li v-if="!isLogin"> -->
-            <li v-if="!store.isLogin">
+          <li v-if="!store.isLogin">
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />

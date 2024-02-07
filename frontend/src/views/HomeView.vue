@@ -1,31 +1,37 @@
 <template>
   <main id="main-landing">
-    <section class="pt-52 z-2 h-max pb-[20lvh]" id="main-gradient2">
-      <div id="flex" class="flex flex-row">
+    <section class="pt-[20vh] z-2 h-max pb-[20lvh]" id="main-gradient2">
+      <div id="flex" class="ml-[3vw] flex justify-center items-center">
         <div
-          class="text-center ml-12 flex flex-col animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-prewrap"
+          class="text-center ml-12 w-1/2 flex flex-col justify-center items-center animate-in fade-in-10 delay-1000 duration-1000 text-xl whitespace-wrap"
         >
           <div>
             <h1 id="title">모꼬지</h1>
             <br />
-
-            <p>
-              화상 모임 플랫폼 ‘모꼬지’를 통해 결혼식, 졸업식, 돌잔치 등 다양한 행사를 공간적인 제약
-              없이 참여해보세요.
-            </p>
-            <br />
-            <p>순간을 더욱 특별하게 추억하기 위한 롤링페이퍼, 포토 모자이크 기능을 제공합니다.</p>
+            <div class="text-2xl">
+              <p>
+                화상 모임 플랫폼 ‘모꼬지’를 통해
+                <strong class="text-purple-500">결혼식, 졸업식, 돌잔치</strong> 등
+              </p>
+              <p>
+                다양한 행사를
+                <strong class="text-green-500">공간적인 제약 없이</strong> 참여해보세요.
+              </p>
+              <br />
+              <p>순간을 더욱 특별하게 추억하기 위한</p>
+              <p>
+                <strong class="text-purple-500">롤링페이퍼, 포토 모자이크 기능</strong> 을
+                제공합니다.
+              </p>
+            </div>
           </div>
-          <!-- TODO : 화면 가운데 div 박스 배치해서 회의 생성 버튼 및 input 을 넣기-->
-          <div class="grid place-content-center ml-[10vh] my-20 w-2/3 text-base">
+          <div class="flex flex-col mt-[7vh] w-2/3 text-base justify-center items-center">
             <button
               class="my-2 py-2 rounded-xl hover:bg-purple-500 text-white duration-300 w-60 bg-purple-400"
               @click="createMeeting"
             >
               화상 모임 생성하기
             </button>
-
-            <!-- TODO : submit 버튼 + invalid input 렌더링 -->
             <div>
               <div class="relative">
                 <input
@@ -51,9 +57,9 @@
             </div>
           </div>
         </div>
-        <div class="relative -top-[10lvh] size-2/4">
+        <div class="w-1/2">
           <!-- <img src="@/assets/landing/wedding.svg" /> -->
-          <div class="ml-[10lvh] w-[70lvh] h-[70lvh] border-8 border-white cursor-grab">
+          <div class="w-[70lvh] h-[70lvh] border-8 border-white cursor-grab rounded-r-xl">
             <swiper
               :spaceBetween="30"
               :autoplay="{
@@ -66,9 +72,10 @@
               }"
               :loop="true"
               :modules="modules"
+              class="rounded-r-xl"
             >
               <swiper-slide v-for="photo in photos" :key="photo">
-                <img :src="`src/assets/landing/${photo}`" />
+                <img :src="`src/assets/landing/${photo}`" class="rounded-r-xl" />
               </swiper-slide>
             </swiper>
           </div>
