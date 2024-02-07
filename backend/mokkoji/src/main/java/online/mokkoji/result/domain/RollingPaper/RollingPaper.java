@@ -27,7 +27,7 @@ public class RollingPaper {
     private boolean isEdited;
 
     @OneToMany(mappedBy = "rollingPaper")
-    List<Message> messageList=new ArrayList<>();
+    List<Message> messages =new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "background_id")
@@ -41,16 +41,16 @@ public class RollingPaper {
     @Builder(builderMethodName = "buildWithResult")
     public RollingPaper(Result result, BackgroundTemplate backgroundTemplate, PostitTemplate postitTemplate) {
         this.result = result;
-        setBackgroundTemplate(backgroundTemplate);
-        setPostitTemplate(postitTemplate);
+        updateTemplate(backgroundTemplate,postitTemplate);
         result.setRollingpaper(this);
     }
 
-    public void setBackgroundTemplate(BackgroundTemplate backgroundTemplate) {
-        this.backgroundTemplate = backgroundTemplate;
+    public void updateTemplate(BackgroundTemplate backgroundTemplate, PostitTemplate postitTemplate) {
+        this.backgroundTemplate=backgroundTemplate;
+        this.postitTemplate=postitTemplate;
     }
 
-    public void setPostitTemplate(PostitTemplate postitTemplate) {
-        this.postitTemplate = postitTemplate;
-    }
+
+
+
 }

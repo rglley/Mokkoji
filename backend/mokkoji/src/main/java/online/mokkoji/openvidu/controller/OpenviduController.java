@@ -100,6 +100,7 @@ public class OpenviduController {
 
         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
         sessionReqDto.setUserId(user.getId());
+//        sessionReqDto.setUserId(1L);
 
         Session activeSession = openvidu.getActiveSession(sessionId);
         eventService.deleteSession(sessionId, sessionReqDto);

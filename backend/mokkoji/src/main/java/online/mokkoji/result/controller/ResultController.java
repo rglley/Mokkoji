@@ -38,13 +38,13 @@ public class ResultController {
 
     // 행사 리스트
     @GetMapping("/lists")
-    public ResponseEntity<Map<String, Object>> getResultList(/*HttpServletRequest req*/) {
+    public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
 //        String provider = jwtUtil.getProvider(req);
 
         String provider = "NAVER";
         String email = "";
 
-        Map<String, Object> result = resultService.getResultList(provider, email);
+        Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

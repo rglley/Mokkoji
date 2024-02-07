@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import online.mokkoji.event.domain.Event;
+import online.mokkoji.result.domain.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,9 @@ public class User {
     private Authority authority;
 
     private String image;
+
+    @OneToMany(mappedBy = "user")
+    private List<Result> results = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Event> events = new ArrayList<>();
