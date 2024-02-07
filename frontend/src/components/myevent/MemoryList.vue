@@ -76,26 +76,26 @@
         <p class="flex  justify-center items-center">
           모꼬지 날짜 <Icon-calen /> : {{ memory.eventDay }} ({{ lastDayToEdit.dayOfWeek }})
         </p>
-        <p class="flex  justify-center items-center"> 모꼬지 진행 시간 <IconClock />: {{ memory.eventRunTime }}</p>
+        <p class="flex justify-center items-center"> 모꼬지 진행 시간 <IconClock />: {{ memory.eventRunTime }}</p>
         <p class="flex justify-center items-center"> 참여 인원 수 <IconPeople />: {{ memory.participants }}</p>
         <p>편집 가능 기간 : <a class="effect-yellow"> {{ lastDayToEdit.expireDay }}</a></p>
         <p class="text-center mt-8">
           편집 가능 기간이 <strong> {{ lastDayToEdit.editablePeriod }}일 </strong> 남았어요
         </p>
         <div class="flex justify-center items-center">
-        <button class= "bg-[#f5eefc] mr-5 rounded-2xl h-8 w-20 mt-2  hover:bg-[#e7cffe]">
+          <button class= "bg-[#f5eefc] mr-5 rounded-2xl h-8 w-20 mt-2  hover:bg-[#e7cffe]">
           추억생성
           </button>
-        <button class="text-md  bg-[#fff8c6]  mr-3 rounded-2xl h-8 w-20 mt-2 hover:bg-[#fff396]">
+          <button class="text-md  bg-[#fff8c6]  mr-3 rounded-2xl h-8 w-20 mt-2 hover:bg-[#fff396]">
           편집
-        </button>
+          </button>
         </div>
       </div>
     </div>
         </div>
         <div>
           <p class="absolute flex text-3xl top-[150px] right-[540px]"><IconWarning /> 주의</p>
-          <p class="absolute text-2xl top-[200px] right-[500px]">추억으로 생성되면</p>
+          <p class="absolute text-2xl top-[200px] right-[530px]">추억이 되면</p>
           <p class="absolute text-2xl top-[240px] right-[480px]">결과물 편집이 어려워요</p>
           <p class="absolute text-2xl top-[280px] right-[480px]">충분히 확인하셨나요?</p>
         </div>

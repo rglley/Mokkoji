@@ -15,8 +15,8 @@
         <strong class="text-[40px]">기억 </strong>
         <p class="text-3xl mt-3">: Memory</p>
       </div>
-      <p class="pt-2 text-[20px]">편집 버튼을 클릭하여 롤링페이퍼와 포토모자이크를 생성하세요.</p>
-      <p class="pt-2 text-[20px] pb-10">추억 생성을 통해 화상 모임을 추억으로 간직하세요.</p>
+      <p class="pt-2 text-[20px]">편집 버튼으로 롤링페이퍼와 포토모자이크를 만드세요.</p>
+      <p class="pt-2 text-[20px] pb-10">추억 생성을 통해 모꼬지를 추억으로 간직하세요.</p>
       <!-- 도움말 -->
       <a class="mr-4"
         ><span class="text-[#610091] text-sm highlight-pink" @mouseover="hoverPhotomosaic"
@@ -65,8 +65,11 @@
             <img src="@/assets/eventlist/warning.png" class="pt-10 w-24 h-36" />
           </div>
           <div class="w-3/4">
-            <p class="pt-20">편집 가능 기간 (모임 주최일로부터 한 달)이 지나면</p>
-            <p class="">롤링페이퍼, 포토 모자이크 생성 및 추억 생성이 불가합니다.</p>
+            <p class="pt-20">편집 가능 기간 <strong>(모임 주최일로부터 한 달)</strong>이 지나면</p>
+            <p class="">
+              롤링페이퍼, 포토 모자이크 생성 및 추억 생성이
+              <strong class="text-red-400">불가</strong>합니다.
+            </p>
           </div>
         </div>
       </div>
