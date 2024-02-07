@@ -13,9 +13,13 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:5173",
                         "http://mokkoji.online:5173",
+                        "https://mokkoji.online:5173",
                         "http://mokkoji.online",
+                        "https://mokkoji.online",
                         "http://i10a401.p.ssafy.io:5173",
-                        "http://i10a401.p.ssafy.io"
+                        "https://i10a401.p.ssafy.io:5173",
+                        "http://i10a401.p.ssafy.io",
+                        "https://i10a401.p.ssafy.io"
                 )
                 .allowedMethods("GET", "PUT", "POST", "DELETE")
                 .allowedHeaders("*")
