@@ -12,5 +12,9 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['events']
+  },
+
+  define: {
+    global: {}
   }
 })

@@ -6,7 +6,6 @@ import EventListPage from '@/views/EventListView.vue'
 import MyDetail from '@/components/mypage/MyDetail.vue'
 import test from '@/components/myEdit/ImgUpload.vue'
 import MyAccount from '@/components/mypage/MyAccount.vue'
-import Meeting from '@/components/meeting/Meeting.vue'
 import MeetingView from '@/views/MeetingView.vue'
 import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
@@ -64,11 +63,7 @@ const router = createRouter({
       component: GroupMeetingView,
       props: true
     },
-    {
-      path: '/resultpage',
-      name: 'resultpage',
-      component: ResultPage
-    },
+
     {
       path: '/eventlist',
       name: 'eventlist',
@@ -87,6 +82,21 @@ const router = createRouter({
       path: '/404',
       name: 'Error404',
       component: Error404
+    },
+    {
+      path: '/rollingpaper',
+      name: 'rollingpaper',
+      component: RollingPaper
+    },
+    {
+      path: '/photomosaic',
+      name: 'photomosaic',
+      component: PhotoMosaic
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: Test
     }
   ]
 })
