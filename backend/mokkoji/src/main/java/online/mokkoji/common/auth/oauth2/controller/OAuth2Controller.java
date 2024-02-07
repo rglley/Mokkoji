@@ -23,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/oauth2")
+@RequestMapping("${api.version}/oauth2")
 public class OAuth2Controller {
 
     private final OAuth2ServiceImpl oAuth2Service;
