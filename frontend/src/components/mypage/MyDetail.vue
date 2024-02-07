@@ -75,7 +75,7 @@ const email = ref('')
 
 const update = () => {
   axios
-    .put('/users', {
+    .put(import.meta.env.VITE_SERVER + '/users', {
       name: name.value,
       image: image.value,
       bank: bank.value,
@@ -110,7 +110,7 @@ const base64 = (file) => {
 
 const withdraw = async () => {
     try {
-      await axios.delete('/users')
+      await axios.delete(import.meta.env.VITE_SERVER + '/users')
       .then(() => {
         store.isLogin.value = false;
         router.push('/')
@@ -124,7 +124,7 @@ const withdraw = async () => {
 
 onBeforeMount(() => {
   axios
-    .get('/users/userinfo')
+    .get(import.meta.env.VITE_SERVER + '/users/userinfo')
     .then((res) => {
       name.value = res.data.name
       email.value = res.data.email
