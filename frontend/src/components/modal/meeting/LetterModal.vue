@@ -149,9 +149,7 @@ const removeVideoFile = (event) => {
 }
 
 const sendLetter = () => {
-  const formData = new FormData()
-
-  store.sendLetter(audioFile.value, videoFile.value, props.sessionId)
+  store.sendLetter(videoFile.value, audioFile.value, 'ses_E7EEm5DZxe')
 
   audioFile.value = null
   videoFile.value = null

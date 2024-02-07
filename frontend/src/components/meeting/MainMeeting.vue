@@ -676,7 +676,7 @@ const updateMainVideoStreamManager = (stream) => {
 }
 
 onBeforeMount(() => {
-  joinSession()
+  // joinSession()
 
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
