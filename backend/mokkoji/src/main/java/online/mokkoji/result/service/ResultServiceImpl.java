@@ -166,9 +166,7 @@ public class ResultServiceImpl implements ResultService {
         RollingPaper rollingPaper = result.getRollingpaper();
 
         // 롤링페이퍼 설정된 템플릿 가져옴
-        RollingpaperEditResDto rollingpaperDto = new RollingpaperEditResDto();
-        rollingpaperDto.setBackgroundTemplate(rollingPaper.getBackgroundTemplate());
-        rollingpaperDto.setPostitTemplate(rollingPaper.getPostitTemplate());
+        RollingpaperEditResDto rollingpaperDto = new RollingpaperEditResDto(rollingPaper.getBackgroundTemplate(), rollingPaper.getPostitTemplate());
 
         // 사진 루트 가져옴
         List<Photo> photoList = photoRepository.findAllByResultId(resultId);
@@ -211,6 +209,14 @@ public class ResultServiceImpl implements ResultService {
         Result result = getResultById(resultId);
         result.setImage(url);
         resultRepository.save(result);
+    }
+
+    // 사진 여러개 저장(1개도 가능)
+    @Override
+    public void createPhotoList(List<PhotoResDto> photoResDtoList) {
+        for (PhotoResDto photoResDto : photoResDtoList) {
+            createPhoto(photoResDto);
+        }
     }
 
     // 결과객체 가져오는 메서드

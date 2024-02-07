@@ -88,7 +88,8 @@ public class EventServiceImpl implements EventService {
     public void deleteSession(String sessionId, SessionReqDto sessionReqDto) {
 
         // 세션의 호스트Id와 지금 전달받은 userId가 맞는지 확인
-        Event event = eventRepository.findBySessionId(sessionId);
+        Event event = eventRepository.findBySessionId(sessionId)
+                .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
         if (!event.getUser().getId().equals(sessionReqDto.getUserId())) {
             log.error("호스트Id가 아님"); //임시로 하는 거.
             throw new RestApiException(EventErrorCode.HOST_NOT_FOUND);

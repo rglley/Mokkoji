@@ -12,4 +12,5 @@ import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
 public class RollingpaperEditResDto {
     private BackgroundTemplate backgroundTemplate;
     private PostitTemplate postitTemplate;
+
 }
