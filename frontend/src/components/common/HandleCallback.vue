@@ -29,7 +29,8 @@ onBeforeMount(() => {
 onMounted(() => {
   axios({
     method: 'GET',
-    url: 'https://mokkoji.online/api/v1/oauth2/naver/' + naverquerycode.value
+    // url: "localhost:8080/api/vping"
+    url: import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER  + '/oauth2/naver/' + naverquerycode.value,
   })
     .then((res) => {
       const token = res.headers['authorization']

@@ -107,8 +107,8 @@ const accountNumber = ref('')
 
 const signUp = async () => {
   await axios({
-    url: import.meta.env.VITE_SERVER + 'users',
-    method: 'POST',
+    url: import.meta.env.VITE_SERVER +"/users",
+    method: "POST",
     data: {
       name: name.value,
       image: image.value,

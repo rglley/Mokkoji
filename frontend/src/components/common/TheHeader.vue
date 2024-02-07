@@ -16,16 +16,18 @@
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <li>
-            <button id="button-header">기능 소개<a href="/"></a></button>
+            <button id="button-header"><a href="/">홈으로</a></button>
           </li>
           <!-- <li v-if="!isLogin"> -->
-          <li v-if="!store.isLogin">
+          <li v-if="!isLogin">
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
           <li v-else>
+            <img id="image-profile" :src="image" class="w-10" />
+            <p>{{ name }}님</p>
             <button
               id="button-header"
               data-dropdown-toggle="dropdown"
@@ -45,7 +47,7 @@
                   <router-link to="eventlist">내 결과물</router-link>
                 </li>
                 <li id="li-dropdown">
-                  <a @click="store.logout">로그아웃</a>
+                  <a @click="logout">로그아웃</a>
                 </li>
               </ul>
             </div>
@@ -59,13 +61,17 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue'
 import { initFlowbite } from 'flowbite'
-import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/home/LoginModal.vue'
+import tokenService from '@/services/token.service'
 
-const store = useUserStore()
+const router = useRouter()
 const isLoginModal = ref(false)
 const isTransparent = ref(false)
+const isLogin = ref(false)
+const image = ref('')
+const name = ref('')
 
 const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
@@ -77,11 +83,23 @@ const handleScroll = () => {
   if (scrollY > limitHeight) isTransparent.value = true
   if (scrollY < limitHeight) isTransparent.value = false
 }
+
 initFlowbite()
+
+const logout = () => {
+  tokenService.removeUser()
+  isLogin.value = false
+  router.push('/')
+}
 
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
-  store.getLoginStatus()
+  console.log($cookies.get('user'))
+  if ($cookies.isKey('user')) {
+    isLogin.value = true
+    image.value = $cookies.get('user').image
+    name.value = $cookies.get('user').name
+  }
 })
 </script>
 
