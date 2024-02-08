@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeMount, ref } from 'vue'
+import { onMounted, onBeforeMount, ref, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { toast } from 'vue3-toastify'
@@ -45,13 +45,12 @@ onMounted(() => {
       store.image = res.data.image
       if (res.data.first == true) {
         router.push('/signup')
-      } else {
+      } 
+      else {
         store.isLogin = true
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
-        this.$nextTick(() => {
-          router.push('/')
-        })
+        nextTick().then(router.push('/'));
       }
     })
     .catch((err) => {
