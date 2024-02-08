@@ -44,13 +44,15 @@ onMounted(() => {
       store.email = res.data.email
       store.image = res.data.image
       if (res.data.first == true) {
+        alert('회원가입 페이지로 이동합니다.')
         router.push('/signup')
       } 
       else {
         store.isLogin = true;
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
-        alert('로그인 완료').nextTick().then(router.push('/'));
+        alert('로그인 완료')
+        (router.push('/'));
       }
     })
     .catch((err) => {
