@@ -101,7 +101,7 @@ const base64 = (file) => {
   })
 }
 
-const banks = ['KB', '농협', '기업', '카카오뱅크']
+const banks = ['KB', '농협', '기업', '카카오뱅크', '하나', '신한', 'SC제일']
 const bank = ref('')
 const accountNumber = ref('')
 
@@ -118,7 +118,7 @@ const signUp = async () => {
   })
     .then(() => {
       store.isLogin = true
-      toast('회원가입을 완료했습니다')
+      alert('회원가입을 완료했습니다')
       router.push('/')
     })
     .catch((err) => {
