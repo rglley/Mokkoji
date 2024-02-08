@@ -55,11 +55,13 @@ public class OpenviduController {
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
         log.info("jwt 토큰 : {}", jwtUtil.getProvider(req));
+        log.info("jwt 토큰 : {}", jwtUtil.getEmail(req));
 
         
 
         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
+        log.info("user : {}", user.toString());
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
