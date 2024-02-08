@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class PostitTemplate {
 
     @Id
