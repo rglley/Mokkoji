@@ -59,7 +59,8 @@ public class OpenviduController {
 
         
 
-        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
 
         log.info("user : {}", user.toString());
 
