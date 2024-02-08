@@ -294,7 +294,7 @@ import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import { useSessionStore } from '@/stores/meeting'
 import html2canvas from 'html2canvas'
-import axios from 'axios'
+import axiosJwt from '@/services/api'
 import UserList from './UserList.vue'
 import UserVideo from './UserVideo.vue'
 import ChatLog from './ChatLog.vue'
@@ -458,7 +458,7 @@ const showChat = () => {
 
 // ---------------- OpenVidu 관련 ----------------
 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
 
 const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
@@ -575,8 +575,8 @@ const joinSession = () => {
 
 // 세션 생성
 const createSession = async (sessionId) => {
-  const response = await axios.post(
-    VITE_API_URL + VITE_SERVER + '/meetings/sessions',
+  const response = await axiosJwt.post(
+    VITE_SERVER + '/meetings/sessions',
     { customSessionId: sessionId },
     {
       headers: { 'Content-Type': 'application/json' }
@@ -602,8 +602,8 @@ const deleteSession = () => {
 
 // 토큰 생성
 const createToken = async (sessionId) => {
-  const response = await axios.post(
-    VITE_API_URL + VITE_SERVER + '/meetings/sessions/' + sessionId + '/connections',
+  const response = await axiosJwt.post(
+    VITE_SERVER + '/meetings/sessions/' + sessionId + '/connections',
     {
       role: 'MODERATOR'
     },
@@ -676,7 +676,7 @@ const updateMainVideoStreamManager = (stream) => {
 }
 
 onBeforeMount(() => {
-  joinSession()
+  // joinSession()
 
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
