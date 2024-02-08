@@ -7,74 +7,80 @@
       <div v-if="isNotShownTwo" class=""><IconFlowers /></div>
       <div v-if="isShownTwo" class=""><IconFlowersColored /></div>
     </div>
+    <div class="">
+      <div class="ml-64">
+        <a class="mr-10"
+          ><span class="text-[#610091] text-lg highlight-pink" @mouseover="hoverPhotomosaic"
+            >포토 모자이크란?</span
+          ></a
+        >
+        <a class="mr-10"
+          ><span class="text-[#610091] text-lg highlight-green" @mouseover="hoverRollingPaper"
+            >롤링페이퍼란?</span
+          ></a
+        >
+        <a class="mr-10"
+          ><span class="text-[#610091] text-lg highlight-white" @mouseover="hoverBeCareful"
+            >기억 주의사항</span
+          ></a
+        >
+      </div>
+      <div class="ml-48 w-[600px]">
+        <div v-if="isHoveredPhotoMosaic" data-aos="fade-up" data-aos-duration="2000">
+          <div class="flex text-lg">
+            <div class="w-1/4 ml-10">
+              <img src="@/assets/eventlist/photomosaic_ex.png" class="pt-10 w-24 h-40" />
+            </div>
+            <div class="w-3/4 pl-1">
+              <p class="pt-20">여러 장의 사진을 색상에 맞게 배열해</p>
+              <p class="">한 장의 큰 이미지를 표현하는 것입니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="isHoveredRollingPaper" data-aos="fade-up" data-aos-duration="2000">
+          <div class="flex text-lg">
+            <div class="w-1/4 ml-10">
+              <img src="@/assets/eventlist/rollingpaper_ex.png" class="pt-10 w-24 h-40" />
+            </div>
+            <div class="w-3/4 pl-1">
+              <p class="pt-20">참여자가 남긴 텍스트, 영상, 음성 메시지를</p>
+              <p class="">모꼬지 전용 템플릿에서 한 눈에 확인해보세요.</p>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="isHoveredBeCareful" data-aos="fade-up" data-aos-duration="2000">
+          <div class="flex text-lg">
+            <div class="w-1/4 ml-5">
+              <img src="@/assets/eventlist/warning.png" class="pt-10 w-30 h-40" />
+            </div>
+            <div class="w-3/4 pl-1">
+              <p class="pt-20">
+                편집 가능 기간 <strong>(모임 주최일로부터 한 달)</strong>이 지나면
+              </p>
+              <p class="">
+                롤링페이퍼, 포토 모자이크 생성 및 추억 생성이
+                <strong class="text-red-400">불가</strong>합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- 섹션 2/3, 기억: Memory -->
-  <div class="flex">
-    <div class="justify-center h-[500px] mt-10 ml-24 w-[40%]">
+  <div class="">
+    <div class="justify-center mt-10 ml-24 w-[40%]">
       <div class="flex">
         <strong class="text-[40px]">기억 </strong>
         <p class="text-3xl mt-3">: Memory</p>
       </div>
       <p class="pt-2 text-[20px]">편집 버튼으로 롤링페이퍼와 포토모자이크를 만드세요.</p>
-      <p class="pt-2 text-[20px] pb-10">추억 생성을 통해 모꼬지를 추억으로 간직하세요.</p>
+      <p class="pt-2 text-[20px] mb-10">추억 쌓기를 통해 모꼬지를 추억으로 간직하세요.</p>
       <!-- 도움말 -->
-      <a class="mr-4"
-        ><span class="text-[#610091] text-sm highlight-pink" @mouseover="hoverPhotomosaic"
-          >포토 모자이크란?</span
-        ></a
-      >
-      <a class="mr-4"
-        ><span class="text-[#610091] text-sm highlight-green" @mouseover="hoverRollingPaper"
-          >롤링페이퍼란?</span
-        ></a
-      >
-      <a
-        ><span class="text-[#610091] text-sm highlight-white" @mouseover="hoverBeCareful"
-          >기억 주의사항</span
-        ></a
-      >
-      <p />
-
-      <div v-if="isHoveredPhotoMosaic" data-aos="fade-up" data-aos-duration="2000">
-        <div class="flex">
-          <div class="w-1/4 pl-5">
-            <img src="@/assets/eventlist/photomosaic_ex.png" class="pt-10" />
-          </div>
-          <div class="w-3/4 pl-2">
-            <p class="pt-20">여러 장의 사진을 색상에 맞게 배열해</p>
-            <p class="">한 장의 큰 이미지를 표현하는 것입니다.</p>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="isHoveredRollingPaper" data-aos="fade-up" data-aos-duration="2000">
-        <div class="flex">
-          <div class="w-1/4 pl-5">
-            <img src="@/assets/eventlist/rollingpaper_ex.png" class="pt-10 w-24 h-40" />
-          </div>
-          <div class="w-3/4 pl-2">
-            <p class="pt-20">참여자가 남긴 텍스트, 영상, 음성 메시지를</p>
-            <p class="">모꼬지 전용 템플릿에서 한 눈에 확인해보세요.</p>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="isHoveredBeCareful" data-aos="fade-up" data-aos-duration="2000">
-        <div class="flex">
-          <div class="w-1/4 pl-5">
-            <img src="@/assets/eventlist/warning.png" class="pt-10 w-24 h-36" />
-          </div>
-          <div class="w-3/4">
-            <p class="pt-20">편집 가능 기간 <strong>(모임 주최일로부터 한 달)</strong>이 지나면</p>
-            <p class="">
-              롤링페이퍼, 포토 모자이크 생성 및 추억 생성이
-              <strong class="text-red-400">불가</strong>합니다.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="w-2/3 h-[400px] mt-12 mr-5 overflow-scroll" ref="verticalScrollWrap">
+    <div class="h-[400px] overflow-scroll mx-14" ref="verticalScrollWrap">
       <!-- <div class="">
         
         <div class="inline-block"> -->
@@ -99,17 +105,19 @@
         <p class="text-3xl mt-3">: Recollection</p>
       </div>
       <p class="pt-2 text-[20px]">
-        대표 이미지를 클릭하면 완성된 포토 모자이크와 롤링페이퍼를 확인할 수 있어요.
+        대표 이미지를 클릭하면 완성된 롤링페이퍼와 포토 모자이크를 확인할 수 있어요.
       </p>
     </div>
 
-    <div class="h-96 flex justify-center items-center mt-10">
-      <!--추억 컴포넌트-->
-      <RecollectionList
-        v-for="recollection in RecollectionData"
-        :key="recollection.eventId"
-        :recollection="recollection"
-      />
+    <div class="h-96 overflow-scroll mt-10 mx-14" ref="verticalScrollWrap">
+      <div class="whitespace-nowrap flex">
+        <!--추억 컴포넌트-->
+        <RecollectionList
+          v-for="recollection in RecollectionData"
+          :key="recollection.eventId"
+          :recollection="recollection"
+        />
+      </div>
     </div>
   </div>
 
