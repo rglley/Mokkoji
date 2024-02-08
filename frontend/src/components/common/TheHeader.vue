@@ -67,13 +67,13 @@
 import { ref, onBeforeMount } from "vue";
 import { initFlowbite } from "flowbite";
 import { useRouter } from "vue-router";
-// import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 import ModalView from "@/views/ModalView.vue";
 import LoginModal from "@/components/modal/home/LoginModal.vue";
 import tokenService from "@/services/token.service";
 
 const router = useRouter();
-// const store = useUserStore();
+const store = useUserStore();
 const isLoginModal = ref(false);
 const isTransparent = ref(false);
 const image = ref("");
