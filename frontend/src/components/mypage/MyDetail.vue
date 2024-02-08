@@ -9,7 +9,7 @@
       <div class="flex items-center space-x-4">
         <div class="flex-auto w-max m-5">
           <label>
-            <img id="image-profile" src="@/assets/landing/profile_icon.jpg" />
+            <img id="image-profile" :src="image" />
           </label>
           <input
             class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
@@ -28,7 +28,7 @@
               id="input"
               aria-placeholder="은행명"
               required
-              class="border-2 border-slate-200 py-[4px] mx-2 rounded-xl"
+              class="border-2 border-slate-200 py-[4px] mx-2 h-10 w-[12lvh]"
             >
               <option v-for="bank in banks" :key="bank" :value="bank">
                 {{ bank }}
@@ -36,7 +36,7 @@
             </select>
             <input
               id="input"
-              class="w-64"
+              class="w-[48lvh] h-10 rounded-none mx-2"
               placeholder="계좌번호를 입력하세요"
               v-model="accountNumber"
             />
@@ -44,14 +44,14 @@
         </div>
       </div>
       <button
-        class="float-right bg-natural-beige border-2 border-yellow-600 rounded-xl p-2"
+        class="bg-natural-yellow border-2 border-yellow-600 rounded-xl p-2 my-10 relative "
         @click="update"
       >
         정보 수정하기
       </button>
-      <button class="w-fit rounded-xl text-red-400 my-10 p-2" @click="withdraw">
+      <!-- <button class="w-fit rounded-xl text-red-400 my-10 p-2" @click="withdraw">
         회원 탈퇴
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -101,25 +101,25 @@ const base64 = (file) => {
     const reader = new FileReader()
     reader.onload = (e) => {
       resolve(e.target.result)
-      const previewImage = document.getElementById('preview')
+      const previewImage = document.getElementById('image-profile')
       previewImage.src = e.target.result
     }
     reader.readAsDataURL(file)
   })
 }
 
-const withdraw = async () => {
-    try {
-      await axios.delete(import.meta.env.VITE_SERVER + '/users')
-      .then(() => {
-        store.isLogin.value = false;
-        router.push('/')
-      })
-    } catch (err) {
-      alert(err.errorMsg)
-      console.error(err)
-    }
-  }
+// const withdraw = async () => {
+//     try {
+//       await axios.delete(import.meta.env.VITE_SERVER + '/users')
+//       .then(() => {
+//         store.isLogin.value = false;
+//         router.push('/')
+//       })
+//     } catch (err) {
+//       alert(err.errorMsg)
+//       console.error(err)
+//     }
+//   }
 
 
 onBeforeMount(() => {

@@ -15,41 +15,42 @@
 
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
-          <li>
-            <button id="button-header"><a href="/">홈으로</a></button>
-          </li>
-          <!-- <li v-if="!isLogin"> -->
-          <li v-if="!isLogin">
+          <button id="button-header"><a href="/">홈으로</a></button>
+          <li v-if="!(store.isLogin || isLogin)">
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
           <li v-else>
-            <img id="image-profile" :src="image" class="w-10" />
-            <p>{{ name }}님</p>
-            <button
-              id="button-header"
-              data-dropdown-toggle="dropdown"
-              data-dropdown-trigger="click"
-            >
-              내 서비스
-            </button>
-            <div
-              id="dropdown"
-              class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
-            >
-              <ul aria-labelledby="dropdownHoverButton" class="w-50">
-                <li id="li-dropdown">
-                  <router-link to="mypage">마이페이지</router-link>
-                </li>
-                <li id="li-dropdown">
-                  <router-link to="eventlist">내 결과물</router-link>
-                </li>
-                <li id="li-dropdown">
-                  <a @click="logout">로그아웃</a>
-                </li>
-              </ul>
+            <div class="flex flex-row relative justify-center items-center gap-5">
+              <button
+                id="button-header"
+                data-dropdown-toggle="dropdown"
+                data-dropdown-trigger="click"
+              >
+                내 서비스
+              </button>
+              <div class="flex justify-center items-center gap-2 rounded-full mx-2">
+                <img class="overflow-hidden rounded-full w-12 m-0;" :src="image" />
+                <p class="text-black text-lg">{{ name }}님</p>
+              </div>
+              <div
+                id="dropdown"
+                class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
+              >
+                <ul aria-labelledby="dropdownHoverButton" class="w-50">
+                  <li id="li-dropdown">
+                    <router-link to="mypage">마이페이지</router-link>
+                  </li>
+                  <li id="li-dropdown">
+                    <router-link to="eventlist">내 결과물</router-link>
+                  </li>
+                  <li id="li-dropdown">
+                    <a @click="logout">로그아웃</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </li>
         </ul>
@@ -59,19 +60,21 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/home/LoginModal.vue'
 import tokenService from '@/services/token.service'
 
 const router = useRouter()
+const store = useUserStore()
 const isLoginModal = ref(false)
 const isTransparent = ref(false)
-const isLogin = ref(false)
 const image = ref('')
 const name = ref('')
+const isLogin = ref(false)
 
 const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
@@ -88,15 +91,22 @@ initFlowbite()
 
 const logout = () => {
   tokenService.removeUser()
-  isLogin.value = false
+  isLogin.value = false;
+  store.isLogin = false;
   router.push('/')
 }
 
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
-  console.log($cookies.get('user'))
-  if ($cookies.isKey('user')) {
+  if ($cookies.get('user')) {
     isLogin.value = true
+    image.value = $cookies.get('user').image
+    name.value = $cookies.get('user').name
+  }
+})
+
+watch(isLogin, async (newValue, oldValue) => {
+  if (newValue == true && oldValue == false) {
     image.value = $cookies.get('user').image
     name.value = $cookies.get('user').name
   }
