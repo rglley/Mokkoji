@@ -75,7 +75,7 @@ import { ref, onMounted } from 'vue'
 import axios from '@/services/api'
 
 const userData  = ref({})
-
+const num = 0;
 const getUserDetail = () => {
 -    axios.get(import.meta.env.VITE_SERVER + '/users/mypage')
     .then((res) => {
