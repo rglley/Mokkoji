@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.CommonErrorCode;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
+import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserServiceImpl;
@@ -31,7 +33,6 @@ public class OpenviduController {
 
     private final EventService eventService;
     private final JwtUtil jwtUtil;
-    private final UserServiceImpl userServiceImpl;
     private final UserRepository userRepository;
 
 
@@ -105,7 +106,8 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
-        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
         sessionReqDto.setUserId(user.getId());
 //        sessionReqDto.setUserId(1L);
 

@@ -1,3 +1,26 @@
+package online.mokkoji.user.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.user.domain.*;
+import online.mokkoji.user.domain.Record;
+import online.mokkoji.user.dto.request.UserInputReqDto;
+import online.mokkoji.user.dto.response.MyPageResDto;
+import online.mokkoji.user.dto.response.UpdatePageResDto;
+import online.mokkoji.common.auth.jwt.util.JwtUtil;
+import online.mokkoji.common.exception.RestApiException;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
+import online.mokkoji.user.domain.UserAccount;
+import online.mokkoji.user.repository.AccountRepository;
+import online.mokkoji.user.repository.RecordRepository;
+import online.mokkoji.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;

@@ -7,6 +7,7 @@ import online.mokkoji.S3.S3ServiceImpl;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.EventErrorCode;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.dto.response.PhotoResDto;
@@ -14,8 +15,9 @@ import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.service.ResultService;
+import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.service.UserServiceImpl;
+import online.mokkoji.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +34,7 @@ import java.util.Map;
 public class EventController {
 
     private final EventRepository eventRepository;
-    private final UserServiceImpl userServiceImpl;
+    private final UserRepository userRepository;
     private final EventService eventService;
     private final S3ServiceImpl s3Service;
     private final JwtUtil jwtUtil;
@@ -44,7 +46,8 @@ public class EventController {
                                            HttpServletRequest req,
                                            MultipartFile photo) throws IOException {
 
-        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
 
         // 사진 업로드
         Event event = eventRepository.findBySessionId(sessionId)
@@ -66,7 +69,8 @@ public class EventController {
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
                                                   @RequestPart("writerAndText") MessageReqDto messageReqDto) throws IOException {
 
-        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
         Event event = eventRepository.findBySessionId(sessionId)
                 .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
         Long paperId = event.getResult().getRollingpaper().getId();
