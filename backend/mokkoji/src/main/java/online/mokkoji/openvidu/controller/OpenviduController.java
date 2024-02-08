@@ -53,6 +53,11 @@ public class OpenviduController {
     public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params,
                                               HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
+
+        log.info("jwt 토큰 : {}", jwtUtil.getProvider(req));
+
+        
+
         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
 
