@@ -61,6 +61,9 @@ public class ResultController {
     public ResponseEntity<Map<String, Object>> addRecollection(@PathVariable Long resultId, HttpServletRequest req) {
         resultService.createRecollection(resultId);
 
+        // S3에서 대표이미지 제외 사진 삭제
+        s3Service.deletePhotos(resultId);
+
         String provider = jwtUtil.getProvider(req);
         String email = jwtUtil.getEmail(req);
 
@@ -92,14 +95,14 @@ public class ResultController {
     // 사진첩 사진 추가
     @PostMapping("/{resultId}/memories/photos")
     public ResponseEntity<String> addPhotos(@PathVariable("resultId") Long resultId,
-//                                           HttpServletRequest req,
+                                           HttpServletRequest req,
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
-//        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+
 
         // 사진 업로드
-//        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
-        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, 1L, resultId);
+        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
 
         // db에 저장
         resultService.createPhotoList(photoResDtoList);

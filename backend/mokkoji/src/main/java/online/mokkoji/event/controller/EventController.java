@@ -12,6 +12,7 @@ import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
+import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
@@ -49,8 +50,8 @@ public class EventController {
         // 사진 업로드
         Event event = eventRepository.findBySessionId(sessionId)
                 .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
-        Long resultId = event.getResult().getId();
-        PhotoResDto photoResDto = s3Service.uploadOnePhoto(photo, user.getId(), resultId);
+        Result result = event.getResult();
+        PhotoResDto photoResDto = s3Service.uploadOnePhoto(photo, user.getId(), result);
 
         // db에 저장
         resultService.createPhoto(photoResDto);

@@ -133,7 +133,8 @@ public class ResultServiceImpl implements ResultService {
     // 사진 db 저장
     @Override
     public void createPhoto(PhotoResDto photoResDto) {
-        Photo photo = Photo.builder().resultId(photoResDto.getResultId()).photoPath(photoResDto.getPhotoPath()).build();
+
+        Photo photo = Photo.builder().result(photoResDto.getResult()).photoPath(photoResDto.getPhotoPath()).build();
         photoRepository.save(photo);
     }
 
