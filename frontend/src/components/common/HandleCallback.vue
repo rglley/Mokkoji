@@ -30,7 +30,11 @@ onMounted(() => {
   axios({
     method: 'GET',
     // url: "localhost:8080/api/vping"
-    url: import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER  + '/oauth2/naver/' + naverquerycode.value,
+    url:
+      import.meta.env.VITE_API_URL +
+      import.meta.env.VITE_SERVER +
+      '/oauth2/naver/' +
+      naverquerycode.value
   })
     .then((res) => {
       const token = res.headers['authorization']
@@ -45,8 +49,9 @@ onMounted(() => {
         store.isLogin = true
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
-        alert('로그인이 완료!')
-        router.push('/')
+        this.$nextTick(() => {
+          router.push('/')
+        })
       }
     })
     .catch((err) => {

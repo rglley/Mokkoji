@@ -16,7 +16,7 @@
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <button id="button-header"><a href="/">홈으로</a></button>
-          <li v-if="!(!store.isLogin&&!isLogin)">
+          <li v-if="!(store.isLogin||isLogin)">
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView
               v-if="isLoginModal"
