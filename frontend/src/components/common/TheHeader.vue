@@ -115,7 +115,8 @@ watch(isLogin, async (newValue, oldValue) => {
 
 <style>
 .transparent-header {
-  @apply opacity-0 transition-opacity duration-500;
+  @apply opacity-0 transition-opacity duration-500 z-10; 
+  pointer-events: none;
 }
 
 li {

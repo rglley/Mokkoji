@@ -50,7 +50,7 @@ onMounted(() => {
         store.isLogin = true;
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
-        alert('로그인 완료').nextTick().then(router.push('/'));
+        alert('로그인 완료').then(router.push('/'));
       }
     })
     .catch((err) => {
