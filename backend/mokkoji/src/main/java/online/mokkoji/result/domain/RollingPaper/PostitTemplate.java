@@ -2,6 +2,7 @@ package online.mokkoji.result.domain.RollingPaper;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
