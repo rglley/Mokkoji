@@ -32,9 +32,9 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico",
                                         "/h2-console/**").permitAll()
-                                .requestMatchers("/signup", "/oauth2/**", "/api/v1/**").permitAll()
-                                .anyRequest().permitAll()
-                );
+                                .requestMatchers("/signup", "/oauth2/**", "/api/v1/**", "/error").permitAll()
+                                .anyRequest().authenticated()
+                )
 
 //                .addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 //                .addFilterBefore(jwtExceptionFilter, JwtAuthFilter.class);

@@ -14,7 +14,7 @@ spring:
           naver:
             client-id: Y_veSn1KXI8bYwTv29AA
             client-secret: ${JWT_SECRET_NAVER}
-            redirect-uri: "http://localhost:5173/oauth2/login"
+            redirect-uri: "http://mokkoji.online/oauth2/login"
             client-authentication-method: client_secret_basic
             authorization-grant-type: authorization_code
             scope: name, email, profile_image
