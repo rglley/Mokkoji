@@ -54,6 +54,8 @@ public class EventServiceImpl implements EventService {
         User user = userRepository.findById(sessionDto.getUserId())
                 .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
 
+        log.info("service user : {}", user.toString());
+
         // Event 객체 생성
         Event event = Event.createSession()
                 .user(user)
