@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axiosJwt from '@/services/api'
 import axios from 'axios'
 
+const { VITE_API_URL_LOCAL } = import.meta.env
 const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
@@ -17,7 +19,9 @@ export const useSessionStore = defineStore('session', () => {
 
   const findSession = async (sessionId) => {
     try {
-      const res = await axios.get(VITE_API_URL + VITE_SERVER + `/meetings/sessions/${sessionId}`)
+      const res = await axios.get(
+        VITE_API_URL_LOCAL + VITE_SERVER + `/meetings/sessions/${sessionId}`
+      )
       if (res.data.sessionId !== undefined) {
         sessionStorage.setItem('sessionId', res.data.sessionId)
         sessionStorage.setItem('isHost', false)
@@ -32,7 +36,7 @@ export const useSessionStore = defineStore('session', () => {
 
   const deleteSession = async (sessionId) => {
     try {
-      const res = await axios.delete(VITE_API_URL + VITE_SERVER + `/meetings/sessions/${sessionId}`)
+      const res = await axiosJwt.delete(VITE_SERVER + `/meetings/sessions/${sessionId}`)
     } catch (error) {
       console.error(error)
     }
@@ -68,8 +72,8 @@ export const useLetterStore = defineStore('letter', () => {
 
     try {
       // axios를 사용하여 POST 요청 보내기
-      const response = await axios.post(
-        'http://localhost:8080/api/v1/events/rollingpapers/ses_E7EEm5DZxe',
+      const response = await axiosJwt.post(
+        VITE_SERVER + `/events/rollingpapers/ses_E7EEm5DZxe`,
         formData,
         {
           // 필수: FormData를 사용할 때는 이 헤더를 설정해야 함
