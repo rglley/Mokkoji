@@ -98,7 +98,7 @@ const logout = () => {
 
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
-  if ($cookies.get('user')) {
+  if ($cookies.get('user')!= null) {
     isLogin.value = true
     image.value = $cookies.get('user').image
     name.value = $cookies.get('user').name
