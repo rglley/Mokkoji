@@ -16,13 +16,9 @@
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <button id="button-header"><a href="/">홈으로</a></button>
-          <li v-if="!(store.isLogin && isLogin)">
+          <li v-if="!(store.isLogin || isLogin)">
             <button id="button-header" @click="showLoginModal">로그인</button>
-            <ModalView
-              v-if="isLoginModal"
-              :show-modal="isLoginModal"
-              @close-modal="showLoginModal"
-            >
+            <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
@@ -64,49 +60,55 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from "vue";
-import { initFlowbite } from "flowbite";
-import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
-import ModalView from "@/views/ModalView.vue";
-import LoginModal from "@/components/modal/home/LoginModal.vue";
-import tokenService from "@/services/token.service";
+import { ref, onBeforeMount, watch } from 'vue'
+import { initFlowbite } from 'flowbite'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+import ModalView from '@/views/ModalView.vue'
+import LoginModal from '@/components/modal/home/LoginModal.vue'
+import tokenService from '@/services/token.service'
 
-const router = useRouter();
-const store = useUserStore();
-const isLoginModal = ref(false);
-const isTransparent = ref(false);
-const image = ref("");
-const name = ref("");
+const router = useRouter()
+const store = useUserStore()
+const isLoginModal = ref(false)
+const isTransparent = ref(false)
+const image = ref('')
+const name = ref('')
 const isLogin = ref(false)
 
 const showLoginModal = () => {
-  isLoginModal.value = !isLoginModal.value;
-};
+  isLoginModal.value = !isLoginModal.value
+}
 
-const limitHeight = 200;
+const limitHeight = 200
 
 const handleScroll = () => {
-  if (scrollY > limitHeight) isTransparent.value = true;
-  if (scrollY < limitHeight) isTransparent.value = false;
-};
+  if (scrollY > limitHeight) isTransparent.value = true
+  if (scrollY < limitHeight) isTransparent.value = false
+}
 
-initFlowbite();
+initFlowbite()
 
 const logout = () => {
-  tokenService.removeUser();
-  router.push("/");
-};
+  tokenService.removeUser()
+  router.push('/')
+}
 
 onBeforeMount(() => {
-  window.addEventListener("scroll", handleScroll);
-  if ($cookies.isKey("user")) {
-    isLogin.value = true;
-    image.value = $cookies.get("user").image;
-    name.value = $cookies.get("user").name;
+  window.addEventListener('scroll', handleScroll)
+  if ($cookies.isKey('user')) {
+    isLogin.value = true
+    image.value = $cookies.get('user').image
+    name.value = $cookies.get('user').name
   }
-});
+})
 
+watch(isLogin, async (newValue, oldValue) => {
+  if (newValue == true && oldValue == false) {
+    image.value = $cookies.get('user').image
+    name.value = $cookies.get('user').name
+  }
+})
 </script>
 
 <style>
