@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.S3.S3ServiceImpl;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
+import online.mokkoji.common.exception.RestApiException;
+import online.mokkoji.common.exception.errorCode.EventErrorCode;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.dto.response.PhotoResDto;
@@ -12,8 +15,10 @@ import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.service.ResultService;
+import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.service.UserServiceImpl;
+import online.mokkoji.user.repository.UserRepository;
+import online.mokkoji.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +35,7 @@ import java.util.Map;
 public class EventController {
 
     private final EventRepository eventRepository;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private final EventService eventService;
     private final S3ServiceImpl s3Service;
     private final JwtUtil jwtUtil;
@@ -42,18 +47,14 @@ public class EventController {
                                            HttpServletRequest req,
                                            MultipartFile photo) throws IOException {
 
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
-        User user = userServiceImpl.getByProviderAndEmail(provider, email);
-
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
         // 사진 업로드
-        Event event = eventRepository.findBySessionId(sessionId);
+        Event event = eventRepository.findBySessionId(sessionId)
+                .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
         Long resultId = event.getResult().getId();
-        String url = s3Service.uploadImage(photo, user.getId(), resultId);
+        PhotoResDto photoResDto = s3Service.uploadOnePhoto(photo, user.getId(), resultId);
 
-        log.info("url : {}", url);
-
-        PhotoResDto photoResDto = new PhotoResDto(resultId, url);
+        // db에 저장
         resultService.createPhoto(photoResDto);
 
         return new ResponseEntity<>("사진 업로드 완료", HttpStatus.OK);
@@ -63,16 +64,14 @@ public class EventController {
     @PostMapping("/rollingpapers/{sessionId}")
     public ResponseEntity<String> addRollingpaper(@PathVariable("sessionId") String sessionId,
                                                   HttpServletRequest req,
-                                                  @RequestPart(value = "voice", required = false) MultipartFile voice,
+                                                  @RequestPart(value = "audio", required = false) MultipartFile voice,
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
                                                   @RequestPart("writerAndText") MessageReqDto messageReqDto) throws IOException {
 
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
-        User user = userServiceImpl.getByProviderAndEmail(provider, email);
-
-        Event event = eventRepository.findBySessionId(sessionId);
+        Event event = eventRepository.findBySessionId(sessionId)
+                .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
         Long paperId = event.getResult().getRollingpaper().getId();
 
         messageReqDto.setVoice(voice);
@@ -80,7 +79,6 @@ public class EventController {
 
         // 파일들 유효성 검사 후 map에 담음
         Map<String, MultipartFile> fileMap = eventService.createRollingpaperFileMap(messageReqDto);
-
 
         // 유효성 검사 후 파일 S3에 업로드
         Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, user.getId(), paperId);

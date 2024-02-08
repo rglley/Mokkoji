@@ -8,12 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.CommonErrorCode;
+import online.mokkoji.common.exception.errorCode.UserErrorCode;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
-import online.mokkoji.result.service.ResultService;
+import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
-import online.mokkoji.user.service.UserServiceImpl;
+import online.mokkoji.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class OpenviduController {
 
     private final EventService eventService;
     private final JwtUtil jwtUtil;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
 
     @Value("${openvidu.url}")
@@ -54,11 +55,16 @@ public class OpenviduController {
                                               HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
-         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        log.info("jwt 토큰 : {}", jwtUtil.getProvider(req));
+        log.info("jwt 토큰 : {}", jwtUtil.getEmail(req));
+
+        
+
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        log.info("user : {}", user.toString());
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
-
 
         //세션 생성
         Session session = openvidu.createSession(properties);
@@ -82,7 +88,6 @@ public class OpenviduController {
         List<Session> activeSessions = openvidu.getActiveSessions();
         for (Session session : activeSessions) {
             if (session.getSessionId().equals(sessionId)) {
-
                 return new ResponseEntity<>(session, HttpStatus.OK);
             }
         }
@@ -99,8 +104,10 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
-        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+
         sessionReqDto.setUserId(user.getId());
+//        sessionReqDto.setUserId(1L);
 
         Session activeSession = openvidu.getActiveSession(sessionId);
         eventService.deleteSession(sessionId, sessionReqDto);
