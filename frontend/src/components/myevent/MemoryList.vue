@@ -33,7 +33,7 @@
         </p>
         <div class="flex justify-center items-center pb-3">
         <button class= "bg-[#f5eefc] mr-5 rounded-2xl h-8 w-20 mt-2  hover:bg-[#e7cffe]" @click="showWarningModal">
-          추억생성
+          추억쌓기
           </button>
          <router-link to="/editpage"><button class="text-md  bg-[#fff8c6]  mr-3 rounded-2xl h-8 w-20 mt-2 hover:bg-[#fff396]"  >
           편집
@@ -82,9 +82,9 @@
         <p class="text-center mt-8">
           편집 가능 기간이 <strong> {{ lastDayToEdit.editablePeriod }}일 </strong> 남았어요
         </p>
-        <div class="flex justify-center items-center">
+        <div v-if="isOpenInputModal" class="flex justify-center items-center">
           <button class= "bg-[#f5eefc] mr-5 rounded-2xl h-8 w-20 mt-2  hover:bg-[#e7cffe]">
-          추억생성
+          추억쌓기
           </button>
           <button class="text-md  bg-[#fff8c6]  mr-3 rounded-2xl h-8 w-20 mt-2 hover:bg-[#fff396]">
           편집
@@ -94,21 +94,21 @@
     </div>
         </div>
         <div>
-          <p class="absolute flex text-3xl top-[150px] right-[540px]"><IconWarning /> 주의</p>
+          <p class="absolute flex text-3xl top-[150px] right-[545px]"><IconWarning /> 주의</p>
           <p class="absolute text-2xl top-[200px] right-[530px]">추억이 되면</p>
-          <p class="absolute text-2xl top-[240px] right-[480px]">결과물 편집이 어려워요</p>
+          <p class="absolute text-2xl top-[240px] right-[470px]">결과물 편집이 어려워요.</p>
           <p class="absolute text-2xl top-[280px] right-[480px]">충분히 확인하셨나요?</p>
         </div>
         <div>
           <button
             @click="showInputModal"
-            class="text-white rounded-2xl mr-5 bg-green-300 hover:bg-green-400 h-8 w-12 absolute top-[330px] left-[150px]"
+            class="text-white rounded-2xl mr-5 bg-green-300 hover:bg-green-400 h-8 w-14 absolute top-[330px] left-[150px]"
           >
-            네!
+            네
           </button>
           <button
             @click="showWarningModal"
-            class="text-white h-8 w-12 rounded-2xl mr-5 bg-red-300 hover:bg-red-400 absolute top-[330px] left-[230px]"
+            class="text-white h-8 w-14 rounded-2xl mr-5 bg-red-300 hover:bg-red-400 absolute top-[330px] left-[230px]"
           >
             아니요
           </button>
@@ -123,18 +123,18 @@
   >
     <div v-if="isOpenInputModal" class="">
       <div class="bg-violet-50 fixed top-[100px] w-[600px] h-[500px] rounded-lg custom-background">
-        <p class="absolute top-[20px] text-3xl left-[110px] font-bold effect-yellow">행사 정보를 추가로 입력해주세요</p>
+        <p class="absolute top-[20px] text-3xl left-[130px] font-bold effect-yellow">행사 정보를 추가로 입력하세요</p>
         <button class="absolute top-[10px] text-3xl right-1" @click="showInputModal"><IconClosePurple/></button>
         <p class="absolute top-[60px] text-xl left-[150px] text-gray-500">
           입력하신 내용은 추억 카드에 기록됩니다.
         </p>
         <p class="absolute top-[120px] left-[30px]"><IconSingleFlower/></p>
         <p class="absolute top-[115px] text-2xl left-[50px] effect-purple">행사명</p>
-        <input type="text" @input="inputHandlerName" :disabled="isDisabledName" maxlength = "15" placeholder="ex. 결혼식" class="bg-white absolute top-[100px] text-2xl left-[150px] rounded-lg w-[350px] border-violet-300  border-2 border-solid placeholder: text-center focus:border-black" ></input>
+        <input type="text" @input="inputHandlerName" :disabled="isDisabledName" maxlength = "15" placeholder="ex. 결혼식" class="text-center bg-white placeholder:text-2xl absolute top-[100px] text-2xl left-[150px] rounded-lg w-[350px] border-violet-300  border-2 border-solid placeholder:text-center focus:border-black" ></input>
         <p class="absolute top-[195px] left-[30px]"><IconSingleFlower/></p>
         <p class="absolute top-[190px] text-2xl left-[50px] effect-purple">행사설명</p>
         <textarea @input="inputHandlerContent" :disabled="isDisabledContent" placeholder="ex. 검은 머리 파뿌리 될때까지... &#13;ex. Will you marry me? 가장 많이 웃은 날" maxlength = "99" class="resize-none bg-white absolute top-[190px] text-2xl left-[160px] rounded-lg w-[350px] h-[200px] focus:border-black border-violet-300  border-2 border-solid placeholder: text-center"></textarea>
-        <button @click="showInputModal" class="absolute top-[415px] text-lg left-[160px] border-violet-300 border-2 border-solid rounded-lg px-4 py-2 w-[350px]  hover:bg-[#e7cffe] ">입력 완료 및 추억 생성</button>
+        <button @click="showInputModal" class="absolute top-[415px] text-lg left-[160px] border-violet-300 border-2 border-solid rounded-lg px-4 py-2 w-[350px]  hover:bg-[#e7cffe] ">입력 완료 및 추억 쌓기</button>
       </div>
     </div>
   </transition>

@@ -1,6 +1,6 @@
 <template>
   <svg
-    height="1.1em"
+    height="1.5em"
     version="1.1"
     id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
     <g id="SVGRepo_iconCarrier">
-      <circle style="fill: #c968fd" cx="254" cy="254" r="254"></circle>
+      <circle style="fill: none" cx="254" cy="254" r="254"></circle>
       <path
         style="fill: #ffffff"
         d="M424.1,336.3L270.2,64c-7.1-12.6-25.2-12.6-32.3,0l-154,272.3c-7,12.4,1.9,27.7,16.2,27.7H408 C422.2,364,431.1,348.7,424.1,336.3z"
@@ -30,6 +30,7 @@
 </template>
 <style scoped>
 svg {
-  padding-right: 4px;
+  padding-right: 1px;
+  padding-bottom: 4px;
 }
 </style>

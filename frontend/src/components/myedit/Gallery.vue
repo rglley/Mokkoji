@@ -1,44 +1,12 @@
 <template>
   <div class="flex mt-10 ml-10">
-    <div class="w-[55%]">
-      <div class="flex justify-end items-end">
-        <button
-          class="opacity-70 text-lg mr-5 border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
-          @click="showPhotoUploadModal"
-        >
-          <IconPhotoAdd /> 사진 여러 장 추가
-        </button>
-        <button
-          class="opacity-70 text-lg border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
-          @click="showCutPhotoUploadModal"
-        >
-          <IconCrop /> 자르기 + 사진 추가
-        </button>
-        <button class="mb-6 ml-3" @click="callScrollToHelp">
-          <IconQuestionMarkBlue />
-        </button>
+    <div class="w-[20vw] pt-[5vh]">
+      <div class="flex justify-center items-center text-[25px]">
+        <p class="flex ml-3">선택한 사진 <IconCheckBlue /></p>
       </div>
-      <div class="ml-4 h-[808px] border-2 rounded-lg border-[#5da2bd]">
-        <div ref="scrollContainer" class="custom-scroll-container">
-          <div ref="scrollComponent" class="custom-scroll-content">
-            <ul class="photo-grid">
-              <li v-for="(photo, index) in photos" :key="index" @click="selectedPhoto(photo)">
-                <img :src="`${photo}`" />
-              </li>
-            </ul>
-          </div>
-          <div v-if="isPreviewOpen" class="photo-preview-modal" @click="closePhotoPreview">
-            <img :src="previewPhoto" class="preview-image" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-[5%]"></div>
-    <div class="w-[35%] pt-[100px] h-[900px]">
-      <div class="flex justify-center items-center text-[40px]">
-        <p class="flex">선택한 사진 <IconCheckBlue /></p>
-      </div>
-      <div class="flex justify-center items-center mt-5 mx-12 border-[10px] border-[#9f46c8]">
+      <div
+        class="flex justify-center items-center w-[14vw] h-[14vw] mt-5 mx-12 border-[10px] border-[#9f46c8]"
+      >
         <img
           :src="selectedImage"
           alt="Selected Image"
@@ -67,21 +35,55 @@
         </div> -->
 
         <div
-          class="mt-10 opacity-70 border-[3px] rounded-lg h-16 w-[340px] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[3vw] w-[16vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('대표이미지')"
         >
-          <p class="text-[30px] justify-center flex text-center">
+          <p class="text-r-md justify-center flex text-center">
             대표이미지 설정하기 <IconMainPhoto />
           </p>
         </div>
 
         <div
-          class="mt-10 opacity-70 border-[3px] rounded-lg h-16 w-[340px] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[3vw] w-[16vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('포토모자이크')"
         >
-          <p class="text-[30px] justify-center flex text-center">
+          <p class="text-r-md justify-center flex text-center">
             포토모자이크 생성하기 <IconMosaic />
           </p>
+        </div>
+      </div>
+    </div>
+    <div class="w-[5%]"></div>
+    <div class="w-[40vw]">
+      <div class="flex justify-end items-end">
+        <button
+          class="opacity-70 text-sm mr-5 border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
+          @click="showPhotoUploadModal"
+        >
+          <IconPhotoAdd /> 사진 여러 장 추가
+        </button>
+        <button
+          class="opacity-70 text-sm border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
+          @click="showCutPhotoUploadModal"
+        >
+          <IconCrop /> 자르기 + 사진 추가
+        </button>
+        <button class="mb-6 ml-3" @click="callScrollToHelp">
+          <IconQuestionMarkBlue />
+        </button>
+      </div>
+      <div class="ml-4 h-[30vw] w-[40vw] border-2 rounded-lg border-[#5da2bd]">
+        <div ref="scrollContainer" class="custom-scroll-container">
+          <div ref="scrollComponent" class="custom-scroll-content">
+            <ul class="photo-grid">
+              <li v-for="(photo, index) in photos" :key="index" @click="selectedPhoto(photo)">
+                <img :src="`${photo}`" />
+              </li>
+            </ul>
+          </div>
+          <div v-if="isPreviewOpen" class="photo-preview-modal" @click="closePhotoPreview">
+            <img :src="previewPhoto" class="preview-image" />
+          </div>
         </div>
       </div>
     </div>
@@ -255,7 +257,7 @@ onUnmounted(() => {
 
 .custom-scroll-container {
   overflow-y: scroll;
-  height: 800px;
+  height: 30vw;
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: rgb(255, 255, 255) rgb(190, 212, 244); /* For Firefox */
 }
