@@ -157,4 +157,14 @@ public class UserServiceImpl implements UserService{
         User deleteUser = findUser.get();
         userRepository.delete(deleteUser);
     }
+
+    @Override
+    public User getByProviderAndEmail(String provider, String email) {
+        log.info("회원 조회(provider, email) : {}, {}", provider, email);
+
+
+        return userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
+                .orElseThrow(()->new RestApiException(UserErrorCode.USER_NOT_FOUND));
+    }
+
 }

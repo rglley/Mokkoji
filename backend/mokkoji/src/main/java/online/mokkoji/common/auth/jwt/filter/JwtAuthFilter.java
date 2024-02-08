@@ -28,108 +28,108 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-   private static final String MAIN_URL = "/";
-   private static final String JOIN_URL = "/signup";
-   private static final String LOGIN_URL = "/oauth2";
-   private static final String TEST_URL = "/api/v1";
+    private static final String MAIN_URL = "/";
+    private static final String JOIN_URL = "/signup";
+    private static final String LOGIN_URL = "/oauth2";
+    private static final String TEST_URL = "/api/v1";
 
 
 
-   private final JwtUtil jwtUtil;
-   private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
-   private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-   @Override
-   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-           throws ServletException, IOException {
-       if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
-               request.getRequestURI().startsWith(LOGIN_URL)|| request.getRequestURI().startsWith(TEST_URL)){
-           filterChain.doFilter(request, response);
-           return;
-       }
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        if (request.getRequestURI().equals(JOIN_URL) || request.getRequestURI().equals(MAIN_URL) ||
+                request.getRequestURI().startsWith(LOGIN_URL)|| request.getRequestURI().startsWith(TEST_URL)){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-       String refreshToken = jwtUtil.extractRefreshToken(request)
-               .filter(jwtUtil::isTokenValid)
-               .orElse(null);
+        String refreshToken = jwtUtil.extractRefreshToken(request)
+                .filter(jwtUtil::isTokenValid)
+                .orElse(null);
 
-       if (refreshToken != null) {
-           checkAndUpdateToken(response, refreshToken);
-           filterChain.doFilter(request, response);
-           return;
-       }
+        if (refreshToken != null) {
+            checkAndUpdateToken(response, refreshToken);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-       if (refreshToken == null) {
-           checkValidity(request);
-           filterChain.doFilter(request, response);
-       }
-   }
+        if (refreshToken == null) {
+            checkValidity(request);
+            filterChain.doFilter(request, response);
+        }
+    }
 
-   public void checkAndUpdateToken(HttpServletResponse response, String refreshToken) {
+    public void checkAndUpdateToken(HttpServletResponse response, String refreshToken) {
 
-       Optional<User> findUser = userRepository.findByRefreshToken(refreshToken);
+        Optional<User> findUser = userRepository.findByRefreshToken(refreshToken);
 
-       if (findUser.isEmpty()) {
-           throw new JwtException("RefreshToken is not valid");
-       }
+        if (findUser.isEmpty()) {
+            throw new JwtException("RefreshToken is not valid");
+        }
 
-       User loginUser = findUser.get();
-       String newRefreshToken = jwtUtil.createRefreshToken();
-       loginUser.updateRefreshToken(newRefreshToken);
-       userRepository.saveAndFlush(loginUser);
+        User loginUser = findUser.get();
+        String newRefreshToken = jwtUtil.createRefreshToken();
+        loginUser.updateRefreshToken(newRefreshToken);
+        userRepository.saveAndFlush(loginUser);
 
-       String newAccessToken = jwtUtil.createAccessToken(loginUser.getProvider().getKey(), loginUser.getEmail());
+        String newAccessToken = jwtUtil.createAccessToken(loginUser.getProvider().getKey(), loginUser.getEmail());
 
-       jwtUtil.sendAccessAndRefreshToken(response, newAccessToken, newRefreshToken);
-   }
+        jwtUtil.sendAccessAndRefreshToken(response, newAccessToken, newRefreshToken);
+    }
 
 
-   public void checkValidity(HttpServletRequest req) throws ServletException, IOException {
+    public void checkValidity(HttpServletRequest req) throws ServletException, IOException {
 
-       Optional<String> extractAccessToken = jwtUtil.extractAccessToken(req);
+        Optional<String> extractAccessToken = jwtUtil.extractAccessToken(req);
 
-       if (extractAccessToken.isEmpty()) {
-           throw new JwtException("헤더에서 AccessToken을 찾을 수 없습니다.");
-       }
+        if (extractAccessToken.isEmpty()) {
+            throw new JwtException("헤더에서 AccessToken을 찾을 수 없습니다.");
+        }
 
-       String accessToken = extractAccessToken.get();
-       Optional<String> extractProvider = jwtUtil.extractProvider(accessToken);
-       Optional<String> extractEmail = jwtUtil.extractEmail(accessToken);
+        String accessToken = extractAccessToken.get();
+        Optional<String> extractProvider = jwtUtil.extractProvider(accessToken);
+        Optional<String> extractEmail = jwtUtil.extractEmail(accessToken);
 
-       if (extractEmail.isEmpty() || extractProvider.isEmpty()) {
-           throw new JwtException("AccessToken claim이 올바르지 않습니다");
-       }
+        if (extractEmail.isEmpty() || extractProvider.isEmpty()) {
+            throw new JwtException("AccessToken claim이 올바르지 않습니다");
+        }
 
-       String provider = extractProvider.get();
-       String email = extractEmail.get();
+        String provider = extractProvider.get();
+        String email = extractEmail.get();
 
-       Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
-       if (findUser.isEmpty()) {
-           throw new JwtException("존재하지 않는 회원의 토큰입니다");
-       }
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email);
+        if (findUser.isEmpty()) {
+            throw new JwtException("존재하지 않는 회원의 토큰입니다");
+        }
 
-       User varifyUSer = findUser.get();
-       AuthUserDto authUser = AuthUserDto.builder()
-               .userNo(varifyUSer.getId())
-               .provider(varifyUSer.getProvider().getKey())
-               .email(varifyUSer.getEmail())
-               .role(varifyUSer.getAuthority().getKey())
-               .build();
+        User varifyUSer = findUser.get();
+        AuthUserDto authUser = AuthUserDto.builder()
+                .userNo(varifyUSer.getId())
+                .provider(varifyUSer.getProvider().getKey())
+                .email(varifyUSer.getEmail())
+                .role(varifyUSer.getAuthority().getKey())
+                .build();
 
-       saveAuthentication(authUser);
-   }
+        saveAuthentication(authUser);
+    }
 
-   public void saveAuthentication(AuthUserDto user) {
-       UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
-               .username(user.getEmail())
-               .password(user.getProvider())
-               .roles(user.getRole())
-               .build();
+    public void saveAuthentication(AuthUserDto user) {
+        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getProvider())
+                .roles(user.getRole())
+                .build();
 
-       Authentication authentication =
-               new UsernamePasswordAuthenticationToken(userDetailsUser, user.getProvider(),
-                       authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetailsUser, user.getProvider(),
+                        authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
-       SecurityContextHolder.getContext().setAuthentication(authentication);
-   }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 }

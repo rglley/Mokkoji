@@ -14,7 +14,7 @@ import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
-import online.mokkoji.user.service.UserServiceImpl;
+import online.mokkoji.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class OpenviduController {
 
     private final EventService eventService;
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
 
     @Value("${openvidu.url}")
@@ -60,9 +60,7 @@ public class OpenviduController {
 
         
 
-        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
-                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
-
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
         log.info("user : {}", user.toString());
 
         // request body 객체로 직렬화
@@ -106,8 +104,8 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
-        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
-                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+
         sessionReqDto.setUserId(user.getId());
 //        sessionReqDto.setUserId(1L);
 

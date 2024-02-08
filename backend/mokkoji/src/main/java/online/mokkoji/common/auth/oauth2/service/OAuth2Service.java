@@ -17,3 +17,4 @@ public interface OAuth2Service {
     Map<String, Object> getNaverUserInfo(String accessToken) throws Exception;
 
 }
+

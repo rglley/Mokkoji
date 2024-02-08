@@ -18,6 +18,7 @@ import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
+import online.mokkoji.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ import java.util.Map;
 public class EventController {
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final EventService eventService;
     private final S3ServiceImpl s3Service;
     private final JwtUtil jwtUtil;
@@ -46,9 +47,7 @@ public class EventController {
                                            HttpServletRequest req,
                                            MultipartFile photo) throws IOException {
 
-        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
-                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
-
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
         // 사진 업로드
         Event event = eventRepository.findBySessionId(sessionId)
                 .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
@@ -69,8 +68,8 @@ public class EventController {
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
                                                   @RequestPart("writerAndText") MessageReqDto messageReqDto) throws IOException {
 
-        User user = userRepository.findByProviderAndEmail(Provider.valueOf(jwtUtil.getProvider(req)), jwtUtil.getEmail(req))
-                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
+        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+
         Event event = eventRepository.findBySessionId(sessionId)
                 .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
         Long paperId = event.getResult().getRollingpaper().getId();
