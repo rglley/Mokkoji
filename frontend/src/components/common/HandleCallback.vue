@@ -47,7 +47,7 @@ onMounted(() => {
         router.push('/signup')
       } 
       else {
-        this.set(store, 'isLogin', true)
+        store.isLogin = true;
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
         nextTick().then(router.push('/'));
