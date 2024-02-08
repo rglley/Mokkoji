@@ -1,19 +1,14 @@
 package online.mokkoji.S3;
 
-import online.mokkoji.event.dto.response.PhotoResDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public interface S3Service {
 
     // 사진 업로드
-    PhotoResDto uploadOnePhoto(MultipartFile multipartFile, Long userId, Long resultId) throws IOException;
-
-    // 사진 여러개 업로드
-    List<PhotoResDto> uploadPhotoList(List<MultipartFile> photoList, Long userId, Long resultId);
+    String uploadImage(MultipartFile multipartFile, Long userId, Long resultId) throws IOException;
 
     // 롤링페이퍼 업로드
     Map<String, String> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long resultId) throws IOException;

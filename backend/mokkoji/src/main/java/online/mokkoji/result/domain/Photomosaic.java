@@ -10,8 +10,7 @@ import lombok.Getter;
 public class Photomosaic {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "photomosaic_id")
+    @GeneratedValue
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -20,6 +19,6 @@ public class Photomosaic {
 
     @Column(nullable = false, length = 100)
     @Size(max = 100)
-    private String path;
+    private String url;
 }
 

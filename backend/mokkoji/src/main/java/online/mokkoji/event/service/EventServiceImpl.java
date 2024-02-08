@@ -12,7 +12,9 @@ import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.event.repository.EventRepository;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.result.domain.Result;
-import online.mokkoji.result.domain.RollingPaper.*;
+import online.mokkoji.result.domain.RollingPaper.BackgroundTemplate;
+import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
+import online.mokkoji.result.domain.RollingPaper.RollingPaper;
 import online.mokkoji.result.repository.BackgroundTemplateRepository;
 import online.mokkoji.result.repository.PostitTemplateRepository;
 import online.mokkoji.result.repository.ResultRepository;
@@ -22,14 +24,8 @@ import online.mokkoji.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 @Slf4j
 @Service
@@ -51,10 +47,9 @@ public class EventServiceImpl implements EventService {
     public String createSession(SessionReqDto sessionDto) {
 
         //User 객체 가져오기
+        // userId 없을 경우
         User user = userRepository.findById(sessionDto.getUserId())
                 .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
-
-        log.info("service user : {}", user.toString());
 
         // Event 객체 생성
         Event event = Event.createSession()
@@ -66,14 +61,12 @@ public class EventServiceImpl implements EventService {
         // repository에 저장
         Event savedEvent = eventRepository.save(event);
 
-        // 빈 result도 생성
-        Result result = new Result(savedEvent,user);
+        // 빈 Result도 생성
+        Result result = new Result(savedEvent);
         Result savedResult = resultRepository.save(result);
         // 빈 rollingpaper 생성
-        PostitTemplate postitTemplate = postitTemplateRepository.findByPostitName(PostitName.RAINBOW).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
-        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findByBackgroundName(BackgroundName.BASIC).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
-
-        // rollingpaper 저장
+        PostitTemplate postitTemplate = postitTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
+        BackgroundTemplate backgroundTemplate = backgroundTemplateRepository.findById(1).orElseThrow(() -> new RestApiException(ResultErrorCode.BACKGROUND_NOT_FOUND));
         RollingPaper rollingPaper = RollingPaper.buildWithResult()
                 .result(savedResult)
                 .backgroundTemplate(backgroundTemplate)
@@ -90,8 +83,7 @@ public class EventServiceImpl implements EventService {
     public void deleteSession(String sessionId, SessionReqDto sessionReqDto) {
 
         // 세션의 호스트Id와 지금 전달받은 userId가 맞는지 확인
-        Event event = eventRepository.findBySessionId(sessionId)
-                .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
+        Event event = eventRepository.findBySessionId(sessionId);
         if (!event.getUser().getId().equals(sessionReqDto.getUserId())) {
             log.error("호스트Id가 아님"); //임시로 하는 거.
             throw new RestApiException(EventErrorCode.HOST_NOT_FOUND);

@@ -10,13 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.EventErrorCode;
-import online.mokkoji.event.dto.response.PhotoResDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,32 +32,19 @@ public class S3ServiceImpl implements S3Service {
     private final AmazonS3Client amazonS3Client;
 
 
-    // 사진 한 장 업로드 후 url 리턴
+    // 사진 업로드 후 레디스에 저장
     @Override
-    public PhotoResDto uploadOnePhoto(MultipartFile multipartFile, Long userId, Long resultId) throws IOException {
+    public String uploadImage(MultipartFile multipartFile, Long userId, Long resultId) throws IOException {
 
-        return getPhotoResDto(multipartFile, userId, resultId);
+        String dir = "photos";
+        String subDir = "photoList";
+        String prefix = "pic_";
+        String fileName = createFileName(userId.toString(), resultId.toString(), dir, subDir, prefix, multipartFile.getOriginalFilename());
+
+        upload(multipartFile, fileName);
+
+        return amazonS3Client.getUrl(bucket, fileName).toString();
     }
-
-
-    // 사진 여러장 업로드
-    @Override
-    public List<PhotoResDto> uploadPhotoList(List<MultipartFile> photoList, Long userId, Long resultId) {
-
-        List<PhotoResDto> dtoList = new ArrayList<>();
-
-        for (MultipartFile photo : photoList) {
-            try {
-                PhotoResDto photoResDto = getPhotoResDto(photo, userId, resultId);
-                dtoList.add(photoResDto);
-            } catch (IOException e) {
-                // TODO : 이부분도 RestApiException으로 해야하는지?
-                throw new RuntimeException(e);
-            }
-        }
-        return dtoList;
-    }
-
 
     // 롤링페이퍼 업로드
     @Override
@@ -92,19 +80,6 @@ public class S3ServiceImpl implements S3Service {
 
         }
         return urlMap;
-    }
-
-
-    // 사진 하나 업로드 후 dto로 담음
-    private PhotoResDto getPhotoResDto(MultipartFile multipartFile, Long userId, Long resultId) throws IOException {
-        String dir = "photos";
-        String subDir = "photoList";
-        String prefix = "pic_";
-        String fileName = createFileName(userId.toString(), resultId.toString(), dir, subDir, prefix, multipartFile.getOriginalFilename());
-
-        upload(multipartFile, fileName);
-
-        return new PhotoResDto(resultId, amazonS3Client.getUrl(bucket, fileName).toString());
     }
 
     // S3에 upload

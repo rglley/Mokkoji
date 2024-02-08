@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import online.mokkoji.event.domain.Event;
-import online.mokkoji.result.domain.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +36,6 @@ public class User {
     private String image;
 
     @OneToMany(mappedBy = "user")
-    private List<Result> results = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
     private List<Event> events = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -51,13 +47,6 @@ public class User {
     // TODO : reddis로 관리
     @Column(length = 65535)
     private String refreshToken;
-
-    @Builder(builderMethodName = "initialBuilder")
-    public User(String email, String name, String image) {
-        this.email = email;
-        this.name = name;
-        this.image = image;
-    }
 
     @Builder(builderMethodName = "nonTokenBuilder")
     public User(Provider provider, String email, String name, String image, Authority authority) {

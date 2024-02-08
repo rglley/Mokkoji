@@ -2,13 +2,9 @@ package online.mokkoji.result.domain.RollingPaper;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @Entity
-@NoArgsConstructor
-@ToString
 public class PostitTemplate {
 
     @Id
@@ -16,11 +12,10 @@ public class PostitTemplate {
     @Column(name = "postit_id")
     private int id;
 
-    @Enumerated(EnumType.STRING)
-    private PostitName postitName;
+    private String postitName;
     private String postitPath;
 
-    public PostitTemplate(PostitName postitName, String postitPath) {
+    public PostitTemplate(String postitName, String postitPath) {
         this.postitName = postitName;
         this.postitPath = postitPath;
     }

@@ -18,5 +18,4 @@ public class MessageReqDto {
     private String text;
     private MultipartFile voice;
     private MultipartFile video;
-
 }

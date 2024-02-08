@@ -32,7 +32,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico",
                                         "/h2-console/**").permitAll()
-                                .requestMatchers("/signup", "/oauth2/**", "/api/v1/**", "/error").permitAll()
+                                .requestMatchers("/signup", "/oauth2/**", "/api/v1/**").permitAll()
                                 .anyRequest().authenticated()
                 )
 

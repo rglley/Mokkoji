@@ -10,11 +10,10 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class Photo {
+public class Photo implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "photo_id")
+    @GeneratedValue
     private Long id;
 
     private Long resultId;
