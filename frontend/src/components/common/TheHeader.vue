@@ -16,7 +16,7 @@
       <div class="ml-auto mr-1 self-center">
         <ul class="font-medium flex md:flex-row ml-10">
           <button id="button-header"><a href="/">홈으로</a></button>
-          <li v-if="!isLogin">
+          <li v-if="!(!store.isLogin&&!isLogin)">
             <button id="button-header" @click="showLoginModal">로그인</button>
             <ModalView
               v-if="isLoginModal"
@@ -36,7 +36,7 @@
                 내 서비스
               </button>
               <div class="flex justify-center items-center gap-2 rounded-full mx-2">
-                <img class="overflow-hidden rounded-full w-16 m-0;" :src="image" />
+                <img class="overflow-hidden rounded-full w-12 m-0;" :src="image" />
                 <p class="text-black text-lg">{{ name }}님</p>
               </div>
               <div
