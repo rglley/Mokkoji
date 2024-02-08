@@ -1,6 +1,8 @@
 package online.mokkoji.result.dto.response;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,19 +10,19 @@ import lombok.Setter;
 import java.util.Map;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class MessageResDto {
 
+    @NotBlank
     private Long paperId;
+
+    @NotBlank
     private String writer;
-    @Nullable
+
     private String text;
-    @Nullable
     private String voicePath;
-    @Nullable
     private String videoPath;
 
+    @Builder
     public MessageResDto(Long paperId, String writer, String text, Map<String, String> urlMap) {
         this.paperId = paperId;
         this.writer = writer;

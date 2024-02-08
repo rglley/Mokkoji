@@ -13,10 +13,11 @@ public class BackgroundTemplate {
     @Column(name = "background_id")
     private int id;
 
-    private String backgroundName;
+    @Enumerated(EnumType.STRING)
+    private BackgroundName backgroundName;
     private String backgroundPath;
 
-    public BackgroundTemplate(String backgroundName, String backgroundPath) {
+    public BackgroundTemplate(BackgroundName backgroundName, String backgroundPath) {
         this.backgroundName = backgroundName;
         this.backgroundPath = backgroundPath;
     }

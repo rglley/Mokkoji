@@ -10,7 +10,6 @@ import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorCode.CommonErrorCode;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
-import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserServiceImpl;
@@ -33,6 +32,7 @@ public class OpenviduController {
     private final EventService eventService;
     private final JwtUtil jwtUtil;
     private final UserServiceImpl userServiceImpl;
+    private final UserRepository userRepository;
 
 
     @Value("${openvidu.url}")
@@ -53,12 +53,11 @@ public class OpenviduController {
     public ResponseEntity<String> addSession(@RequestBody(required = false) Map<String, Object> params,
                                               HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
+        User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
-         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
-
 
         //세션 생성
         Session session = openvidu.createSession(properties);
@@ -82,7 +81,6 @@ public class OpenviduController {
         List<Session> activeSessions = openvidu.getActiveSessions();
         for (Session session : activeSessions) {
             if (session.getSessionId().equals(sessionId)) {
-
                 return new ResponseEntity<>(session, HttpStatus.OK);
             }
         }
@@ -101,6 +99,7 @@ public class OpenviduController {
 
         User user = userServiceImpl.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
         sessionReqDto.setUserId(user.getId());
+//        sessionReqDto.setUserId(1L);
 
         Session activeSession = openvidu.getActiveSession(sessionId);
         eventService.deleteSession(sessionId, sessionReqDto);

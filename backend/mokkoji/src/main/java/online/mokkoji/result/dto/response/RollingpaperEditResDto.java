@@ -9,7 +9,8 @@ import online.mokkoji.result.domain.RollingPaper.PostitTemplate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RollingpaperResDto {
+public class RollingpaperEditResDto {
     private BackgroundTemplate backgroundTemplate;
     private PostitTemplate postitTemplate;
+
 }
