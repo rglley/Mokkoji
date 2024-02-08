@@ -36,8 +36,3 @@
     </g>
   </svg>
 </template>
-<style scoped>
-svg {
-  padding-right: 2px;
-}
-</style>

@@ -38,13 +38,23 @@
   </div>
   <!-- 섹션 3/6 롤링페이퍼 편집 -->
   <div class="bg-slate-100 h-[100vh] flex" ref="rollingpaper">
-    <div class="ml-[10vw] w-[40%]">
-      <div class="h-[35%]">
-        <p class="flex items-center justify-center pt-[70px]"><IconLoveLetterBlue /></p>
-        <p class="flex items-center text-[35px] justify-center">원하는 템플릿을 선택한 후</p>
-        <div class="flex items-center text-[35px] justify-center">'저장하기'를 눌러주세요</div>
+    <div class="w-[22vw] flex items-center">
+      <div class="ml-[10vb]">
+        <p class="flex items-center justify-center"><IconLoveLetterBlue /></p>
+        <p class="flex items-center text-[25px] justify-center pt-2">원하는 템플릿을 선택한 후</p>
+        <div class="flex items-center text-[25px] justify-center">'저장하기'를 눌러주세요</div>
       </div>
-      <div class="h-[40%] flex mt-[5vh]">
+    </div>
+    <!-- <div class="ml-[10vb] w-[30wv] flex items-center">
+      <div>
+        <p class="flex items-center justify-center"><IconLoveLetterBlue /></p>
+
+        <p class="flex items-center text-[25px] justify-center">원하는 템플릿을 선택한 후</p>
+        <div class="flex items-center text-[25px] justify-center">'저장하기'를 눌러주세요</div>
+      </div>
+    </div> -->
+    <div class="ml-[10vb] w-[25vw]">
+      <div class="h-[60vh] flex pt-[30vh]">
         <div class="w-1/2">
           <p class="justify-center flex text-[25px]">배경지</p>
           <div class="justify-center flex text-[25px] mt-5 hover:cursor-pointer">
@@ -108,14 +118,14 @@
           </div>
         </div>
       </div>
-      <div class="h-[30%]">
+      <div class="h-[20vh]">
         <!-- <div
           class="opacity-70 border-2 rounded-lg w-64 mx-auto hover:cursor-pointer hover:opacity-100 effect-button"
         >
           <p class="text-[30px] justify-center ml-2 flex">미리보기 <IconSearch /></p>
         </div> -->
         <div
-          class="mt-[12+vh] opacity-70 border-2 rounded-lg w-40 mx-auto h-9 flex items-center justify-center hover:cursor-pointer hover:opacity-100 effect-button"
+          class="mt-[20vh] opacity-70 border-2 rounded-lg w-40 mx-auto h-9 flex items-center justify-center hover:cursor-pointer hover:opacity-100 effect-button"
           @click="showSaved('템플릿')"
         >
           <p class="text-[20px] justify-center ml-2 flex">저장하기 <IconCheckMark /></p>
@@ -123,7 +133,7 @@
       </div>
     </div>
 
-    <div class="mr-[7vw] w-2/3 flex justify-center items-center">
+    <div class="mr-[7vw] w-[50vw] flex justify-center items-center">
       <img
         :src="`src/assets/rollingtemplate/${design}.png`"
         :alt="`template_${design}`"
@@ -223,7 +233,7 @@
             </p>
             <p class="">'자르기 + 사진 추가'를 통해 사진을 1:1 비율로 자르고 추가해 보세요.</p>
             <p class="">
-              '0 추가'를 통해 여러 장의 사진을 한 번에 추가할 수도 있습니다.
+              '사진 여러 장 추가'를 통해 여러 장의 사진을 한 번에 추가할 수도 있습니다.
             </p>
           </div>
         </div>
@@ -244,17 +254,20 @@
         클릭!<IconQuestionMark />
       </p>
     </div>
-
-    <div class="h-[20vh] flex">
-      <div class="ml-[15vb]">
-        <p class="flex items-center justify-center"><IconGalleryColored /></p>
-        <p class="flex items-center text-[25px] justify-center pt-5">대표 이미지를 지정하고</p>
-        <div class="flex items-center text-[25px] justify-center">포토 모자이크를 생성해주세요</div>
+    <div class="h-[100vh] flex">
+      <div class="w-[23vw] flex items-center">
+        <div class="ml-[10vb]">
+          <p class="flex items-center justify-center"><IconGalleryColored /></p>
+          <p class="flex items-center text-[25px] justify-center pt-5">대표 이미지를 지정하고</p>
+          <div class="flex items-center text-[25px] justify-center">
+            포토 모자이크를 생성해주세요
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="">
-      <Gallery :scrollToHelp="scrollToHelp" />
+      <div class="w-[80vw]">
+        <Gallery :scrollToHelp="scrollToHelp" />
+      </div>
     </div>
   </div>
   <!-- 섹션 6/6 올라가기 -->

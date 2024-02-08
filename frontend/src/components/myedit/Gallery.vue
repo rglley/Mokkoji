@@ -1,19 +1,21 @@
 <template>
   <div class="flex mt-10 ml-10">
-    <div class="w-[20vw] pt-[5vh]">
+    <div class="w-[20vw] pt-[15vh]">
       <div class="flex justify-center items-center text-[25px]">
         <p class="flex ml-3">선택한 사진 <IconCheckBlue /></p>
       </div>
-      <div
-        class="flex justify-center items-center w-[14vw] h-[14vw] mt-5 mx-12 border-[10px] border-[#9f46c8]"
-      >
-        <img
-          :src="selectedImage"
-          alt="Selected Image"
-          width="80%"
-          height="80%"
-          class="mx-10 my-10"
-        />
+      <div class="flex justify-center items-center">
+        <div
+          class="flex justify-center items-center w-[14vw] h-[14vw] mt-5 border-[10px] border-[#9f46c8]"
+        >
+          <img
+            :src="selectedImage"
+            alt="Selected Image"
+            width="80%"
+            height="80%"
+            class="mx-10 my-10"
+          />
+        </div>
       </div>
       <div class="">
         <!-- <div class="flex justify-center items-center">
@@ -35,44 +37,37 @@
         </div> -->
 
         <div
-          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[3vw] w-[16vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2vw] w-[14vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('대표이미지')"
         >
-          <p class="text-r-md justify-center flex text-center">
-            대표이미지 설정하기 <IconMainPhoto />
-          </p>
+          <p class="text-[20px] flex text-center">대표이미지 설정하기 <IconMainPhoto /></p>
         </div>
 
         <div
-          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[3vw] w-[16vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2vw] w-[14vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('포토모자이크')"
         >
-          <p class="text-r-md justify-center flex text-center">
-            포토모자이크 생성하기 <IconMosaic />
-          </p>
+          <p class="text-[20px] flex text-center">포토모자이크 생성하기 <IconMosaic /></p>
         </div>
       </div>
     </div>
     <div class="w-[5%]"></div>
-    <div class="w-[40vw]">
-      <div class="flex justify-end items-end">
+    <div class="">
+      <div class="flex justify-end items-end pt-[1vh]">
         <button
-          class="opacity-70 text-sm mr-5 border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
+          class="opacity-70 text-sm mr-5 w-[10vw] h-[4.5vh] border-[#5da2bd] rounded-lg hover:opacity-100 border-2 border-solid mb-5 effect-button-two"
           @click="showPhotoUploadModal"
         >
           <IconPhotoAdd /> 사진 여러 장 추가
         </button>
         <button
-          class="opacity-70 text-sm border-[#5da2bd] pt-1 rounded-lg hover:opacity-100 border-2 border-solid mt-10 mb-5 px-2 py-1 effect-button-two"
+          class="opacity-70 text-sm w-[10vw] h-[4.5vh] border-[#5da2bd] rounded-lg hover:opacity-100 border-2 border-solid mb-5 effect-button-two"
           @click="showCutPhotoUploadModal"
         >
           <IconCrop /> 자르기 + 사진 추가
         </button>
-        <button class="mb-6 ml-3" @click="callScrollToHelp">
-          <IconQuestionMarkBlue />
-        </button>
       </div>
-      <div class="ml-4 h-[30vw] w-[40vw] border-2 rounded-lg border-[#5da2bd]">
+      <div class="ml-4 h-[70vh] w-[40vw] border-2 rounded-lg border-[#5da2bd]">
         <div ref="scrollContainer" class="custom-scroll-container">
           <div ref="scrollComponent" class="custom-scroll-content">
             <ul class="photo-grid">
@@ -257,7 +252,7 @@ onUnmounted(() => {
 
 .custom-scroll-container {
   overflow-y: scroll;
-  height: 30vw;
+  height: 70vh;
   scrollbar-width: thin; /* For Firefox */
   scrollbar-color: rgb(255, 255, 255) rgb(190, 212, 244); /* For Firefox */
 }

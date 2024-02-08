@@ -105,7 +105,8 @@ onBeforeMount(() => {
 
 <style>
 .transparent-header {
-  @apply opacity-0 transition-opacity duration-500;
+  @apply opacity-0 transition-opacity duration-500 -z-20;
+  pointer-events: none;
 }
 
 li {
