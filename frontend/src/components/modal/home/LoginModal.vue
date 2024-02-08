@@ -44,10 +44,10 @@
       </div>
     </div>
   </div>
-  <span class="m-1 float-right font-light text-slate-300">
+  <!-- <span class="m-1 float-right font-light text-slate-300">
     계정이 없으신가요?
     <a href="/signup" class="text-primary hover:text-blue-800 hover:bg-natural-yellow">회원가입</a>
-  </span>
+  </span> -->
 </template>
 
 <script setup>
