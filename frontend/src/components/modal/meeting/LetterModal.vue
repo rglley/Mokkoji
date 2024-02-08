@@ -10,6 +10,13 @@
       </button>
     </div>
     <div class="flex flex-col justify-center">
+      <!-- <input
+        type="text"
+        name="writer"
+        id="writer"
+        placeholder="이름"
+        class="p-0 m-0 mb-[2vh] w-[13vw] h-[7vh] bg-yellow-100 border-sm border-black rounded-r-lg text-center text-r-md placeholder:text-[1.3vw] placeholder:text-center"
+      /> -->
       <div class="p-[2vw] flex flex-col border-sm rounded-r-lg">
         <textarea
           name=""
@@ -18,7 +25,8 @@
           cols="30"
           rows="10"
           placeholder="메시지를 입력하세요"
-          class="h-[40vh] bg-yellow-100 rounded-r-lg resize-none placeholder:text-[1.5vw]"
+          class="h-[40vh] bg-yellow-100 rounded-r-lg resize-none placeholder:text-[1.5vw] text-center text-r-md focus:outline-none"
+          v-model="textFile"
         >
         </textarea>
         <div class="flex h-[5vh]">
@@ -40,7 +48,7 @@
         </div>
       </div>
       <div>
-        <audio-recorder src=""></audio-recorder>
+        <!-- <audio-recorder src=""></audio-recorder> -->
       </div>
       <div class="pt-[1vh] pb-[2vh] flex flex-wrap">
         <div
@@ -104,14 +112,6 @@ import IconVideo from '@/icons/meeting/IconVideo.vue'
 import IconRemove from '@/icons/meeting/IconRemove.vue'
 import IconCancelBlack from '@/icons/meeting/IconCancelBlack.vue'
 
-const props = defineProps({
-  sessionId: {
-    type: String
-  }
-})
-
-console.log(props.sessionId)
-
 defineEmits(['remove-letter-modal'])
 
 const store = useLetterStore()
@@ -119,11 +119,13 @@ const isVideoFile = ref(false)
 const isAudioFile = ref(false)
 const videoFile = ref()
 const audioFile = ref()
+const textFile = ref('')
 const videoFileName = ref('')
 const audioFileName = ref('')
 
 const removeContents = () => {
   document.getElementById('input-text').value = ''
+  textFile.value = ''
 }
 
 const uploadAudioFile = (event) => {
@@ -149,10 +151,11 @@ const removeVideoFile = (event) => {
 }
 
 const sendLetter = () => {
-  store.sendLetter(videoFile.value, audioFile.value, 'ses_E7EEm5DZxe')
+  store.sendLetter(videoFile.value, audioFile.value, textFile.value)
 
   audioFile.value = null
   videoFile.value = null
+  textFile.value = ''
 }
 </script>
 

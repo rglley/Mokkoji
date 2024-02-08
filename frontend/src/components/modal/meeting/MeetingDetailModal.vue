@@ -49,8 +49,8 @@ import { ref } from 'vue'
 import IconCopy from '@/icons/meeting/IconCopy.vue'
 import IconCancelWhite from '@/icons/meeting/IconCancelWhite.vue'
 
-const address = ref('https://mokkoji.online/meetings/')
-const sessionId = ref(123)
+const address = ref(`https://mokkoji.online/meetings/${sessionStorage.getItem('sessionId')}`)
+const sessionId = ref(sessionStorage.getItem('sessionId'))
 const date = new Date()
 const today = date.toLocaleDateString()
 

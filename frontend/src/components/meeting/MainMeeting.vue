@@ -460,7 +460,7 @@ const showChat = () => {
 
 axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
 
-const { VITE_API_URL } = import.meta.env
+// const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
