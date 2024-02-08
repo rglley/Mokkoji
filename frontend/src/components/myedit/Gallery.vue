@@ -37,14 +37,14 @@
         </div> -->
 
         <div
-          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2vw] w-[14vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2vw] w-[15vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('대표이미지')"
         >
           <p class="text-[20px] flex text-center">대표이미지 설정하기 <IconMainPhoto /></p>
         </div>
 
         <div
-          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2vw] w-[14vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
+          class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2vw] w-[15vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('포토모자이크')"
         >
           <p class="text-[20px] flex text-center">포토모자이크 생성하기 <IconMosaic /></p>
@@ -137,7 +137,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, defineProps } from 'vue'
 import getImages from '@/api/get_images'
-import { mainImageStore } from '@/stores/result.js'
+import { useMainImageStore } from '@/stores/result.js'
 import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
 import IconClose from '@/icons/result/IconClose.vue'
@@ -157,7 +157,7 @@ const callScrollToHelp = () => {
   props.scrollToHelp('사진 업로드 TIP')
 }
 
-const store = mainImageStore()
+const store = useMainImageStore()
 const selectedImage = ref('src/assets/edit/no_image.png')
 
 const alertText = ref('')
