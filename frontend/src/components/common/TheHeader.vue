@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from 'vue'
+import { ref, onBeforeMount, computed, watch } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
