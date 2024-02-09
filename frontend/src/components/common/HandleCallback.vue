@@ -51,8 +51,9 @@ onMounted(() => {
         store.isLogin = true;
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
-        alert('로그인 완료')
-        (router.push('/'));
+        store.forceReload = true;
+        // alert('로그인 완료')
+        router.push('/');
       }
     })
     .catch((err) => {

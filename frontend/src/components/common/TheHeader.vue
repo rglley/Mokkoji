@@ -108,7 +108,10 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  window.location.reload()
+  if (store.forceReload) {
+    store.forceReload = false;
+    window.location.reload()
+  }
 })
 
 // watch(isLoggedIn, async (newValue, oldValue) => {
