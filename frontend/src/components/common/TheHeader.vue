@@ -75,6 +75,7 @@ const isTransparent = ref(false)
 const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
+const reloadFlag = ref(false)
 
 const limitHeight = 200
 
@@ -102,7 +103,7 @@ const logout = () => {
 
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
-  if ($cookies.get('user') != null) {
+  if ($cookies.get('user') !== null) {
     isLogin.value = true
     image.value = $cookies.get('user').image
     name.value = $cookies.get('user').name
@@ -110,7 +111,8 @@ onBeforeMount(() => {
 })
 
 watch(isLogin, async (newValue, oldValue) => {
-  if (newValue == true && oldValue == false) {
+  if (newValue === true && oldValue === false && !reloadFlag) {
+    reloadFlag.value = true
     reloadPage()
   }
 })
