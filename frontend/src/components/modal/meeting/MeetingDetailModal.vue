@@ -19,7 +19,7 @@
         class="ml-[4vw] w-[5vw] text-white text-[0.8vw] hover:bg-neutral-500 rounded-r-lg"
         @click="copySessionInfo(address), $emit('copy-address-info')"
       >
-        <IconCopy class="mr-[0.3vw]" />주소 복사
+        <IconCopyWhite class="mr-[0.3vw]" />주소 복사
       </button>
 
       <div class="text-white text-r-sm flex">
@@ -30,7 +30,7 @@
         class="ml-[4vw] w-[4.3vw] text-white text-[0.8vw] hover:bg-neutral-500 rounded-r-lg"
         @click="copySessionInfo(sessionId), $emit('copy-session-id-info')"
       >
-        <IconCopy class="mr-[0.3vw]" />ID 복사
+        <IconCopyWhite class="mr-[0.3vw]" />ID 복사
       </button>
       <div class="text-white text-r-sm flex">
         주최자
@@ -46,7 +46,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import IconCopy from '@/icons/meeting/IconCopy.vue'
+import IconCopyWhite from '@/icons/meeting/IconCopyWhite.vue'
 import IconCancelWhite from '@/icons/meeting/IconCancelWhite.vue'
 
 const hostName = ref($cookies.get('user').name)

@@ -76,6 +76,8 @@ const submitTempName = (tempName) => {
   }
   // 서버에 회의 id, userName 전달 후 참가
   sessionStorage.setItem('userName', tempName)
+
+  router.push('/meetings')
 }
 </script>
 
