@@ -114,11 +114,11 @@ pre {
   }
 
   #title {
-    @apply text-7xl font-bold tracking-wider p-3;
+    @apply text-[4vw] mb-[2vb] font-bold tracking-wider;
   }
 
   #title-sub-bold {
-    @apply text-5xl font-bold tracking-tighter;
+    @apply text-[3vw] font-bold tracking-tighter;
   }
 
   #title-sub {
@@ -126,7 +126,7 @@ pre {
   }
 
   #p-main {
-    @apply text-xl whitespace-pre-line
+    @apply text-[1.5vw] whitespace-pre-line;
   }
 
   #li-dropdown {
@@ -186,7 +186,7 @@ pre {
   }
 
   #button-header {
-    @apply bg-transparent text-black text-lg hover:underline hover:text-primary3;
+    @apply bg-transparent text-black hover:underline hover:text-primary3;
   }
 
   input {
@@ -222,26 +222,26 @@ pre {
   }
 
   #section-main {
-    @apply h-[600px] justify-between flex flex-col;
+    @apply h-[] justify-between flex flex-col;
   }
 
   #svg-curve-1 {
-    @apply fill-primary w-[120%] h-[135px];
+    @apply fill-primary w-[150%] h-[100%];
   }
 
   #svg-curve-2 {
-    @apply fill-white  w-[135%] h-[100px];
+    @apply fill-white  w-[150%] h-[100%];
   }
 
   #svg-curve-3 {
-    @apply fill-natural-yellow w-[150%] h-[92px];
+    @apply fill-natural-yellow w-[150%] h-[100%];
   }
 
   #svg-curve-4 {
-    @apply fill-natural-beige w-[200%] h-[120px];
+    @apply fill-natural-beige w-[200%] h-[100%];
   }
 
   #space {
-    @apply min-h-12;
+    @apply h-[2vh];
   }
 }
