@@ -34,12 +34,18 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Cropper from 'cropperjs'
+import { useFormDataStore, useImgUploadStore } from '@/stores/result.js'
 import 'cropperjs/dist/cropper.css'
+
+const formDataStore = useFormDataStore()
+const imgUploadStore = useImgUploadStore()
 
 const image = ref(null)
 const cropper = ref(null)
 const croppedImage = ref(null)
 const imageUrl = ref('src/assets/edit/no_image.png') //처음 이미지
+
+const imgList = []
 
 const cropImage = () => {
   const croppedDataUrl = cropper.value.getCroppedCanvas().toDataURL('image/png')
@@ -51,7 +57,32 @@ const handleFileChange = (event) => {
   if (file) {
     imageUrl.value = URL.createObjectURL(file)
     cropper.value.replace(imageUrl.value)
+    console.log(file)
+    formDataStore.addFile(file)
+    console.log(formDataStore.formData)
+    imgList.push(file)
   }
+}
+
+const uploadImage = () => {
+  photoList()
+}
+
+const photoList = () => {
+  console.log('사진 추가 데이터 전송 메소드 실행')
+  console.log(imgList)
+  const formData = new FormData()
+  for (let i = 0; i < imgList.length; i++) {
+    formData.append('photos', imgList[i])
+  }
+
+  imgUploadStore.addPhotos(11, formData, ({ res }) => {
+    console.log('이미지 업로드 성공')
+  }),
+    (error) => {
+      console.log('이미지 업로드 오류:', error)
+    }
+  formDataStore.clearFormData()
 }
 
 onMounted(() => {

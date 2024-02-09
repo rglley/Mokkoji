@@ -33,7 +33,7 @@
           type="button"
           class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2"
           :href="naverApiRequestURI"
->
+        >
           <img
             src="@/assets/logo/logoN_naver.svg"
             class="w-4 h-43 inline-block mb-2 ml-2 mt-1 mr-2"
@@ -53,7 +53,12 @@
 <script setup>
 const { VITE_NAVER_CLIENT_ID, VITE_NAVER_REDIRECT_URI } = import.meta.env
 
-const naverApiRequestURI = `https://nid.naver.com/oauth2.0/authorize?client_id=`+ VITE_NAVER_CLIENT_ID + '&redirect_uri=' + VITE_NAVER_REDIRECT_URI + '&state=mokkoji&response_type=code';
+const naverApiRequestURI =
+  `https://nid.naver.com/oauth2.0/authorize?client_id=` +
+  VITE_NAVER_CLIENT_ID +
+  '&redirect_uri=' +
+  VITE_NAVER_REDIRECT_URI +
+  '&state=mokkoji&response_type=code'
 </script>
 
 <style></style>

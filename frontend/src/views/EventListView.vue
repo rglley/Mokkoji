@@ -154,7 +154,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-import { eventList } from '@/api/result'
 import IconFlowers from '@/icons/result/IconFlowers.vue'
 import IconFlowersColored from '@/icons/result/IconFlowersColored.vue'
 import MemoryList from '@/components/myevent/MemoryList.vue'
@@ -229,7 +228,7 @@ onMounted(() => {
   console.log("I'm here")
   setShow()
   setShowTwo()
-  getEventList()
+  // getEventList()
   window.onload = () => {
     console.log("I'm here")
     console.log(verticalScrollWrap.value)

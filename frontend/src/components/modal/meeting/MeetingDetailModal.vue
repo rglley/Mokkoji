@@ -5,7 +5,7 @@
       class="px-[2vw] h-[100%] bg-black flex flex-col justify-center items-start space-y-[1vh] rounded-r-lg"
     >
       <div class="flex w-[23vw] items-center h-[5vh]">
-        <div class="text-white text-r-md">{{}}님의 회의 정보</div>
+        <div class="text-white text-r-md">{{ hostName }}님의 회의 정보</div>
         <button
           class="ml-auto w-[2.5vw] aspect-square size-[100%] flex justify-center items-center hover:bg-neutral-500 rounded-full"
         >
@@ -34,7 +34,7 @@
       </button>
       <div class="text-white text-r-sm flex">
         주최자
-        <div class="text-white ml-[1.3vw]">| {{}}</div>
+        <div class="text-white ml-[1.3vw]">| {{ hostName }}</div>
       </div>
       <div class="text-white text-r-sm flex">
         <div>날짜</div>
@@ -49,6 +49,7 @@ import { ref } from 'vue'
 import IconCopy from '@/icons/meeting/IconCopy.vue'
 import IconCancelWhite from '@/icons/meeting/IconCancelWhite.vue'
 
+const hostName = ref($cookies.get('user').name)
 const address = ref(`https://mokkoji.online/meetings/${sessionStorage.getItem('sessionId')}`)
 const sessionId = ref(sessionStorage.getItem('sessionId'))
 const date = new Date()

@@ -59,7 +59,7 @@ export const useLetterStore = defineStore('letter', () => {
 
     // JSON 데이터 추가
     const text = {
-      writer: 'writer',
+      writer: $cookies.get('user').name,
       text: textFile
     }
 
@@ -70,8 +70,8 @@ export const useLetterStore = defineStore('letter', () => {
 
     try {
       // axios를 사용하여 POST 요청 보내기
-      const response = await axios.post(
-        `http://localhost:8080/api/v1/events/rollingpapers/${sessionStorage.getItem('sessionId')}`,
+      const response = await axiosJwt.post(
+        VITE_SERVER + `/events/rollingpapers/${sessionStorage.getItem('sessionId')}`,
         formData,
         {
           // 필수: FormData를 사용할 때는 이 헤더를 설정해야 함

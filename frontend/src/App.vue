@@ -1,7 +1,8 @@
 <template>
   <main>
-    <TheHeader v-if="!isMeeting" :key="reload"/>
+    <TheHeader v-if="!isMeeting" :key="reload" />
     <RouterView
+      @load-home="leaveMeeting"
       @create-meeting="createMeeting"
       @leave-meeting="leaveMeeting"
       @waiting-room="createMeeting"
@@ -26,17 +27,18 @@ const leaveMeeting = () => {
   isMeeting.value = false
 }
 
-const reload = ref(0);
+const reload = ref(0)
 
 const reloadMethod = () => {
-  reload.value++;
+  reload.value++
 }
 
-watchEffect(($cookies.get('user'), async() => {
-  reloadMethod
-})) 
-
-
+watchEffect(
+  ($cookies.get('user'),
+  async () => {
+    reloadMethod
+  })
+)
 </script>
 
 <style scoped></style>

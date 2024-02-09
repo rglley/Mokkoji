@@ -91,14 +91,14 @@ initFlowbite()
 
 const logout = () => {
   tokenService.removeUser()
-  isLogin.value = false;
-  store.isLogin = false;
+  isLogin.value = false
+  store.isLogin = false
   router.push('/')
 }
 
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
-  if ($cookies.get('user')!= null) {
+  if ($cookies.get('user') != null) {
     isLogin.value = true
     image.value = $cookies.get('user').image
     name.value = $cookies.get('user').name
@@ -115,7 +115,7 @@ watch(isLogin, async (newValue, oldValue) => {
 
 <style>
 .transparent-header {
-  @apply opacity-0 transition-opacity duration-500 z-10; 
+  @apply opacity-0 transition-opacity duration-500 z-10;
   pointer-events: none;
 }
 
