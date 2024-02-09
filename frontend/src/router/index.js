@@ -80,6 +80,9 @@ const router = createRouter({
       component: Error404
     },
     {
+      path: '/meetings'
+    },
+    {
       path: '/rollingpaper',
       name: 'rollingpaper',
       component: RollingPaper
