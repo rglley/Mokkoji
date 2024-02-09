@@ -256,10 +256,7 @@ const submitConferenceId = async () => {
     isInputError.value = false
 
     if ($cookies.get('user') !== null) {
-      router.push({
-        path: '/meetings',
-        props: { sessionId: store.mainSessionId }
-      })
+      router.push('/meetings')
     } else {
       isModal.value = true
     }
@@ -270,16 +267,18 @@ const submitConferenceId = async () => {
 }
 
 const createMeeting = () => {
-  if ($cookies.get('user') !== null) {
-    store.createSession()
-  } else {
-    toast('로그인이 필요합니다', {
-      theme: 'auto',
-      type: 'warning',
-      transition: 'flip',
-      autoClose: 1000
-    })
-  }
+  store.createSession()
+
+  // if ($cookies.get('user') !== null) {
+  //   store.createSession()
+  // } else {
+  //   toast('로그인이 필요합니다', {
+  //     theme: 'auto',
+  //     type: 'warning',
+  //     transition: 'flip',
+  //     autoClose: 1000
+  //   })
+  // }
 }
 
 const toTop = () => {

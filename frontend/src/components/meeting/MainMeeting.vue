@@ -52,10 +52,10 @@
           class="w-full h-full border-sm border-neutral-300 rounded-r-lg flex flex-col"
         >
           <div class="px-md w-full h-[13%] flex items-center">
-            <div class="w-[30%] font-bold text-r-lg">참여자</div>
+            <div class="ml-[1vw] w-[30%] font-bold text-r-md">참여자</div>
             <div class="w-[70%] flex just">
-              <button class="w-[70%]">
-                <div class="text-r-sm text-purple-400">초대하기</div>
+              <button @click="showInviteModal">
+                <div class="ml-[4vw] text-r-sm text-purple-400">초대하기</div>
                 <IconInvite class="w-[4vw] size-[40%]" />
               </button>
               <button class="ml-auto basis-2/12 flex justify-end" @click="showUserList">
@@ -99,7 +99,7 @@
           class="w-full h-full border-sm border-neutral-300 rounded-r-lg flex flex-col"
         >
           <div class="px-md w-full h-[13%] flex items-center">
-            <div class="basis-3/12 font-bold text-r-lg">채팅</div>
+            <div class="ml-[1vw] basis-3/12 font-bold text-r-md">채팅</div>
             <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
               <IconCancelPurple @click="showChat" class="size-[50%]" />
             </button>
@@ -249,6 +249,9 @@
         </div>
       </div>
     </section>
+    <transition-group name="down">
+      <InviteModal v-if="isInviteModal" />
+    </transition-group>
     <transition-group name="up">
       <MeetingDetailModal
         v-if="isMeetingDetailModal"
@@ -314,6 +317,7 @@ import IconCamera from '@/icons/meeting/IconCamera.vue'
 import IconUserList from '@/icons/meeting/IconUserList.vue'
 import IconChat from '@/icons/meeting/IconChat.vue'
 import IconSendMessage from '@/icons/meeting/IconSendMessage.vue'
+import InviteModal from '@/components/modal/meeting/InviteModal.vue'
 import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
 import AddressCopyModal from '@/components/modal/meeting/AddressCopyModal.vue'
 import SessionIdCopyModal from '@/components/modal/meeting/SessionIdCopyModal.vue'
@@ -336,6 +340,7 @@ const isMic = ref(true)
 const isMicModal = ref(false)
 const isCamera = ref(true)
 const isCameraModal = ref(false)
+const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
 const isAddressCopyModal = ref(false)
 const isSessionIdCopyModal = ref(false)
@@ -374,6 +379,10 @@ const onSaveAs = (uri, filename) => {
   link.download = filename
   link.click()
   document.body.removeChild(link)
+}
+
+const showInviteModal = () => {
+  isInviteModal.value = !isInviteModal.value
 }
 
 const showMeetingDetailModal = () => {

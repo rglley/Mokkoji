@@ -76,18 +76,20 @@ const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
 
+const limitHeight = 200
+
+initFlowbite()
+
+const isLoggedIn = computed(() => isLogin.value)
+
 const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
 }
-
-const limitHeight = 200
 
 const handleScroll = () => {
   if (scrollY > limitHeight) isTransparent.value = true
   if (scrollY < limitHeight) isTransparent.value = false
 }
-
-initFlowbite()
 
 const logout = () => {
   tokenService.removeUser()
@@ -105,7 +107,7 @@ onBeforeMount(() => {
   }
 })
 
-watch(isLogin, async (newValue, oldValue) => {
+watch(isLoggedIn, async (newValue, oldValue) => {
   if (newValue == true && oldValue == false) {
     image.value = $cookies.get('user').image
     name.value = $cookies.get('user').name
