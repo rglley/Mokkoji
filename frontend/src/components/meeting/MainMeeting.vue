@@ -58,7 +58,10 @@
                 <div class="ml-[4vw] text-r-sm text-purple-400">초대하기</div>
                 <IconInvite class="w-[4vw] size-[40%]" />
               </button>
-              <button class="ml-auto basis-2/12 flex justify-end" @click="showUserList">
+              <button
+                class="ml-auto basis-2/12 flex justify-end"
+                @click="showUserList, showInviteModal"
+              >
                 <IconCancelPurple class="size-[70%]" />
               </button>
             </div>

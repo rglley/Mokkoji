@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, computed, watch } from 'vue'
+import { ref, onBeforeMount, onMounted, computed, watch } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -107,12 +107,16 @@ onBeforeMount(() => {
   }
 })
 
-watch(isLoggedIn, async (newValue, oldValue) => {
-  if (newValue == true && oldValue == false) {
-    image.value = $cookies.get('user').image
-    name.value = $cookies.get('user').name
-  }
+onMounted(() => {
+  window.location.reload()
 })
+
+// watch(isLoggedIn, async (newValue, oldValue) => {
+//   if (newValue == true && oldValue == false) {
+//     image.value = $cookies.get('user').image
+//     name.value = $cookies.get('user').name
+//   }
+// })
 </script>
 
 <style>
