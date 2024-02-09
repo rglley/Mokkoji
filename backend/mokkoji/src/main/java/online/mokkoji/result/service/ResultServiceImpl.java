@@ -132,6 +132,7 @@ public class ResultServiceImpl implements ResultService {
 
     // 사진 db 저장
     @Override
+    @Cacheable(cacheNames = "photoList", key = "#photoResDto.getResult().id", cacheManager = "cacheManager")
     public void createPhoto(PhotoResDto photoResDto) {
 
         Photo photo = Photo.builder().result(photoResDto.getResult()).photoPath(photoResDto.getPhotoPath()).build();
@@ -158,7 +159,6 @@ public class ResultServiceImpl implements ResultService {
 
     // 기억 편집 화면에서 필요한 사진과 메시지 불러오는 메서드
     @Override
-    @Cacheable(cacheNames = "photoList", key = "#resultId", cacheManager = "cacheManager")
     public Map<String, Object> getPhotoAndMessageMap(Long resultId) {
         Map<String, Object> resultMap = new HashMap<>();
 

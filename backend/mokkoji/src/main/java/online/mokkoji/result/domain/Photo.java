@@ -2,6 +2,7 @@ package online.mokkoji.result.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serializable;
 
@@ -19,6 +20,7 @@ public class Photo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "result_id")
+    @JsonIgnore
     private Result result;
 
     @Column(nullable = false)

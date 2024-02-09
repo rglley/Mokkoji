@@ -40,8 +40,6 @@ public class ResultController {
     @GetMapping("/lists")
     public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
 
-//        String provider = "NAVER";
-//        String email = "";
 
         Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
@@ -72,6 +70,19 @@ public class ResultController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+    //////////////////////
+    @GetMapping("/test/{resultId}")
+    public ResponseEntity<String> deletePhoto(@PathVariable Long resultId) {
+
+
+        // S3에서 대표이미지 제외 사진 삭제
+        s3Service.deletePhotos(resultId);
+
+
+        return new ResponseEntity<>("삭제 완료", HttpStatus.CREATED);
+    }
+    //////////////////////
+
     // 기억 편집화면
     @GetMapping("/{resultId}/memories")
     public ResponseEntity<Map<String, Object>> getRollingpaperAndPhotoEdit(@PathVariable Long resultId) {
@@ -95,14 +106,15 @@ public class ResultController {
     // 사진첩 사진 추가
     @PostMapping("/{resultId}/memories/photos")
     public ResponseEntity<String> addPhotos(@PathVariable("resultId") Long resultId,
-                                           HttpServletRequest req,
+//                                           HttpServletRequest req,
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
-        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+//        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
 
         // 사진 업로드
-        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
+//        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
+        List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, 15L, resultId);
 
         // db에 저장
         resultService.createPhotoList(photoResDtoList);

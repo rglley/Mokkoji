@@ -1,5 +1,7 @@
 package online.mokkoji.event.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.StringPath;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +18,10 @@ public class PhotoResDto {
 //    private Long resultId;
     private Result result;
     private String photoPath;
+
+
+    @QueryProjection
+    public PhotoResDto(StringPath photoPath) {
+        this.photoPath= String.valueOf(photoPath);
+    }
 }

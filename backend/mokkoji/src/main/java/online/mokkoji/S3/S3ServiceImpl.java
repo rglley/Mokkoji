@@ -18,6 +18,7 @@ import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.repository.PhotoRepository;
 import online.mokkoji.result.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -106,6 +107,7 @@ public class S3ServiceImpl implements S3Service {
 
     // 대표이미지 제외 사진 삭제
     @Override
+    @CacheEvict(cacheNames = "photoList", key = "#resultId", cacheManager = "cacheManager")
     public void deletePhotos(Long resultId) {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
@@ -115,11 +117,18 @@ public class S3ServiceImpl implements S3Service {
         for (Photo photo : photos) {
             if (!result.getImage().equals(photo.getPhotoPath())) {
                 // S3에서 지우기
-                delete(photo.getPhotoPath());
+                delete(getPhotoKey(photo.getPhotoPath()));
                 // db에서 지우기
                 photoRepository.deleteById(photo.getId());
             }
         }
+    }
+
+    // 사진 key 얻어냄
+    private String getPhotoKey(String photoPath) {
+        String prefixToRemove="https://mokkoji-bucket.s3.ap-northeast-2.amazonaws.com/";
+
+        return photoPath.substring(prefixToRemove.length());
     }
 
 
@@ -137,16 +146,16 @@ public class S3ServiceImpl implements S3Service {
     }
 
     // S3에 delete
-    private void delete(String photoPath) {
-        if (amazonS3Client.doesObjectExist(bucket, photoPath)) {
+    private void delete(String photoKey) {
+        if (amazonS3Client.doesObjectExist(bucket, photoKey)) {
             try {
-                amazonS3Client.deleteObject(bucket, photoPath);
+                amazonS3Client.deleteObject(bucket, photoKey);
             } catch (Exception e) {
                 log.debug("S3 사진 삭제 실패", e);
                 e.printStackTrace();
             }
         } else {
-            throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
+            throw new RestApiException(ResultErrorCode.PHOTO_NOT_FOUND);
         }
     }
 
