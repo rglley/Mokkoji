@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, computed, watch } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -80,7 +80,9 @@ const limitHeight = 200
 
 initFlowbite()
 
-const isLoggedIn = computed(() => isLogin.value)
+const reloadPage = () => {
+  window.location.reload()
+}
 
 const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
@@ -107,19 +109,11 @@ onBeforeMount(() => {
   }
 })
 
-onMounted(() => {
-  if (store.forceReload) {
-    store.forceReload = false;
-    window.location.reload()
+watch(isLogin, async (newValue, oldValue) => {
+  if (newValue == true && oldValue == false) {
+    reloadPage()
   }
 })
-
-// watch(isLoggedIn, async (newValue, oldValue) => {
-//   if (newValue == true && oldValue == false) {
-//     image.value = $cookies.get('user').image
-//     name.value = $cookies.get('user').name
-//   }
-// })
 </script>
 
 <style>
