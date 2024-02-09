@@ -470,7 +470,8 @@ const state = reactive({
   publisher: undefined,
   subscribers: [],
   mySessionId: sessionStorage.getItem('sessionId'),
-  myUserName: 'participant' + Math.floor(Math.random() * 100),
+  myUserName:
+    $cookies.get('user') !== null ? $cookies.get('user').name : sessionStorage.getItem('userName'),
   openviduToken: undefined,
   isMic: true,
   isCamera: true,
