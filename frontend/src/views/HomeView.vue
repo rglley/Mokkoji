@@ -224,7 +224,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -235,6 +235,8 @@ import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
+
+const emit = defineEmits(['load-home'])
 
 const store = useSessionStore()
 const router = useRouter()
@@ -252,34 +254,32 @@ const submitConferenceId = async () => {
 
   if (result === 'success') {
     isInputError.value = false
-    router.push({
-      path: '/meetings',
-      props: { sessionId: store.mainSessionId }
-    })
+
+    if ($cookies.get('user') !== null) {
+      router.push({
+        path: '/meetings',
+        props: { sessionId: store.mainSessionId }
+      })
+    } else {
+      isModal.value = true
+    }
   } else {
     isInputError.value = true
     conferenceIdInput.value = ''
   }
-  // 로그인하지 않았다면 모달
-  // if (!isLogin.value) {
-  //   // 모달 띄우고
-  //   isModal.value = true
-  // }
 }
 
 const createMeeting = () => {
-  store.createSession()
-
-  // if (isLogin.value) {
-  //   router.push('/meeting')
-  // } else {
-  //   toast('로그인이 필요합니다', {
-  //     theme: 'auto',
-  //     type: 'warning',
-  //     transition: 'flip',
-  //     autoClose: 1000
-  //   })
-  // }
+  if ($cookies.get('user') !== null) {
+    store.createSession()
+  } else {
+    toast('로그인이 필요합니다', {
+      theme: 'auto',
+      type: 'warning',
+      transition: 'flip',
+      autoClose: 1000
+    })
+  }
 }
 
 const toTop = () => {
@@ -291,6 +291,10 @@ const toTop = () => {
 const modules = [Autoplay, Pagination]
 
 const photos = ['carousel1.png', 'carousel2.png', 'carousel3.png', 'carousel4.png']
+
+onMounted(() => {
+  emit('load-home')
+})
 </script>
 
 <style></style>

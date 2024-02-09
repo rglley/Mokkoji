@@ -70,15 +70,12 @@ const createName = () => {
 }
 
 const submitTempName = (tempName) => {
-  if (tempName.value == null || tempName.trim(' ').length == 0) {
+  if (tempName.value === null || tempName.trim(' ').length === 0) {
     // tempName 조합 로직
     tempName = createName()
   }
   // 서버에 회의 id, userName 전달 후 참가
-  // 회의 id는 HomeView에서 받아옴
-  alert(props.conferenceIdInput)
-  alert(tempName)
-  // alert(userName.value)
+  sessionStorage.setItem('userName', tempName)
 }
 </script>
 
