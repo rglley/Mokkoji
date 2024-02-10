@@ -198,7 +198,7 @@
           <div>
             <button
               id="button-picture"
-              :class="{ 'bg-purple-400': isCapture, 'bg-purple-200': !isCapture }"
+              :class="{ 'bg-purple-400': isCaptureModal, 'bg-purple-200': !isCaptureModal }"
               @click="captureMyVideo"
             >
               <IconCamera class="size-[50%]" />
@@ -304,6 +304,7 @@ import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
+import CaptureModal from '@/components/modal/meeting/CaptureModal.vue'
 import LeaveGroupModal from '@/components/modal/meeting/LeaveGroupModal.vue'
 
 const props = defineProps({
@@ -455,9 +456,8 @@ const showLeaveGroupModal = () => {
 
 // ---------------- OpenVidu 관련 ----------------
 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
 
-const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
@@ -466,13 +466,10 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: sessionStorage.getItem('sessionId') + groupNumber.value,
-  myUserName: 'participant' + Math.floor(Math.random() * 100),
-  openviduToken: undefined,
-  isMic: true,
-  isCamera: true,
-  isSpeaker: true,
-  isChat: true
+  mySessionId: sessionStorage.getItem('sessionId') + props.session.groupNumber,
+  myUserName:
+    $cookies.get('user') !== null ? $cookies.get('user').name : sessionStorage.getItem('userName'),
+  openviduToken: undefined
 })
 
 // 세션 참가하기
@@ -501,6 +498,8 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
+        state.session.publish(publisher)
+        userList.value.unshift(publisher)
       })
     })
     .catch((error) => {
@@ -566,9 +565,6 @@ const createToken = async (sessionId) => {
   )
   return response.data.connectionToken // 토큰
 }
-
-/* APPLICATION SERVER로부터 토큰 얻기
-아래의 메소드들은 세션과 토큰의 생성을 어플리케이션 서버에 요청한다. */
 
 const getToken = async (mySessionId) => {
   const sessionId = await createSession(mySessionId)

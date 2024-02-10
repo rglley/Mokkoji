@@ -360,7 +360,7 @@ const chatMessage = ref('')
 const chatMessages = ref([])
 const userList = ref([])
 const connectedUser = ref([])
-const groupNumber = ref(0)
+const groupNumber = ref(1)
 const groupList = ref([])
 const myVideo = ref(null)
 
@@ -518,9 +518,19 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
+        state.session.publish(publisher)
         userList.value.unshift(publisher)
 
-        state.session.host = state.session.publish(publisher)
+        if (sessionStorage.getItem('isHost')) {
+          console.log(1123123)
+          state.session.host = $cookies.get('user').name
+        }
+
+        console.log(state.session.host)
+
+        sessionStorage.setItem('session', state.session)
+
+        window.addEventListener('beforeunload', leaveMainMeeting)
       })
     })
     .catch((error) => {
@@ -569,8 +579,8 @@ const joinSession = () => {
   })
 
   // 소그룹 생성
-  state.session.on('signal:group', () => {
-    emit('create-group-meeting', {
+  state.session.on('signal:group', async () => {
+    await emit('create-group-meeting', {
       groupNumber: groupNumber.value
     })
 
@@ -632,17 +642,19 @@ const getToken = async (mySessionId) => {
   return await createToken(sessionId)
 }
 
-const leaveMainMeeting = (event) => {
-  if (sessionStorage.getItem('isHost')) {
-    store.deleteSession
+const leaveMainMeeting = async () => {
+  // if (sessionStorage.getItem('isHost')) {
+  //   store.deleteSession
 
-    for (let idx = 0; idx < state.subscribers.length; idx++) {
-      state.session.forceDisconnect(state.subscribers[idx].stream.connection)
-    }
-  }
+  //   for (let idx = 0; idx < state.subscribers.length; idx++) {
+  //     state.session.forceDisconnect(state.subscribers[idx].stream.connection)
+  //   }
+  // }
 
   // delete sessionStorage.sessionId
-  // deleteSession()
+  await deleteSession()
+
+  delete sessionStorage.session
 
   emit('leave-meeting')
 
@@ -689,7 +701,7 @@ const updateMainVideoStreamManager = (stream) => {
 }
 
 onBeforeMount(() => {
-  joinSession()
+  if (!sessionStorage.getItem('session') !== null) joinSession()
 
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
