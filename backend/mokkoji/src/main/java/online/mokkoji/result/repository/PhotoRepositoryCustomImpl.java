@@ -12,7 +12,6 @@ public class PhotoRepositoryCustomImpl implements PhotoRepositoryCustom{
     private final JPAQueryFactory query;
 
     @Override
-    @Cacheable(value = "photoPath", key = "#resultId", cacheManager = "cacheManager")
     public List<String> findPhotoPathListByResultId(Long resultId) {
 
         QPhoto photo = QPhoto.photo;

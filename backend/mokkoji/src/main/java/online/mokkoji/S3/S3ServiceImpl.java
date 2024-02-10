@@ -56,6 +56,7 @@ public class S3ServiceImpl implements S3Service {
 
         List<PhotoResDto> dtoList = new ArrayList<>();
 
+        // 사진 업로드 후 dto에 담아서 리턴
         for (MultipartFile photo : photoList) {
             try {
                 PhotoResDto photoResDto = getPhotoResDto(photo, userId, result);
