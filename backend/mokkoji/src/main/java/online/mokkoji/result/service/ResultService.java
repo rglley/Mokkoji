@@ -18,7 +18,7 @@ public interface ResultService {
     void createRecollection(Long resultId);
 
     // 사진 db 저장
-    void createPhoto(PhotoResDto photoResDto);
+    List<String> createPhoto(PhotoResDto photoResDto);
 
     // 메시지 db 저장
     void createMessage(MessageResDto message);
@@ -34,4 +34,7 @@ public interface ResultService {
 
     // 사진첩 사진 추가
     void createPhotoList(List<PhotoResDto> photoResDtoList);
+
+    // TODO : test 지우기
+    Map<String, Object> test(Long resultId);
 }

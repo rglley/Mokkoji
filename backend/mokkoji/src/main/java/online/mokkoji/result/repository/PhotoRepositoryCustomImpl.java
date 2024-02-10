@@ -1,10 +1,9 @@
 package online.mokkoji.result.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import online.mokkoji.result.domain.QPhoto;
-import online.mokkoji.result.dto.response.PhotoPathResDto;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 @RequiredArgsConstructor
@@ -13,11 +12,12 @@ public class PhotoRepositoryCustomImpl implements PhotoRepositoryCustom{
     private final JPAQueryFactory query;
 
     @Override
-    public List<PhotoPathResDto> findPhotoPathListByResultId(Long resultId) {
+    @Cacheable(value = "photoPath", key = "#resultId", cacheManager = "cacheManager")
+    public List<String> findPhotoPathListByResultId(Long resultId) {
 
         QPhoto photo = QPhoto.photo;
 
-        return query.select(Projections.fields(PhotoPathResDto.class, photo.photoPath))
+        return query.select(photo.photoPath)
                 .where(photo.result.id.eq(resultId))
                 .from(photo)
                 .fetch();

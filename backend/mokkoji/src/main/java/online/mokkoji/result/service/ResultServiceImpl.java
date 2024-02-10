@@ -17,6 +17,8 @@ import online.mokkoji.result.repository.*;
 import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,7 +89,6 @@ public class ResultServiceImpl implements ResultService {
         return resultMap;
     }
 
-//    @Cacheable(cacheNames = "messageList", key = "#", cacheManager = "cacheManager")
     @Override
     public ResultResDto getResult(Long resultId, Pageable pageable) {
         Optional<Result> findResult = resultRepository.findById(resultId);
@@ -132,11 +133,27 @@ public class ResultServiceImpl implements ResultService {
 
     // 사진 db 저장
     @Override
-    @Cacheable(cacheNames = "photoList", key = "#photoResDto.getResult().id", cacheManager = "cacheManager")
-    public void createPhoto(PhotoResDto photoResDto) {
+    @CachePut(value = "photoPath", key = "#photoResDto.getResult().id", cacheManager = "cacheManager")
+    public List<String> createPhoto(PhotoResDto photoResDto) {
+
+        clearCache(photoResDto.getResult().getId());
 
         Photo photo = Photo.builder().result(photoResDto.getResult()).photoPath(photoResDto.getPhotoPath()).build();
         photoRepository.save(photo);
+        // 캐시에서 기존의 사진 경로 리스트를 가져옴
+        List<String> photoPaths = photoRepository.findPhotoPathListByResultId(photoResDto.getResult().getId());
+        if (photoPaths == null) {
+            photoPaths = new ArrayList<>();
+        }
+
+        // 새로운 사진 경로를 리스트에 추가
+        photoPaths.add(photo.getPhotoPath());
+
+        return photoPaths;
+    }
+
+    @CacheEvict(value = "photoPath", key = "#resultId", cacheManager = "cacheManager")
+    public void clearCache(Long resultId) {
     }
 
     // 메시지 db 저장
@@ -178,6 +195,29 @@ public class ResultServiceImpl implements ResultService {
 
         resultMap.put("rollingpaperTemplate", rollingpaperDto);
         resultMap.put("photoPathList", photoPathList);
+
+        return resultMap;
+
+    }
+
+
+    // TODO : test 지우기
+    @Override
+    public Map<String, Object> test(Long resultId) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        // result를 통해 롤링페이퍼 가져옴
+        Result result = getResultById(resultId);
+        RollingPaper rollingPaper = result.getRollingpaper();
+
+        // 롤링페이퍼 설정된 템플릿 가져옴
+        RollingpaperEditResDto rollingpaperDto = new RollingpaperEditResDto(rollingPaper.getBackgroundTemplate(), rollingPaper.getPostitTemplate());
+
+        // 사진 루트 가져옴
+        List<String> photos = photoRepository.findPhotoPathListByResultId(resultId);
+
+        resultMap.put("rollingpaperTemplate", rollingpaperDto);
+        resultMap.put("photoPathList", photos);
 
         return resultMap;
 

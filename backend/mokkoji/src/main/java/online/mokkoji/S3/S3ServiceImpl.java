@@ -107,7 +107,7 @@ public class S3ServiceImpl implements S3Service {
 
     // 대표이미지 제외 사진 삭제
     @Override
-    @CacheEvict(cacheNames = "photoList", key = "#resultId", cacheManager = "cacheManager")
+    @CacheEvict(value = "photoPath", key = "#resultId", cacheManager = "cacheManager")
     public void deletePhotos(Long resultId) {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));

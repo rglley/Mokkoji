@@ -70,16 +70,25 @@ public class ResultController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    //////////////////////
+    ////////////////////// TODO: 지우기
     @GetMapping("/test/{resultId}")
-    public ResponseEntity<String> deletePhoto(@PathVariable Long resultId) {
+    public ResponseEntity<Map<String, Object>> testPhotoList(@PathVariable Long resultId) {
+
+
+        Map<String, Object> test = resultService.test(resultId);
+
+
+        return new ResponseEntity<>(test, HttpStatus.OK);
+    }
+    @DeleteMapping("/test/{resultId}")
+    public ResponseEntity<String> testDelete(@PathVariable Long resultId) {
 
 
         // S3에서 대표이미지 제외 사진 삭제
         s3Service.deletePhotos(resultId);
 
 
-        return new ResponseEntity<>("삭제 완료", HttpStatus.CREATED);
+        return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
     //////////////////////
 
