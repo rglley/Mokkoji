@@ -55,9 +55,6 @@ public class OpenviduController {
                                               HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
-
-        
-
         User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
         // request body 객체로 직렬화

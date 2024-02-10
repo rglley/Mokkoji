@@ -42,7 +42,7 @@ public class ResultServiceImpl implements ResultService {
     private final PostitTemplateRepository postitTemplateRepository;
     private final UserRepository userRepository;
 
-    // 사진과 메시지 리스트로 담는 메서드
+    // 행사 리스트
     @Override
     public Map<String, Object> getResultList(String provider, String email) {
 
@@ -90,6 +90,7 @@ public class ResultServiceImpl implements ResultService {
         return resultMap;
     }
 
+    // 롤링페이퍼와 메시지 페이징
     @Override
     public ResultResDto getResult(Long resultId, Pageable pageable) {
         Optional<Result> findResult = resultRepository.findById(resultId);
@@ -104,6 +105,7 @@ public class ResultServiceImpl implements ResultService {
         if(rollingPaper == null)
             throw new RestApiException(ResultErrorCode.ROLLINGPAPER_NOT_FOUND);
 
+        // TODO : @Cacheable(value = "messages", key = "#rollingpaperId + #pageNo") 를 하고 싶은데 pageNo를 어케 하는지
         Page<Message> messageList = messageRepository.findAllByRollingPaper_Id(rollingPaper.getId(), pageable);
 
         Photomosaic photomosaic = result.getPhotomosaic();

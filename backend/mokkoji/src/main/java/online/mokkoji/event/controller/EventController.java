@@ -83,6 +83,7 @@ public class EventController {
 
         // 유효성 검사 후 파일 S3에 업로드
         Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, user.getId(), paperId);
+//        Map<String, String> urlMap = s3Service.uploadRollingpaper(fileMap, 15L, paperId);
         MessageResDto messageResDto = new MessageResDto(paperId, messageReqDto.getWriter(), messageReqDto.getText(), urlMap);
         resultService.createMessage(messageResDto);
         return new ResponseEntity<>("롤링페이퍼 업로드 완료", HttpStatus.OK);
