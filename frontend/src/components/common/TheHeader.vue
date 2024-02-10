@@ -23,7 +23,7 @@
             </ModalView>
           </li>
           <li v-else>
-            <div class="flex flex-row relative justify-center items-center gap-5">
+            <div class="flex flex-row relative justify-center items-center gap-[3vh] text-[2vh]">
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
@@ -31,8 +31,8 @@
               >
                 내 서비스
               </button>
-              <div class="flex justify-center items-center gap-2 rounded-full mx-2">
-                <img class="overflow-hidden rounded-full w-12 m-0;" :src="image" />
+              <div class="flex justify-center items-center rounded-full">
+                <img class="overflow-hidden rounded-full w-[5vh] m-0 mr-[1vh]" :src="image" />
                 <p class="text-black text-[2vh]">{{ name }}님</p>
               </div>
               <div

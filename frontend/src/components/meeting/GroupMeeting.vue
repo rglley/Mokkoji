@@ -49,37 +49,50 @@
       >
         <div
           v-if="isUserList"
-          class="w-full h-full border-sm border-gray rounded-r-lg flex flex-col"
+          :class="{
+            'w-full h-full border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isUserList && !isChat,
+            'w-full h-1/2 border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isUserList && isChat
+          }"
         >
           <div class="px-md w-full h-[13%] flex items-center">
-            <div class="w-[30%] font-bold text-r-lg">참여자</div>
-            <div class="w-[70%] flex just overflow-hidden">
-              <button class="w-[70%]">
-                <div class="text-r-sm text-purple-400 text-end">초대하기</div>
-                <IconInvite class="size-[40%]" />
+            <div class="ml-[1vw] w-[30%] font-bold text-r-md">참여자</div>
+            <div class="w-[70%] flex">
+              <button
+                class="ml-auto w-[45%] flex justify-center hover:bg-neutral-200 rounded-r-lg"
+                @click="showInviteModal"
+              >
+                <div class="w-[100%] text-r-sm text-purple-400">초대하기</div>
+                <IconInvite class="w-[4vw] size-[70%]" />
               </button>
-              <button class="ml-auto w-[20%] flex overflow-hidden" @click="showUserList">
-                <IconCancelPurple class="size-[60%]" />
+              <button
+                class="ml-[3vh] flex w-[2.3vw] aspect-square rounded-full hover:bg-neutral-200"
+                @click="showUserList(), showInviteModal('close')"
+              >
+                <IconCancelPurple class="size-[80%]" />
               </button>
             </div>
           </div>
           <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-hidden">
             <user-list
-              v-for="sub in state.subscribers"
-              :key="sub.stream.connection.connectionId"
-              :stream-manager="sub"
+              v-for="user in userList"
+              :key="user.stream.connection.connectionId"
+              :stream-manager="user"
               :search-user-name="searchUserName"
+              :my-name="state.myUserName"
+              :button-type="'user-list'"
               class="bg-white w-[90%] h-[10vh] rounded-r-lg text-r-sm flex justify-center items-center font-semibold"
             />
           </div>
           <div class="h-[13%] flex flex-col justify-center items-center">
-            <div class="bg-gray w-[90%] h-[70%] rounded-full flex items-center">
+            <div class="bg-gray w-[95%] h-[70%] rounded-r-xl flex items-center">
               <input
                 type="text"
                 name=""
                 id="search-name"
                 placeholder="참여자명 검색"
-                class="bg-gray w-[80%] h-[100%] border-0 rounded-full"
+                class="my-0 ml-[2vb] pr-0 pl-[0.5vw] bg-gray w-[80%] h-[100%] border-0 rounded-full text-r-md rounded-r-xl"
                 v-model="searchUserName"
               />
               <button
@@ -93,30 +106,42 @@
         <div v-if="isUserList && isChat" class="mb-[1vh]"></div>
         <div
           v-if="isChat"
-          id="chat-container"
-          class="w-full h-full border-sm border-gray rounded-r-lg flex flex-col"
+          :class="{
+            'w-full h-full border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isChat && !isUserList,
+            'w-full h-1/2 border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isChat && isUserList
+          }"
         >
           <div class="px-md w-full h-[13%] flex items-center">
-            <div class="basis-3/12 font-bold text-r-md">채팅</div>
-            <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
-              <IconCancelPurple @click="showChat" class="size-[50%]" />
+            <div class="ml-[1vw] basis-3/12 font-bold text-r-md">채팅</div>
+            <button
+              class="ml-auto w-[2.3vw] aspect-square rounded-full flex hover:bg-neutral-200"
+              @click="showChat"
+            >
+              <IconCancelPurple class="size-[80%]" />
             </button>
           </div>
-          <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-y-scroll">
+          <div
+            id="chat-container"
+            class="pt-[1vh] bg-gray h-[80%] flex flex-col justify-start items-center overflow-y-scroll"
+          >
             <ChatLog :chat-log="chatMessages" />
           </div>
           <div class="h-[13%] flex flex-col justify-center items-center">
-            <div action="/meeting" class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center">
+            <div action="/meeting" class="bg-gray w-[95%] h-[70%] rounded-r-xl flex items-center">
               <input
                 v-model="chatMessage"
                 type="text"
                 name=""
                 id="chat-message"
                 placeholder="메시지 보내기"
-                class="bg-gray w-[80%] h-[100%] border-0 rounded-full"
+                class="my-0 ml-[2vb] pl-[0.5vw] bg-gray w-[80%] h-[100%] border-0 placeholder:items-center text-r-md rounded-r-xl"
+                maxlength="100"
+                @keypress.enter="sendMessage"
               />
               <button
-                @click="sendMessage()"
+                @click="sendMessage"
                 type="submit"
                 class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
               >
@@ -327,6 +352,7 @@ const isMic = ref(true)
 const isMicModal = ref(false)
 const isCamera = ref(true)
 const isCameraModal = ref(false)
+const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
 const isAddressCopyModal = ref(false)
 const isSessionIdCopyModal = ref(false)
@@ -372,6 +398,14 @@ const onSaveAs = (uri, filename) => {
   link.download = filename
   link.click()
   document.body.removeChild(link)
+}
+
+const showInviteModal = (event) => {
+  if (event === 'close') {
+    isInviteModal.value = false
+  } else {
+    isInviteModal.value = !isInviteModal.value
+  }
 }
 
 const showMeetingDetailModal = () => {
@@ -454,6 +488,13 @@ const showLeaveGroupModal = () => {
   isLeaveGroupModal.value = !isLeaveGroupModal.value
 }
 
+const scrollToBottom = () => {
+  // 스크롤할 대상 요소 선택
+  const scroll = document.getElementById('chat-container')
+
+  scroll.scrollTop = scroll.scrollHeight
+}
+
 // ---------------- OpenVidu 관련 ----------------
 
 axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
@@ -521,12 +562,24 @@ const joinSession = () => {
   // 시그널링 서버로부터 수신된 채팅 메시지 처리
   state.session.on('signal:chat', (event) => {
     const sender = JSON.parse(event.from.data)
+    const now = new Date()
+    const time = ref()
+
+    if (now.getHours > 12) {
+      time.value = (now.getHours() % 12) + ':' + now.getMinutes() + ' PM'
+    } else {
+      time.value = now.getHours() + ':' + now.getMinutes() + ' AM'
+    }
 
     const chatData = {
       sender: sender.clientData,
-      content: event.data
+      content: event.data,
+      time: time
     }
+
     chatMessages.value.push(chatData)
+
+    window.setTimeout(scrollToBottom, 50)
   })
 
   // 참가자 퇴장
@@ -628,7 +681,17 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style>
+<style scoped>
+::-webkit-scrollbar {
+  width: 0.8vw;
+  background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #e7c6ff;
+  border-radius: var(--border-radius-lg);
+}
+
 #button-container-center {
   margin: auto 0;
 }
