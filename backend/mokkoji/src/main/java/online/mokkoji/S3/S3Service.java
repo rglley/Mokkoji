@@ -21,4 +21,13 @@ public interface S3Service {
 
     // 대표이미지 제외 사진 삭제
     void deletePhotos(Long resultId);
+
+    String downloadWithUrl(String s3Url, String provider, String email);
+
+    String downloadAllPhotos(Long resultId, String provider, String email);
+
+    String createDownloadUrl(String fileName);
+
+    String uploadPhotomosaic(MultipartFile multipartFile, Long resultId, String provider, String email);
+
 }

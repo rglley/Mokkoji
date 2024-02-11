@@ -1,29 +1,34 @@
 package online.mokkoji.S3;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.HttpMethod;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
-import online.mokkoji.common.exception.errorCode.CommonErrorCode;
-import online.mokkoji.common.exception.errorCode.EventErrorCode;
-import online.mokkoji.common.exception.errorCode.ResultErrorCode;
+import online.mokkoji.common.exception.errorCode.*;
 import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.repository.PhotoRepository;
 import online.mokkoji.result.repository.ResultRepository;
+import online.mokkoji.user.domain.Provider;
+import online.mokkoji.user.domain.User;
+import online.mokkoji.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -34,10 +39,14 @@ public class S3ServiceImpl implements S3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Downloads" +
+            File.separator + "mokkoji" + File.separator;
+
 
     private final AmazonS3Client amazonS3Client;
     private final ResultRepository resultRepository;
     private final PhotoRepository photoRepository;
+    private final UserRepository userRepository;
 
 
     // 사진 한 장 업로드 후 url 리턴
@@ -194,4 +203,118 @@ public class S3ServiceImpl implements S3Service {
             throw new RestApiException(EventErrorCode.FILE_EXTENSION_NOT_FOUND);
         }
     }
+
+    @Override
+    public String downloadWithUrl(String s3Url, String provider, String email) {
+        URL url;
+        try {
+            url = new URL(s3Url);
+        } catch (MalformedURLException e) {
+            throw new RestApiException(S3ErrorCode.INVALID_URL);
+        }
+
+        String key = url.getPath().substring(1);
+        String userId = key.substring(0, key.indexOf('/'));
+
+        User loginUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
+
+        if(!userId.equals(loginUser.getId().toString()))
+            throw new RestApiException(S3ErrorCode.PERMISSION_NOT_GRANTED);
+
+        File localFile = new File(LOCAL_PATH + key.substring(key.lastIndexOf('/') + 1));
+
+        File parentDir = localFile.getParentFile();
+        if(!parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+
+        GetObjectRequest request = new GetObjectRequest(bucket, key);
+
+        amazonS3Client.getObject(request, localFile);
+
+        return localFile.getAbsolutePath();
+    }
+
+    @Override
+    public String downloadAllPhotos(Long resultId, String provider, String email) {
+        User loginUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
+
+        Result findResult = resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
+
+        Long userId = findResult.getUser().getId();
+
+        if(loginUser.getId() != userId)
+            throw new RestApiException(S3ErrorCode.PERMISSION_NOT_GRANTED);
+
+        String folderPrefix = userId + "/" + resultId + "/photos/photoList/";
+
+        ListObjectsV2Request listRequest = new ListObjectsV2Request()
+                .withBucketName(bucket)
+                .withPrefix(folderPrefix);
+
+        ListObjectsV2Result listResponse = amazonS3Client.listObjectsV2(listRequest);
+
+        for(S3ObjectSummary s3ObjectSummary : listResponse.getObjectSummaries()) {
+            String key = s3ObjectSummary.getKey();
+
+            File localFile = new File(LOCAL_PATH + key.substring(key.lastIndexOf('/') + 1));
+
+            File parentDir = localFile.getParentFile();
+            if(!parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            GetObjectRequest request = new GetObjectRequest(bucket, key);
+
+            amazonS3Client.getObject(request, localFile);
+        }
+
+        return LOCAL_PATH;
+    }
+
+    @Override
+    public String createDownloadUrl(String fileName) {
+        Date expiration = new Date();
+        long expTime = expiration.getTime();
+        expTime += TimeUnit.MINUTES.toMillis(5);
+        expiration.setTime(expTime);
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
+                .withMethod(HttpMethod.GET)
+                .withExpiration(expiration);
+
+        return amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest).toString();
+    }
+
+    @Override
+    public String uploadPhotomosaic(MultipartFile multipartFile, Long resultId, String provider, String email) {
+        User loginUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
+                .orElseThrow(() -> new RestApiException(UserErrorCode.USER_NOT_FOUND));
+        Long loginId = loginUser.getId();
+
+        Result result = resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
+        Long userId = result.getUser().getId();
+
+        if(loginId != userId)
+            throw new RestApiException(S3ErrorCode.PERMISSION_NOT_GRANTED);
+
+        String fileName = userId + "/" + resultId + "/photos/photomosaic.jpeg";
+
+        if (amazonS3Client.doesObjectExist(bucket, fileName)) {
+            amazonS3Client.deleteObject(bucket, fileName);
+        }
+
+        try {
+            upload(multipartFile, fileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
 }

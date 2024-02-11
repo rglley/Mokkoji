@@ -25,6 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -41,6 +43,9 @@ public class ResultServiceImpl implements ResultService {
     private final BackgroundTemplateRepository backgroundTemplateRepository;
     private final PostitTemplateRepository postitTemplateRepository;
     private final UserRepository userRepository;
+    private final PhotomosaicRepository photomosaicRepository;
+
+
 
     // 행사 리스트
     @Override
@@ -241,5 +246,71 @@ public class ResultServiceImpl implements ResultService {
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
     }
 
+    @Override
+    public String getThumbnailPath(Long resultId) {
+        Optional<Result> findResult = resultRepository.findById(resultId);
 
+        if(findResult.isEmpty())
+            throw new RestApiException(ResultErrorCode.RESULT_NOT_FOUND);
+
+        return findResult.get().getImage();
+    }
+
+    @Override
+    public String getPhotomosaicPath(Long resultId) {
+        Optional<Photomosaic> findPhotoMosaic = photomosaicRepository.findById(resultId);
+
+        if(findPhotoMosaic.isEmpty())
+            throw new RestApiException(ResultErrorCode.PHOTOMOSAIC_NOT_FOUND);
+
+        return findPhotoMosaic.get().getPath();
+    }
+
+    @Override
+    public String getImageFileName(Long resultId) {
+        Optional<Result> findResult = resultRepository.findById(resultId);
+
+        if(findResult.isEmpty())
+            throw new RestApiException(ResultErrorCode.RESULT_NOT_FOUND);
+
+        String imageUrl = findResult.get().getImage();
+
+        URL url = null;
+        try {
+            url = new URL(imageUrl);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return url.getPath().substring(1);
+    }
+
+    @Override
+    public String getPhotoMosaicFileName(Long resultId) {
+        Optional<Photomosaic> findPhotoMosaic = photomosaicRepository.findById(resultId);
+
+        if(findPhotoMosaic.isEmpty())
+            throw new RestApiException(ResultErrorCode.PHOTOMOSAIC_NOT_FOUND);
+
+        String photomosaicPath = findPhotoMosaic.get().getPath();
+
+        URL url = null;
+        try {
+            url = new URL(photomosaicPath);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return url.getPath().substring(1);
+    }
+
+    @Override
+    public void updatePhotomosaic(Long resultId, String photomosaicPath) {
+        Photomosaic photomosaic = photomosaicRepository.findByResult_Id(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.PHOTOMOSAIC_NOT_FOUND));
+
+        photomosaic.updatePath(photomosaicPath);
+
+        photomosaicRepository.save(photomosaic);
+    }
 }

@@ -41,4 +41,14 @@ public interface ResultService {
 
     // 사진 url redis에 업데이트
     List<String> updatePhotoPathCache(Long resultId, List<PhotoResDto> photoResDtoList);
+
+    String getThumbnailPath(Long resultId);
+
+    String getPhotomosaicPath(Long resultId);
+
+    String getImageFileName(Long resultId);
+
+    String getPhotoMosaicFileName(Long resultId);
+
+    void updatePhotomosaic(Long resultId, String photomosaicPath);
 }
