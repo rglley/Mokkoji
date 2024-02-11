@@ -40,7 +40,7 @@
       v-model="userName"
       class="w-80 border-2 border-gray"
     /><br />
-    <button @click="submitTempName" class="float-right">참가하기</button>
+    <button @click="submitTempName(userName)" class="float-right">참가하기</button>
   </div>
 </template>
 

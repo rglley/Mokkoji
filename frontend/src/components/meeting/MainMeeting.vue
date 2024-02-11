@@ -75,7 +75,7 @@
             </div>
           </div>
           <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-hidden">
-            <user-list
+            <UserList
               v-for="user in userList"
               :key="user.stream.connection.connectionId"
               :stream-manager="user"
@@ -95,7 +95,7 @@
                 v-model="searchUserName"
               />
               <button
-                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center hover:bg-purple-300"
               >
                 <IconSearch class="size-[60%]" />
               </button>
@@ -142,7 +142,7 @@
               <button
                 @click="sendMessage"
                 type="submit"
-                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center hover:bg-purple-300"
               >
                 <IconSendMessage class="size-[60%]" />
               </button>
@@ -361,7 +361,6 @@ import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
 
 const router = useRouter()
-const store = useSessionStore()
 
 const videoWidth = window.screen.width * 0.22
 const videoHeight = window.screen.height * 0.95
@@ -743,7 +742,7 @@ const updateMainVideoStreamManager = (stream) => {
 }
 
 onBeforeMount(() => {
-  if (!sessionStorage.getItem('session') !== null) joinSession()
+  joinSession()
 
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
