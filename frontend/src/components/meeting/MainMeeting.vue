@@ -361,6 +361,7 @@ import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
 
 const router = useRouter()
+const store = useSessionStore()
 
 const videoWidth = window.screen.width * 0.22
 const videoHeight = window.screen.height * 0.95
@@ -389,7 +390,6 @@ const chatMessages = ref([])
 const userList = ref([])
 const connectedUser = ref([])
 const groupNumber = ref(1)
-const groupList = ref([])
 const myVideo = ref(null)
 
 const captureMyVideo = () => {
@@ -476,6 +476,10 @@ const setCameraState = () => {
   }, 600)
 }
 
+const today = new Date()
+
+console.log(today.getHours() % 12)
+
 const showGroupModal = () => {
   isGroupModal.value = !isGroupModal.value
 }
@@ -520,7 +524,6 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  // mySessionId: sessionStorage.getItem('sessionId'),
   myUserName:
     $cookies.get('user') !== null ? $cookies.get('user').name : sessionStorage.getItem('userName'),
   openviduToken: undefined
@@ -536,7 +539,7 @@ const joinSession = () => {
 
   // 3) 유효한 사용자 토큰으로 세션에 연결하기
 
-  getToken(state.mySessionId)
+  getToken()
     .then((token) => {
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
         let publisher = state.OV.initPublisher(undefined, {
@@ -555,12 +558,6 @@ const joinSession = () => {
         state.publisher = publisher
         state.session.publish(publisher)
         userList.value.unshift(publisher)
-
-        if (sessionStorage.getItem('isHost')) {
-          state.session.host = $cookies.get('user').name
-        }
-
-        window.addEventListener('beforeunload', leaveMainMeeting)
       })
     })
     .catch((error) => {
@@ -586,7 +583,7 @@ const joinSession = () => {
     const now = new Date()
     const time = ref()
 
-    if (now.getHours > 12) {
+    if (now.getHours() > 12) {
       time.value = (now.getHours() % 12) + ':' + now.getMinutes() + ' PM'
     } else {
       time.value = now.getHours() + ':' + now.getMinutes() + ' AM'
@@ -621,9 +618,16 @@ const joinSession = () => {
 
   // 소그룹 생성
   state.session.on('signal:group', async () => {
+    isLeave.value = true
+
     await emit('create-group-meeting', {
       groupNumber: groupNumber.value
     })
+
+    sessionStorage.setItem(
+      'groupSessionId',
+      sessionStorage.getItem('sessionId') + groupNumber.value
+    )
 
     groupNumber.value++
 
@@ -669,18 +673,7 @@ const getToken = async () => {
 }
 
 const leaveMainMeeting = async () => {
-  // if (sessionStorage.getItem('isHost')) {
-  //   store.deleteSession
-
-  //   for (let idx = 0; idx < state.subscribers.length; idx++) {
-  //     state.session.forceDisconnect(state.subscribers[idx].stream.connection)
-  //   }
-  // }
-
-  // delete sessionStorage.sessionId
   await deleteSession()
-
-  delete sessionStorage.session
 
   emit('leave-meeting')
 
@@ -701,6 +694,8 @@ const sendMessage = () => {
 }
 
 const createGroupMeeting = (userList) => {
+  store.createGroupSession(sessionStorage.getItem('sessionId') + groupNumber.value)
+
   connectedUser.value.forEach((user) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
     const userIndex = foundUser ? userList.value.indexOf(foundUser) : -1
@@ -732,9 +727,7 @@ onBeforeMount(() => {
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
 
-onBeforeUnmount(() => {
-  window.addEventListener('beforeunload', leaveMainMeeting)
-})
+onBeforeUnmount(() => {})
 </script>
 
 <style scoped>
