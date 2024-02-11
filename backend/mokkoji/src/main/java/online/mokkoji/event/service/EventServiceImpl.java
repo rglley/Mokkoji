@@ -124,4 +124,11 @@ public class EventServiceImpl implements EventService {
 
         return fileMap;
     }
+
+    // 행사 정보 하나 받아오기
+    @Override
+    public Event getEvent(String sessionId) {
+        return eventRepository.findBySessionId(sessionId)
+                .orElseThrow(() -> new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
+    }
 }

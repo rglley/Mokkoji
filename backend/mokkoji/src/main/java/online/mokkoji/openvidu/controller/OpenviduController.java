@@ -74,15 +74,19 @@ public class OpenviduController {
 
     // 세션 정보 받기
     @GetMapping("/sessions/{sessionId}")
-    public ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId)
+    public ResponseEntity<Map<String, Object>> getSession(@PathVariable("sessionId") String sessionId)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-
         openvidu.fetch();
+        Map<String, Object> responseMap = new HashMap<>();
         List<Session> activeSessions = openvidu.getActiveSessions();
         for (Session session : activeSessions) {
             if (session.getSessionId().equals(sessionId)) {
-                return new ResponseEntity<>(session, HttpStatus.OK);
+
+                responseMap.put("session", session);
+                responseMap.put("hostName", eventService.getEvent(sessionId).getUser().getName());
+
+                return new ResponseEntity<>(responseMap, HttpStatus.OK);
             }
         }
 

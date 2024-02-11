@@ -1,5 +1,6 @@
 package online.mokkoji.event.service;
 
+import online.mokkoji.event.domain.Event;
 import online.mokkoji.event.dto.request.MessageReqDto;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,7 @@ public interface EventService {
     void deleteSession(String sessionId, SessionReqDto sessionReqDto);
 
     Map<String, MultipartFile> createRollingpaperFileMap(MessageReqDto messageReqDto);
+
+    Event getEvent(String sessionId);
 
 }
