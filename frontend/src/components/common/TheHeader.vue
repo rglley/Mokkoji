@@ -10,20 +10,19 @@
           class="w-[8vw] transition ease-in-out hover:animate-pulse"
           alt="모꼬지 로고"
         />
-        <!-- <span id="title-bold">모꼬지</span> -->
       </router-link>
 
       <div class="ml-auto self-center">
-        <ul class="font-medium flex md:flex-row ml-10">
-          <button id="button-header"><a href="/" class="text-[3vh]">홈으로</a></button>
+        <ul class="font-medium flex md:flex-row">
+          <button id="button-header"><a href="/" class="text-[2vh]">홈으로</a></button>
           <li v-if="!(store.isLogin || isLogin)">
-            <button id="button-header" @click="showLoginModal" class="text-[3vh]">로그인</button>
+            <button id="button-header" @click="showLoginModal" class="text-[2vh]">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
           <li v-else>
-            <div class="flex flex-row relative justify-center items-center gap-5">
+            <div class="flex flex-row relative justify-center items-center gap-[3vh] text-[2vh]">
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
@@ -31,9 +30,9 @@
               >
                 내 서비스
               </button>
-              <div class="flex justify-center items-center gap-2 rounded-full mx-2">
-                <img class="overflow-hidden rounded-full w-12 m-0;" :src="image" />
-                <p class="text-black text-[3vh]">{{ name }}님</p>
+              <div class="flex justify-center items-center rounded-full">
+                <img class="overflow-hidden rounded-full w-[5vh] m-0 mr-[1vh]" :src="image" />
+                <p class="text-black text-[2vh]">{{ name }}님</p>
               </div>
               <div
                 id="dropdown"
@@ -60,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -75,10 +74,14 @@ const isTransparent = ref(false)
 const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
-
+const reloadFlag = ref(false)
 const limitHeight = 200
 
 initFlowbite()
+
+const reloadPage = () => {
+  window.location.reload()
+}
 
 const showLoginModal = () => {
   isLoginModal.value = !isLoginModal.value
@@ -105,6 +108,12 @@ onBeforeMount(() => {
   }
 })
 
+watch(isLogin, async (newValue, oldValue) => {
+  if (newValue === true && oldValue === false && !reloadFlag) {
+    reloadFlag.value = true
+    reloadPage()
+  }
+})
 </script>
 
 <style>
@@ -114,6 +123,6 @@ onBeforeMount(() => {
 }
 
 li {
-  @apply m-2 p-5;
+  @apply m-[1vw] p-[1vw];
 }
 </style>

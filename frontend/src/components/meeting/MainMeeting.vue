@@ -281,8 +281,7 @@
       </div>
     </section>
     <transition-group name="down">
-      <InviteModal v-if="isInviteModal" 
-      />
+      <InviteModal v-if="isInviteModal" />
     </transition-group>
     <transition-group name="up">
       <MeetingDetailModal
@@ -307,14 +306,8 @@
       />
     </transition-group>
     <transition-group name="up">
-      <LetterModal
-        v-if="isLetterModal"
-        @remove-letter-modal="showLetterModal(), showAudioRecorderModal('close'), showVideoRecorderModal('close')"
-        @show-audio-recorder="showAudioRecorderModal"
-        @show-video-recorder="showVideoRecorderModal"
-      />
+      <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal()" />
     </transition-group>
-    <AudioRecorderModal v-if="isAudioRecorderModal" />
     <VideoRecorderModal v-if="isVideoRecorderModal" />
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
@@ -323,7 +316,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeMount, onBeforeUnmount } from 'vue'
+import { ref, reactive, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import { useSessionStore } from '@/stores/meeting'
@@ -354,8 +347,6 @@ import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
-import AudioRecorderModal from '@/components/modal/meeting/AudioRecorderModal.vue'
-import VideoRecorderModal from '@/components/modal/meeting/VideoRecorderModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
@@ -376,8 +367,6 @@ const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
 const isGroupModal = ref(false)
 const isLetterModal = ref(false)
-const isAudioRecorderModal = ref(false)
-const isVideoRecorderModal = ref(false)
 const isGroup = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -468,29 +457,9 @@ const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
 }
 
-const showAudioRecorderModal = (event) => {
-  if (event === 'close') {
-    isAudioRecorderModal.value = false
-  } else {
-    isAudioRecorderModal.value = !isAudioRecorderModal.value
-  }
-}
-
-const showVideoRecorderModal = (event) => {
-  if (event === 'close') {
-    isVideoRecorderModal.value = false
-  } else {
-    isVideoRecorderModal.value = !isVideoRecorderModal.value
-  }
-}
-
 const showGiftModal = () => {
   isGiftModal.value = !isGiftModal.value
 }
-
-// const setCaptureState = () => {
-//   isCapture.value = !isCapture.value
-// }
 
 const showUserList = () => {
   isUserList.value = !isUserList.value
@@ -511,7 +480,6 @@ const scrollToBottom = () => {
 
 axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
 
-// const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
@@ -534,7 +502,6 @@ const joinSession = () => {
   state.session = state.OV.initSession()
 
   // 3) 유효한 사용자 토큰으로 세션에 연결하기
-
   getToken()
     .then((token) => {
       state.session.connect(token, { clientData: state.myUserName }).then(() => {

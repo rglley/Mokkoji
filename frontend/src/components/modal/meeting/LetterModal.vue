@@ -2,7 +2,7 @@
   <div
     id="letter-container"
     class="fixed py-[4vh] px-[3vw] w-[37vw] left-[33vw] aspect-square bg-yellow-100 flex flex-col justify-center rounded-r-lg"
-    >
+  >
     <div class="flex pb-[4vb] w-[31vw] items-center">
       <div class="text-[1.5vw] basis-1/2 font-bold">롤링페이퍼 작성</div>
       <button
@@ -44,12 +44,12 @@
             <button
               id="button"
               v-if="!isRecording"
-              @click="startRecording()"
+              @click="startAudioRecording()"
               :disabled="isRecording"
             >
               <IconRecord class="size-[100%]" />
             </button>
-            <button id="button" v-else @click="stopRecording()" :disabled="!isRecording">
+            <button id="button" v-else @click="stopAudioRecording()" :disabled="!isRecording">
               <IconStop class="size-[100%]" />
             </button>
             <button
@@ -90,7 +90,34 @@
           </div>
         </div>
         <!-- 영상 파일 -->
-        <div v-if="!isAudioRecorder && isVideoRecorder"></div>
+        <div v-if="!isAudioRecorder && isVideoRecorder">
+          <div
+            class="absolute self-center ml-1/2 mt-1/2 p-[4lvh] bg-purple-200 rounded-r-xl flex flex-col gap-1 items-center w-fit h-fit z-20"
+          >
+            <video
+              ref="videoRef"
+              width="200"
+              autoplay
+              class="border-2 border-white rounded-lg"
+            ></video>
+            <div class="flex flex-row justify-center h-10">
+              <button @click="startVideoRecording" :disabled="isRecording">
+                <IconRecord class="size-[100%] fill-red-500"></IconRecord>
+              </button>
+              <button @click="stopVideoRecording" :disabled="!isRecording">
+                <IconStop class="size-[100%] fill-red-500" />
+              </button>
+              <!-- <button @click="downloadRecording" :disabled="!videoFile">Download Recording</button> -->
+            </div>
+            <video
+              v-if="isEndRecording"
+              ref="recordedVideo"
+              width="150lwh"
+              controls
+              :src="recordedVideoSrc"
+            ></video>
+          </div>
+        </div>
         <div class="flex h-[6vh]">
           <div class="basis-1/2 flex justify-start">
             <label
@@ -106,7 +133,7 @@
             >
               <IconVideo class="size-[85%] hover:cursor-pointer" />
             </label>
-            <!-- <input type="file" id="input-video" class="hidden" @change="uploadVideoFile" /> -->
+            <input type="file" id="input-video" class="hidden" @change="uploadVideoFile" />
           </div>
           <div class="basis-1/2 flex justify-end">
             <button
@@ -135,7 +162,7 @@
             <img
               src="@/assets/meeting/delete.png"
               alt="음성 파일 삭제 버튼"
-              class="w-[1.5vw] hover:cursor-pointer"
+              class="w-[1.5vw] hover:cursor-pointer hover:bg-red-100 rounded-full"
               @click="removeAudioFile"
             />
           </div>
@@ -155,7 +182,7 @@
             <img
               src="@/assets/meeting/delete.png"
               alt="영상 파일 삭제 버튼"
-              class="ml-auto w-[1.5vw] hover:cursor-pointer"
+              class="ml-auto w-[1.5vw] hover:cursor-pointer hover:bg-red-100 rounded-full"
               @click="removeVideoFile"
             />
           </div>
@@ -221,7 +248,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useLetterStore } from '@/stores/meeting'
 import IconAudio from '@/icons/meeting/IconAudio.vue'
 import IconVideo from '@/icons/meeting/IconVideo.vue'
@@ -232,7 +259,7 @@ import IconStop from '@/icons/meeting/IconStop.vue'
 import IconPlay from '@/icons/meeting/IconPlay.vue'
 import IconPause from '@/icons/meeting/IconPause.vue'
 
-defineEmits(['remove-letter-modal', 'show-audio-recorder', 'show-video-recorder']);
+defineEmits(['remove-letter-modal', 'show-audio-recorder', 'show-video-recorder'])
 
 const store = useLetterStore()
 
@@ -263,6 +290,14 @@ const recordedChunks = ref([])
 const isRecording = ref(false)
 const isPlaying = ref(false)
 const leftTime = ref(60)
+
+// 영상 촬영 관련
+
+const videoRef = ref(null)
+const stream = ref(null)
+const isEndRecording = ref(false)
+const chunks = ref([])
+const recordedVideoSrc = ref('')
 
 const removeContents = () => {
   document.getElementById('input-text').value = ''
@@ -348,7 +383,7 @@ const sendLetter = () => {
 
 // 음성 녹음 관련
 
-const startRecording = async () => {
+const startAudioRecording = async () => {
   recordedChunks.value = []
 
   isRecording.value = true
@@ -400,7 +435,7 @@ const drawSoundBar = () => {
   animationId.value = requestAnimationFrame(drawSoundBar)
 }
 
-const stopRecording = async () => {
+const stopAudioRecording = async () => {
   isRecording.value = false
   await mediaRecorder.value.stop()
 
@@ -428,9 +463,73 @@ const onAudioEnded = () => {
 
 // 영상 촬영 관련
 
+async function startCamera() {
+  try {
+    stream.value = await navigator.mediaDevices.getUserMedia({ video: true })
+    videoRef.value.srcObject = stream.value
+  } catch (error) {
+    console.error('Error accessing camera:', error)
+  }
+}
+
+function startVideoRecording() {
+  if (isEndRecording.value) startCamera()
+
+  if (!stream.value || !(stream.value instanceof MediaStream)) {
+    console.error('Invalid stream for recording')
+    return
+  }
+
+  try {
+    mediaRecorder.value = new MediaRecorder(stream.value)
+    chunks.value = []
+    mediaRecorder.value.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        chunks.value.push(event.data)
+      }
+    }
+    mediaRecorder.value.onstop = () => {
+      const recordedBlob = new Blob(chunks.value, { type: 'video/webm' })
+      videoFile.value = recordedBlob
+      isRecording.value = false
+      videoRef.value.srcObject = null
+      recordedVideoSrc.value = URL.createObjectURL(recordedBlob)
+    }
+    mediaRecorder.value.start()
+    isRecording.value = true
+  } catch (error) {
+    console.error('Error starting recording:', error)
+  }
+}
+
+function stopVideoRecording() {
+  if (mediaRecorder.value && isRecording.value) {
+    mediaRecorder.value.stop()
+    isEndRecording.value = true
+  }
+}
+
+function downloadRecording() {
+  if (videoFile.value) {
+    const url = URL.createObjectURL(videoFile.value)
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = url
+    a.download = 'recorded_video.webm'
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+}
+
+onMounted(() => {
+  startCamera()
+})
+
 onBeforeUnmount(() => {
   if (isRecording.value) {
-    stopRecording()
+    stopAudioRecording()
+    stopVideoRecording()
   }
 })
 </script>

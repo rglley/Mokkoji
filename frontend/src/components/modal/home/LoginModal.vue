@@ -44,20 +44,16 @@
       </div>
     </div>
   </div>
-  <!-- <span class="m-1 float-right font-light text-slate-300">
-    계정이 없으신가요?
-    <a href="/signup" class="text-primary hover:text-blue-800 hover:bg-natural-yellow">회원가입</a>
-  </span> -->
 </template>
 
 <script setup>
-const { VITE_NAVER_CLIENT_ID, VITE_NAVER_REDIRECT_URL } = import.meta.env
+const { VITE_NAVER_CLIENT_ID, VITE_NAVER_REDIRECT_URL_LOCAL } = import.meta.env
 
 const naverApiRequestURI =
   `https://nid.naver.com/oauth2.0/authorize?client_id=` +
   VITE_NAVER_CLIENT_ID +
   '&redirect_uri=' +
-  VITE_NAVER_REDIRECT_URL +
+  VITE_NAVER_REDIRECT_URL_LOCAL +
   '&state=mokkoji&response_type=code'
 </script>
 
