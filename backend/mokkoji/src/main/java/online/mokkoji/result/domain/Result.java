@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import online.mokkoji.event.domain.Event;
-import online.mokkoji.result.domain.RollingPaper.RollingPaper;
+import online.mokkoji.result.domain.rollingpaper.RollingPaper;
 import online.mokkoji.user.domain.User;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;

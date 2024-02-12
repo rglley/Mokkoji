@@ -3,7 +3,7 @@ package online.mokkoji.result.dto.response;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
-import online.mokkoji.result.domain.RollingPaper.Message;
+import online.mokkoji.result.domain.rollingpaper.Message;
 import org.springframework.data.domain.Page;
 
 @Getter

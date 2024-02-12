@@ -9,7 +9,7 @@ import online.mokkoji.user.dto.response.MyPageResDto;
 import online.mokkoji.user.dto.response.UpdatePageResDto;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.common.exception.RestApiException;
-import online.mokkoji.common.exception.errorCode.UserErrorCode;
+import online.mokkoji.common.exception.errorcode.UserErrorCode;
 import online.mokkoji.user.domain.UserAccount;
 import online.mokkoji.user.repository.AccountRepository;
 import online.mokkoji.user.repository.RecordRepository;

@@ -25,7 +25,6 @@ public class RedisConfig {
     @Value("${spring.data.redis.password}")
     private String password;
 
-
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
@@ -39,7 +38,6 @@ public class RedisConfig {
 
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
-
 
     @Bean
     public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -57,6 +55,4 @@ public class RedisConfig {
     public PlatformTransactionManager transactionManager() {
         return new JpaTransactionManager();
     }
-
-
 }

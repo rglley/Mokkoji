@@ -4,13 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.common.exception.RestApiException;
-import online.mokkoji.common.exception.errorCode.ResultErrorCode;
-import online.mokkoji.common.exception.errorCode.UserErrorCode;
+import online.mokkoji.common.exception.errorcode.ResultErrorCode;
+import online.mokkoji.common.exception.errorcode.UserErrorCode;
 import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Photomosaic;
 import online.mokkoji.result.domain.Result;
-import online.mokkoji.result.domain.RollingPaper.*;
+import online.mokkoji.result.domain.rollingpaper.*;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.*;
 import online.mokkoji.result.repository.*;
@@ -44,8 +44,6 @@ public class ResultServiceImpl implements ResultService {
     private final PostitTemplateRepository postitTemplateRepository;
     private final UserRepository userRepository;
     private final PhotomosaicRepository photomosaicRepository;
-
-
 
     // 행사 리스트
     @Override
@@ -124,6 +122,7 @@ public class ResultServiceImpl implements ResultService {
                 .build();
     }
 
+    //추억 생성
     @Override
     public void createRecollection(Long resultId) {
         Optional<Result> findResult = resultRepository.findById(resultId);
@@ -247,6 +246,7 @@ public class ResultServiceImpl implements ResultService {
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
     }
 
+    //대표사진 S3 링크 반환
     @Override
     public String getThumbnailPath(Long resultId) {
         Optional<Result> findResult = resultRepository.findById(resultId);
@@ -257,6 +257,7 @@ public class ResultServiceImpl implements ResultService {
         return findResult.get().getImage();
     }
 
+    //포토 모자이크 S3 링크 반환
     @Override
     public String getPhotomosaicPath(Long resultId) {
         Optional<Photomosaic> findPhotoMosaic = photomosaicRepository.findById(resultId);
@@ -267,6 +268,7 @@ public class ResultServiceImpl implements ResultService {
         return findPhotoMosaic.get().getPath();
     }
 
+    //대표사진 파일이름 반환
     @Override
     public String getImageFileName(Long resultId) {
         Optional<Result> findResult = resultRepository.findById(resultId);
@@ -286,6 +288,7 @@ public class ResultServiceImpl implements ResultService {
         return url.getPath().substring(1);
     }
 
+    //포토모자이크 파일이름 반환
     @Override
     public String getPhotoMosaicFileName(Long resultId) {
         Optional<Photomosaic> findPhotoMosaic = photomosaicRepository.findById(resultId);
@@ -305,6 +308,7 @@ public class ResultServiceImpl implements ResultService {
         return url.getPath().substring(1);
     }
 
+    //포토모자이크 S3 링크 DB에 저장
     @Override
     public void updatePhotomosaic(Long resultId, String photomosaicPath) {
         Photomosaic photomosaic = photomosaicRepository.findByResult_Id(resultId)

@@ -1,8 +1,6 @@
 package online.mokkoji.result.repository;
 
-import online.mokkoji.result.domain.Result;
-import online.mokkoji.result.domain.RollingPaper.Message;
-import org.springframework.cache.annotation.Cacheable;
+import online.mokkoji.result.domain.rollingpaper.Message;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
