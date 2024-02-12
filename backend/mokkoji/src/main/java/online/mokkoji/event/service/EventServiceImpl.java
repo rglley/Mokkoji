@@ -166,7 +166,6 @@ public class EventServiceImpl implements EventService {
 
         if (redisTemplate.hasKey(key)) {
             List<GroupSessionResDto> range = listOperations.range(key, 0, -1);
-            log.info("밸류 : {}",range);
             return range;
         } else {
             return new ArrayList<>();
