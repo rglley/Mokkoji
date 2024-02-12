@@ -25,7 +25,7 @@ public class CorsConfig implements WebMvcConfigurer {
                         "http://mokkoji-server.duckdns.org:8080",
                         "https://mokkoji-server.duckdns.org:8080"
                 )
-                .allowedMethods("GET", "PUT", "POST", "DELETE")
+                .allowedMethods("GET", "PUT", "POST", "DELETE", "PATCH")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .exposedHeaders("Authorization", "Authorization-Refresh")
