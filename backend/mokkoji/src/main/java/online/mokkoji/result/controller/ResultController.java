@@ -92,7 +92,7 @@ public class ResultController {
 
 
     // 대표이미지 설정
-    @PatchMapping("/results/{resultId}/memories")
+    @PatchMapping("/{resultId}/memories")
     public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody String url) {
         resultService.updateThumbnail(resultId, url);
         return new ResponseEntity<>("대표이미지 설정 완료", HttpStatus.OK);
