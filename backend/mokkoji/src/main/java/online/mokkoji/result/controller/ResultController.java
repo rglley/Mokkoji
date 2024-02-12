@@ -9,7 +9,6 @@ import online.mokkoji.event.dto.response.PhotoResDto;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.ResultResDto;
 import online.mokkoji.result.dto.response.RollingpaperEditResDto;
-import online.mokkoji.result.service.PhotomosaicService;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
@@ -36,7 +35,6 @@ public class ResultController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final S3Service s3Service;
-    private final PhotomosaicService photomosaicService;
 
     // 행사 리스트
     @GetMapping("/lists")
@@ -160,26 +158,5 @@ public class ResultController {
         String downloadUrl = s3Service.createDownloadUrl(photomosaicFilename);
 
         return new ResponseEntity<>(downloadUrl, HttpStatus.CREATED);
-    }
-
-    @PutMapping("photomosaic/{resultId}")
-    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId, HttpServletRequest req) {
-        //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
-        String thumbnailPath = resultService.getThumbnailPath(resultId);
-
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
-
-        String localThumbnail = s3Service.downloadWithUrl(thumbnailPath, provider, email);
-        String cellImagesPath = s3Service.downloadAllPhotos(resultId, provider, email);
-
-        //photomosaic 생성, 임시 경로에 저장
-        MultipartFile photomosaic = photomosaicService.createPhotomosaic(localThumbnail, cellImagesPath);
-
-        //임시 경로에 저장된 포토 모자이크 S3로 업로드
-        String photomosaicPath = s3Service.uploadPhotomosaic(photomosaic, resultId, provider, email);
-        resultService.updatePhotomosaic(resultId, photomosaicPath);
-
-        return new ResponseEntity<>(photomosaicPath, HttpStatus.CREATED);
     }
 }
