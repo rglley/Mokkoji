@@ -314,8 +314,13 @@
       />
     </transition-group>
     <transition-group name="up">
-      <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal" />
+      <LetterModal
+        v-if="isLetterModal"
+        @remove-letter-modal="showLetterModal(), showAudioRecorderModal('close')"
+        @show-audio-recorder="showAudioRecorderModal"
+      />
     </transition-group>
+    <AudioRecorderModal v-if="isAudioRecorderModal" />
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
     </transition-group>
@@ -329,9 +334,9 @@ import { OpenVidu } from 'openvidu-browser'
 import { useSessionStore } from '@/stores/meeting'
 import html2canvas from 'html2canvas'
 import axiosJwt from '@/services/api'
-import UserList from './UserList.vue'
-import UserVideo from './UserVideo.vue'
-import ChatLog from './ChatLog.vue'
+import UserList from '@/components/meeting/UserList.vue'
+import UserVideo from '@/components/meeting/UserVideo.vue'
+import ChatLog from '@/components/meeting/ChatLog.vue'
 import IconInfo from '@/icons/meeting/IconInfo.vue'
 import IconSearch from '@/icons/meeting/IconSearch.vue'
 import IconInvite from '@/icons/meeting/IconInvite.vue'
@@ -356,6 +361,7 @@ import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
+import AudioRecorderModal from '@/components/modal/meeting/AudioRecorderModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
@@ -378,6 +384,7 @@ const isAddressCopyModal = ref(false)
 const isSessionIdCopyModal = ref(false)
 const isGroupModal = ref(false)
 const isLetterModal = ref(false)
+const isAudioRecorderModal = ref(false)
 const isGroup = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -476,16 +483,20 @@ const setCameraState = () => {
   }, 600)
 }
 
-const today = new Date()
-
-console.log(today.getHours() % 12)
-
 const showGroupModal = () => {
   isGroupModal.value = !isGroupModal.value
 }
 
 const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
+}
+
+const showAudioRecorderModal = (event) => {
+  if (event === 'close') {
+    isAudioRecorderModal.value = false
+  } else {
+    isAudioRecorderModal.value = !isAudioRecorderModal.value
+  }
 }
 
 const showGiftModal = () => {
