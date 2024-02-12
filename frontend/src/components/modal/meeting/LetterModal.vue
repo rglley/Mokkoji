@@ -2,7 +2,7 @@
   <div
     id="letter-container"
     class="fixed py-[4vh] px-[3vw] w-[37vw] left-[33vw] aspect-square bg-yellow-100 flex flex-col justify-center rounded-r-lg"
-  >
+    >
     <div class="flex pb-[4vb] w-[31vw] items-center">
       <div class="text-[1.5vw] basis-1/2 font-bold">롤링페이퍼 작성</div>
       <button
@@ -106,7 +106,7 @@
             >
               <IconVideo class="size-[85%] hover:cursor-pointer" />
             </label>
-            <input type="file" id="input-video" class="hidden" @change="uploadVideoFile" />
+            <!-- <input type="file" id="input-video" class="hidden" @change="uploadVideoFile" /> -->
           </div>
           <div class="basis-1/2 flex justify-end">
             <button
@@ -232,7 +232,7 @@ import IconStop from '@/icons/meeting/IconStop.vue'
 import IconPlay from '@/icons/meeting/IconPlay.vue'
 import IconPause from '@/icons/meeting/IconPause.vue'
 
-defineEmits(['remove-letter-modal']['show-audio-recorder'])
+defineEmits(['remove-letter-modal', 'show-audio-recorder', 'show-video-recorder']);
 
 const store = useLetterStore()
 

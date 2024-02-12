@@ -297,6 +297,11 @@ const photos = ['carousel1.png', 'carousel2.png', 'carousel3.png', 'carousel4.pn
 
 onMounted(() => {
   emit('load-home')
+  if (store.forceReload == true) {
+    store.forceReload = false;
+    setTimeout(100);
+    router.go(0);
+  }
 })
 </script>
 

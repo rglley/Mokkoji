@@ -122,11 +122,7 @@ const signUp = async () => {
       router.push('/')
     })
     .catch((err) => {
-      toast(err.message, {
-        theme: 'auto',
-        type: 'default',
-        dangerouslyHTMLString: true
-      })
+      console.log(err);
     })
 }
 

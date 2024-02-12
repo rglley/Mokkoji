@@ -281,7 +281,8 @@
       </div>
     </section>
     <transition-group name="down">
-      <InviteModal v-if="isInviteModal" />
+      <InviteModal v-if="isInviteModal" 
+      />
     </transition-group>
     <transition-group name="up">
       <MeetingDetailModal
@@ -308,9 +309,13 @@
     <transition-group name="up">
       <LetterModal
         v-if="isLetterModal"
-        @remove-letter-modal="showLetterModal(), showAudioRecorderModal('close')"
+        @remove-letter-modal="showLetterModal(), showAudioRecorderModal('close'), showVideoRecorderModal('close')"
+        @show-audio-recorder="showAudioRecorderModal"
+        @show-video-recorder="showVideoRecorderModal"
       />
     </transition-group>
+    <AudioRecorderModal v-if="isAudioRecorderModal" />
+    <VideoRecorderModal v-if="isVideoRecorderModal" />
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
     </transition-group>
@@ -349,6 +354,8 @@ import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
+import AudioRecorderModal from '@/components/modal/meeting/AudioRecorderModal.vue'
+import VideoRecorderModal from '@/components/modal/meeting/VideoRecorderModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
@@ -369,6 +376,8 @@ const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
 const isGroupModal = ref(false)
 const isLetterModal = ref(false)
+const isAudioRecorderModal = ref(false)
+const isVideoRecorderModal = ref(false)
 const isGroup = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -457,6 +466,22 @@ const showGroupModal = () => {
 
 const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
+}
+
+const showAudioRecorderModal = (event) => {
+  if (event === 'close') {
+    isAudioRecorderModal.value = false
+  } else {
+    isAudioRecorderModal.value = !isAudioRecorderModal.value
+  }
+}
+
+const showVideoRecorderModal = (event) => {
+  if (event === 'close') {
+    isVideoRecorderModal.value = false
+  } else {
+    isVideoRecorderModal.value = !isVideoRecorderModal.value
+  }
 }
 
 const showGiftModal = () => {
