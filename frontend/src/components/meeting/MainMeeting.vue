@@ -201,7 +201,7 @@
           </div>
           <div v-if="!isGroup">
             <button id="button-group" class="bg-purple-200" @click="showGroupModal">
-              <IconGroup class="size-[70%]" />
+              <IconGroup class="size-[60%]" />
             </button>
             <span @click="showGroupModal" class="button-text">소그룹</span>
           </div>
@@ -287,16 +287,8 @@
       <MeetingDetailModal
         v-if="isMeetingDetailModal"
         :session="state.session"
-        @copy-address-info="showAddressCopyModal"
-        @copy-session-id-info="showSessionIdCopyModal"
         @remove-detail-modal="showMeetingDetailModal"
       />
-    </transition-group>
-    <transition-group name="up">
-      <AddressCopyModal v-if="isAddressCopyModal" />
-    </transition-group>
-    <transition-group name="up">
-      <SessionIdCopyModal v-if="isSessionIdCopyModal" />
     </transition-group>
     <transition-group name="down">
       <MicModal v-if="isMicModal" :is-mic="isMic" />
@@ -317,10 +309,8 @@
       <LetterModal
         v-if="isLetterModal"
         @remove-letter-modal="showLetterModal(), showAudioRecorderModal('close')"
-        @show-audio-recorder="showAudioRecorderModal"
       />
     </transition-group>
-    <AudioRecorderModal v-if="isAudioRecorderModal" />
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
     </transition-group>
@@ -355,13 +345,10 @@ import IconChat from '@/icons/meeting/IconChat.vue'
 import IconSendMessage from '@/icons/meeting/IconSendMessage.vue'
 import InviteModal from '@/components/modal/meeting/InviteModal.vue'
 import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
-import AddressCopyModal from '@/components/modal/meeting/AddressCopyModal.vue'
-import SessionIdCopyModal from '@/components/modal/meeting/SessionIdCopyModal.vue'
 import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
-import AudioRecorderModal from '@/components/modal/meeting/AudioRecorderModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
@@ -380,11 +367,8 @@ const isCamera = ref(true)
 const isCameraModal = ref(false)
 const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
-const isAddressCopyModal = ref(false)
-const isSessionIdCopyModal = ref(false)
 const isGroupModal = ref(false)
 const isLetterModal = ref(false)
-const isAudioRecorderModal = ref(false)
 const isGroup = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -431,22 +415,6 @@ const showMeetingDetailModal = () => {
   isMeetingDetailModal.value = !isMeetingDetailModal.value
 }
 
-const showAddressCopyModal = () => {
-  isAddressCopyModal.value = true
-
-  setTimeout(() => {
-    isAddressCopyModal.value = false
-  }, 600)
-}
-
-const showSessionIdCopyModal = () => {
-  isSessionIdCopyModal.value = true
-
-  setTimeout(() => {
-    isSessionIdCopyModal.value = false
-  }, 600)
-}
-
 const setLayoutState = () => {
   isGrid.value = !isGrid.value
 }
@@ -489,14 +457,6 @@ const showGroupModal = () => {
 
 const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
-}
-
-const showAudioRecorderModal = (event) => {
-  if (event === 'close') {
-    isAudioRecorderModal.value = false
-  } else {
-    isAudioRecorderModal.value = !isAudioRecorderModal.value
-  }
 }
 
 const showGiftModal = () => {
@@ -629,8 +589,6 @@ const joinSession = () => {
 
   // 소그룹 생성
   state.session.on('signal:group', async () => {
-    isLeave.value = true
-
     await emit('create-group-meeting', {
       groupNumber: groupNumber.value
     })
@@ -648,8 +606,6 @@ const joinSession = () => {
   state.session.on('signal:else-group', () => {
     groupNumber.value++
   })
-
-  window.addEventListener('beforeunload', leaveMainMeeting)
 }
 
 // 세션 삭제
@@ -737,8 +693,6 @@ onBeforeMount(() => {
 
   window.addEventListener('beforeunload', leaveMainMeeting)
 })
-
-onBeforeUnmount(() => {})
 </script>
 
 <style scoped>

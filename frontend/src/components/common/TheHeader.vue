@@ -4,10 +4,10 @@
     class="fixed h-[10vh] z-10 my-auto w-full bg-transparent"
   >
     <nav class="w-full flex items-center px-[2vw]">
-      <router-link to="/" class="h-[10vh] flex items-center rtl:l:space-x-reverse">
+      <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse">
         <img
           src="/src/assets/logo/mokkoji_logo.png"
-          class="h-[10vh] transition ease-in-out hover:animate-pulse"
+          class="w-[8vw] transition ease-in-out hover:animate-pulse"
           alt="모꼬지 로고"
         />
         <!-- <span id="title-bold">모꼬지</span> -->
