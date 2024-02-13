@@ -82,7 +82,7 @@ initFlowbite()
 
 const reloadPage = () => {
   store.forceReload = false;
-  router.go(0);
+  router.push('/');
 }
 
 const showLoginModal = () => {
