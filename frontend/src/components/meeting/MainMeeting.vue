@@ -308,8 +308,6 @@
     <transition-group name="up">
       <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal()" />
     </transition-group>
-    <AudioRecorderModal v-if="isAudioRecorderModal" />
-    <VideoRecorderModal v-if="isVideoRecorderModal" />
     <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
     </transition-group>
@@ -317,7 +315,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeMount } from 'vue'
+import { ref, reactive, onBeforeMount, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import { useSessionStore } from '@/stores/meeting'
@@ -462,10 +460,6 @@ const showGiftModal = () => {
   isGiftModal.value = !isGiftModal.value
 }
 
-// const setCaptureState = () => {
-//   isCapture.value = !isCapture.value
-// }
-
 const showUserList = () => {
   isUserList.value = !isUserList.value
 }
@@ -532,6 +526,7 @@ const joinSession = () => {
     })
     .catch((error) => {
       console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
+      router.push('/waitingroom')
     })
 
   // 비동기 예외
@@ -576,6 +571,12 @@ const joinSession = () => {
     if (index >= 0) {
       state.subscribers.splice(index, 1)
     }
+
+    for (let idx = 0; idx < userList.value.length; idx++) {
+      if (stream.streamId === userList.value[idx].stream.streamId) {
+        userList.value.splice(idx, 1)
+      }
+    }
   })
 
   state.session.on('connectionCreated', (event) => {
@@ -607,11 +608,9 @@ const joinSession = () => {
   })
 }
 
-// 세션 삭제
 const deleteSession = () => {
   if (state.session) {
     state.session.disconnect()
-
     state.session = undefined
     state.mainStreamManager = undefined
     state.publisher = undefined
@@ -638,8 +637,8 @@ const getToken = async () => {
   return await createToken(sessionStorage.getItem('sessionId'))
 }
 
-const leaveMainMeeting = async () => {
-  await deleteSession()
+const leaveMainMeeting = () => {
+  deleteSession()
 
   emit('leave-meeting')
 
@@ -660,7 +659,7 @@ const sendMessage = () => {
 }
 
 const createGroupMeeting = (userList) => {
-  store.createGroupSession(sessionStorage.getItem('sessionId') + groupNumber.value)
+  store.createGroupSession(sessionStorage.getItem('sessionId') + 0)
 
   connectedUser.value.forEach((user) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
@@ -690,7 +689,11 @@ const updateMainVideoStreamManager = (stream) => {
 onBeforeMount(() => {
   joinSession()
 
-  window.addEventListener('beforeunload', leaveMainMeeting)
+  window.addEventListener('beforeunload', deleteSession)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', deleteSession)
 })
 </script>
 

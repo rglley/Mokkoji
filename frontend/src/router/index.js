@@ -54,7 +54,7 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/meetings/:groupNumber',
+      path: '/groupmeetings',
       name: 'groupmeeting',
       component: GroupMeetingView,
       props: true
