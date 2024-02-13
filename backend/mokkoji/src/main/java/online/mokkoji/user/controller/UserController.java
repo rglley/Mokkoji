@@ -52,6 +52,7 @@ public class UserController {
         String provider = jwtService.getProvider(req);
         String email = jwtService.getEmail(req);
 
+        log.info("회원가입 요청");
         userServiceImpl.createUser(provider, email, userInputReqDto);
 
         return new ResponseEntity<>(userInputReqDto, HttpStatus.CREATED);
