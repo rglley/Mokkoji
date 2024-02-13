@@ -121,14 +121,14 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    if (!($cookies.isKey('authorization') || $cookies.isKey('authorization-refresh'))) {
-      alert('로그인이 필요합니다!')
-      router.push('/')
-    }
-  }
-  next();
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requireAuth) {
+//     if (!($cookies.get('authorization') === undefined || $cookies.get('authorization-refresh') === undefined)) {
+//       alert('로그인이 필요합니다!')
+//       router.push('/')
+//     }
+//   }
+//   next();
+// })
 
 export default router
