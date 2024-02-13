@@ -8,7 +8,7 @@
         <img alt="프로필 사진" id="image-profile" :src="userData.image" />
       </div>
       <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
-        <div class="flex flex-col w-6/12 ml-10">
+        <div class="flex flex-col w-[25lvw] items-center justify-center">
           <span class="flex flex-col mt-10 max-md:mt-10"
             ><div class="text-3xl font-bold">{{ userData.name }}님</div>
           </span>
@@ -19,17 +19,17 @@
               <a class="text-2xl text-red-500" v-text="userData.accountRegistered ? 'O' : 'X'" />
             </div>
           </span>
-          <div class="text-sm font-light m-2 max-w-[24lvh] mt-5">
+          <div class="text-sm font-light m-2 max-w-[24lvh] mt-5 whitespace-wrap text-center">
             계좌를 등록하시면 참가자들의 마음을 받을 수 있어요
           </div>
-            <button @click="$router.push('mypage/detail')" id="button-submit" class="max-w-32 mt-10 self-center">
+            <button @click="$router.push('mypage/detail')" class="m-10 self-center text-primary3 hover:bg-natural-yellow hover:text-red-500">
               회원정보 수정
             </button>
         </div>
-        <div class="flex flex-col justify-around items-stretch mr-10">
+        <div class="flex flex-col justify-around items-stretch">
           <div>
             <span class="flex items-stretch justify-between">
-              <div class="text-black text-2xl font-bold">활동 기록</div>
+              <div class="text-black text-2xl font-extrabold">활동 기록</div>
               <!-- TODO : 결과물 보기 링크 -->
               <a href="/eventlist" class="text-1xl">상세보기 ></a>
             </span>
