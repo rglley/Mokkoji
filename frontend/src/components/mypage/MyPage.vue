@@ -16,8 +16,7 @@
           <span class="mt-16 pl-2 pr-4"
             ><div class="text-black text-2xl">
               계좌 등록
-              <a class="text-2xl text-red-500" v-if="userData.accountRegistered">O</a>
-              <a class="text-2xl text-red-500" v-else>X </a>
+              <a class="text-2xl text-red-500" v-text="userData.accountRegistered ? 'O' : 'X'" />
             </div>
           </span>
           <div class="text-sm font-light m-2 max-w-[24lvh] mt-5">
@@ -32,7 +31,7 @@
             <span class="flex items-stretch justify-between">
               <div class="text-black text-2xl font-bold">활동 기록</div>
               <!-- TODO : 결과물 보기 링크 -->
-              <a href="#" class="text-1xl">상세보기 ></a>
+              <a href="/eventlist" class="text-1xl">상세보기 ></a>
             </span>
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">

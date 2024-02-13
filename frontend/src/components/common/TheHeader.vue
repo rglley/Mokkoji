@@ -82,7 +82,8 @@ initFlowbite()
 
 const reloadPage = () => {
   store.forceReload = false;
-  router.push('/');
+  if (window.location.pathname == '/') window.location.reload();
+  else router.push('/');
 }
 
 const showLoginModal = () => {
