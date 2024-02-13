@@ -283,6 +283,7 @@ const showVideoRecorder = () => {
 
 const uploadAudioFile = () => {
   isAudioFile.value = true
+  isAudioRecorder.value = false
   audioFileName.value = '내 녹음 파일'
 }
 
@@ -310,8 +311,12 @@ const sendLetter = () => {
   }
 
   isFileCheck.value = false
+  isVideoFile.value = false
+  isAudioFile.value = false
   audioFile.value = null
   videoFile.value = null
+  videoFileName.value = ''
+  audioFileName.value = ''
   textFile.value = ''
 }
 
@@ -376,7 +381,7 @@ const stopAudioRecording = async () => {
   const blob = new Blob(recordedChunks.value, { type: 'audio/webm' })
   const audioUrl = URL.createObjectURL(blob)
   audio.value.src = audioUrl
-  audioFile.value = new File([blob], 'audio recording', { type: 'audio/webm' })
+  audioFile.value = new File([blob], 'audio.webm', { type: 'audio/webm' })
 
   cancelAnimationFrame(animationId.value)
 }
