@@ -88,7 +88,10 @@ initFlowbite()
 
 const reloadPage = () => {
   console.log(window.location);
-  if (window.location.pathname === '/') window.location.reload()
+  if (window.location.pathname === '/') {
+    console.log('forceReload :' + store.forceReload)
+    window.location.reload()
+  }
   else router.push('/')
 }
 
