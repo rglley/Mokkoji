@@ -240,7 +240,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -251,8 +251,6 @@ import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
-
-const emit = defineEmits(['load-home'])
 
 const store = useSessionStore()
 const router = useRouter()
@@ -304,16 +302,6 @@ const toTop = () => {
 const modules = [Autoplay, Pagination]
 
 const photos = ['carousel1.png', 'carousel2.png', 'carousel3.png', 'carousel4.png']
-
-onMounted(() => {
-  emit('load-home')
-  if (store.forceReload == true) {
-    store.forceReload = false;
-    setTimeout(100);
-    router.go(0);
-  }
-  
-})
 </script>
 
 <style>
