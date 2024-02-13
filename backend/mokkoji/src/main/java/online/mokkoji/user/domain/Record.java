@@ -44,4 +44,11 @@ public class Record {
         this.totalParticipant = totalParticipant;
         this.totalMessage = totalMessage;
     }
+
+    public void updateRecord(long totalTime, int participantCount, int totalMessage) {
+        this.eventCount++;
+        this.totalTime += (int) totalTime;
+        this.totalParticipant += participantCount;
+        this.totalMessage+=totalMessage;
+    }
 }
