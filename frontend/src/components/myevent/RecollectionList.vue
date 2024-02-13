@@ -7,12 +7,7 @@
     <div class="bg-custom">
       <div class="flex justify-center items-center">
         <a href="/resultPage">
-          <img
-            src="@/assets/eventlist/recollection_real.png"
-            alt="unregistered"
-            height="180"
-            width="180"
-          />
+          <img :src="mainImage" alt="unregistered" height="180" width="180" />
         </a>
       </div>
       <p class="text-lg mt-2 text-center">
@@ -29,9 +24,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import IconModify from '@/icons/result/IconModify.vue'
 
+const mainImage = ref('')
 const props = defineProps(['recollection'])
 
 const description = props.recollection.content
@@ -41,6 +37,10 @@ const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
 let imgNo = computed(() => {
   let no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
   return no === 0 ? VITE_RECOLLECTION_FRAME_COUNT : no
+})
+
+onMounted(() => {
+  mainImage.value = props.recollection.image
 })
 </script>
 

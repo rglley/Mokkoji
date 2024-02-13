@@ -22,6 +22,20 @@
       <!--롤링페이퍼-->
       <div class="flex justify-center items-center" v-if="isRollingPaperResult">
         <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
+        <swiper :pagination="pagination" :module="modules" class="mySwiper">
+          <swiper-slide v-for="(msg, index) in Messages" :key="`${index}`">
+            <div class="absolute z-30">
+              <!-- <div v-for="(msg, index) in Messages" :key="`${index}`"> -->
+              <RecollectionList
+                v-for="recollection in recollections"
+                :key="recollection.eventId"
+                :recollection="recollection"
+              />
+              <!-- </div> -->
+            </div>
+          </swiper-slide>
+        </swiper>
+
         <img
           :src="`src/assets/rollingtemplate/${design}.png`"
           :alt="`template_${design}`"
@@ -36,17 +50,6 @@
           width="460px"
           height="700px"
         />
-        <!-- <swiper
-          :pagination="{
-            clickable: true
-          }"
-          :modules="modules"
-          class="mySwiper"
-        > -->
-        <!-- <div v-for="(msg, index) in Messages" :key="`${index}`">
-          <RollingPaperItem :msg="msg"></RollingPaperItem>
-        </div> -->
-        <!-- </swiper> -->
       </div>
 
       <!--포토모자이크-->
@@ -152,11 +155,14 @@ import IconLetter from '@/icons/result/IconLetter.vue'
 import Messages from '@/temp/result/messages.json'
 import RollingPaperItem from '@/components/myresult/RollingPaperItem.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import { Pagination } from 'swiper/modules'
+
+// import './style.css'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 import PhotoCard from '@/temp/result/photocard.json'
+
 import { ref, onMounted } from 'vue'
 import {
   useRecollection,
@@ -168,8 +174,6 @@ import {
   useSharePhotomosaic
 } from '@/stores/result.js'
 
-const modules = [Pagination]
-
 const recollectionStore = useRecollection()
 const resultIDStore = useResultIDStore()
 const userNameStore = useUserNameStore()
@@ -178,12 +182,19 @@ const downloadPhotomosaicStore = useDownloadPhotomosaic()
 const shareImageStore = useShareImage()
 const sharePhotomosaicStore = useSharePhotomosaic()
 
+const pagination = {
+  clickable: true,
+  renderBullet: (index, className) => `<span class="${className}">${index + 1}</span>`
+}
+
+const modules = [Pagination]
+
 const photocard = PhotoCard
 const design = 'wedding'
 const username = ref('')
 const color = 'rainbow'
-const currentPage = ref(1)
-const totalPage = ref(0)
+// const currentPage = ref(1)
+// const totalPage = ref(0)
 
 const isRollingPaperResult = ref(false)
 const isPhotomosaicResult = ref(false)
@@ -319,5 +330,15 @@ onMounted(() => {
 .rate > input:checked ~ label:hover ~ label,
 .rate > label:hover ~ input:checked ~ label {
   color: #c59b08;
+}
+
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
 }
 </style>

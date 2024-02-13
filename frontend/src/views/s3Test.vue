@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="imageURL" alt="S3 Image" />
+    <!-- <img :src="imageURL" alt="S3 Image" /> -->
   </div>
 </template>
 <script setup>
