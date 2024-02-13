@@ -12,6 +12,7 @@ import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.openvidu.dto.response.GroupSessionResDto;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.service.RecordService;
 import online.mokkoji.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ public class OpenviduController {
     private final EventService eventService;
     private final JwtUtil jwtUtil;
     private final UserService userService;
+    private final RecordService recordService;
 
 
     @Value("${openvidu.url}")
@@ -58,10 +60,10 @@ public class OpenviduController {
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
 
-        //세션 생성
+        // 세션 생성
         Session session = openvidu.createSession(properties);
 
-//         DB에 저장할 Dto 생성
+        // DB에 저장할 Dto 생성
         SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
 
         // DB에 저장
@@ -108,8 +110,10 @@ public class OpenviduController {
         Session activeSession = openvidu.getActiveSession(sessionId);
         eventService.deleteSession(sessionId, sessionReqDto);
 
-        activeSession.close();
+        // 활동기록 업데이트
+        recordService.updateRecord(sessionId);
 
+        activeSession.close();
 
         return new ResponseEntity<>("세션 삭제 완료", HttpStatus.NO_CONTENT);
     }
