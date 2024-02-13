@@ -65,7 +65,6 @@
 import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
-import { toast } from 'vue3-toastify'
 import axios from '@/services/api'
 
 const router = useRouter()
@@ -117,7 +116,8 @@ const signUp = async () => {
     }
   })
     .then(() => {
-      store.isLogin = true
+      store.isLogin = true;
+      store.forceReload = true;
       alert('회원가입을 완료했습니다')
       router.push('/')
     })

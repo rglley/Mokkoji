@@ -51,11 +51,12 @@ onMounted(() => {
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
         store.forceReload = true;
-        alert('로그인 완료').then(router.push('/'));
+        alert('로그인 완료')
+        router.push('/');
       }
     })
     .catch((err) => {
-      toast(err.message)
+      console.log(err);
     })
 })
 </script>
