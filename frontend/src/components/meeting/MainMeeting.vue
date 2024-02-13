@@ -25,6 +25,7 @@
               :main-stream="true"
               class="px-sm w-full h-full"
             />
+            <button @click="toggleCamera">화면전환</button>
           </div>
         </div>
       </div>
@@ -523,7 +524,7 @@ const joinSession = () => {
     })
     .catch((error) => {
       console.log('세션에 연결하는 과정에서 에러가 발생했습니다.', error.code, error.message)
-      router.push('/waitingroom')
+      router.push('/reloadingroom')
     })
 
   // 비동기 예외
@@ -665,6 +666,35 @@ const createGroupMeeting = (userList) => {
   })
 
   isGroupModal.value = false
+}
+
+const isFrontCamera = ref(false)
+
+const toggleCamera = () => {
+  state.OV.getDevices().then((devices) => {
+    const videoDevices = devices.filter((device) => device.kind === 'videoinput')
+
+    console.log(videoDevices)
+
+    if (videoDevices && videoDevices.length > 1) {
+      const newPublisher = state.OV.initPublisher('html-element-id', {
+        videoSource: isFrontCamera.value ? videoDevices[1].deviceId : videoDevices[0].deviceId,
+        publishAudio: true,
+        publishVideo: true,
+        mirror: isFrontCamera.value
+      })
+
+      isFrontCamera.value = !isFrontCamera.value
+
+      state.session.unpublish(state.publisher).then(() => {
+        state.publisher = newPublisher
+
+        state.session.publish(state.publisher).then(() => {
+          console.log('New publisher published!')
+        })
+      })
+    }
+  })
 }
 
 const updateMainVideoStreamManager = (stream) => {
