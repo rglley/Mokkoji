@@ -83,7 +83,7 @@ public class ResultServiceImpl implements ResultService {
                     .date(date)
                     .image(result.getImage())
                     .name(result.getName())
-                    .content(result.getMemo())
+                    .content(result.getContent())
                     .build();
 
             recollectionList.add(recollectionInfoResDto);
@@ -119,8 +119,8 @@ public class ResultServiceImpl implements ResultService {
         Photomosaic photomosaic = result.getPhotomosaic();
 
         return ResultResDto.builder()
-                .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundPath())
-                .postitTemplate(rollingPaper.getPostitTemplate().getPostitPath())
+                .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundName().toString())
+                .postitTemplate(rollingPaper.getPostitTemplate().getPostitName().toString())
                 .messageList(messageList)
                 .participantCount(participantCount)
                 .messageCount(messageCount)
@@ -211,6 +211,8 @@ public class ResultServiceImpl implements ResultService {
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
 
         rollingpaper.updateTemplate(backgroundTemplate,postitTemplate);
+
+        rollingpaper.getBackgroundTemplate().getBackgroundName().toString();
 
         // 변경내용 수정
         rollingPaperRepository.save(rollingpaper);
