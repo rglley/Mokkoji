@@ -25,7 +25,11 @@
           <li v-show="store.isLogin || isLogin">
             <div
               class="flex flex-row relative justify-center items-center gap-[2.5vh] text-[2.5vh]"
-            >
+              >
+              <div class="flex justify-center items-center rounded-full">
+                <img class="overflow-hidden rounded-full w-[6vw] m-0 mr-[1vw]" :src="image" />
+                <p class="text-black text-[2.5vh]">{{ name }}님</p>
+              </div>
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
@@ -34,10 +38,6 @@
                 내 서비스
               </button>
               <button id="button-header" @click="logout">로그아웃</button>
-              <div class="flex justify-center items-center rounded-full">
-                <img class="overflow-hidden rounded-full w-[5vh] m-0 mr-[1vh]" :src="image" />
-                <p class="text-black text-[2.5vh]">{{ name }}님</p>
-              </div>
               <div
                 :key="dropdownKey"
                 id="dropdown"
