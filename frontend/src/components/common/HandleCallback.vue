@@ -28,8 +28,6 @@ onBeforeMount(() => {
 
 onMounted(() => {
   axios({
-    method: 'GET',
-    // url: "localhost:8080/api/vping"
     url:
       import.meta.env.VITE_API_URL +
       import.meta.env.VITE_SERVER +
@@ -44,6 +42,7 @@ onMounted(() => {
       store.email = res.data.email
       store.image = res.data.image
       if (res.data.first == true) {
+        alert('회원 가입 페이지로 이동합니다.')
         router.push('/signup')
       } 
       else {

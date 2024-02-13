@@ -4,7 +4,7 @@
     class="fixed h-[10vh] z-10 my-auto w-full bg-transparent"
   >
     <nav class="w-full flex items-center px-[2vw]">
-      <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse">
+      <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse cursor-grab">
         <img
           src="/src/assets/logo/mokkoji_logo.png"
           class="w-[8vw] transition ease-in-out hover:animate-pulse"
@@ -14,15 +14,15 @@
 
       <div class="ml-auto self-center">
         <ul class="font-medium flex md:flex-row">
-          <button id="button-header"><a href="/" class="text-[3vh]">홈으로</a></button>
+          <button id="button-header"><a href="/" class="text-[2.5vh] cursor-grab">홈으로</a></button>
           <li v-show="!(store.isLogin || isLogin)">
-            <button id="button-header" @click="showLoginModal" class="text-[3vh]">로그인</button>
+            <button id="button-header" @click="showLoginModal" class="text-[2.5vh] cursor-grab">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
           <li v-show="store.isLogin || isLogin">
-            <div class="flex flex-row relative justify-center items-center gap-[3vh] text-[3vh]">
+            <div class="flex flex-row relative justify-center items-center gap-[2.5vh] text-[2.5vh]">
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
@@ -32,20 +32,21 @@
               </button>
               <div class="flex justify-center items-center rounded-full">
                 <img class="overflow-hidden rounded-full w-[5vh] m-0 mr-[1vh]" :src="image" />
-                <p class="text-black text-[3vh]">{{ name }}님</p>
+                <p class="text-black text-[2.5vh]">{{ name }}님</p>
               </div>
               <div
+                :key="dropdownKey"
                 id="dropdown"
                 class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
               >
                 <ul aria-labelledby="dropdownHoverButton" class="w-50">
-                  <li id="li-dropdown" class="text-[3vh]">
+                  <li id="li-dropdown" class="text-[2.5vh]">
                     <router-link to="mypage">마이페이지</router-link>
                   </li>
-                  <li id="li-dropdown" class="text-[3vh]">
+                  <li id="li-dropdown" class="text-[2.5vh]">
                     <router-link to="eventlist">내 결과물</router-link>
                   </li>
-                  <li id="li-dropdown" class="text-[3vh]">
+                  <li id="li-dropdown" class="text-[2.5vh]">
                     <a @click="logout">로그아웃</a>
                   </li>
                 </ul>
@@ -75,6 +76,7 @@ const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
 const limitHeight = 200
+const dropdownKey = ref(3);
 
 initFlowbite()
 
@@ -107,15 +109,15 @@ onBeforeMount(() => {
   }
 })
 
-watch(
-  () => store.forceReload,
-  (newValue, oldValue) => {
-    if (newValue === true) {
-      store.forceReload = false;
-      setTimeout(reloadPage(), 1000);
-    }
-  }
-)
+// watch(
+//   () => store.forceReload,
+//   (newValue, oldValue) => {
+//     if (newValue === true) {
+//       store.forceReload = false;
+//       setTimeout(reloadPage(), 1000);
+//     }
+//   }
+// )
 </script>
 
 <style>
