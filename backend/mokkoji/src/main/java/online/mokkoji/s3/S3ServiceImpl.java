@@ -240,7 +240,8 @@ public class S3ServiceImpl implements S3Service {
 
         Long userId = findResult.getUser().getId();
 
-        String folderPrefix = userId + "/" + resultId + "/photos/photoList/";
+        String folderPrefix = userId + File.separator + resultId + File.separator +
+                "photos" + File.separator + "photoList" + File.separator;
 
         ListObjectsV2Request listRequest = new ListObjectsV2Request()
                 .withBucketName(bucket)
@@ -287,7 +288,8 @@ public class S3ServiceImpl implements S3Service {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
-        String key = result.getUser().getId() + "/" + resultId + "/photos/photomosaic.jpeg";
+        String key = result.getUser().getId() + File.separator + resultId + File.separator +
+                "photos" + File.separator + "photomosaic.jpeg";
 
         if (amazonS3Client.doesObjectExist(bucket, key)) {
             amazonS3Client.deleteObject(bucket, key);
