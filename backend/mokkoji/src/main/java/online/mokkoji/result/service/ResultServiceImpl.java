@@ -113,6 +113,9 @@ public class ResultServiceImpl implements ResultService {
 
         Page<Message> messageList = messageRepository.findAllByRollingPaper_Id(rollingPaper.getId(), pageable);
 
+        String thumbnail = result.getImage();
+        String name = result.getName();
+        String content = result.getContent();
         int participantCount = result.getEvent().getParticipantCount();
         int messageCount = messageRepository.countAllByRollingPaper_Id(rollingPaper.getId());
 
@@ -122,6 +125,9 @@ public class ResultServiceImpl implements ResultService {
                 .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundName().toString())
                 .postitTemplate(rollingPaper.getPostitTemplate().getPostitName().toString())
                 .messageList(messageList)
+                .thumbnail(thumbnail)
+                .name(name)
+                .content(content)
                 .participantCount(participantCount)
                 .messageCount(messageCount)
                 .photomosaic(photomosaic == null ? "" : photomosaic.getPath())
