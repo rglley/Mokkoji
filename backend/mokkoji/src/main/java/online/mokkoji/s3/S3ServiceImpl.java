@@ -73,7 +73,6 @@ public class S3ServiceImpl implements S3Service {
                 PhotoResDto photoResDto = getPhotoResDto(photo, userId, result);
                 dtoList.add(photoResDto);
             } catch (IOException e) {
-                // TODO : 이부분도 RestApiException으로 해야하는지?
                 throw new RuntimeException(e);
             }
         }
@@ -181,7 +180,6 @@ public class S3ServiceImpl implements S3Service {
         try {
             amazonS3Client.putObject(request);
         } catch (AmazonServiceException e) {
-            // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
             e.printStackTrace();
         } catch (SdkClientException e) {
             e.printStackTrace();

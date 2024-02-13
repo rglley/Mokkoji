@@ -60,10 +60,10 @@ public class OpenviduController {
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
 
-        //세션 생성
+        // 세션 생성
         Session session = openvidu.createSession(properties);
 
-//         DB에 저장할 Dto 생성
+        // DB에 저장할 Dto 생성
         SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
 
         // DB에 저장

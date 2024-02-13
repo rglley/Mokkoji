@@ -32,7 +32,9 @@ public class RecordServiceImpl implements RecordService{
 
         Record record = event.getUser().getRecord();
 
-        long totalTime = ChronoUnit.MINUTES.between(event.getStartTime(), event.getEndTime());
+        // 회의 시간 계산
+        long totalTime = ChronoUnit.HOURS.between(event.getStartTime(), event.getEndTime());
+
         int participantCount = event.getParticipantCount();
         int totalMessage = event.getResult().getRollingpaper().getMessages().size();
 

@@ -48,7 +48,6 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.PERSIST, optional = false)
     private Record record;
 
-    // TODO : reddis로 관리
     @Column(length = 65535)
     private String refreshToken;
 
