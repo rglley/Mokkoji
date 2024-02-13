@@ -14,9 +14,6 @@
 
       <div class="ml-auto self-center">
         <ul class="font-medium flex md:flex-row">
-          <button id="button-header">
-            <a href="/" class="text-[2.5vh] cursor-grab">홈으로</a>
-          </button>
           <li v-show="!(store.isLogin || isLogin)">
             <button id="button-header" @click="showLoginModal" class="text-[2.5vh] cursor-grab">
               로그인
@@ -36,6 +33,7 @@
               >
                 내 서비스
               </button>
+              <button id="button-header" @click="logout">로그아웃</button>
               <div class="flex justify-center items-center rounded-full">
                 <img class="overflow-hidden rounded-full w-[5vh] m-0 mr-[1vh]" :src="image" />
                 <p class="text-black text-[2.5vh]">{{ name }}님</p>
@@ -52,9 +50,9 @@
                   <li id="li-dropdown" class="text-[2.5vh]">
                     <router-link to="eventlist">내 결과물</router-link>
                   </li>
-                  <li id="li-dropdown" class="text-[2.5vh]">
+                  <!-- <li id="li-dropdown" class="text-[2.5vh]">
                     <a @click="logout">로그아웃</a>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
             </div>
@@ -88,8 +86,8 @@ initFlowbite()
 
 const reloadPage = () => {
   router.push('/').then(() => {
-    window.location.reload();
-  });
+    window.location.reload()
+  })
 }
 
 const showLoginModal = () => {
@@ -122,7 +120,7 @@ watch(
   (newValue, oldValue) => {
     if (newValue === true) {
       store.forceReload = false
-      setTimeout(reloadPage(), 2000)
+      setTimeout(reloadPage(), 100)
     }
   }
 )
