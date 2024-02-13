@@ -22,6 +22,7 @@ import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -129,15 +130,42 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
     }
 
+    // redis에서 counter로 sessionId 생성 후 소그룹 정보 리턴
+    @Override
+    public Map<String, Object> getGroupSessionCounter(Map<String, Object> params) {
+
+        ValueOperations<String,String> valueOperations=redisTemplate.opsForValue();
+
+
+        // 미리 가공할 sessionId 뽑아놓기
+        String sessionId = (String) params.get("customSessionId");
+
+        String counterKey="counter::"+sessionId;
+
+        // 키가 있든 없든 increment 메서드 호출
+        valueOperations.increment(counterKey, 1);
+
+        String count = String.valueOf(valueOperations.get(counterKey));
+
+
+        params.remove("customSessionId");
+        params.put("customSessionId", sessionId +"_"+count);
+
+
+        return params;
+    }
+
     // redis에 소그룹 정보 저장
     @Override
     public void createGroupSession(GroupSessionResDto groupSessionResDto) {
+
+
 
         ListOperations<String, GroupSessionResDto> listOperations = redisTemplate.opsForList();
 
         String key = "session::" + groupSessionResDto.getSessionId().substring(0,14);
 
-        if (redisTemplate.hasKey(key)!=null) {
+        if (redisTemplate.hasKey(key)) {
             listOperations.rightPush(key, groupSessionResDto);
         } else {
             List<GroupSessionResDto> groupSessionList = new ArrayList<>();

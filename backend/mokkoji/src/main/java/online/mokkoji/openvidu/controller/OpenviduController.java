@@ -11,9 +11,7 @@ import online.mokkoji.common.exception.errorcode.CommonErrorCode;
 import online.mokkoji.event.service.EventService;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;
 import online.mokkoji.openvidu.dto.response.GroupSessionResDto;
-import online.mokkoji.user.domain.Provider;
 import online.mokkoji.user.domain.User;
-import online.mokkoji.user.repository.UserRepository;
 import online.mokkoji.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -140,8 +138,11 @@ public class OpenviduController {
     public ResponseEntity<String> addGroupSession(@RequestBody(required = false) Map<String, Object> params
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
+        // sessionId 생성
+        Map<String, Object> newParams = eventService.getGroupSessionCounter(params);
+
         // request body 객체로 직렬화
-        SessionProperties properties = SessionProperties.fromJson(params).build();
+        SessionProperties properties = SessionProperties.fromJson(newParams).build();
 
         //세션 생성
         Session session = openvidu.createSession(properties);
@@ -151,7 +152,6 @@ public class OpenviduController {
 
         // redis에 저장
         eventService.createGroupSession(groupSessionResDto);
-
 
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
