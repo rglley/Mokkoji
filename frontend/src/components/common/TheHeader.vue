@@ -14,15 +14,21 @@
 
       <div class="ml-auto self-center">
         <ul class="font-medium flex md:flex-row">
-          <button id="button-header"><a href="/" class="text-[2.5vh] cursor-grab">홈으로</a></button>
+          <button id="button-header">
+            <a href="/" class="text-[2.5vh] cursor-grab">홈으로</a>
+          </button>
           <li v-show="!(store.isLogin || isLogin)">
-            <button id="button-header" @click="showLoginModal" class="text-[2.5vh] cursor-grab">로그인</button>
+            <button id="button-header" @click="showLoginModal" class="text-[2.5vh] cursor-grab">
+              로그인
+            </button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
           <li v-show="store.isLogin || isLogin">
-            <div class="flex flex-row relative justify-center items-center gap-[2.5vh] text-[2.5vh]">
+            <div
+              class="flex flex-row relative justify-center items-center gap-[2.5vh] text-[2.5vh]"
+            >
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
@@ -76,14 +82,14 @@ const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
 const limitHeight = 200
-const dropdownKey = ref(3);
+const dropdownKey = ref(3)
 
 initFlowbite()
 
 const reloadPage = () => {
-  store.forceReload = false;
-  if (window.location.pathname == '/') window.location.reload();
-  else router.push('/');
+  console.log(window.location);
+  if (window.location.pathname === '/') window.location.reload()
+  else router.push('/')
 }
 
 const showLoginModal = () => {
@@ -115,9 +121,8 @@ watch(
   () => store.forceReload,
   (newValue, oldValue) => {
     if (newValue === true) {
-      
-      setTimeout(
-        reloadPage(), 2000);
+      setTimeout(reloadPage(), 2000)
+      store.forceReload = false
     }
   }
 )

@@ -1,6 +1,6 @@
 <template>
   <div id="main-gradient2" class="py-20">
-    <div class="mx-auto w-1/3 bg-white rounded-lg shadow-md p-20 pb-5">
+    <div class="mx-auto w-[40lvw] bg-white rounded-lg shadow-md p-20 pb-5">
       <div class="space-y-2 text-center">
         {{ email }}
         <h1 class="text-3xl font-bold">{{ name }}님의 정보</h1>
