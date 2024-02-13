@@ -479,7 +479,6 @@ const scrollToBottom = () => {
 
 axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
 
-// const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
@@ -502,7 +501,6 @@ const joinSession = () => {
   state.session = state.OV.initSession()
 
   // 3) 유효한 사용자 토큰으로 세션에 연결하기
-
   getToken()
     .then((token) => {
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
