@@ -1,25 +1,66 @@
 <template>
-  <img src="@/assets/logo/mokkoji_logo.png" alt="" class="fixed h-[80vh] top-[10%] left-[10%]" />
   <div
-    class="fixed h-full flex flex-col justify-center items-center right-[8%] text-r-md font-bold"
+    class="flex items-center justify-center w-full h-screen text-gray-900 px-[2vw]"
+    id="main-gradient3"
   >
-    <h1 class="text-[8lvh]">모꼬지에 오신걸 환영합니다!</h1>
-    <div class="">회의에서 사용할 닉네임을 입력해주세요!</div>
-    <input type="text" name="" id="" />
-    <button>행사 참가</button>
+    <div
+      class="flex flex-col justify-center items-center w-full h-3/4 mx-[14vw] bg-white rounded-r-xl shadow-md border-sm border-yellow-100"
+    >
+      <div class="relative w-full h-[100%] flex items-center">
+        <div class="w-1/2 h-full flex justify-center items-center">
+          <img src="@/assets/logo/mokkoji_logo.png" alt="" class="h-[80%]" />
+        </div>
+        <div
+          class="w-1/2 h-full pr-[7vh] flex flex-col justify-center items-center right-[8%] text-r-md font-bold"
+        >
+          <h1 class="text-[2.7vw]">모꼬지에 오신걸 환영합니다!</h1>
+          <br />
+          <div class="text-[2vw]">회의에서 사용할 이름을 입력하세요</div>
+          <input
+            type="text"
+            name="userName"
+            id="userName"
+            placeholder="최대 6글자"
+            maxlength="6"
+            v-model="userName"
+            class="w-[40%] h-[10%] border-sm border-purple-200 text-r-md text-center"
+          />
+          <button class="w-[30%] aspect-[3] bg-purple-200 rounded-r-lg hover:bg-purple-300">
+            행사 참가
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onBeforeMount } from 'vue'
+import { ref, onMounted, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
+import { useSessionStore } from '@/stores/meeting'
 
 const emit = defineEmits(['waiting-room']['leave-meeting'])
 
 const router = useRouter()
+const store = useSessionStore()
 
-const goToMeeting = () => {
-  router.push('/meetings')
+const userName = ref('')
+
+const goToMeeting = async () => {
+  const result = await store.findSession(userName.value)
+
+  if (result === 'success') {
+    isInputError.value = false
+
+    if ($cookies.get('user') !== null) {
+      router.push('/meetings')
+    } else {
+      isModal.value = true
+    }
+  } else {
+    isInputError.value = true
+    conferenceIdInput.value = ''
+  }
 }
 
 onMounted(() => {

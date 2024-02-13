@@ -377,7 +377,6 @@ const chatMessage = ref('')
 const chatMessages = ref([])
 const userList = ref([])
 const connectedUser = ref([])
-const groupNumber = ref(1)
 const myVideo = ref(null)
 
 const captureMyVideo = () => {
@@ -587,22 +586,11 @@ const joinSession = () => {
 
   // 소그룹 생성
   state.session.on('signal:group', async () => {
-    await emit('create-group-meeting', {
-      groupNumber: groupNumber.value
-    })
+    await emit('create-group-meeting')
 
-    sessionStorage.setItem(
-      'groupSessionId',
-      sessionStorage.getItem('sessionId') + groupNumber.value
-    )
-
-    groupNumber.value++
+    sessionStorage.setItem('groupSessionId', sessionStorage.getItem('sessionId'))
 
     deleteSession()
-  })
-
-  state.session.on('signal:else-group', () => {
-    groupNumber.value++
   })
 }
 
@@ -657,7 +645,7 @@ const sendMessage = () => {
 }
 
 const createGroupMeeting = (userList) => {
-  store.createGroupSession(sessionStorage.getItem('sessionId') + 0)
+  store.createGroupSession(sessionStorage.getItem('sessionId'))
 
   connectedUser.value.forEach((user) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
