@@ -83,7 +83,7 @@ public class ResultServiceImpl implements ResultService {
                     .date(date)
                     .image(result.getImage())
                     .name(result.getName())
-                    .content(result.getMemo())
+                    .content(result.getContent())
                     .build();
 
             recollectionList.add(recollectionInfoResDto);
