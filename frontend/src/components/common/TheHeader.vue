@@ -81,7 +81,8 @@ const dropdownKey = ref(3);
 initFlowbite()
 
 const reloadPage = () => {
-  window.location.reload()
+  store.forceReload = false;
+  router.go(0);
 }
 
 const showLoginModal = () => {
@@ -109,15 +110,16 @@ onBeforeMount(() => {
   }
 })
 
-// watch(
-//   () => store.forceReload,
-//   (newValue, oldValue) => {
-//     if (newValue === true) {
-//       store.forceReload = false;
-//       setTimeout(reloadPage(), 1000);
-//     }
-//   }
-// )
+watch(
+  () => store.forceReload,
+  (newValue, oldValue) => {
+    if (newValue === true) {
+      
+      setTimeout(
+        reloadPage(), 2000);
+    }
+  }
+)
 </script>
 
 <style>
