@@ -48,6 +48,7 @@ public class RollingPaper {
     public void updateTemplate(BackgroundTemplate backgroundTemplate, PostitTemplate postitTemplate) {
         this.backgroundTemplate=backgroundTemplate;
         this.postitTemplate=postitTemplate;
+        this.isEdited=true;
     }
 
 
