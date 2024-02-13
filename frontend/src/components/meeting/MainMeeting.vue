@@ -632,6 +632,8 @@ const joinSession = () => {
   })
 }
 
+const build = '123'
+
 const deleteSession = () => {
   if (state.session) {
     state.session.disconnect()
