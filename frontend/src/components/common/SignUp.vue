@@ -1,6 +1,6 @@
 <template>
   <div id="main-gradient2" class="py-40">
-    <div class="mx-auto w-1/3 bg-white rounded-lg shadow-md p-20">
+    <div class="mx-auto w-[40lvw] bg-white rounded-lg shadow-md p-20">
       <div class="space-y-2 text-center">
         <h1 class="text-3xl font-bold">모꼬지 시작하기</h1>
         <p class="text-slate-400">회원정보를 입력해요</p>

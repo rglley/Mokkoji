@@ -103,6 +103,7 @@
       <div
         class="mt-[2vh] mb-[4vh] grid grid-cols-2 justify-center items-center"
         data-aos="fade-up"
+        data-aos-once="false"
       >
         <div class="ml-[8vw] px-[vw] text-center">
           <h1 id="title-sub-bold">롤링페이퍼를 통해 친구들의</h1>
@@ -134,7 +135,10 @@
           ></path>
         </svg>
       </div>
-      <div class="mt-[2vh] mb-[2vh] flex grid-cols-2 items-center" data-aos="fade-up">
+      <div class="mt-[2vh] mb-[2vh] flex grid-cols-2 items-center" 
+      data-aos="fade-up"
+      data-aos-once="false"
+>
         <div class="basis-2/5 flex justify-end">
           <img class="size-[60%]" src="@/assets/landing/main2.png" />
         </div>
@@ -167,7 +171,10 @@
           ></path>
         </svg>
       </div>
-      <div class="mt-[2vh] grid grid-cols-2 items-center" data-aos="fade-up">
+      <div class="mt-[2vh] grid grid-cols-2 items-center" 
+      data-aos="fade-up"
+      data-aos-once="false"
+>
         <div class="ml-[5vw] text-center">
           <h1 id="title-sub-bold">소그룹을 형성하여 친구들과</h1>
           <h1 id="title-sub-bold">자유롭게 소통하세요.</h1>
@@ -198,7 +205,10 @@
           ></path>
         </svg>
       </div>
-      <div class="mt-[1vh] grid grid-cols-2 items-center" data-aos="fade-up">
+      <div class="mt-[1vh] grid grid-cols-2 items-center" 
+      data-aos="fade-up"
+      data-aos-once="false"
+>
         <div class="flex justify-center">
           <img src="@/assets/landing/main4.png" class="size-[60%]" />
         </div>
@@ -302,6 +312,7 @@ onMounted(() => {
     setTimeout(100);
     router.go(0);
   }
+  
 })
 </script>
 
