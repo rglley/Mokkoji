@@ -16,31 +16,55 @@
         </a>
       </div>
       <p class="text-lg mt-2 text-center">
-        <strong class="effect-blacnk-recollection">{{ recollection.name }}</strong>
+        <strong class="effect-blank-recollection">{{ recollection.name }}</strong>
       </p>
     </div>
     <div class="mt-5 text-center text-black">
       <pre
-        class="text-base whitespace-pre-wrap w-[284px] h-[72px] custom-border flex justify-center items-center"
-        >{{ description }}</pre
-      >
+        class="text-base whitespace-pre-wrap w-[284px] h-[72px] custom-border flex justify-center items-center">
+        {{ description }} <br>
+        {{ participantCount }} 명이 {{ messageCount }} 개의 메시지를 보내줬어요.</pre>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useResultIDStore } from '@/stores/result'
 import IconModify from '@/icons/result/IconModify.vue'
-
+import axiosJwt from '@/services/api'
 const props = defineProps(['recollection'])
+
+const resultIDStore = useResultIDStore()
 
 const description = props.recollection.content
 const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
+
+const backgroundTemplate = ref('')
+const postitTemplate = ref('')
+const messageList = ref([])
+const participantCount = ref(0)
+const messageCount = ref(0)
+const photomosaic = ref('')
 
 //액자, 미정
 let imgNo = computed(() => {
   let no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
   return no === 0 ? VITE_RECOLLECTION_FRAME_COUNT : no
+})
+
+onMounted(() => {
+  axiosJwt
+    .get('/results/recollection/' + resultIDStore.getID)
+    .then((res) => {
+      backgroundTemplate.value = res.data.backgroundTemplate
+      postitTemplate.value = res.data.postitTemplate
+      messageList.value = res.data.messageList
+      participantCount.value = res.data.participantCount
+      messageCount.value = res.data.messageCount
+      photomosaic.value = res.data.photomosaic
+    })
+    .catch((err) => console.error(err))
 })
 </script>
 
