@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, onBeforeMount } from 'vue'
 import TheHeader from './components/common/TheHeader.vue'
 import TheFooter from './components/common/TheFooter.vue'
 import { RouterView } from 'vue-router'
@@ -39,6 +39,10 @@ watchEffect(
     reloadMethod
   })
 )
+
+onBeforeMount(() => {
+  $cookies.keys().forEach((cookie) => $cookies.remove(cookie));
+})
 </script>
 
 <style scoped></style>

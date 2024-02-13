@@ -18,6 +18,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueCookies, { expires: '7d' })
-VueCookies.keys().forEach((cookie) => VueCookies.remove(cookie));
+// VueCookies.keys().forEach((cookie) => VueCookies.remove(cookie));
 
 app.mount('#app')
