@@ -18,8 +18,8 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueCookies, { expires: '1h' })
-if ($cookies.isKey('authorization')) {
-  if (tokenService.expiredToken($cookies.get('authorization'))) {
+if ($cookies.isKey('token')) {
+  if (tokenService.expiredToken($cookies.get('token'))) {
     $cookies.keys().forEach(cookie => $cookies.remove(cookie));
   }
 }

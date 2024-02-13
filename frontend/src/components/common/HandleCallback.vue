@@ -51,7 +51,7 @@ onMounted(() => {
         tokenService.setLocalRefreshToken(refreshToken)
         store.forceReload = true;
         alert('로그인 완료')
-        router.push('/');
+        router.replace('/');
       }
     })
     .catch((err) => {
