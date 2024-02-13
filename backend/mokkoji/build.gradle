@@ -69,7 +69,6 @@ dependencies {
 
     //photomosaic
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation files('lib\\opencv-490.jar')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
