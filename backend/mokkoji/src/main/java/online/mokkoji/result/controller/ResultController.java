@@ -3,6 +3,7 @@ package online.mokkoji.result.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.mokkoji.result.dto.request.RecollectionReqDto;
 import online.mokkoji.result.service.PhotomosaicService;
 import online.mokkoji.s3.S3Service;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
@@ -110,9 +111,10 @@ public class ResultController {
     }
 
     // 추억 생성(S3 포토모자이크 링크 DB에 저장, 로컬 cellImages 삭제)
-    @GetMapping("/{resultId}")
-    public ResponseEntity<Map<String, Object>> addRecollection(@PathVariable Long resultId, HttpServletRequest req) {
-        resultService.createRecollection(resultId);
+    @PostMapping("/{resultId}")
+    public ResponseEntity<Map<String, Object>> addRecollection(@PathVariable Long resultId,
+                                                               @RequestBody RecollectionReqDto recollectionReqDto, HttpServletRequest req) {
+        resultService.createRecollection(resultId, recollectionReqDto);
 
         // S3에서 대표이미지 제외 사진 삭제
         s3Service.deletePhotos(resultId);

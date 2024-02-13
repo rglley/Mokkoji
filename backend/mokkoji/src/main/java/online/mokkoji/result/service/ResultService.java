@@ -1,6 +1,7 @@
 package online.mokkoji.result.service;
 
 import online.mokkoji.event.dto.response.PhotoResDto;
+import online.mokkoji.result.dto.request.RecollectionReqDto;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.dto.response.ResultResDto;
@@ -16,7 +17,7 @@ public interface ResultService {
 
     ResultResDto getResult(Long resultId, Pageable pageable);
 
-    void createRecollection(Long resultId);
+    void createRecollection(Long resultId, RecollectionReqDto recollectionReqDto);
 
     // 사진 db 저장
     void createPhoto(PhotoResDto photoResDto);

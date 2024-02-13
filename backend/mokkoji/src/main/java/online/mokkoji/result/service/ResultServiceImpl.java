@@ -11,6 +11,7 @@ import online.mokkoji.result.domain.Photo;
 import online.mokkoji.result.domain.Photomosaic;
 import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.domain.rollingpaper.*;
+import online.mokkoji.result.dto.request.RecollectionReqDto;
 import online.mokkoji.result.dto.request.RollingPaperReqDto;
 import online.mokkoji.result.dto.response.*;
 import online.mokkoji.result.repository.*;
@@ -82,7 +83,7 @@ public class ResultServiceImpl implements ResultService {
                     .date(date)
                     .image(result.getImage())
                     .name(result.getName())
-                    .content(result.getContent())
+                    .content(result.getMemo())
                     .build();
 
             recollectionList.add(recollectionInfoResDto);
@@ -124,7 +125,7 @@ public class ResultServiceImpl implements ResultService {
 
     //추억 생성
     @Override
-    public void createRecollection(Long resultId) {
+    public void createRecollection(Long resultId, RecollectionReqDto recollectionReqDto) {
         Optional<Result> findResult = resultRepository.findById(resultId);
 
         if(findResult.isEmpty())
@@ -135,7 +136,10 @@ public class ResultServiceImpl implements ResultService {
         if(result.getStatus().getKey().equals("recollection"))
             throw new RestApiException(ResultErrorCode.ALREADY_RECOLLECTION);
 
-        result.updateStatus();
+        String name = recollectionReqDto.getName();
+        String memo = recollectionReqDto.getMemo();
+
+        result.updateStatus(name, memo);
         resultRepository.save(result);
     }
 
