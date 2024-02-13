@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString(of = {"id","name", "content", "status","image"})
+@ToString(of = {"id","name", "memo", "status","image"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Result {
 
