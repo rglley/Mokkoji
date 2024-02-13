@@ -12,6 +12,7 @@ import AOS from 'aos'
 import App from './App.vue'
 import router from './router/index.js'
 import VueCookies from 'vue-cookies'
+import tokenService from '@/services/token.service'
 
 const app = createApp(App)
 
