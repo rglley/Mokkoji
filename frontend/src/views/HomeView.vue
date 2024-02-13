@@ -5,19 +5,19 @@
         <div
           class="h-full text-center ml-[2vw] w-1/2 flex flex-col justify-center items-center whitespace-wrap"
         >
-          <div>
-            <h1 id="title">모꼬지</h1>
+          <div class="m-2 rounded-2xl p-6">
+            <h1 id="title" class="underline decoration-primary2">모꼬지</h1>
             <div class="text-[1.5vw]">
-              <p class="mb-[1vw]">
+              <p>
                 화상 모임 플랫폼 ‘모꼬지’를 통해
                 <strong class="text-purple-500">결혼식, 졸업식, 돌잔치</strong> 등
               </p>
               <p class="mb-[1vw]">
                 다양한 행사를
-                <strong class="text-green-500">공간적인 제약 없이</strong> 참여해보세요.
+                <strong class="text-purple-500">집에서 편하게</strong> 참여할 수 있어요.
               </p>
               <br />
-              <p class="mb-[1vw]">순간을 더욱 특별하게 추억하기 위한</p>
+              <p>순간을 더욱 특별하게 추억하기 위한</p>
               <p>
                 <strong class="text-purple-500">롤링페이퍼, 포토 모자이크 기능</strong> 을
                 제공합니다.

@@ -17,7 +17,11 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(VueCookies, { expires: '7d' })
-// VueCookies.keys().forEach((cookie) => VueCookies.remove(cookie));
+app.use(VueCookies, { expires: '1h' })
+if ($cookies.isKey('authorization')) {
+  if (tokenService.expiredToken($cookies.get('authorization'))) {
+    $cookies.keys().forEach(cookie => $cookies.remove(cookie));
+  }
+}
 
 app.mount('#app')
