@@ -281,8 +281,7 @@
       </div>
     </section>
     <transition-group name="down">
-      <InviteModal v-if="isInviteModal" 
-      />
+      <InviteModal v-if="isInviteModal" />
     </transition-group>
     <transition-group name="up">
       <MeetingDetailModal
@@ -307,12 +306,7 @@
       />
     </transition-group>
     <transition-group name="up">
-      <LetterModal
-        v-if="isLetterModal"
-        @remove-letter-modal="showLetterModal(), showAudioRecorderModal('close'), showVideoRecorderModal('close')"
-        @show-audio-recorder="showAudioRecorderModal"
-        @show-video-recorder="showVideoRecorderModal"
-      />
+      <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal()" />
     </transition-group>
     <AudioRecorderModal v-if="isAudioRecorderModal" />
     <VideoRecorderModal v-if="isVideoRecorderModal" />
@@ -323,7 +317,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeMount, onBeforeUnmount } from 'vue'
+import { ref, reactive, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import { useSessionStore } from '@/stores/meeting'
@@ -354,8 +348,6 @@ import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
-import AudioRecorderModal from '@/components/modal/meeting/AudioRecorderModal.vue'
-import VideoRecorderModal from '@/components/modal/meeting/VideoRecorderModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
@@ -363,8 +355,8 @@ const emit = defineEmits(['leave-meeting']['create-group-meeting'])
 const router = useRouter()
 const store = useSessionStore()
 
-const videoWidth = window.screen.width * 0.22
-const videoHeight = window.screen.height * 0.95
+const videoWidth = window.screen.width * 0.65
+const videoHeight = window.screen.height * 0.85
 
 const isHost = ref(sessionStorage.getItem('isHost'))
 const isGrid = ref(false)
@@ -376,8 +368,6 @@ const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
 const isGroupModal = ref(false)
 const isLetterModal = ref(false)
-const isAudioRecorderModal = ref(false)
-const isVideoRecorderModal = ref(false)
 const isGroup = ref(false)
 const isGiftModal = ref(false)
 const isCapture = ref(false)
@@ -466,22 +456,6 @@ const showGroupModal = () => {
 
 const showLetterModal = () => {
   isLetterModal.value = !isLetterModal.value
-}
-
-const showAudioRecorderModal = (event) => {
-  if (event === 'close') {
-    isAudioRecorderModal.value = false
-  } else {
-    isAudioRecorderModal.value = !isAudioRecorderModal.value
-  }
-}
-
-const showVideoRecorderModal = (event) => {
-  if (event === 'close') {
-    isVideoRecorderModal.value = false
-  } else {
-    isVideoRecorderModal.value = !isVideoRecorderModal.value
-  }
 }
 
 const showGiftModal = () => {
