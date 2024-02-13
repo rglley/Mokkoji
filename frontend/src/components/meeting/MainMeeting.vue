@@ -640,11 +640,10 @@ const leaveMainMeeting = async () => {
 
 const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
-    // OpenVidu 시그널링 서버를 통해 채팅 메시지 보내기
     state.session.signal({
       data: chatMessage.value,
       to: [],
-      type: 'chat' // 채팅 메시지 타입
+      type: 'chat'
     })
 
     chatMessage.value = ''
@@ -677,14 +676,13 @@ const createGroupMeeting = async (userList) => {
 
 const toggleCamera = async () => {
   const devices = await state.OV.getDevices()
-
   const videoDevices = await devices.filter((device) => device.kind === 'videoinput')
 
   isFrontCamera.value = !isFrontCamera.value
 
   const mediaStream = await state.OV.getUserMedia({
     audioSource: false,
-    videoSource: isFrontCamera.value ? videoDevices[1].deviceId : videoDevices[0].deviceId,
+    videoSource: isFrontCamera.value ? videoDevices[0].deviceId : videoDevices[1].deviceId,
     resolution: `${videoWidth}x${videoHeight}`,
     frameRate: 30
   })
@@ -692,9 +690,7 @@ const toggleCamera = async () => {
   const myTrack = mediaStream.getVideoTracks()[0]
 
   state.publisher.replaceTrack(myTrack).then(() => {
-    console.log('New track has been published').catch((error) => {
-      console.error('Error replacing track', error)
-    })
+    console.log('New track has been published')
   })
 }
 
