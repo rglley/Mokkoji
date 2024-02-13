@@ -40,9 +40,6 @@ watchEffect(
   })
 )
 
-onBeforeMount(() => {
-  $cookies.keys().forEach((cookie) => $cookies.remove(cookie));
-})
 </script>
 
 <style scoped></style>
