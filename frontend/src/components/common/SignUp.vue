@@ -118,8 +118,7 @@ const signUp = async () => {
     .then(() => {
       store.isLogin = true;
       store.forceReload = true;
-      alert('회원가입을 완료했습니다')
-      router.push('/')
+      router.replace('/')
     })
     .catch((err) => {
       console.log(err);

@@ -403,6 +403,7 @@ const onAudioEnded = () => {
 // 영상 촬영 관련
 
 const startCamera = async () => {
+  console.log(navigator.mediaDevices.getUserMedia);
   try {
     videoStream.value = await navigator.mediaDevices.getUserMedia({ video: true })
     videoRef.value.srcObject = videoStream.value
@@ -461,10 +462,6 @@ const downloadRecording = () => {
     window.URL.revokeObjectURL(url)
   }
 }
-
-onMounted(() => {
-  startCamera()
-})
 
 onBeforeUnmount(() => {
   if (isRecording.value) {

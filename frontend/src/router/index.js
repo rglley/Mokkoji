@@ -122,14 +122,27 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requireAuth) {
-//     if (!($cookies.get('authorization') === undefined || $cookies.get('authorization-refresh') === undefined)) {
-//       alert('로그인이 필요합니다!')
-//       router.push('/')
-//     }
-//   }
-//   next();
-// })
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (!($cookies.isKey('token') || $cookies.isKey('refresh-token'))) {
+      alert('로그인이 필요합니다!');
+      next('/');
+      return;
+    }
+  }
+
+  if (from.path === '/meetings') {
+    if (confirm('회의 페이지를 벗어나면 변경사항이 저장되지 않을 수 있습니다.')) {
+      next();
+    } 
+    else {
+      next(false);
+    }
+  }
+
+  next();
+
+});
+
 
 export default router

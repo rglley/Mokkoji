@@ -114,7 +114,7 @@ pre {
   }
 
   #title {
-    @apply text-[4vw] mb-[2vb] font-bold tracking-wider;
+    @apply text-[5vw] mb-[2vb] font-bold ;
   }
 
   #title-sub-bold {
@@ -174,7 +174,7 @@ pre {
     );
   }
   #card-div {
-    @apply rounded-md shadow-lg bg-white p-4 pb-10 flex flex-col mt-24 mb-40 border-2 border-slate-200;
+    @apply rounded-md shadow-lg bg-white p-10 flex flex-col mt-24 mb-40 border-2 border-slate-200 w-fit;
   }
 
   #button-submit {
@@ -186,7 +186,7 @@ pre {
   }
 
   #button-header {
-    @apply bg-transparent text-black hover:underline hover:text-primary3 cursor-grab;
+    @apply bg-transparent text-black cursor-grab duration-200 rounded-2xl p-2 hover:ring hover:ring-primary3 hover:bg-white;
   }
 
   input {
@@ -210,7 +210,7 @@ pre {
   }
 
   #div-stat {
-    @apply flex-col border-solid border-2 border-purple-500 rounded-md bg-natural-beige text-center text-xl font-bold relative overflow-hidden w-[25lvh] justify-center px-7 py-10 shadow-lg shadow-indigo-100;
+    @apply flex-col border-solid border-2 border-primary rounded-md bg-natural-beige text-center text-xl font-bold relative overflow-hidden w-[25lvh] justify-center px-7 py-10 shadow-lg shadow-indigo-100;
   }
 
   #li-dropdown {
