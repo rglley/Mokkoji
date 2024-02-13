@@ -91,7 +91,7 @@
         </div>
         <!-- 영상 파일 -->
         <div
-          v-if="!isAudioRecorder && isVideoRecorder"
+          v-show="!isAudioRecorder && isVideoRecorder"
           class="w-fit h-full self-center p-[4lvh] bg-purple-200 rounded-r-lg flex flex-col gap-[1lvh] items-center"
         >
           <button
@@ -463,6 +463,7 @@ const onAudioEnded = () => {
 // 영상 촬영 관련
 
 const startCamera = async () => {
+  console.log(navigator.mediaDevices.getUserMedia);
   try {
     stream.value = await navigator.mediaDevices.getUserMedia({ video: true })
     videoRef.value.srcObject = stream.value
@@ -520,10 +521,6 @@ const downloadRecording = () => {
     window.URL.revokeObjectURL(url)
   }
 }
-
-onMounted(() => {
-  startCamera()
-})
 
 onBeforeUnmount(() => {
   if (isRecording.value) {

@@ -63,9 +63,9 @@
             <swiper
               :spaceBetween="30"
               :autoplay="{
-                delay: 2500,
+                delay: 7500,
                 pauseOnMouseEnter: true,
-                waitForTransition: 200
+                waitForTransition: 500
               }"
               :pagination="{
                 clickable: true
@@ -316,4 +316,12 @@ onMounted(() => {
 })
 </script>
 
-<style></style>
+<style>
+.swiper-pagination-bullet {
+  @apply size-[0.6lvw] bg-white;
+}
+
+.swiper-pagination-bullet-active {
+ @apply bg-primary3 size-[0.75lvw];
+}
+</style>
