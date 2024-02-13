@@ -4,7 +4,7 @@
     class="fixed h-[10vh] z-10 my-auto w-full bg-transparent"
   >
     <nav class="w-full flex items-center px-[2vw]">
-      <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse">
+      <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse cursor-grab">
         <img
           src="/src/assets/logo/mokkoji_logo.png"
           class="w-[8vw] transition ease-in-out hover:animate-pulse"
@@ -21,8 +21,14 @@
               <LoginModal />
             </ModalView>
           </li>
-          <li v-else>
-            <div class="flex flex-row relative justify-center items-center gap-[3vh] text-[3vh]">
+          <li v-show="store.isLogin || isLogin">
+            <div
+              class="flex flex-row relative justify-center items-center gap-[2.5vh] text-[2.5vh]"
+              >
+              <div class="flex justify-center items-center rounded-full">
+                <img class="overflow-hidden rounded-full w-[6vw] m-0 mr-[1vw]" :src="image" />
+                <p class="text-black text-[2.5vh]">{{ name }}님</p>
+              </div>
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
@@ -30,24 +36,22 @@
               >
                 내 서비스
               </button>
-              <div class="flex justify-center items-center rounded-full">
-                <img class="overflow-hidden rounded-full w-[5vh] m-0 mr-[1vh]" :src="image" />
-                <p class="text-black text-[3vh]">{{ name }}님</p>
-              </div>
+              <button id="button-header" @click="logout">로그아웃</button>
               <div
+                :key="dropdownKey"
                 id="dropdown"
                 class="z-10 hidden bg-white divide-y divide-slate-200 rounded-lg w-32"
               >
                 <ul aria-labelledby="dropdownHoverButton" class="w-50">
-                  <li id="li-dropdown" class="text-[3vh]">
+                  <li id="li-dropdown" class="text-[2.5vh]">
                     <router-link to="mypage">마이페이지</router-link>
                   </li>
-                  <li id="li-dropdown" class="text-[3vh]">
+                  <li id="li-dropdown" class="text-[2.5vh]">
                     <router-link to="eventlist">내 결과물</router-link>
                   </li>
-                  <li id="li-dropdown" class="text-[3vh]">
+                  <!-- <li id="li-dropdown" class="text-[2.5vh]">
                     <a @click="logout">로그아웃</a>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
             </div>
@@ -74,13 +78,15 @@ const isTransparent = ref(false)
 const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
-const reloadFlag = ref(false)
 const limitHeight = 200
+const dropdownKey = ref(3)
 
 initFlowbite()
 
 const reloadPage = () => {
-  window.location.reload()
+  router.push('/').then(() => {
+    window.location.reload()
+  })
 }
 
 const showLoginModal = () => {
@@ -108,12 +114,15 @@ onBeforeMount(() => {
   }
 })
 
-watch(isLogin, async (newValue, oldValue) => {
-  if (newValue === true && oldValue === false && !reloadFlag) {
-    reloadFlag.value = true
-    reloadPage()
+watch(
+  () => store.forceReload,
+  (newValue, oldValue) => {
+    if (newValue === true) {
+      store.forceReload = false
+      setTimeout(reloadPage(), 100)
+    }
   }
-})
+)
 </script>
 
 <style>

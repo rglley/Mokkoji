@@ -130,7 +130,7 @@ pre {
   }
 
   #li-dropdown {
-    @apply m-1 p-2;
+    @apply m-1 p-2 cursor-grab;
   }
 
   #main-gradient {
@@ -186,7 +186,7 @@ pre {
   }
 
   #button-header {
-    @apply bg-transparent text-black hover:underline hover:text-primary3;
+    @apply bg-transparent text-black hover:underline hover:text-primary3 cursor-grab;
   }
 
   input {

@@ -35,6 +35,9 @@ const router = createRouter({
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
+      meta: {
+        requireAuth: true
+      },
       children: [
         {
           path: '',
@@ -64,12 +67,18 @@ const router = createRouter({
     {
       path: '/eventlist',
       name: 'eventlist',
-      component: EventListPage
+      component: EventListPage,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/editpage',
       name: 'editpage',
-      component: EditPage
+      component: EditPage,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/:pathMatch(.*)*',
@@ -86,12 +95,18 @@ const router = createRouter({
     {
       path: '/rollingpaper',
       name: 'rollingpaper',
-      component: RollingPaper
+      component: RollingPaper,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/photomosaic',
       name: 'photomosaic',
-      component: PhotoMosaic
+      component: PhotoMosaic,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/waitingroom',
@@ -104,6 +119,16 @@ const router = createRouter({
       component: ReloadingRoom
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (!($cookies.isKey('authorization') && $cookies.isKey('authorization-refresh'))) {
+      alert('로그인이 필요합니다!')
+      router.push('/')
+    }
+  }
+  next();
 })
 
 export default router

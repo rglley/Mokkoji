@@ -28,8 +28,6 @@ onBeforeMount(() => {
 
 onMounted(() => {
   axios({
-    method: 'GET',
-    // url: "localhost:8080/api/vping"
     url:
       import.meta.env.VITE_API_URL +
       import.meta.env.VITE_SERVER +
@@ -44,7 +42,7 @@ onMounted(() => {
       store.email = res.data.email
       store.image = res.data.image
       if (res.data.first == true) {
-        alert('회원가입 페이지로 이동합니다.')
+        alert('회원 가입 페이지로 이동합니다.')
         router.push('/signup')
       } 
       else {
@@ -52,12 +50,12 @@ onMounted(() => {
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
         store.forceReload = true;
-        // alert('로그인 완료')
+        alert('로그인 완료')
         router.push('/');
       }
     })
     .catch((err) => {
-      toast(err.message)
+      console.log(err);
     })
 })
 </script>
