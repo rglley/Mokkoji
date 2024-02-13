@@ -7,11 +7,10 @@ import MyDetail from '@/components/mypage/MyDetail.vue'
 import MainMeetingView from '@/views/MainMeetingView.vue'
 import GroupMeetingView from '@/views/GroupMeetingView.vue'
 import Error404 from '@/components/common/Error404.vue'
-import ErrorSession from '@/components/common/ErrorSession.vue'
+import Test from '@/views/s3Test.vue'
 import EditPage from '@/views/EditView.vue'
+import ResultPage from '@/views/ResultView.vue'
 import HandleCallback from '@/components/common/HandleCallback.vue'
-import RollingPaper from '@/views/RollingPaper.vue'
-import PhotoMosaic from '@/views/PhotoMosaic.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,14 +79,15 @@ const router = createRouter({
       component: Error404
     },
     {
-      path: '/rollingpaper',
-      name: 'rollingpaper',
-      component: RollingPaper
+      path: '/test',
+      name: 'test',
+      component: Test
     },
+
     {
-      path: '/photomosaic',
-      name: 'photomosaic',
-      component: PhotoMosaic
+      path: '/resultpage',
+      name: 'resultpage',
+      component: ResultPage
     }
   ]
 })

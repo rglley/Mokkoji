@@ -1,12 +1,12 @@
 <template>
   <div class="h-[22rem] w-72 mx-8 my-4 rounded-xl bg-white border-2 border-slate-300">
     <p class="pl-2 pt-2 pb-2 text-black flex">
-      <strong class="effect-pink-recollection">{{ recollection.eventDay }}</strong>
-      <button class="ml-40"><IconModify /></button>
+      <strong class="effect-pink-recollection">{{ recollection.date }}</strong>
+      <button class="ml-40"></button>
     </p>
     <div class="bg-custom">
       <div class="flex justify-center items-center">
-        <a href="/rollingpaper">
+        <a href="/resultPage">
           <img
             src="@/assets/eventlist/recollection_real.png"
             alt="unregistered"
@@ -16,7 +16,7 @@
         </a>
       </div>
       <p class="text-lg mt-2 text-center">
-        <strong class="effect-blacnk-recollection">{{ recollection.eventType }}</strong>
+        <strong class="effect-blacnk-recollection">{{ recollection.name }}</strong>
       </p>
     </div>
     <div class="mt-5 text-center text-black">
@@ -34,7 +34,7 @@ import IconModify from '@/icons/result/IconModify.vue'
 
 const props = defineProps(['recollection'])
 
-const description = props.recollection.description
+const description = props.recollection.content
 const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
 
 //액자, 미정
