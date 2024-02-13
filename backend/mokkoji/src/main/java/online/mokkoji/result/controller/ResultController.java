@@ -169,12 +169,9 @@ public class ResultController {
 
     //포토 모자이크 생성
     @PutMapping("{resultId}/photomosaic")
-    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId, HttpServletRequest req) {
+    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId) {
         //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
         String thumbnailPath = resultService.getThumbnailPath(resultId);
-
-        String provider = jwtUtil.getProvider(req);
-        String email = jwtUtil.getEmail(req);
 
         String localThumbnail = s3Service.downloadWithUrl(thumbnailPath);
         String cellImagesPath = s3Service.downloadCellImages(resultId);
