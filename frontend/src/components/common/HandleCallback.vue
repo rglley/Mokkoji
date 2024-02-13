@@ -44,7 +44,6 @@ onMounted(() => {
       store.email = res.data.email
       store.image = res.data.image
       if (res.data.first == true) {
-        alert('회원가입 페이지로 이동합니다.')
         router.push('/signup')
       } 
       else {
@@ -52,8 +51,7 @@ onMounted(() => {
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
         store.forceReload = true;
-        // alert('로그인 완료')
-        router.push('/');
+        alert('로그인 완료').then(router.push('/'));
       }
     })
     .catch((err) => {

@@ -14,14 +14,14 @@
 
       <div class="ml-auto self-center">
         <ul class="font-medium flex md:flex-row">
-          <button id="button-header"><a href="/" class="text-[3vh]">홈으로</a></button>
-          <li v-if="!(store.isLogin || isLogin)">
-            <button id="button-header" @click="showLoginModal" class="text-[2vh]">로그인</button>
+          <button id="button-header"><a href="/" class="text-[3lvh]">홈으로</a></button>
+          <li v-show="!(store.isLogin || isLogin)">
+            <button id="button-header" @click="showLoginModal" class="text-[3vh]">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
           </li>
-          <li v-else>
+          <li v-show="store.isLogin || isLogin">
             <div class="flex flex-row relative justify-center items-center gap-[3vh] text-[3vh]">
               <button
                 id="button-header"
@@ -74,7 +74,6 @@ const isTransparent = ref(false)
 const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
-const reloadFlag = ref(false)
 const limitHeight = 200
 
 initFlowbite()
@@ -108,12 +107,15 @@ onBeforeMount(() => {
   }
 })
 
-watch(isLogin, async (newValue, oldValue) => {
-  if (newValue === true && oldValue === false && !reloadFlag) {
-    reloadFlag.value = true
-    reloadPage()
+watch(
+  () => store.forceReload,
+  (newValue, oldValue) => {
+    if (newValue === true) {
+      store.forceReload = false;
+      setTimeout(reloadPage(), 1000);
+    }
   }
-})
+)
 </script>
 
 <style>
