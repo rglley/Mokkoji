@@ -16,7 +16,7 @@
         <ul class="font-medium flex md:flex-row">
           <button id="button-header"><a href="/" class="text-[3vh]">홈으로</a></button>
           <li v-if="!(store.isLogin || isLogin)">
-            <button id="button-header" @click="showLoginModal" class="text-[3vh]">로그인</button>
+            <button id="button-header" @click="showLoginModal" class="text-[2vh]">로그인</button>
             <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
               <LoginModal />
             </ModalView>
@@ -75,7 +75,6 @@ const image = ref('')
 const name = ref('')
 const isLogin = ref(false)
 const reloadFlag = ref(false)
-
 const limitHeight = 200
 
 initFlowbite()
