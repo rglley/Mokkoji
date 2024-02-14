@@ -16,6 +16,7 @@ import online.mokkoji.result.domain.Result;
 import online.mokkoji.result.dto.response.MessageResDto;
 import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.dto.response.AccountResDto;
 import online.mokkoji.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class EventController {
     private final ResultService resultService;
 
     // 캡쳐사진 저장
-    @PostMapping("/photos/{sessionId}")
+    @PostMapping("/{sessionId}/photos")
     public ResponseEntity<String> addPhoto(@PathVariable("sessionId") String sessionId,
                                            HttpServletRequest req,
                                            MultipartFile photo) throws IOException {
@@ -59,7 +60,7 @@ public class EventController {
     }
 
     //롤링페이퍼 저장
-    @PostMapping("/rollingpapers/{sessionId}")
+    @PostMapping("/{sessionId}/rollingpapers")
     public ResponseEntity<String> addRollingpaper(@PathVariable("sessionId") String sessionId,
                                                   HttpServletRequest req,
                                                   @RequestPart(value = "audio", required = false) MultipartFile voice,
@@ -84,5 +85,13 @@ public class EventController {
         resultService.createMessage(messageResDto);
         return new ResponseEntity<>("롤링페이퍼 업로드 완료", HttpStatus.OK);
 
+    }
+
+    // 호스트 계좌 정보 얻기
+    @GetMapping("/{sessionId}/accounts")
+    public ResponseEntity<AccountResDto> getAccount(@PathVariable("sessionId") String sessionId) {
+        AccountResDto accountResDto=eventService.getHostAccount(sessionId);
+
+        return new ResponseEntity<>(accountResDto,HttpStatus.OK);
     }
 }

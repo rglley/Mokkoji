@@ -1,9 +1,11 @@
 package online.mokkoji.openvidu.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.time.ZoneId;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class SessionReqDto {
     private Long userId;
     private String sessionId;

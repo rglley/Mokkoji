@@ -79,13 +79,11 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
         openvidu.fetch();
-        Map<String, Object> responseMap = new HashMap<>();
         List<Session> activeSessions = openvidu.getActiveSessions();
         for (Session session : activeSessions) {
             if (session.getSessionId().equals(sessionId)) {
 
-                responseMap.put("session", session);
-                responseMap.put("hostName", eventService.getEvent(sessionId).getUser().getName());
+                Map<String, Object> responseMap = eventService.getSession(session);
 
                 return new ResponseEntity<>(responseMap, HttpStatus.OK);
             }
