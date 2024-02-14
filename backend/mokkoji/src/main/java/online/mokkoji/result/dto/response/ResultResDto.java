@@ -19,6 +19,9 @@ public class ResultResDto {
     private Page<Message> messageList;
 
     @NotBlank
+    private int totalPage;
+
+    @NotBlank
     private int participantCount;
 
     @NotBlank
@@ -32,11 +35,12 @@ public class ResultResDto {
     private String photomosaic;
 
     @Builder
-    public ResultResDto(String backgroundTemplate, String postitTemplate, Page<Message> messageList, String thumbnail,
-                        String name, String content, int participantCount, int messageCount, String photomosaic) {
+    public ResultResDto(String backgroundTemplate, String postitTemplate, Page<Message> messageList, int totalPage,
+                        String thumbnail, String name, String content, int participantCount, int messageCount, String photomosaic) {
         this.backgroundTemplate = backgroundTemplate;
         this.postitTemplate = postitTemplate;
         this.messageList = messageList;
+        this.totalPage = totalPage;
         this.thumbnail = thumbnail;
         this.name = name;
         this.content = content;

@@ -112,6 +112,7 @@ public class ResultServiceImpl implements ResultService {
 
 
         Page<Message> messageList = messageRepository.findAllByRollingPaper_Id(rollingPaper.getId(), pageable);
+        int totalPage = messageList.getTotalPages();
 
         String thumbnail = result.getImage();
         String name = result.getName();
@@ -125,6 +126,7 @@ public class ResultServiceImpl implements ResultService {
                 .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundName().toString())
                 .postitTemplate(rollingPaper.getPostitTemplate().getPostitName().toString())
                 .messageList(messageList)
+                .totalPage(totalPage)
                 .thumbnail(thumbnail)
                 .name(name)
                 .content(content)
