@@ -41,14 +41,14 @@
             <label class="text-sm font-light"> 계좌번호 </label>
 
             <div class="flex flex-row items-baseline">
-              <select v-model="bank" id="input" aria-placeholder="은행명" required>
+              <select v-model="bank" id="input" aria-placeholder="은행명" class="h-10 border-2 border-slate-300">
                 <option v-for="bank in banks" :key="bank" :value="bank">
                   {{ bank }}
                 </option>
               </select>
               <input
                 id="input"
-                class="w-auto"
+                class="w-auto border-2 border-slate-300"
                 placeholder="계좌번호를 입력하세요"
                 v-model="accountNumber"
               />
