@@ -6,7 +6,7 @@
           class="h-full text-center ml-[2vw] w-1/2 flex flex-col justify-center items-center whitespace-wrap"
         >
           <div class="m-2 rounded-2xl p-6">
-            <h1 id="title" class="underline decoration-primary2">모꼬지</h1>
+            <h1 id="title" class="underline decoration-red-300">모꼬지</h1>
             <div class="text-[1.5vw]">
               <p>
                 화상 모임 플랫폼 ‘모꼬지’를 통해
