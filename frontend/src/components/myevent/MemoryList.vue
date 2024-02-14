@@ -130,10 +130,10 @@
         </p>
         <p class="absolute top-[120px] left-[30px]"><IconSingleFlower/></p>
         <p class="absolute top-[115px] text-2xl left-[50px] effect-purple">행사명</p>
-        <input type="text" @input="inputHandlerName" :disabled="isDisabledName" maxlength = "10" placeholder="ex. 결혼식" class="text-center bg-white placeholder:text-2xl absolute top-[100px] text-2xl left-[150px] rounded-lg w-[350px] border-violet-300  border-2 border-solid placeholder:text-center focus:border-black" ></input>
+        <input v-model="eventDataAdd.name" type="text" @input="inputHandlerName" :disabled="isDisabledName" maxlength = "10" placeholder="ex. 결혼식" class="text-center bg-white placeholder:text-2xl absolute top-[100px] text-2xl left-[150px] rounded-lg w-[350px] border-violet-300  border-2 border-solid placeholder:text-center focus:border-black" ></input>
         <p class="absolute top-[195px] left-[30px]"><IconSingleFlower/></p>
         <p class="absolute top-[190px] text-2xl left-[50px] effect-purple">행사설명</p>
-        <textarea @input="inputHandlerContent" :disabled="isDisabledContent" placeholder="ex. 검은 머리 파뿌리 될때까지... &#13;ex. Will you marry me? 가장 많이 웃은 날" maxlength = "35" class="resize-none bg-white absolute top-[190px] text-2xl left-[160px] rounded-lg w-[350px] h-[200px] focus:border-black border-violet-300  border-2 border-solid placeholder: text-center"></textarea>
+        <textarea v-model="eventDataAdd.memo" @input="inputHandlerContent" :disabled="isDisabledContent" placeholder="ex. 검은 머리 파뿌리 될때까지... &#13;ex. Will you marry me? 가장 많이 웃은 날" maxlength = "35" class="resize-none bg-white absolute top-[190px] text-2xl left-[160px] rounded-lg w-[350px] h-[200px] focus:border-black border-violet-300  border-2 border-solid placeholder: text-center"></textarea>
         <button @click="closeAndRecollection" class="absolute top-[415px] text-lg left-[160px] border-violet-300 border-2 border-solid rounded-lg px-4 py-2 w-[350px]  hover:bg-[#e7cffe] ">입력 완료 및 추억 쌓기</button>
       </div>
     </div>
@@ -173,6 +173,7 @@ const isDisabledContent=ref(false)
 
 const toRecollection = (id) => {
   console.log(`${id}를 기억에서 추억으로....`)
+  console.log(eventDataAdd.value)
   toRecollectionStore.toRecollection(id, eventDataAdd.value, (res) => {
     console.log(res)
   }, (error) => {
@@ -191,7 +192,7 @@ const inputHandlerName = (e) => {
     else {
       this.isDisabledName = false
     }
-    eventDataAdd.value.name = target.value;
+    
 
 }
 
@@ -206,7 +207,7 @@ const inputHandlerContent = (e) => {
     else {
       this.isDisabledContent = false
     }
-    eventDataAdd.value.memo = target.value;
+    
 
 }
 
