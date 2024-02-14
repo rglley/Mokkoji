@@ -23,6 +23,7 @@ import online.mokkoji.user.domain.User;
 import online.mokkoji.user.domain.UserAccount;
 import online.mokkoji.user.dto.response.AccountResDto;
 import online.mokkoji.user.repository.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -211,6 +212,7 @@ public class EventServiceImpl implements EventService {
 
     // 호스트 계좌 정보 얻기
     @Override
+    @Cacheable(value = "hostAccount", key = "#sessionId", cacheManager = "cacheManager")
     public AccountResDto getHostAccount(String sessionId) {
 
         Event event = getEvent(sessionId);
