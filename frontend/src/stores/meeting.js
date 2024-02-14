@@ -60,11 +60,35 @@ export const useSessionStore = defineStore('session', () => {
 
   const deleteSession = async (sessionId) => {
     try {
-      const res = await axiosJwt.delete(
+      await axiosJwt.delete(
         VITE_SERVER + `/meetings/sessions/${sessionId}`,
-        { participantCount: 1234, endTime: 12 },
+        {
+          data: {
+            participantCount: 123
+          }
+        },
         {
           headers: { 'Content-Type': 'application/json' }
+        }
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const sendPicture = async (pictureFile) => {
+    const formData = new FormData()
+
+    formData.append('photo', pictureFile)
+
+    try {
+      const res = await axiosJwt.post(
+        VITE_SERVER + `/events/photos/${sessionStorage.getItem('sessionId')}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         }
       )
 
@@ -78,7 +102,8 @@ export const useSessionStore = defineStore('session', () => {
     createSession,
     createGroupSession,
     findSession,
-    deleteSession
+    deleteSession,
+    sendPicture
   }
 })
 
@@ -88,7 +113,6 @@ export const useLetterStore = defineStore('letter', () => {
     const formData = new FormData()
 
     console.log(videoFile)
-    console.log(textFile)
 
     const text = {
       writer: $cookies.get('user').name,
