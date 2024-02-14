@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService{
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if(findUser.isPresent() && findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
+        if(findUser.isPresent()) {
             throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
 
