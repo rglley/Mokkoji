@@ -5,16 +5,18 @@ spring:
         registration:
           google:
             client-id: 784446908563-mecj1ijjk02b1064karovm690fedar97.apps.googleusercontent.com
-            client-secret: ${JWT_SECRET_GOOGLE}
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            client-secret: ${OAUTH2_SECRET_GOOGLE}
+            redirect-uri: http://localhost:5173/oauth2/login
+#            redirect-uri: https://mokkoji.online/oauth2/login/google
             authorization-grant-type: authorization_code
             scope: email, profile
 
 
           naver:
             client-id: Y_veSn1KXI8bYwTv29AA
-            client-secret: ${JWT_SECRET_NAVER}
-            redirect-uri: "http://mokkoji.online/oauth2/login"
+            client-secret: ${OAUTH2_SECRET_NAVER}
+            redirect-uri: https://mokkoji.online/oauth2/login
+#            redirect-uri: https://mokkoji.online/oauth2/login/naver
             client-authentication-method: client_secret_basic
             authorization-grant-type: authorization_code
             scope: name, email, profile_image
@@ -26,6 +28,13 @@ spring:
           #            token_uri: https://kauth.kakao.com/oauth/token
           #            user-info-uri: https://kapi.kakao.com/v2/user/me
           #            user_name_attribute: id
+
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://www.googleapis.com/oauth2/v4/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
           naver:
             authorization_uri: https://nid.naver.com/oauth2.0/authorize
             token_uri: https://nid.naver.com/oauth2.0/token
