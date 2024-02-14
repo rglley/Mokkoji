@@ -64,7 +64,7 @@ public class OpenviduController {
         Session session = openvidu.createSession(properties);
 
         // DB에 저장할 Dto 생성
-        SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId(), session.createdAt());
+        SessionReqDto sessionReqDto = new SessionReqDto(user.getId(), session.getSessionId());
 
         // DB에 저장
          eventService.createSession(sessionReqDto);
@@ -123,6 +123,8 @@ public class OpenviduController {
                                                              @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
+
+        log.info("연결 sessionId : {}", sessionId);
 
         ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
         Connection connection = session.createConnection(properties);

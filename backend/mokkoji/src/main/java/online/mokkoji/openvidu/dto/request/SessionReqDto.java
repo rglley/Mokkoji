@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.cglib.core.Local;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -23,11 +24,10 @@ public class SessionReqDto {
     private int participantCount;
 
     // Session 생성용 생성자
-    public SessionReqDto(Long userId, String sessionId, Long milli) {
+    public SessionReqDto(Long userId, String sessionId) {
         this.userId = userId;
         this.sessionId = sessionId;
-        // millisceconds -> LocalDateTime-UTC으로 변경
-        this.startTime = Instant.ofEpochMilli(milli).atZone(ZoneId.of("UTC")).toLocalDateTime();
+        this.startTime = LocalDateTime.now();
     }
 
 }
