@@ -111,15 +111,13 @@ public class UserServiceImpl implements UserService{
         String bank = userInputReqDto.getBank();
         String accountNumber = userInputReqDto.getAccountNumber();
 
-        if(!bank.equals("") && !accountNumber.equals("")) {
-            UserAccount userAccount = UserAccount.builder()
-                    .user(newUser)
-                    .bank(bank)
-                    .number(accountNumber)
-                    .build();
+        UserAccount userAccount = UserAccount.builder()
+                .user(newUser)
+                .bank(bank)
+                .number(accountNumber)
+                .build();
 
-            accountRepository.save(userAccount);
-        }
+        accountRepository.save(userAccount);
     }
 
     @Override
@@ -165,5 +163,4 @@ public class UserServiceImpl implements UserService{
         return userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
                 .orElseThrow(()->new RestApiException(UserErrorCode.USER_NOT_FOUND));
     }
-
 }
