@@ -5,4 +5,4 @@ COPY ${JAR_FILE} /usr/src/app/app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "./app.jar"]
 # opencv library config
-ENTRYPOINT ["java", -Djava.library.path=./opencv, "./app.jar"]
+#ENTRYPOINT ["java", -Djava.library.path=./opencv, "./app.jar"]
