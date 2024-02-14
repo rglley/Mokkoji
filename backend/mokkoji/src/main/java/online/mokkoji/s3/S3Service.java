@@ -23,13 +23,10 @@ public interface S3Service {
     void deletePhotos(Long resultId);
 
     //url로 다운로드
-    String downloadWithUrl(String s3Url);
+    String downloadWithUrl(String s3Url, String folderName);
 
     //포토모자이크 cellImages 다운로드
     String downloadCellImages(Long resultId);
-
-    //다운로드 presigned 링크 생성(공유)
-    String createDownloadUrl(String fileName);
 
     //포토모자이크 S3로 업로드
     String uploadPhotomosaic(String localPath, Long resultId);

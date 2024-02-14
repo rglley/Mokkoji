@@ -75,12 +75,6 @@ public class Event/* extends BaseEntity */ {
         this.startTime = startTime;
     }
 
-    //==설정 메서드==//
-
-
-    //==비즈니스 로직==//
-
-
     // Session 종료 시 정보 추가, CLOSED로 변경
     public void closeSession(SessionReqDto sessionReqDto) {
 

@@ -12,11 +12,9 @@ import online.mokkoji.user.domain.User;
 import online.mokkoji.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,11 +26,11 @@ public class OAuth2Controller {
 
     private final OAuth2ServiceImpl oAuth2Service;
 
-    @GetMapping("/{provider}/{code}")
-    public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @PathVariable String code,
+    @GetMapping("/{provider}")
+    public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @RequestParam String code,
                                                       HttpServletResponse res) throws Exception {
 
-        Map<String, Object> result = oAuth2Service.getNaverUserInfo(code);
+        Map<String, Object> result = oAuth2Service.getUserInfo(provider, code);
 
         UserInfoResDto userInfoResDto = (UserInfoResDto) result.get("userInfo");
 

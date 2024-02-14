@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.result.dto.request.RecollectionReqDto;
+import online.mokkoji.result.dto.request.CoverImageReqDTO;
 import online.mokkoji.result.service.PhotomosaicService;
 import online.mokkoji.s3.S3Service;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
@@ -15,7 +16,6 @@ import online.mokkoji.result.service.ResultService;
 import online.mokkoji.user.domain.User;
 import online.mokkoji.user.service.UserService;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,14 +96,14 @@ public class ResultController {
 
     // 대표이미지 설정
     @PatchMapping("/{resultId}/memories")
-    public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody String url) {
-        resultService.updateThumbnail(resultId, url);
+    public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody CoverImageReqDTO coverImageReqDTO) {
+        resultService.updateThumbnail(resultId, coverImageReqDTO.getUrl());
         return new ResponseEntity<>("대표이미지 설정 완료", HttpStatus.OK);
     }
 
     // 추억 결과물 보기(롤링페이퍼)
     @GetMapping("/recollections/{resultId}")
-    public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, @PageableDefault(page = 0, size = 9) Pageable pageable) {
+    public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, Pageable pageable) {
 
         ResultResDto resultResDto = resultService.getResult(resultId, pageable);
 
@@ -134,35 +134,33 @@ public class ResultController {
     @GetMapping("/{resultId}/thumbnail")
     public ResponseEntity<Void> downloadThumbnail(@PathVariable Long resultId) {
         String thumbnailPath = resultService.getThumbnailPath(resultId);
-
-        s3Service.downloadWithUrl(thumbnailPath);
+        s3Service.downloadWithUrl(thumbnailPath, "thumbnail");
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    //포토 모자이크 다운로드
     @GetMapping("{resultId}/photomosaic")
     public ResponseEntity<Void> downloadPhotomosaic(@PathVariable Long resultId) {
         String photomosaicPath = resultService.getPhotomosaicPath(resultId);
 
-        s3Service.downloadWithUrl(photomosaicPath);
+        s3Service.downloadWithUrl(photomosaicPath, "photomosaic");
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    //대표사진 공유 링크 생성
     @GetMapping("{resultId}/sharing/thumbnail")
     public ResponseEntity<String> shareThumbnail(@PathVariable Long resultId) {
-        String imageFilename = resultService.getImageFileName(resultId);
-
-        String downloadUrl = s3Service.createDownloadUrl(imageFilename);
+        String downloadUrl = resultService.getThumbnailPath(resultId);
 
         return new ResponseEntity<>(downloadUrl, HttpStatus.CREATED);
     }
 
+    //포토모자이크 공유 링크 생성
     @GetMapping("{resultId}/sharing/photomosaic/")
     public ResponseEntity<String> sharePhotoMosaic(@PathVariable Long resultId) {
-        String photomosaicFilename = resultService.getPhotoMosaicFileName(resultId);
-
-        String downloadUrl = s3Service.createDownloadUrl(photomosaicFilename);
+        String downloadUrl = resultService.getPhotomosaicPath(resultId);
 
         return new ResponseEntity<>(downloadUrl, HttpStatus.CREATED);
     }
@@ -173,7 +171,7 @@ public class ResultController {
         //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
         String thumbnailPath = resultService.getThumbnailPath(resultId);
 
-        String localThumbnail = s3Service.downloadWithUrl(thumbnailPath);
+        String localThumbnail = s3Service.downloadWithUrl(thumbnailPath, "thumbnail");
         String cellImagesPath = s3Service.downloadCellImages(resultId);
 
         //photomosaic 생성, 임시 경로에 저장

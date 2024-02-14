@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString(of = {"id","name", "memo", "status","image"})
+@ToString(of = {"id","name", "content", "status","image"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Result {
 
@@ -39,7 +39,7 @@ public class Result {
 
     @Column(length = 40)
     @Size(max = 40)
-    private String memo;
+    private String content;
 
     @Column(length = 255, columnDefinition = "varchar(255) default 'https://mokkoji-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8+%EC%82%AC%EC%A7%84/%EB%8C%80%ED%91%9C%EC%9D%B4%EB%AF%B8%EC%A7%80_%EA%B8%B0%EB%B3%B8.png'")
     private String image;
@@ -68,7 +68,7 @@ public class Result {
 
     public void updateStatus(String name, String memo) {
         this.name = name;
-        this.memo = memo;
+        this.content = memo;
         this.status = Status.RECOLLECTION;
     }
 

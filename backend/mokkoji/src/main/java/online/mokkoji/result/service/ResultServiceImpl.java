@@ -83,7 +83,7 @@ public class ResultServiceImpl implements ResultService {
                     .date(date)
                     .image(result.getImage())
                     .name(result.getName())
-                    .content(result.getMemo())
+                    .content(result.getContent())
                     .build();
 
             recollectionList.add(recollectionInfoResDto);
@@ -112,16 +112,24 @@ public class ResultServiceImpl implements ResultService {
 
 
         Page<Message> messageList = messageRepository.findAllByRollingPaper_Id(rollingPaper.getId(), pageable);
+        int totalPage = messageList.getTotalPages();
 
+        String thumbnail = result.getImage();
+        String name = result.getName();
+        String content = result.getContent();
         int participantCount = result.getEvent().getParticipantCount();
         int messageCount = messageRepository.countAllByRollingPaper_Id(rollingPaper.getId());
 
         Photomosaic photomosaic = result.getPhotomosaic();
 
         return ResultResDto.builder()
-                .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundPath())
-                .postitTemplate(rollingPaper.getPostitTemplate().getPostitPath())
+                .backgroundTemplate(rollingPaper.getBackgroundTemplate().getBackgroundName().toString())
+                .postitTemplate(rollingPaper.getPostitTemplate().getPostitName().toString())
                 .messageList(messageList)
+                .totalPage(totalPage)
+                .thumbnail(thumbnail)
+                .name(name)
+                .content(content)
                 .participantCount(participantCount)
                 .messageCount(messageCount)
                 .photomosaic(photomosaic == null ? "" : photomosaic.getPath())
@@ -211,6 +219,8 @@ public class ResultServiceImpl implements ResultService {
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.POSTIT_NOT_FOUND));
 
         rollingpaper.updateTemplate(backgroundTemplate,postitTemplate);
+
+        rollingpaper.getBackgroundTemplate().getBackgroundName().toString();
 
         // 변경내용 수정
         rollingPaperRepository.save(rollingpaper);

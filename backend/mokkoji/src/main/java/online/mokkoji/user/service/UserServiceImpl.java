@@ -87,15 +87,20 @@ public class UserServiceImpl implements UserService{
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if(findUser.isPresent() && findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
+        if(findUser.isPresent()) {
             throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
 
         String refreshToken = jwtService.createRefreshToken();
 
-        User newUser = findUser.get();
-        newUser.updateAuthority();
-        newUser.updateRefreshToken(refreshToken);
+        User newUser = User.builder()
+                .provider(Provider.valueOf(provider.toUpperCase()))
+                .email(email)
+                .name(userInputReqDto.getName())
+                .image(userInputReqDto.getImage())
+                .authority(Authority.USER)
+                .refreshToken(refreshToken)
+                .build();
         userRepository.save(newUser);
 
         Record record = Record.builder()
@@ -106,15 +111,13 @@ public class UserServiceImpl implements UserService{
         String bank = userInputReqDto.getBank();
         String accountNumber = userInputReqDto.getAccountNumber();
 
-        if(!bank.equals("") && !accountNumber.equals("")) {
-            UserAccount userAccount = UserAccount.builder()
-                    .user(newUser)
-                    .bank(bank)
-                    .number(accountNumber)
-                    .build();
+        UserAccount userAccount = UserAccount.builder()
+                .user(newUser)
+                .bank(bank)
+                .number(accountNumber)
+                .build();
 
-            accountRepository.save(userAccount);
-        }
+        accountRepository.save(userAccount);
     }
 
     @Override
@@ -160,5 +163,4 @@ public class UserServiceImpl implements UserService{
         return userRepository.findByProviderAndEmail(Provider.valueOf(provider), email)
                 .orElseThrow(()->new RestApiException(UserErrorCode.USER_NOT_FOUND));
     }
-
 }

@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +44,7 @@ public class S3ServiceImpl implements S3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Downloads" +
+    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop" +
             File.separator + "mokkoji" + File.separator;
 
     private final AmazonS3Client amazonS3Client;
@@ -73,7 +75,6 @@ public class S3ServiceImpl implements S3Service {
                 PhotoResDto photoResDto = getPhotoResDto(photo, userId, result);
                 dtoList.add(photoResDto);
             } catch (IOException e) {
-                // TODO : 이부분도 RestApiException으로 해야하는지?
                 throw new RuntimeException(e);
             }
         }
@@ -181,7 +182,6 @@ public class S3ServiceImpl implements S3Service {
         try {
             amazonS3Client.putObject(request);
         } catch (AmazonServiceException e) {
-            // TODO: 2024.01.28 에러 잡기 공부하고 수정ㄱㄱ
             e.printStackTrace();
         } catch (SdkClientException e) {
             e.printStackTrace();
@@ -208,7 +208,7 @@ public class S3ServiceImpl implements S3Service {
 
     //Url로 다운로드
     @Override
-    public String downloadWithUrl(String s3Url) {
+    public String downloadWithUrl(String s3Url, String folderName) {
         URL url;
         try {
             url = new URL(s3Url);
@@ -217,8 +217,12 @@ public class S3ServiceImpl implements S3Service {
         }
 
         String key = url.getPath().substring(1);
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MMdd_HHmmss");
+        String fileName = dateTime.format(format);
 
-        File localFile = new File(LOCAL_PATH + key.substring(key.lastIndexOf('/') + 1));
+        File localFile = new File(LOCAL_PATH + folderName + File.separator + fileName
+                + key.substring(key.lastIndexOf('.')));
 
         File parentDir = localFile.getParentFile();
         if(!parentDir.exists()) {
@@ -240,7 +244,8 @@ public class S3ServiceImpl implements S3Service {
 
         Long userId = findResult.getUser().getId();
 
-        String folderPrefix = userId + "/" + resultId + "/photos/photoList/";
+        String folderPrefix = userId + "/" + resultId + "/" +
+                "photos/photoList";
 
         ListObjectsV2Request listRequest = new ListObjectsV2Request()
                 .withBucketName(bucket)
@@ -266,28 +271,14 @@ public class S3ServiceImpl implements S3Service {
         return LOCAL_PATH;
     }
 
-    //다운로드 링크 생성(presigned URL, 공유)
-    @Override
-    public String createDownloadUrl(String fileName) {
-        Date expiration = new Date();
-        long expTime = expiration.getTime();
-        expTime += TimeUnit.MINUTES.toMillis(5);
-        expiration.setTime(expTime);
-
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
-                .withMethod(HttpMethod.GET)
-                .withExpiration(expiration);
-
-        return amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest).toString();
-    }
-
     //포토모자이크 업로드
     @Override
     public String uploadPhotomosaic(String localPath, Long resultId) {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
-        String key = result.getUser().getId() + "/" + resultId + "/photos/photomosaic.jpeg";
+        String key = result.getUser().getId() + File.separator + resultId + File.separator +
+                "photos" + File.separator + "photomosaic.jpeg";
 
         if (amazonS3Client.doesObjectExist(bucket, key)) {
             amazonS3Client.deleteObject(bucket, key);

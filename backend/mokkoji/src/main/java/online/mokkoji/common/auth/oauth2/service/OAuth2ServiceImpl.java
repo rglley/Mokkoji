@@ -35,15 +35,69 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     private final JwtUtil jwtUtil;
 
     @Override
-    public Map<String, Object> getNaverUserInfo(String authorizationCode) throws Exception {
+    public HttpEntity<MultiValueMap<String, String>> generateTokenReq(String provider, String authorizationCode) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", authorizationCode);
+        params.add("state", "mokkoji");
+
+        if(provider.equals("naver")) {
+            log.info("네이버 파람 추가");
+            params.add("client_id", oAuth2Config.getNaverId());
+            params.add("client_secret", oAuth2Config.getNaverSecret());
+        }
+
+        else if(provider.equals("google")) {
+            params.add("client_id", oAuth2Config.getGoogleId());
+            params.add("client_secret", oAuth2Config.getGoogleSecret());
+            params.add("redirect_uri", oAuth2Config.getGoogleRedirectUri());
+        }
+
+        else if(provider.equals("kakao")) {
+            params.add("client_id", oAuth2Config.getKakaoId());
+            params.add("client_secret", oAuth2Config.getKakaoSecret());
+            params.add("redirect_uri", oAuth2Config.getKakaoRedirectUri());
+        }
+
+        return new HttpEntity<>(params, headers);
+    }
+
+    @Override
+    public HttpEntity<MultiValueMap<String, String>> generateProfileReq(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        return new HttpEntity<>(headers);
+    }
+
+    @Override
+    public Map<String, Object> getUserInfo(String provider, String authorizationCode) throws Exception {
         if(authorizationCode == null)
             throw new RestApiException(OAuthErrorCode.INVALID_AUTHORIZATION_CODE);
 
-        HttpEntity<MultiValueMap<String, String>> tokenRequest = generateNaverTokenReq(authorizationCode);
+        String tokenUrl = "";
+        String profileUrl = "";
+
+        if(provider.equals("naver")) {
+            tokenUrl = oAuth2Config.getNaverTokenUrl();
+            profileUrl = oAuth2Config.getNaverProfileUrl();
+        }
+        else if(provider.equals("google")) {
+            tokenUrl = oAuth2Config.getGoogleTokenUrl();
+            profileUrl = oAuth2Config.getGoogleProfileUrl();
+        }
+        else if(provider.equals("kakao")) {
+            tokenUrl = oAuth2Config.getKakaoTokenUrl();
+            profileUrl = oAuth2Config.getKakaoProfileUrl();
+        }
+
+        HttpEntity<MultiValueMap<String, String>> tokenRequest = generateTokenReq(provider, authorizationCode);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> tokenResponse = restTemplate.exchange(
-                oAuth2Config.getNaverTokenUrl(), HttpMethod.POST, tokenRequest, String.class
+                tokenUrl, HttpMethod.POST, tokenRequest, String.class
         );
 
         JsonNode tokenJSON = objectMapper.readTree(tokenResponse.getBody());
@@ -53,39 +107,46 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
         String accessToken = tokenJSON.get("access_token").asText();
 
-        HttpEntity<MultiValueMap<String, String>> profileRequest = generateNaverProfileReq(accessToken);
+        HttpEntity<MultiValueMap<String, String>> profileRequest = generateProfileReq(accessToken);
 
         restTemplate = new RestTemplate();
-
         ResponseEntity<String> profileResponse = restTemplate.exchange(
-                oAuth2Config.getNaverProfileUrl(), HttpMethod.POST, profileRequest, String.class
+                profileUrl, HttpMethod.POST, profileRequest, String.class
         );
 
         JsonNode profileJSON = objectMapper.readTree(profileResponse.getBody());
 
-        String email = profileJSON.path("response").path("email").asText();
-        String name = profileJSON.path("response").path("name").asText();
-        String image = profileJSON.path("response").path("profile_image").asText();
+        String email = "";
+        String name = "";
+        String image = "";
+        String jwtAccessToken = "";
+
+        if(provider.equals("naver")) {
+            email = profileJSON.path("response").path("email").asText();
+            name = profileJSON.path("response").path("name").asText();
+            image = profileJSON.path("response").path("profile_image").asText();
+            jwtAccessToken = jwtUtil.createAccessToken("NAVER", email);
+        }
+        else if(provider.equals("google")) {
+            email = profileJSON.path("email").asText();
+            name = profileJSON.path("name").asText();
+            image = profileJSON.path("picture").asText();
+            jwtAccessToken = jwtUtil.createAccessToken("GOOGLE", email);
+        }
+        else if(provider.equals("kakao")) {
+            name = profileJSON.path("properties").path("nickname").asText();
+            image = profileJSON.path("properties").path("profile_image").asText();
+            jwtAccessToken = jwtUtil.createAccessToken("KAKAO", email);
+        }
 
         Map<String, Object> resultMap = new HashMap<>();
 
-        String createdAccessToken = jwtUtil.createAccessToken("NAVER", email);
-        resultMap.put("accessToken", createdAccessToken);
+        resultMap.put("accessToken", jwtAccessToken);
 
-        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.NAVER, email);
+        Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider.toUpperCase()), email);
 
         if(findUser.isEmpty()) {
-            User guestUser = User.builder()
-                    .authority(Authority.GUEST)
-                    .email(email)
-                    .image(image)
-                    .name(name)
-                    .provider(Provider.NAVER)
-                    .build();
-
-            userRepository.save(guestUser);
-
-            UserInfoResDto userInfoResDto = new UserInfoResDto("naver", email, name, image, true);
+            UserInfoResDto userInfoResDto = new UserInfoResDto(provider, email, name, image, true);
 
             resultMap.put("userInfo", userInfoResDto);
 
@@ -98,33 +159,11 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         loginUser.updateRefreshToken(refreshToken);
         userRepository.save(loginUser);
 
-        UserInfoResDto userInfoResDto = new UserInfoResDto("naver", email, name, image, false);
+        UserInfoResDto userInfoResDto = new UserInfoResDto(provider, email, name, image, false);
 
         resultMap.put("refreshToken", refreshToken);
         resultMap.put("userInfo", userInfoResDto);
 
         return resultMap;
-    }
-
-    @Override
-    public HttpEntity<MultiValueMap<String, String>> generateNaverTokenReq(String authorizationCode) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", oAuth2Config.getNaverId());
-        params.add("client_secret", oAuth2Config.getNaverSecret());
-        params.add("state", "mokkoji");
-        params.add("code", authorizationCode);
-        return new HttpEntity<>(params, headers);
-    }
-
-    @Override
-    public HttpEntity<MultiValueMap<String, String>> generateNaverProfileReq(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        return new HttpEntity<>(headers);
     }
 }

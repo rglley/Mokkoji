@@ -26,6 +26,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PhotomosaicService {
 
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
     public double calculateDistance(Scalar color1, Scalar color2) {
         double distance = 0.0;
         for (int i = 0; i < color1.val.length; i++) {
@@ -61,7 +65,7 @@ public class PhotomosaicService {
         File[] images = cellImagesFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg") || name.toLowerCase().endsWith(".png"));
         int totalImages = images.length;
 
-        int stride = (int) Math.sqrt((height * width) / totalImages);
+        int stride = 30;
 
         for (int widthIdx = 0; widthIdx < width / stride; widthIdx++) {
             for (int heightIdx = 0; heightIdx < height / stride; heightIdx++) {

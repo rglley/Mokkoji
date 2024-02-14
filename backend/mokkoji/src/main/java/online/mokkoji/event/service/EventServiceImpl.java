@@ -1,5 +1,6 @@
 package online.mokkoji.event.service;
 
+import io.openvidu.java.client.Session;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,10 @@ import online.mokkoji.result.repository.PostitTemplateRepository;
 import online.mokkoji.result.repository.ResultRepository;
 import online.mokkoji.result.repository.RollingPaperRepository;
 import online.mokkoji.user.domain.User;
+import online.mokkoji.user.domain.UserAccount;
+import online.mokkoji.user.dto.response.AccountResDto;
 import online.mokkoji.user.repository.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -191,5 +195,33 @@ public class EventServiceImpl implements EventService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    // 세션 정보, 호스트 이름, 계좌 정보
+    @Override
+    public Map<String, Object> getSession(Session session) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        User user = getEvent(session.getSessionId()).getUser();
+
+        responseMap.put("session", session);
+        responseMap.put("hostName", user.getName());
+
+        return responseMap;
+    }
+
+    // 호스트 계좌 정보 얻기
+    @Override
+    @Cacheable(value = "hostAccount", key = "#sessionId", cacheManager = "cacheManager")
+    public AccountResDto getHostAccount(String sessionId) {
+
+        Event event = getEvent(sessionId);
+        UserAccount userAccount = event.getUser().getUserAccount();
+
+        if (userAccount != null) {
+            return new AccountResDto(userAccount.getBank(), userAccount.getNumber());
+        }
+
+        return null;
     }
 }
