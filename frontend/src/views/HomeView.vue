@@ -87,7 +87,7 @@
     </section>
 
     <!-- first -->
-    <section id="section-main" class="bg-white">
+    <section id="section-main">
       <div class="w-full overflow-hidden">
         <svg
           id="svg-curve-1"
@@ -235,7 +235,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -299,6 +299,10 @@ const toTop = () => {
     behavior: 'smooth'
   })
 }
+
+onMounted(() => {
+  emit('load-home')
+})
 </script>
 
 <style>
