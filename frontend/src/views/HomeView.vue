@@ -6,7 +6,7 @@
           class="h-full text-center ml-[2vw] w-1/2 flex flex-col justify-center items-center whitespace-wrap"
         >
           <div class="m-2 rounded-2xl p-6">
-            <h1 id="title" class="underline decoration-primary2">모꼬지</h1>
+            <h1 id="title" class="underline decoration-red-300">모꼬지</h1>
             <div class="text-[1.5vw]">
               <p>
                 화상 모임 플랫폼 ‘모꼬지’를 통해
@@ -48,9 +48,6 @@
                 >
                   <img src="@/assets/landing/send.png" class="size-[1.5vw]" />
                 </button>
-                <ModalView v-if="isModal" :show-modal="isModal" @close-modal="showModal">
-                  <MeetingJoinModal :conferenceIdInput="conferenceIdInput" />
-                </ModalView>
               </div>
               <p v-if="isInputError" style="color: red" class="text-[2vh]">
                 올바른 회의 ID가 아닙니다
@@ -63,7 +60,7 @@
             <swiper
               :spaceBetween="30"
               :autoplay="{
-                delay: 7500,
+                delay: 5000,
                 pauseOnMouseEnter: true,
                 waitForTransition: 500
               }"
@@ -218,8 +215,6 @@
       </div>
       <div id="space"></div>
     </section>
-
-    <!--logo-->
     <section class="flex items-center justify-center py-[5vh] bg-primary2">
       <img src="@/assets/logo/mokkoji_logo.png" class="w-[20vh] px-[3vh]" />
 
@@ -237,15 +232,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { toast } from 'vue3-toastify'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Pagination } from 'swiper/modules'
 import { useSessionStore } from '@/stores/meeting'
-import ModalView from './ModalView.vue'
-import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import Swal from 'sweetalert2'
 
 const emit = defineEmits(['load-home'])
 
@@ -254,14 +247,9 @@ const router = useRouter()
 
 const conferenceIdInput = ref('')
 const isInputError = ref(false)
-const isModal = ref(false)
 
 const modules = [Autoplay, Pagination]
 const photos = ['carousel1.png', 'carousel2.png', 'carousel3.png', 'carousel4.png']
-
-const showModal = () => {
-  isModal.value = !isModal.value
-}
 
 const submitConferenceId = async () => {
   const result = await store.findSession(conferenceIdInput.value)
@@ -272,7 +260,49 @@ const submitConferenceId = async () => {
     if ($cookies.get('user') !== null) {
       router.push('/meetings')
     } else {
-      isModal.value = true
+      Swal.fire({
+        title: '잠깐! 로그인을 하지 않으셨습니다.',
+        text: `로그인을 하지 않으면 롤링페이퍼 등 일부 모꼬지 서비스를 이용할 수 없어요.`,
+        showCancelButton: true,
+        confirmButtonText: '알겠어요',
+        cancelButtonText: '돌아가기'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: '사용자 이름 설정하기',
+            text: '참가자들에게 이름을 알려주세요!',
+            input: 'text',
+            inputLabel: '참가자명 정하기',
+            inputPlaceholder: '참가자명은 6자 이내여야 합니다.',
+            showCancelButton: true,
+            confirmButtonText: '참가하기',
+            cancelButtonText: '돌아가기'
+          }).then((inputResult) => {
+            if (inputResult.isConfirmed) {
+              const userInput = inputResult.value.trim()
+              if (userInput.length === 0) {
+                Swal.fire({
+                  title: '이름은 빈칸일 수 없어요.',
+                  icon: 'warning',
+                  allowOutsideClick: false,
+                  showCloseButton: true
+                })
+              } else if (userInput.length > 6) {
+                Swal.fire({
+                  title: '6자 이내의 이름을 입력해 주세요.',
+                  icon: 'warning',
+                  allowOutsideClick: false
+                })
+              } else {
+                sessionStorage.setItem('userName', userInput)
+                router.push('/meetings')
+              }
+            }
+          })
+        } else {
+          Swal.close()
+        }
+      })
     }
   } else {
     isInputError.value = true
@@ -284,11 +314,10 @@ const createMeeting = () => {
   if ($cookies.get('user') !== null) {
     store.createSession()
   } else {
-    toast('로그인이 필요합니다', {
-      theme: 'auto',
-      type: 'warning',
-      transition: 'flip',
-      autoClose: 1000
+    Swal.fire({
+      title: '로그인이 필요합니다.',
+      text: '서비스를 사용하기 위해 로그인을 해주세요',
+      icon: 'warning'
     })
   }
 }
@@ -301,6 +330,7 @@ const toTop = () => {
 }
 
 onMounted(() => {
+  window.scrollTo(0, 0)
   emit('load-home')
 })
 </script>

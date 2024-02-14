@@ -59,6 +59,7 @@ export const useSessionStore = defineStore('session', () => {
   }
 
   const deleteSession = async (sessionId, maxUserNum) => {
+    console.log(maxUserNum)
     try {
       await axiosJwt.delete(
         VITE_SERVER + `/meetings/sessions/${sessionId}`,

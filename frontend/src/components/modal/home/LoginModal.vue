@@ -9,7 +9,7 @@
       <div class="flex flex-col justify-center">
         <a
           type="button"
-          class="text-white bg-[#FEE500] hover:bg-[#FEE500]/50 focus:ring-4 focus:outline-none focus:ring-[#FEE500]/40 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-4 w-[20lvw]"
+          class="text-white bg-[#FEE500] hover:bg-[#FEE500]/50 focus:ring-4 focus:outline-none focus:ring-[#FEE500]/40 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-4 w-[15lvw]"
           :href="kakaoApiRequestURI"
         >
           <svg
@@ -54,7 +54,7 @@ c61 0 70 -2 76 -20 13 -40 -10 -50 -109 -50 -58 0 -96 4 -104 12 -8 8 -12 66
         </a>
         <a
           type="button"
-          class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm pl-5 py-2.5 text-center inline-flex items-center m-0 w-[25lvw]"
+          class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm pl-5 py-2.5 text-center inline-flex items-center m-0 w-[15lvw]"
           :href="googleApiRequestURI"
         >
           <svg
@@ -74,7 +74,7 @@ c61 0 70 -2 76 -20 13 -40 -10 -50 -109 -50 -58 0 -96 4 -104 12 -8 8 -12 66
         </a>
         <a
           type="button"
-          class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2 w-[25lvw]"
+          class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2 w-[15lvw]"
           :href="naverApiRequestURI"
         >
           <img

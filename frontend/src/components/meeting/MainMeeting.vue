@@ -381,7 +381,7 @@ const userList = ref([])
 const connectedUser = ref([])
 const myVideo = ref(null)
 const groupVideo = ref(null)
-const maxUserNum = ref(0)
+const maxUserNum = ref(1)
 const setTime = ref(3)
 
 // 개인 사진 촬영
@@ -652,6 +652,17 @@ const joinSession = () => {
 
     deleteSession()
   })
+
+  // 호스트가 회의 종료시 참가자들을 closeroom 컴포넌트로 이동시키는 메소드
+  state.session.on('signal:close', async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+    const tracks = stream.getTracks()
+    tracks.forEach((track) => track.stop())
+
+    sessionStorage.clear()
+    emit('leave-meeting')
+    router.push('/closeroom')
+  })
 }
 
 const deleteSession = () => {
@@ -689,13 +700,16 @@ const leaveMainMeeting = async () => {
   tracks.forEach((track) => track.stop())
 
   if (sessionStorage.getItem('isHost') === 'true') {
+    state.session.signal({
+      to: [],
+      type: 'close'
+    })
     await store.deleteSession(sessionStorage.getItem('sessionId'), maxUserNum.value)
-    sessionStorage.clear()
   } else {
     deleteSession()
-    sessionStorage.clear()
   }
 
+  sessionStorage.clear()
   emit('leave-meeting')
   router.push('/')
 }
