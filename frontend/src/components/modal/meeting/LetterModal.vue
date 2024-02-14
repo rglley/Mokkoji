@@ -258,14 +258,6 @@ const isRecording = ref(false)
 const isPlaying = ref(false)
 const leftTime = ref(60)
 
-// 영상 촬영 관련
-
-const videoRef = ref(null)
-const videoStream = ref(null)
-const chunks = ref([])
-const recordedVideoSrc = ref('')
-const isEndRecording = ref(false)
-
 const removeContents = () => {
   document.getElementById('input-text').value = ''
   textFile.value = ''
@@ -400,73 +392,9 @@ const onAudioEnded = () => {
   isPlaying.value = false
 }
 
-// 영상 촬영 관련
-
-const startCamera = async () => {
-  console.log(navigator.mediaDevices.getUserMedia);
-  try {
-    videoStream.value = await navigator.mediaDevices.getUserMedia({ video: true })
-    videoRef.value.srcObject = videoStream.value
-  } catch (error) {
-    console.error('Error accessing camera:', error)
-  }
-}
-
-const startVideoRecording = () => {
-  isEndRecording.value = false
-  if (isEndRecording.value) startCamera()
-
-  if (!videoStream.value || !(videoStream.value instanceof MediaStream)) {
-    console.error('Invalid stream for recording')
-    return
-  }
-
-  try {
-    mediaRecorder.value = new MediaRecorder(videoStream.value)
-    chunks.value = []
-    mediaRecorder.value.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        chunks.value.push(event.data)
-      }
-    }
-    mediaRecorder.value.onstop = () => {
-      const recordedBlob = new Blob(chunks.value, { type: 'video/webm' })
-      videoFile.value = recordedBlob
-      isRecording.value = false
-      videoRef.value.srcObject = null
-      recordedVideoSrc.value = URL.createObjectURL(recordedBlob)
-    }
-    mediaRecorder.value.start()
-    isRecording.value = true
-  } catch (error) {
-    console.error('Error starting recording:', error)
-  }
-}
-
-const stopVideoRecording = () => {
-  if (mediaRecorder.value && isRecording.value) {
-    mediaRecorder.value.stop()
-    isEndRecording.value = true
-  }
-}
-
-const downloadRecording = () => {
-  if (videoFile.value) {
-    const url = URL.createObjectURL(videoFile.value)
-    const a = document.createElement('a')
-    a.style.display = 'none'
-    a.href = url
-    a.download = 'recorded_video.webm'
-    document.body.appendChild(a)
-    a.click()
-    window.URL.revokeObjectURL(url)
-  }
-}
-
 onBeforeUnmount(() => {
   if (isRecording.value) {
     stopAudioRecording()
-    stopVideoRecording()
   }
 })
 </script>

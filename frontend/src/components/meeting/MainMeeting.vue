@@ -296,7 +296,7 @@
         @remove-group-modal="showGroupModal"
         @create-group-meeting="createGroupMeeting"
       />
-      <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal()" />
+      <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal" />
       <GiftModal v-if="isGiftModal" />
     </transition-group>
     <transition-group name="down">
@@ -306,6 +306,7 @@
       <GroupAlertModal v-if="isGroupAlertModal" />
       <CaptureCheckModal v-if="isCaptureCheckModal" />
     </transition-group>
+    <LoginCheckModal v-if="isLoginCheckModal" @remove-login-check-modal="showLoginCheckModal" />
   </main>
 </template>
 
@@ -346,6 +347,7 @@ import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 import GroupAlertModal from '@/components/modal/meeting/GroupAlertModal.vue'
 import CaptureCheckModal from '@/components/modal/meeting/CaptureCheckModal.vue'
+import LoginCheckModal from '@/components/modal/meeting/LoginCheckModal.vue'
 
 const emit = defineEmits(['leave-meeting']['create-group-meeting'])
 
@@ -373,6 +375,7 @@ const isCaptureCheckModal = ref(false)
 const isUserList = ref(false)
 const isChat = ref(false)
 const isFrontCamera = ref(true)
+const isLoginCheckModal = ref(false)
 
 const searchUserName = ref('')
 const chatMessage = ref('')
@@ -383,36 +386,6 @@ const myVideo = ref(null)
 const groupVideo = ref(null)
 const maxUserNum = ref(1)
 const setTime = ref(3)
-
-// 개인 사진 촬영
-const captureMyVideo = () => {
-  isCount.value = true
-
-  const countTime = setInterval(() => {
-    setTime.value--
-  }, 1000)
-
-  setTimeout(() => {
-    isCount.value = false
-    setTime.value = 3
-    clearInterval(countTime)
-
-    const target = myVideo.value
-
-    if (!target) {
-      return alert('사진 촬영 실패')
-    }
-
-    html2canvas(target).then((canvas) => {
-      canvas.toBlob((blob) => {
-        const file = new File([blob], 'myVideo.png', { type: 'image/png' })
-        store.sendPicture(file)
-      })
-    })
-
-    showCaptureCheckModal()
-  }, 3000)
-}
 
 // 행사 초대 링크 모달
 const showInviteModal = (event) => {
@@ -480,8 +453,17 @@ const showGroupModal = () => {
   }
 }
 
+// 롤링페이퍼, 사진 촬영 버튼 클릭시 비로그인 상태면 로그인을 할 수 있는 모달 생성
+const showLoginCheckModal = () => {
+  isLoginCheckModal.value = !isLoginCheckModal.value
+}
+
 const showLetterModal = () => {
-  isLetterModal.value = !isLetterModal.value
+  if ($cookies.get('user') !== null) {
+    isLetterModal.value = !isLetterModal.value
+  } else {
+    showLoginCheckModal()
+  }
 }
 
 // 선물하기 모달
@@ -507,7 +489,6 @@ const showChat = () => {
 }
 
 const scrollToBottom = () => {
-  // 스크롤할 대상 요소 선택
   const scroll = document.getElementById('chat-container')
 
   scroll.scrollTop = scroll.scrollHeight
@@ -765,6 +746,40 @@ const toggleCamera = async () => {
   } else {
     // 모달창 띄우기
     console.log('화면을 전환할 수 없습니다.')
+  }
+}
+
+// 개인 사진 촬영
+const captureMyVideo = () => {
+  if ($cookies.get('user') !== null) {
+    isCount.value = true
+
+    const countTime = setInterval(() => {
+      setTime.value--
+    }, 1000)
+
+    setTimeout(() => {
+      isCount.value = false
+      setTime.value = 3
+      clearInterval(countTime)
+
+      const target = myVideo.value
+
+      if (!target) {
+        return alert('사진 촬영 실패')
+      }
+
+      html2canvas(target).then((canvas) => {
+        canvas.toBlob((blob) => {
+          const file = new File([blob], 'myVideo.png', { type: 'image/png' })
+          store.sendPicture(file)
+        })
+      })
+
+      showCaptureCheckModal()
+    }, 3000)
+  } else {
+    showLoginCheckModal()
   }
 }
 
