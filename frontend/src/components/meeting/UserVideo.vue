@@ -3,7 +3,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import OvVideo from './OvVideo.vue'
 
 const props = defineProps({
@@ -14,8 +13,6 @@ const props = defineProps({
     type: Boolean
   }
 })
-
-const userName = ref('')
 </script>
 
 <style></style>

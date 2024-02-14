@@ -3,54 +3,161 @@
     id="letter-container"
     class="fixed py-[4vh] px-[3vw] w-[37vw] left-[33vw] aspect-square bg-yellow-100 flex flex-col justify-center rounded-r-lg"
   >
-    <div class="flex pb-[4vh] h-[10vh] w-[31vw] items-center">
+    <div class="flex pb-[4vb] w-[31vw] items-center">
       <div class="text-[1.5vw] basis-1/2 font-bold">롤링페이퍼 작성</div>
-      <button class="ml-auto h-full" @click="$emit('remove-letter-modal')">
-        <IconCancelBlack class="size-[70%]" />
+      <button
+        class="ml-auto w-[3vw] hover:bg-red-100 aspect-square rounded-full"
+        @click="$emit('remove-letter-modal')"
+      >
+        <IconCancelBlack class="size-[50%]" />
       </button>
     </div>
     <div class="flex flex-col justify-center">
-      <!-- <input
-        type="text"
-        name="writer"
-        id="writer"
-        placeholder="이름"
-        class="p-0 m-0 mb-[2vh] w-[13vw] h-[7vh] bg-yellow-100 border-sm border-black rounded-r-lg text-center text-r-md placeholder:text-[1.3vw] placeholder:text-center"
-      /> -->
       <div class="p-[2vw] flex flex-col border-sm rounded-r-lg">
+        <!-- 텍스트 파일 -->
         <textarea
-          name=""
+          v-if="!isAudioRecorder && !isVideoRecorder"
+          name="textFile"
           id="input-text"
-          value=""
           cols="30"
           rows="10"
           placeholder="메시지를 입력하세요"
-          class="h-[40vh] bg-yellow-100 rounded-r-lg resize-none placeholder:text-[1.5vw] text-center text-r-md focus:outline-none"
+          class="h-[90%] bg-yellow-100 rounded-r-lg resize-none placeholder:text-[1.5vw] text-center text-r-md font-bold focus:outline-none"
           v-model="textFile"
         >
         </textarea>
-        <div class="flex h-[5vh]">
+        <!-- 음성 파일 -->
+        <div
+          v-if="isAudioRecorder && !isVideoRecorder"
+          class="h-[90%] aspect-[1.37] bg-yellow-100 rounded-r-xl flex flex-col justify-center items-center"
+        >
+          <div class="ml-[15vw] w-full flex items-center mb-[1vh]">
+            <div class="w-[50%] text-r-md font-semibold">최대 녹음 시간 : 60초</div>
+            <button
+              class="w-[3vw] aspect-square rounded-full hover:bg-gray hover:cursor-pointer flex justify-center items-center"
+              @click="showAudioRecorder"
+            >
+              <IconCancelBlack class="size-[40%]" />
+            </button>
+          </div>
+          <div class="w-[25vw] bg-purple-200 rounded-r-xl flex items-center">
+            <button
+              id="button"
+              v-if="!isRecording"
+              @click="startAudioRecording()"
+              :disabled="isRecording"
+            >
+              <IconRecord class="size-[100%]" />
+            </button>
+            <button id="button" v-else @click="stopAudioRecording()" :disabled="!isRecording">
+              <IconStop class="size-[100%]" />
+            </button>
+            <button
+              id="button"
+              v-if="recordedChunks.length !== 0 && !isRecording && !isPlaying"
+              @click="playAudioRecording()"
+            >
+              <IconPlay class="size-[100%]" />
+            </button>
+            <button
+              id="button"
+              v-if="recordedChunks.length !== 0 && !isRecording && isPlaying"
+              @click="pauseAudioPlaying()"
+            >
+              <IconPause class="size-[90%]" />
+            </button>
+            <canvas
+              ref="soundBarCanvas"
+              width="150"
+              height="50"
+              class="bg-transparent aspect-[3]"
+            ></canvas>
+            <audio hidden ref="audio" crossorigin="anonymous" @ended="onAudioEnded"></audio>
+          </div>
+          <div v-if="isRecording" class="mt-[1vh] w-[8vw] aspect-[2.5] text-r-md font-semibold">
+            남은 시간 : {{ leftTime }}
+          </div>
+          <div
+            v-if="recordedChunks.length !== 0 && !isRecording"
+            class="mt-[1vh] flex justify-center items-center"
+          >
+            <button
+              class="w-[8vw] aspect-[2.5] bg-purple-200 rounded-r-lg text-r-md flex justify-center items-center font-semibold hover:bg-purple-300 hover:cursor-pointer"
+              @click="uploadAudioFile"
+            >
+              파일 업로드
+            </button>
+          </div>
+        </div>
+        <!-- 영상 파일 -->
+        <div
+          v-if="!isAudioRecorder && isVideoRecorder"
+          class="w-fit h-full self-center px-[4lvh] pt-[2lvh] bg-purple-200 rounded-r-lg flex flex-col gap-[1lvh] items-center"
+        >
+          <button
+            class="ml-auto mb-[1vh] w-[12%] aspect-square hover:bg-white rounded-full"
+            @click="showVideoRecorder"
+          >
+            <IconCancelBlack class="size-[60%]" />
+          </button>
+          <video
+            v-if="!isEndRecording"
+            ref="videoRef"
+            width="300"
+            autoplay
+            class="border-sm border-white rounded-r-lg"
+          ></video>
+          <video v-else ref="recordedVideo" width="300lwh" controls :src="recordedVideoSrc"></video>
+          <div class="flex flex-row justify-center h-[15.5lvh]">
+            <button
+              @click="startVideoRecording"
+              :disabled="isRecording"
+              :class="{
+                'h-[70%] aspect-square': isRecording,
+                'h-[70%] aspect-square hover:bg-purple-300 rounded-full': !isRecording
+              }"
+            >
+              <IconRecord class="size-[90%] fill-red-500"></IconRecord>
+            </button>
+            <button
+              @click="stopVideoRecording"
+              :disabled="!isRecording"
+              :class="{
+                'h-[70%] aspect-square': !isRecording,
+                'h-[70%] aspect-square hover:bg-purple-300 rounded-full': isRecording
+              }"
+            >
+              <IconStop class="size-[90%] fill-red-500" />
+            </button>
+          </div>
+        </div>
+        <div class="flex h-[6vh]">
           <div class="basis-1/2 flex justify-start">
-            <label className="input-audio-button" for="input-audio" class="mr-[1vw]">
-              <IconAudio class="size-[100%] hover:cursor-pointer" />
+            <label
+              class="mr-[1vw] hover:bg-red-100 w-[3vw] aspect-square rounded-full flex justify-center items-center"
+              @click="showAudioRecorder"
+            >
+              <IconAudio class="size-[90%] hover:cursor-pointer" />
             </label>
-            <input type="file" id="input-audio" class="hidden" @change="uploadAudioFile" />
-            <label for="input-video">
-              <IconVideo class="size-[100%] hover:cursor-pointer" />
+            <label
+              class="hover:bg-red-100 w-[3vw] aspect-square rounded-full flex justify-center items-center"
+              @click="showVideoRecorder"
+            >
+              <IconVideo class="size-[85%] hover:cursor-pointer" />
             </label>
-            <input type="file" id="input-video" class="hidden" @change="uploadVideoFile" />
           </div>
           <div class="basis-1/2 flex justify-end">
-            <button type="button" class="" @click="removeContents">
-              <IconRemove class="size-[100%]" />
+            <button
+              type="button"
+              class="hover:bg-red-100 w-[3vw] aspect-square rounded-full flex justify-center items-center"
+              @click="removeContents"
+            >
+              <IconRemove class="size-[90%]" />
             </button>
           </div>
         </div>
       </div>
-      <div>
-        <!-- <audio-recorder src=""></audio-recorder> -->
-      </div>
-      <div class="pt-[1vh] pb-[2vh] flex flex-wrap">
+      <div class="pt-[1vw] pb-[1vw] flex flex-wrap">
         <div
           v-if="isAudioFile"
           class="text-black mr-[1vw] w-[15vw] h-[5vh] border-sm rounded-r-lg flex items-center"
@@ -61,12 +168,12 @@
               alt="파일 클립 이미지"
               class="mr-[0.5vw] w-[1.5vw] size-[70%]"
             /><strong class="text-r-sm w-[10.5vw] whitespace-nowrap overflow-hidden"
-              >음성: {{ audioFileName }}</strong
+              >음성파일: {{ audioFileName }}</strong
             >
             <img
               src="@/assets/meeting/delete.png"
               alt="음성 파일 삭제 버튼"
-              class="w-[1.5vw] hover:cursor-pointer"
+              class="w-[1.5vw] hover:cursor-pointer hover:bg-red-100 rounded-full"
               @click="removeAudioFile"
             />
           </div>
@@ -81,82 +188,309 @@
               alt="파일 클립 이미지"
               class="mr-[0.5vw] w-[1.5vw] size-[70%]"
             /><strong class="text-r-sm w-[10.5vw] whitespace-nowrap overflow-hidden"
-              >영상: {{ videoFileName }}</strong
+              >영상파일: {{ videoFileName }}</strong
             >
             <img
               src="@/assets/meeting/delete.png"
               alt="영상 파일 삭제 버튼"
-              class="ml-auto w-[1.5vw] hover:cursor-pointer"
+              class="ml-auto w-[1.5vw] hover:cursor-pointer hover:bg-red-100 rounded-full"
               @click="removeVideoFile"
             />
           </div>
         </div>
       </div>
-      <button
-        type="submit"
-        form="letterForm"
-        class="w-[7vw] aspect-[2] text-r-md bg-red-200 hover:bg-red-300 border-sm rounded-r-lg self-end"
-        @click="sendLetter"
-      >
-        작성하기
-      </button>
+      <div class="flex">
+        <p v-if="isFileCheck" style="color: red" class="text-[1.4vw]">
+          작성한 내용이 존재하지 않습니다.
+        </p>
+        <button
+          type="submit"
+          form="letterForm"
+          class="ml-auto w-[7vw] aspect-[2] text-r-md bg-red-200 hover:bg-red-300 border-sm rounded-r-lg font-semibold"
+          @click="sendLetter"
+        >
+          작성하기
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useLetterStore } from '@/stores/meeting'
 import IconAudio from '@/icons/meeting/IconAudio.vue'
 import IconVideo from '@/icons/meeting/IconVideo.vue'
 import IconRemove from '@/icons/meeting/IconRemove.vue'
 import IconCancelBlack from '@/icons/meeting/IconCancelBlack.vue'
+import IconRecord from '@/icons/meeting/IconRecord.vue'
+import IconStop from '@/icons/meeting/IconStop.vue'
+import IconPlay from '@/icons/meeting/IconPlay.vue'
+import IconPause from '@/icons/meeting/IconPause.vue'
 
 defineEmits(['remove-letter-modal'])
 
 const store = useLetterStore()
+
+const isAudioRecorder = ref(false)
+const isVideoRecorder = ref(false)
+const isFileCheck = ref(false)
 const isVideoFile = ref(false)
 const isAudioFile = ref(false)
-const videoFile = ref()
-const audioFile = ref()
+const videoFile = ref(null)
+const audioFile = ref(null)
 const textFile = ref('')
 const videoFileName = ref('')
 const audioFileName = ref('')
+
+// 음성 녹음 관련
+
+const audio = ref(null)
+const mediaRecorder = ref(null)
+const soundBarCanvas = ref(null)
+const audioContext = ref(null)
+const analyzer = ref(null)
+const canvas = ref(null)
+const canvasContext = ref(null)
+const animationId = ref(null)
+const recordedChunks = ref([])
+const isRecording = ref(false)
+const isPlaying = ref(false)
+const leftTime = ref(60)
+
+// 영상 촬영 관련
+
+const videoRef = ref(null)
+const videoStream = ref(null)
+const chunks = ref([])
+const recordedVideoSrc = ref('')
+const isEndRecording = ref(false)
 
 const removeContents = () => {
   document.getElementById('input-text').value = ''
   textFile.value = ''
 }
 
-const uploadAudioFile = (event) => {
+const showAudioRecorder = () => {
+  isAudioRecorder.value = !isAudioRecorder.value
+  isVideoRecorder.value = false
+}
+
+const showVideoRecorder = () => {
+  isVideoRecorder.value = !isVideoRecorder.value
+  isAudioRecorder.value = false
+}
+
+const uploadAudioFile = () => {
   isAudioFile.value = true
-  audioFile.value = event.target.files[0]
-  audioFileName.value = event.target.files[0].name
+  isAudioRecorder.value = false
+  audioFileName.value = '내 녹음 파일'
 }
 
-const uploadVideoFile = (event) => {
+const uploadVideoFile = () => {
   isVideoFile.value = true
-  videoFile.value = event.target.files[0]
-  videoFileName.value = event.target.files[0].name
+  videoFileName.value = '내 영상 파일'
 }
 
-const removeAudioFile = (event) => {
+const removeAudioFile = () => {
   isAudioFile.value = false
   audioFile.value = null
 }
 
-const removeVideoFile = (event) => {
+const removeVideoFile = () => {
   isVideoFile.value = false
   videoFile.value = null
 }
 
 const sendLetter = () => {
-  store.sendLetter(videoFile.value, audioFile.value, textFile.value)
+  if (videoFile.value === null && audioFile.value === null && textFile.value === '') {
+    isFileCheck.value = true
+    return
+  } else {
+    store.sendLetter(videoFile.value, audioFile.value, textFile.value)
+  }
 
+  isFileCheck.value = false
+  isVideoFile.value = false
+  isAudioFile.value = false
   audioFile.value = null
   videoFile.value = null
+  videoFileName.value = ''
+  audioFileName.value = ''
   textFile.value = ''
 }
+
+// 음성 녹음 관련
+
+const startAudioRecording = async () => {
+  recordedChunks.value = []
+  isRecording.value = true
+
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  mediaRecorder.value = new MediaRecorder(stream, {
+    mimeType: 'audio/webm;codecs=opus'
+  })
+  mediaRecorder.value.addEventListener('dataavailable', (event) => {
+    if (event.data.size > 0) {
+      recordedChunks.value.push(event.data)
+    }
+  })
+
+  mediaRecorder.value.start(100)
+
+  audioContext.value = new (window.AudioContext || window.webkitAudioContext)()
+  analyzer.value = audioContext.value.createAnalyser()
+  const source = audioContext.value.createMediaStreamSource(stream)
+  source.connect(analyzer.value)
+
+  canvas.value = soundBarCanvas.value
+  canvasContext.value = canvas.value.getContext('2d')
+
+  drawSoundBar()
+}
+
+const countTime = () => {
+  setTimeout(() => {
+    leftTime.value--
+  }, 1000)
+}
+
+const drawSoundBar = () => {
+  canvasContext.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+
+  const bufferLength = analyzer.value.frequencyBinCount
+  const dataArray = new Uint8Array(bufferLength)
+  analyzer.value.getByteFrequencyData(dataArray)
+
+  const barWidth = (canvas.value.width / bufferLength) * 3
+  let x = 0
+  for (let i = 0; i < bufferLength; i++) {
+    const barHeight = dataArray[i] / 4
+    canvasContext.value.fillStyle = '#a78bfa'
+    canvasContext.value.fillRect(x, canvas.value.height - barHeight, barWidth, barHeight)
+    x += barWidth + 1
+  }
+
+  animationId.value = requestAnimationFrame(drawSoundBar)
+}
+
+const stopAudioRecording = async () => {
+  isRecording.value = false
+  await mediaRecorder.value.stop()
+
+  const blob = new Blob(recordedChunks.value, { type: 'audio/webm' })
+  const audioUrl = URL.createObjectURL(blob)
+  audio.value.src = audioUrl
+  audioFile.value = new File([blob], 'audio.webm', { type: 'audio/webm' })
+
+  cancelAnimationFrame(animationId.value)
+}
+
+const playAudioRecording = async () => {
+  isPlaying.value = true
+  await audio.value.play()
+}
+
+const pauseAudioPlaying = () => {
+  isPlaying.value = false
+  audio.value.pause()
+}
+
+const onAudioEnded = () => {
+  isPlaying.value = false
+}
+
+// 영상 촬영 관련
+
+const startCamera = async () => {
+  console.log(navigator.mediaDevices.getUserMedia);
+  try {
+    videoStream.value = await navigator.mediaDevices.getUserMedia({ video: true })
+    videoRef.value.srcObject = videoStream.value
+  } catch (error) {
+    console.error('Error accessing camera:', error)
+  }
+}
+
+const startVideoRecording = () => {
+  isEndRecording.value = false
+  if (isEndRecording.value) startCamera()
+
+  if (!videoStream.value || !(videoStream.value instanceof MediaStream)) {
+    console.error('Invalid stream for recording')
+    return
+  }
+
+  try {
+    mediaRecorder.value = new MediaRecorder(videoStream.value)
+    chunks.value = []
+    mediaRecorder.value.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        chunks.value.push(event.data)
+      }
+    }
+    mediaRecorder.value.onstop = () => {
+      const recordedBlob = new Blob(chunks.value, { type: 'video/webm' })
+      videoFile.value = recordedBlob
+      isRecording.value = false
+      videoRef.value.srcObject = null
+      recordedVideoSrc.value = URL.createObjectURL(recordedBlob)
+    }
+    mediaRecorder.value.start()
+    isRecording.value = true
+  } catch (error) {
+    console.error('Error starting recording:', error)
+  }
+}
+
+const stopVideoRecording = () => {
+  if (mediaRecorder.value && isRecording.value) {
+    mediaRecorder.value.stop()
+    isEndRecording.value = true
+  }
+}
+
+const downloadRecording = () => {
+  if (videoFile.value) {
+    const url = URL.createObjectURL(videoFile.value)
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = url
+    a.download = 'recorded_video.webm'
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+}
+
+onBeforeUnmount(() => {
+  if (isRecording.value) {
+    stopAudioRecording()
+    stopVideoRecording()
+  }
+})
 </script>
 
-<style></style>
+<style scoped>
+canvas {
+  padding-right: 1vw;
+  width: 50%;
+}
+
+#button {
+  width: 4.5vw;
+  margin: 0.8vw;
+  padding: 1vw;
+  aspect-ratio: 1 / 1;
+  background-color: #d8b4fe;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#button:hover {
+  background: #a78bfa;
+}
+</style>

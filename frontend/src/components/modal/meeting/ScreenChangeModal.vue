@@ -1,7 +1,7 @@
 <template>
-  <div class="fixed w-[6%] h-[4%] bottom-[32.5%] left-[19%]">
+  <div class="fixed w-[7%] aspect-[2.5] bottom-[11.5%] left-[20.8%]">
     <div class="h-[100%] bg-neutral-500 flex flex-col justify-center items-center rounded-r-lg">
-      <div class="font-bold text-white text-r-sm">복사 완료</div>
+      <div class="text-r-sm text-white">화면 전환</div>
     </div>
   </div>
 </template>

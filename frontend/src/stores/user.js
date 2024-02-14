@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, onBeforeMount } from 'vue'
 import tokenService from '@/services/token.service'
+import axios from '@/services/api'
 
 export const useUserStore = defineStore('user', () => {
   const name = ref('')
   const email = ref('')
   const image = ref('')
   const isLogin = ref(false)
+  const forceReload = ref(false);
 
   const getLoginStatus = () => {
     try {
@@ -20,6 +22,22 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const getBankAccount = () => {
+    let bank = ref('');
+    let accountNumber = ref('');
+    axios
+    .get(import.meta.env.VITE_SERVER + '/users/userinfo')
+    .then((res) => {
+      bank.value = res.data.bank
+      accountNumber.value = res.data.accountNumber
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+
+    return [bank, accountNumber];
+  }
+
   onBeforeMount(() => {
     getLoginStatus;
   
@@ -30,6 +48,8 @@ export const useUserStore = defineStore('user', () => {
     email,
     image,
     isLogin,
+    forceReload,
     getLoginStatus,
+    getBankAccount,
   }
 })

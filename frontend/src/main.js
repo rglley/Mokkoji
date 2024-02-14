@@ -13,13 +13,18 @@ import AOS from 'aos'
 import App from './App.vue'
 import router from './router/index.js'
 import VueCookies from 'vue-cookies'
-const pinia = createPinia()
+import tokenService from '@/services/token.service'
 
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
-app.use(VueCookies, { expires: '7d' })
+app.use(VueCookies, { expires: '1h' })
+if ($cookies.isKey('token')) {
+  if (tokenService.expiredToken($cookies.get('token'))) {
+    $cookies.keys().forEach(cookie => $cookies.remove(cookie));
+  }
+}
 
 app.mount('#app')

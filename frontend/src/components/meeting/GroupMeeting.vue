@@ -3,7 +3,7 @@
     <section class="w-full h-[85%] flex justify-center">
       <!-- 스포트라이트 레이아웃 -->
       <div v-if="!isGrid" class="w-full h-full flex basis-3/4">
-        <div id="meeting-container" ref="groupVideo" class="w-full h-full flex justify-center">
+        <div id="meeting-container" class="w-full h-full flex justify-center">
           <div
             v-if="state.subscribers.length > 0"
             class="h-full basis-1/4 flex flex-col justify-start items-center overflow-y-scroll gap-[1vh]"
@@ -14,32 +14,29 @@
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
               :main-stream="false"
-              @click.native="updateMainVideoStreamManager(sub)"
-              class="h-1/3 flex-none"
+              @click="updateMainVideoStreamManager(sub)"
             />
           </div>
-          <div ref="myVideo" class="max-h-[100%] basis-3/4 flex justify-center items-start">
-            <user-Video
-              id="main-video"
-              :stream-manager="state.mainStreamManager"
-              :main-stream="true"
-              class="px-sm w-full h-full"
-            />
+          <div
+            ref="myVideo"
+            class="mr-[1vh] w-full h-full basis-3/4 flex justify-center items-start"
+          >
+            <user-Video :stream-manager="state.mainStreamManager" :main-stream="true" />
           </div>
         </div>
       </div>
       <!-- 그리드 레이아웃 -->
       <div
         v-else
+        ref="groupVideo"
         class="w-full h-full basis-3/4 grid grid-cols-3 gap-[1vh] overflow-y-scroll items-center"
       >
         <user-Video
           id="sub-video"
-          v-for="sub in state.subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
+          v-for="user in userList"
+          :key="user.stream.connection.connectionId"
+          :stream-manager="user"
           :main-stream="false"
-          class="w-full"
         />
       </div>
       <!-- 참여자 목록, 채팅방-->
@@ -49,41 +46,54 @@
       >
         <div
           v-if="isUserList"
-          class="w-full h-full border-sm border-gray rounded-r-lg flex flex-col"
+          :class="{
+            'w-full h-full border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isUserList && !isChat,
+            'w-full h-1/2 border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isUserList && isChat
+          }"
         >
           <div class="px-md w-full h-[13%] flex items-center">
-            <div class="w-[30%] font-bold text-r-lg">참여자</div>
-            <div class="w-[70%] flex just overflow-hidden">
-              <button class="w-[70%]">
-                <div class="text-r-sm text-purple-400 text-end">초대하기</div>
-                <IconInvite class="size-[40%]" />
+            <div class="ml-[1vw] w-[30%] font-bold text-r-md">참여자</div>
+            <div class="w-[70%] flex">
+              <button
+                class="ml-auto w-[45%] flex justify-center hover:bg-neutral-200 rounded-r-lg"
+                @click="showInviteModal"
+              >
+                <div class="w-[100%] text-r-sm text-purple-400">초대하기</div>
+                <IconInvite class="w-[4vw] size-[70%]" />
               </button>
-              <button class="ml-auto w-[20%] flex overflow-hidden" @click="showUserList">
-                <IconCancelPurple class="size-[60%]" />
+              <button
+                class="ml-[3vh] flex w-[2.3vw] aspect-square rounded-full hover:bg-neutral-200"
+                @click="showUserList(), showInviteModal('close')"
+              >
+                <IconCancelPurple class="size-[80%]" />
               </button>
             </div>
           </div>
           <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-hidden">
-            <user-list
-              v-for="sub in state.subscribers"
-              :key="sub.stream.connection.connectionId"
-              :stream-manager="sub"
+            <UserList
+              v-for="user in userList"
+              :key="user.stream.connection.connectionId"
+              :stream-manager="user"
               :search-user-name="searchUserName"
+              :my-name="state.myUserName"
+              :button-type="'user-list'"
               class="bg-white w-[90%] h-[10vh] rounded-r-lg text-r-sm flex justify-center items-center font-semibold"
             />
           </div>
           <div class="h-[13%] flex flex-col justify-center items-center">
-            <div class="bg-gray w-[90%] h-[70%] rounded-full flex items-center">
+            <div class="bg-gray w-[95%] h-[70%] rounded-r-xl flex items-center">
               <input
                 type="text"
                 name=""
                 id="search-name"
                 placeholder="참여자명 검색"
-                class="bg-gray w-[80%] h-[100%] border-0 rounded-full"
+                class="my-0 ml-[2vb] pr-0 pl-[0.5vw] bg-gray w-[80%] h-[100%] border-0 rounded-full text-r-md rounded-r-xl"
                 v-model="searchUserName"
               />
               <button
-                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center hover:bg-purple-300"
               >
                 <IconSearch class="size-[60%]" />
               </button>
@@ -93,32 +103,44 @@
         <div v-if="isUserList && isChat" class="mb-[1vh]"></div>
         <div
           v-if="isChat"
-          id="chat-container"
-          class="w-full h-full border-sm border-gray rounded-r-lg flex flex-col"
+          :class="{
+            'w-full h-full border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isChat && !isUserList,
+            'w-full h-1/2 border-sm border-neutral-300 rounded-r-lg flex flex-col':
+              isChat && isUserList
+          }"
         >
           <div class="px-md w-full h-[13%] flex items-center">
-            <div class="basis-3/12 font-bold text-r-md">채팅</div>
-            <button class="ml-auto basis-2/12 flex justify-end" @click="showChat">
-              <IconCancelPurple @click="showChat" class="size-[50%]" />
+            <div class="ml-[1vw] basis-3/12 font-bold text-r-md">채팅</div>
+            <button
+              class="ml-auto w-[2.3vw] aspect-square rounded-full flex hover:bg-neutral-200"
+              @click="showChat"
+            >
+              <IconCancelPurple class="size-[80%]" />
             </button>
           </div>
-          <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-y-scroll">
+          <div
+            id="chat-container"
+            class="pt-[1vh] bg-gray h-[80%] flex flex-col justify-start items-center overflow-y-scroll"
+          >
             <ChatLog :chat-log="chatMessages" />
           </div>
           <div class="h-[13%] flex flex-col justify-center items-center">
-            <div action="/meeting" class="bg-gray w-[90%] h-[70%] rounded-3xl flex items-center">
+            <div action="/meeting" class="bg-gray w-[95%] h-[70%] rounded-r-xl flex items-center">
               <input
                 v-model="chatMessage"
                 type="text"
                 name=""
                 id="chat-message"
                 placeholder="메시지 보내기"
-                class="bg-gray w-[80%] h-[100%] border-0 rounded-full"
+                class="my-0 ml-[2vb] pl-[0.5vw] bg-gray w-[80%] h-[100%] border-0 placeholder:items-center text-r-md rounded-r-xl"
+                maxlength="100"
+                @keypress.enter="sendMessage"
               />
               <button
-                @click="sendMessage()"
+                @click="sendMessage"
                 type="submit"
-                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center"
+                class="ml-[1vw] w-[17%] h-[90%] rounded-full bg-purple-200 flex justify-center items-center hover:bg-purple-300"
               >
                 <IconSendMessage class="size-[60%]" />
               </button>
@@ -145,6 +167,13 @@
               <IconLayout class="size-[80%]" />
             </div>
             <div class="w-[60%] button-text">화면 배치</div>
+          </button>
+          <button
+            class="ml-[1lvh] w-[30%] aspect-square bg-neutral-500 hover:bg-neutral-800 rounded-full flex justify-center items-center"
+            @click="toggleCamera"
+          >
+            <IconScreenChange id="screen-change-button" class="size-[80%]" />
+            <ScreenChangeModal id="screen-change" />
           </button>
         </div>
         <div
@@ -198,7 +227,7 @@
           <div>
             <button
               id="button-picture"
-              :class="{ 'bg-purple-400': isCapture, 'bg-purple-200': !isCapture }"
+              :class="{ 'bg-purple-400': isCaptureModal, 'bg-purple-200': !isCaptureModal }"
               @click="captureMyVideo"
             >
               <IconCamera class="size-[50%]" />
@@ -245,46 +274,37 @@
       <MeetingDetailModal
         v-if="isMeetingDetailModal"
         :session="state.session"
-        @copy-address-info="showAddressCopyModal"
-        @copy-session-id-info="showSessionIdCopyModal"
         @remove-detail-modal="showMeetingDetailModal"
       />
-    </transition-group>
-    <transition-group name="down">
-      <MicModal v-if="isMicModal" :is-mic="isMic" />
-    </transition-group>
-    <transition-group name="down">
-      <CameraModal v-if="isCameraModal" :is-camera="isCamera" />
-    </transition-group>
-    <transition-group name="up">
       <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal" />
-    </transition-group>
-    <transition-group name="up">
       <GiftModal v-if="isGiftModal" />
-    </transition-group>
-    <transition-group name="up">
-      <CaptureModal v-if="isCaptureModal" />
-    </transition-group>
-    <transition-group name="up">
       <LeaveGroupModal
         v-if="isLeaveGroupModal"
         @leave-main-meeting="leaveMainMeeting"
         @leave-group-meeting="leaveGroupMeeting"
       />
     </transition-group>
+    <transition-group name="down">
+      <InviteModal v-if="isInviteModal" />
+      <MicModal v-if="isMicModal" :is-mic="isMic" />
+      <CameraModal v-if="isCameraModal" :is-camera="isCamera" />
+      <CaptureCheckModal v-if="isCaptureCheckModal" />
+    </transition-group>
   </main>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { useSessionStore } from '@/stores/meeting'
 import { useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import html2canvas from 'html2canvas'
-import axios from 'axios'
-import UserList from './UserList.vue'
-import UserVideo from './UserVideo.vue'
-import ChatLog from './ChatLog.vue'
+import axiosJwt from '@/services/api'
+import UserList from '@/components/meeting/UserList.vue'
+import UserVideo from '@/components/meeting/UserVideo.vue'
+import ChatLog from '@/components/meeting/ChatLog.vue'
 import IconInfo from '@/icons/meeting/IconInfo.vue'
+import IconScreenChange from '@/icons/meeting/IconScreenChange.vue'
 import IconSearch from '@/icons/meeting/IconSearch.vue'
 import IconInvite from '@/icons/meeting/IconInvite.vue'
 import IconCancelPurple from '@/icons/meeting/IconCancelPurple.vue'
@@ -299,42 +319,41 @@ import IconCamera from '@/icons/meeting/IconCamera.vue'
 import IconUserList from '@/icons/meeting/IconUserList.vue'
 import IconChat from '@/icons/meeting/IconChat.vue'
 import IconSendMessage from '@/icons/meeting/IconSendMessage.vue'
+import InviteModal from '@/components/modal/meeting/InviteModal.vue'
 import MeetingDetailModal from '@/components/modal/meeting/MeetingDetailModal.vue'
+import ScreenChangeModal from '@/components/modal/meeting/ScreenChangeModal.vue'
 import MicModal from '@/components/modal/meeting/MicModal.vue'
 import CameraModal from '@/components/modal/meeting/CameraModal.vue'
 import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 import LeaveGroupModal from '@/components/modal/meeting/LeaveGroupModal.vue'
-
-const props = defineProps({
-  session: {
-    type: Object
-  }
-})
+import CaptureModal from '@/components/modal/meeting/CaptureModal.vue'
+import CaptureCheckModal from '@/components/modal/meeting/CaptureCheckModal.vue'
 
 const emit = defineEmits(['leave-meeting'])
 
 const router = useRouter()
+const store = useSessionStore()
 
-const videoWidth = window.screen.width * 0.65
-const videoHeight = window.screen.height * 0.9
-
-const groupNumber = ref(props.session.groupNumber)
+const videoWidth = window.screen.width
+const videoHeight = window.screen.height
 
 const isGrid = ref(false)
 const isMic = ref(true)
 const isMicModal = ref(false)
 const isCamera = ref(true)
 const isCameraModal = ref(false)
+const isInviteModal = ref(false)
 const isMeetingDetailModal = ref(false)
-const isAddressCopyModal = ref(false)
-const isSessionIdCopyModal = ref(false)
 const isLetterModal = ref(false)
 const isGiftModal = ref(false)
 const isCaptureModal = ref(false)
+const isCount = ref(false)
 const isUserList = ref(false)
 const isChat = ref(false)
 const isLeaveGroupModal = ref(false)
+const isFrontCamera = ref(true)
+const isCaptureCheckModal = ref(false)
 
 const searchUserName = ref('')
 const chatMessage = ref('')
@@ -342,55 +361,79 @@ const chatMessages = ref([])
 const userList = ref([])
 const myVideo = ref(null)
 const groupVideo = ref(null)
+const setTime = ref(3)
 
+// 개인 사진 촬영
 const captureMyVideo = () => {
-  const target = myVideo.value
-  if (!target) {
-    return alert('결과 저장 실패')
-  }
-  html2canvas(target).then((canvas) => {
-    onSaveAs(canvas.toDataURL('image/png'), 'test.png')
-  })
+  isCount.value = true
+
+  const countTime = setInterval(() => {
+    setTime.value--
+  }, 1000)
+
+  setTimeout(() => {
+    const target = myVideo.value
+
+    if (!target) {
+      return alert('사진 촬영 실패')
+    }
+
+    html2canvas(target).then((canvas) => {
+      canvas.toBlob((blob) => {
+        const file = new File([blob], 'myVideo.png', { type: 'image/png' })
+        store.sendPicture(file)
+      })
+    })
+
+    isCount.value = false
+    setTime.value = 3
+    showCaptureCheckModal()
+    clearInterval(countTime)
+  }, 3000)
 }
 
-const captureGroupVideo = () => {
-  const target = groupVideo.value
-  if (!target) {
-    return alert('결과 저장 실패')
-  }
-  html2canvas(target).then((canvas) => {
-    onSaveAs(canvas.toDataURL('image/png'), 'test.png')
-  })
+// 단체 사진 촬영
+const captureGroupVideo = async () => {
+  isGrid.value = true
+  isCount.value = true
+
+  const countTime = setInterval(() => {
+    setTime.value--
+  }, 1000)
+
+  setTimeout(() => {
+    const target = groupVideo.value
+
+    if (!target) {
+      isGrid.value = false
+      return alert('사진 촬영 실패')
+    }
+
+    html2canvas(target).then((canvas) => {
+      canvas.toBlob((blob) => {
+        const file = new File([blob], 'groupVideo.png', { type: 'image/png' })
+        store.sendPicture(file)
+      })
+    })
+
+    isGrid.value = false
+    isCount.value = false
+    setTime.value = 3
+    showCaptureCheckModal()
+    clearInterval(countTime)
+  }, 3000)
 }
 
-// 캡쳐 사진 저장
-const onSaveAs = (uri, filename) => {
-  const link = document.createElement('a')
-  document.body.appendChild(link)
-  link.href = uri
-  link.download = filename
-  link.click()
-  document.body.removeChild(link)
+const showInviteModal = (event) => {
+  if (event === 'close') {
+    isInviteModal.value = false
+  } else {
+    isInviteModal.value = !isInviteModal.value
+  }
 }
 
 const showMeetingDetailModal = () => {
   isMeetingDetailModal.value = !isMeetingDetailModal.value
-}
-
-const showAddressCopyModal = () => {
-  isAddressCopyModal.value = true
-
-  setTimeout(() => {
-    isAddressCopyModal.value = false
-  }, 600)
-}
-
-const showSessionIdCopyModal = () => {
-  isSessionIdCopyModal.value = true
-
-  setTimeout(() => {
-    isSessionIdCopyModal.value = false
-  }, 600)
 }
 
 const setLayoutState = () => {
@@ -437,9 +480,19 @@ const showGiftModal = () => {
   isGiftModal.value = !isGiftModal.value
 }
 
-// const setCaptureState = () => {
-//   isCapture.value = !isCapture.value
-// }
+// 개인 사진, 단체 사진 버튼 모달
+const showCaptureModal = () => {
+  isCaptureModal.value = !isCaptureModal.value
+}
+
+// 사진 촬영 확인 모달 보여주기
+const showCaptureCheckModal = () => {
+  isCaptureCheckModal.value = true
+
+  setTimeout(() => {
+    isCaptureCheckModal.value = false
+  }, 600)
+}
 
 const showUserList = () => {
   isUserList.value = !isUserList.value
@@ -453,11 +506,17 @@ const showLeaveGroupModal = () => {
   isLeaveGroupModal.value = !isLeaveGroupModal.value
 }
 
+const scrollToBottom = () => {
+  // 스크롤할 대상 요소 선택
+  const scroll = document.getElementById('chat-container')
+
+  scroll.scrollTop = scroll.scrollHeight
+}
+
 // ---------------- OpenVidu 관련 ----------------
 
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axiosJwt.defaults.headers.post['Content-Type'] = 'application/json'
 
-const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
 const state = reactive({
@@ -466,13 +525,9 @@ const state = reactive({
   mainStreamManager: undefined,
   publisher: undefined,
   subscribers: [],
-  mySessionId: sessionStorage.getItem('sessionId') + groupNumber.value,
-  myUserName: 'participant' + Math.floor(Math.random() * 100),
-  openviduToken: undefined,
-  isMic: true,
-  isCamera: true,
-  isSpeaker: true,
-  isChat: true
+  myUserName:
+    $cookies.get('user') !== null ? $cookies.get('user').name : sessionStorage.getItem('userName'),
+  openviduToken: undefined
 })
 
 // 세션 참가하기
@@ -484,7 +539,7 @@ const joinSession = () => {
   state.session = state.OV.initSession()
 
   // 4) 유효한 사용자 토큰으로 세션에 연결하기
-  getToken(state.mySessionId)
+  getToken()
     .then((token) => {
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
         let publisher = state.OV.initPublisher(undefined, {
@@ -501,6 +556,8 @@ const joinSession = () => {
 
         state.mainStreamManager = publisher
         state.publisher = publisher
+        state.session.publish(publisher)
+        userList.value.unshift(publisher)
       })
     })
     .catch((error) => {
@@ -517,17 +574,30 @@ const joinSession = () => {
     console.log('새로운 참가자 입장')
     const subscriber = state.session.subscribe(stream, undefined)
     state.subscribers.push(subscriber)
+    userList.value.push(subscriber)
   })
 
   // 시그널링 서버로부터 수신된 채팅 메시지 처리
   state.session.on('signal:chat', (event) => {
     const sender = JSON.parse(event.from.data)
+    const now = new Date()
+    const time = ref()
+
+    if (now.getHours() > 12) {
+      time.value = (now.getHours() % 12) + ':' + now.getMinutes() + ' PM'
+    } else {
+      time.value = now.getHours() + ':' + now.getMinutes() + ' AM'
+    }
 
     const chatData = {
       sender: sender.clientData,
-      content: event.data
+      content: event.data,
+      time: time
     }
+
     chatMessages.value.push(chatData)
+
+    window.setTimeout(scrollToBottom, 50)
   })
 
   // 참가자 퇴장
@@ -536,27 +606,19 @@ const joinSession = () => {
     if (index >= 0) {
       state.subscribers.splice(index, 1)
     }
-  })
 
-  window.addEventListener('beforeunload', leaveMainMeeting)
-}
-
-// 세션 생성
-const createSession = async (sessionId) => {
-  const response = await axios.post(
-    VITE_API_URL + VITE_SERVER + '/meetings/sessions',
-    { customSessionId: sessionId },
-    {
-      headers: { 'Content-Type': 'application/json' }
+    for (let idx = 0; idx < userList.value.length; idx++) {
+      if (stream.streamId === userList.value[idx].stream.streamId) {
+        userList.value.splice(idx, 1)
+      }
     }
-  )
-  return response.data // sessionId
+  })
 }
 
 // 토큰 생성
 const createToken = async (sessionId) => {
-  const response = await axios.post(
-    VITE_API_URL + VITE_SERVER + '/meetings/sessions/' + sessionId + '/connections',
+  const response = await axiosJwt.post(
+    VITE_SERVER + '/meetings/sessions/' + sessionId + '/connections',
     {
       role: 'MODERATOR'
     },
@@ -567,15 +629,12 @@ const createToken = async (sessionId) => {
   return response.data.connectionToken // 토큰
 }
 
-/* APPLICATION SERVER로부터 토큰 얻기
-아래의 메소드들은 세션과 토큰의 생성을 어플리케이션 서버에 요청한다. */
-
-const getToken = async (mySessionId) => {
-  const sessionId = await createSession(mySessionId)
-  return await createToken(sessionId)
+const getToken = async () => {
+  return await createToken(sessionStorage.getItem('groupSessionId'))
 }
 
-const leaveMainMeeting = () => {
+// 세션 삭제
+const deleteSession = () => {
   if (state.session) {
     state.session.disconnect()
 
@@ -584,24 +643,24 @@ const leaveMainMeeting = () => {
     state.publisher = undefined
     state.subscribers = []
     state.OV = undefined
-
-    emit('leave-meeting')
-    router.push('/')
   }
 }
 
-const leaveGroupMeeting = () => {
-  if (state.session) {
-    state.session.disconnect()
+const leaveMainMeeting = async () => {
+  deleteSession()
 
-    state.session = undefined
-    state.mainStreamManager = undefined
-    state.publisher = undefined
-    state.subscribers = []
-    state.OV = undefined
+  sessionStorage.clear()
 
-    router.push(`/meetings`)
-  }
+  emit('leave-meeting')
+  router.push('/')
+}
+
+const leaveGroupMeeting = async () => {
+  deleteSession()
+
+  sessionStorage.removeItem('groupSessionId')
+
+  router.push(`/meetings`)
 }
 
 const updateMainVideoStreamManager = (stream) => {
@@ -609,30 +668,63 @@ const updateMainVideoStreamManager = (stream) => {
   state.mainStreamManager = stream
 }
 
-const sendMessage = (event) => {
+const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
-    // OpenVidu 시그널링 서버를 통해 채팅 메시지를 보낸다.
     state.session.signal({
       data: chatMessage.value,
       to: [],
-      type: 'chat' // 채팅 메시지 타입
+      type: 'chat'
     })
-    chatMessage.value = '' // 메시지 전송 후 입력 필드 비우기
+    chatMessage.value = ''
+  }
+}
+
+const toggleCamera = async () => {
+  const devices = await state.OV.getDevices()
+  const videoDevices = await devices.filter((device) => device.kind === 'videoinput')
+
+  isFrontCamera.value = !isFrontCamera.value
+
+  if (videoDevices && videoDevices.length > 1) {
+    const mediaStream = await state.OV.getUserMedia({
+      audioSource: false,
+      videoSource: isFrontCamera.value ? videoDevices[0].deviceId : videoDevices[1].deviceId,
+      resolution: `${videoWidth}x${videoHeight}`,
+      frameRate: 30
+    })
+
+    const myTrack = mediaStream.getVideoTracks()[0]
+
+    state.publisher.replaceTrack(myTrack).then(() => {
+      console.log('New track has been published')
+    })
+  } else {
+    // 모달창 띄우기
+    console.log('전환할 화면이 존재하지 않습니다.')
   }
 }
 
 onMounted(() => {
   joinSession()
-
-  window.addEventListener('beforeunload', leaveMainMeeting)
+  window.addEventListener('beforeunload', deleteSession)
 })
 
 onBeforeUnmount(() => {
-  window.addEventListener('beforeunload', leaveMainMeeting)
+  window.removeEventListener('beforeunload', deleteSession)
 })
 </script>
 
-<style>
+<style scoped>
+::-webkit-scrollbar {
+  width: 0.8vw;
+  background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #e7c6ff;
+  border-radius: var(--border-radius-lg);
+}
+
 #button-container-center {
   margin: auto 0;
 }

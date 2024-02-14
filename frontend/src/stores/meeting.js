@@ -1,27 +1,53 @@
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axiosJwt from '@/services/api'
 import axios from 'axios'
 
-const { VITE_API_URL_LOCAL } = import.meta.env
 const { VITE_API_URL } = import.meta.env
 const { VITE_SERVER } = import.meta.env
 
 export const useSessionStore = defineStore('session', () => {
   const router = useRouter()
 
-  const createSession = () => {
-    router.push('/meetings')
-    sessionStorage.setItem('sessionId', '')
-    sessionStorage.setItem('isHost', true)
+  const createSession = async () => {
+    try {
+      const response = await axiosJwt.post(VITE_SERVER + '/meetings/sessions', {
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      sessionStorage.setItem('sessionId', response.data)
+      sessionStorage.setItem('host', $cookies.get('user').name)
+      sessionStorage.setItem('isHost', true)
+
+      router.push('/meetings')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const createGroupSession = async (sessionId) => {
+    try {
+      const response = await axiosJwt.post(
+        VITE_SERVER + '/meetings/groupsessions',
+        { customSessionId: sessionId },
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
+
+      return response.data
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const findSession = async (sessionId) => {
     try {
       const res = await axios.get(VITE_API_URL + VITE_SERVER + `/meetings/sessions/${sessionId}`)
-      if (res.data.sessionId !== undefined) {
-        sessionStorage.setItem('sessionId', res.data.sessionId)
+      if (res.data !== undefined) {
+        sessionStorage.setItem('sessionId', res.data.session.sessionId)
+        sessionStorage.setItem('host', res.data.hostName)
         sessionStorage.setItem('isHost', false)
         return 'success'
       } else {
@@ -34,7 +60,39 @@ export const useSessionStore = defineStore('session', () => {
 
   const deleteSession = async (sessionId) => {
     try {
-      const res = await axiosJwt.delete(VITE_SERVER + `/meetings/sessions/${sessionId}`)
+      await axiosJwt.delete(
+        VITE_SERVER + `/meetings/sessions/${sessionId}`,
+        {
+          data: {
+            participantCount: 123
+          }
+        },
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const sendPicture = async (pictureFile) => {
+    const formData = new FormData()
+
+    formData.append('photo', pictureFile)
+
+    try {
+      const res = await axiosJwt.post(
+        VITE_SERVER + `/events/${sessionStorage.getItem('sessionId')}/photos`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+
+      console.log(res)
     } catch (error) {
       console.error(error)
     }
@@ -42,8 +100,10 @@ export const useSessionStore = defineStore('session', () => {
 
   return {
     createSession,
+    createGroupSession,
     findSession,
-    deleteSession
+    deleteSession,
+    sendPicture
   }
 })
 
@@ -52,26 +112,24 @@ export const useLetterStore = defineStore('letter', () => {
     // FormData 객체 생성
     const formData = new FormData()
 
-    // FormData에 음성 파일 추가
-    if (videoFile) formData.append('video', videoFile)
-    // FormData에 영상 파일 추가
-    if (audioFile) formData.append('audio', audioFile)
+    console.log(videoFile)
 
-    // JSON 데이터 추가
     const text = {
-      writer: 'writer',
+      writer: $cookies.get('user').name,
       text: textFile
     }
 
     const json = JSON.stringify(text)
     const blob = new Blob([json], { type: 'application/json' })
 
-    formData.append('writerAndText', blob)
+    if (videoFile) formData.append('video', videoFile)
+    if (audioFile) formData.append('audio', audioFile)
+    if (textFile !== '') formData.append('writerAndText', blob)
 
     try {
       // axios를 사용하여 POST 요청 보내기
-      const response = await axios.post(
-        `http://localhost:8080/api/v1/events/rollingpapers/${sessionStorage.getItem('sessionId')}`,
+      const response = await axiosJwt.post(
+        VITE_SERVER + `/events/${sessionStorage.getItem('sessionId')}/rollingpapers`,
         formData,
         {
           // 필수: FormData를 사용할 때는 이 헤더를 설정해야 함
