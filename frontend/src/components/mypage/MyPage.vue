@@ -8,7 +8,7 @@
         <img alt="프로필 사진" id="image-profile" :src="userData.image" />
       </div>
       <div class="gap-4 flex max-md:flex-col max-md:gap-2 mt-20">
-        <div class="flex flex-col w-[15lvw] items-center justify-center border-2 border-slate-300 rounded-lg shadow-md m-3">
+        <div class="flex flex-col w-6/12 ml-10">
           <span class="flex flex-col mt-10 max-md:mt-10"
             ><div class="text-3xl font-bold">{{ userData.name }}님</div>
           </span>

@@ -87,7 +87,7 @@
     </section>
 
     <!-- first -->
-    <section id="section-main">
+    <section id="section-main" class="bg-white">
       <div class="w-full overflow-hidden">
         <svg
           id="svg-curve-1"
