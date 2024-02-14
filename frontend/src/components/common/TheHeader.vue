@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from "vue";
+import { ref, onBeforeMount, onMounted, watch } from "vue";
 import { initFlowbite } from "flowbite";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
@@ -116,13 +116,14 @@ const logout = () => {
   Swal.fire({
     title: "로그아웃 하시겠습니까?",
     icon: "warning",
+    showCancelButton: true,
     confirmButtonText: "네",
     cancelButtonText: "돌아가기",
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
         title: "로그아웃 되었습니다!",
-        icno: "info",
+        icon: "info",
       }).then(() => {
         tokenService.removeUser();
         isLogin.value = false;
@@ -134,6 +135,7 @@ const logout = () => {
 };
 
 onBeforeMount(() => {
+  window.scrollTo(0, 0);
   window.addEventListener("scroll", handleScroll);
   // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
   if ($cookies.isKey("user")) {
@@ -151,8 +153,16 @@ watch(
   () => store.forceReload,
   (newValue, oldValue) => {
     if (newValue === true) {
-      store.forceReload = false;
-      setTimeout(reloadPage(), 100);
+      Swal.fire({
+        icon: "success",
+        title: `환영합니다, ${store.name} 님!`,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          store.forceReload = false;
+          setTimeout(reloadPage, 500);
+        }
+      })
     }
   }
 );
