@@ -111,7 +111,7 @@ public class PhotomosaicService {
                     file.delete();
                 }
             }
-        }s
+        }
 
         directory.delete();
     }
