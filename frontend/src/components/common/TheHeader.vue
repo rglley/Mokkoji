@@ -154,10 +154,10 @@ watch(
   (newValue, oldValue) => {
     if (newValue === true) {
       store.forceReload = false;
-      setTimeout(reloadPage(), 100);
+      setTimeout(reloadPage, 100);
     }
   },
-  () => store.isReload,
+  () => store.isReloaded,
   (newValue, oldValue) => {
     if (newValue == true) {
       store.isReload = false;
