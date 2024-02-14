@@ -9,7 +9,6 @@ export const useUserStore = defineStore('user', () => {
   const image = ref('')
   const isLogin = ref(false)
   const forceReload = ref(false)
-  const isReloaded = ref(false)
 
   const getLoginStatus = () => {
     try {
@@ -49,7 +48,6 @@ export const useUserStore = defineStore('user', () => {
     image,
     isLogin,
     forceReload,
-    isReloaded,
     getLoginStatus,
     getBankAccount,
   }

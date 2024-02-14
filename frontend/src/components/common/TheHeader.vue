@@ -75,9 +75,9 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from "vue";
+import { ref, onBeforeMount, onMounted, watch } from "vue";
 import { initFlowbite } from "flowbite";
-import { stringifyQuery, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import ModalView from "@/views/ModalView.vue";
 import LoginModal from "@/components/modal/home/LoginModal.vue";
@@ -98,8 +98,8 @@ initFlowbite();
 
 // header 홈뷰에서 새로고침
 const reloadPage = () => {
+  localStorage.setItem("reload", "true");
   router.push("/").then(() => {
-    store.isReloaded = true;
     window.location.reload();
   });
 };
@@ -136,7 +136,7 @@ const logout = () => {
 };
 
 onBeforeMount(() => {
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
   window.addEventListener("scroll", handleScroll);
   // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
   if ($cookies.isKey("user")) {
@@ -150,22 +150,22 @@ onBeforeMount(() => {
   }
 });
 
+onMounted(() => {
+  if (localStorage.getItem("reload") == true) {
+    localStorage.removeItem("reload");
+    Swal.fire({
+      icon: "success",
+      title: `환영합니다, ${store.name} 님!`,
+    });
+  }
+});
+
 watch(
   () => store.forceReload,
   (newValue, oldValue) => {
     if (newValue === true) {
       store.forceReload = false;
       setTimeout(reloadPage, 100);
-    }
-  },
-  () => store.isReloaded,
-  (newValue, oldValue) => {
-    if (newValue == true) {
-      store.isReload = false;
-      Swal.fire({
-        icon: "success",
-        title: `환영합니다, ${store.name} 님!`,
-      });
     }
   }
 );
