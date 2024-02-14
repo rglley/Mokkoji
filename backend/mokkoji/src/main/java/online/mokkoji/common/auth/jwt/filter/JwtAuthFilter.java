@@ -113,7 +113,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .userNo(varifyUSer.getId())
                 .provider(varifyUSer.getProvider().getKey())
                 .email(varifyUSer.getEmail())
-                .role(varifyUSer.getAuthority().getKey())
+                .role(varifyUSer.getAuthority().getKey().substring(5))
                 .build();
 
         saveAuthentication(authUser);
