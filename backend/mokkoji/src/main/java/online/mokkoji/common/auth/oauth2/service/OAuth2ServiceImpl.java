@@ -146,6 +146,15 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider.toUpperCase()), email);
 
         if(findUser.isEmpty()) {
+            User newUser = User.builder()
+                    .provider(Provider.valueOf(provider.toUpperCase()))
+                    .email(email)
+                    .name(name)
+                    .image(image)
+                    .authority(Authority.GUEST)
+                    .build();
+            userRepository.save(newUser);
+
             UserInfoResDto userInfoResDto = new UserInfoResDto(provider, email, name, image, true);
 
             resultMap.put("userInfo", userInfoResDto);

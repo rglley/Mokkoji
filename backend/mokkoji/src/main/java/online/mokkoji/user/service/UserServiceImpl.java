@@ -87,20 +87,16 @@ public class UserServiceImpl implements UserService{
         Optional<User> findUser = userRepository.findByProviderAndEmail
                 (Provider.valueOf(provider), email);
 
-        if(findUser.isPresent()) {
+        if(findUser.isPresent() && findUser.get().getAuthority().getKey().equals("ROLE_USER")) {
             throw new RestApiException(UserErrorCode.DUPLICATE_SIGNUP);
         }
 
         String refreshToken = jwtService.createRefreshToken();
 
-        User newUser = User.builder()
-                .provider(Provider.valueOf(provider.toUpperCase()))
-                .email(email)
-                .name(userInputReqDto.getName())
-                .image(userInputReqDto.getImage())
-                .authority(Authority.USER)
-                .refreshToken(refreshToken)
-                .build();
+        User newUser = findUser.get();
+        newUser.updateUser(userInputReqDto.getEmail(), userInputReqDto.getName(), userInputReqDto.getImage());
+        newUser.updateRefreshToken(refreshToken);
+        newUser.updateAuthority();
         userRepository.save(newUser);
 
         Record record = Record.builder()
@@ -134,7 +130,7 @@ public class UserServiceImpl implements UserService{
         String accountNumber = modifyDto.getAccountNumber();
 
         User updateUser = findUser.get();
-        updateUser.updateUser(name, image);
+        updateUser.updateUser(email, name, image);
         userRepository.save(updateUser);
 
         Optional<UserAccount> findAccount =
