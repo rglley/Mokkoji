@@ -77,7 +77,7 @@
 <script setup>
 import { ref, onBeforeMount, watch } from "vue";
 import { initFlowbite } from "flowbite";
-import { useRouter } from "vue-router";
+import { stringifyQuery, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import ModalView from "@/views/ModalView.vue";
 import LoginModal from "@/components/modal/home/LoginModal.vue";
@@ -98,12 +98,9 @@ initFlowbite();
 
 // header 홈뷰에서 새로고침
 const reloadPage = () => {
+  store.isReloaded = true;
   router.push("/").then(() => {
     window.location.reload();
-  });
-  Swal.fire({
-    icon: "success",
-    title: `환영합니다, ${store.name} 님!`,
   });
 };
 
@@ -158,6 +155,16 @@ watch(
     if (newValue === true) {
       store.forceReload = false;
       setTimeout(reloadPage(), 100);
+    }
+  },
+  () => store.isReload,
+  (newValue, oldValue) => {
+    if (newValue == true) {
+      store.isReload = false;
+      Swal.fire({
+        icon: "success",
+        title: `환영합니다, ${store.name} 님!`,
+      });
     }
   }
 );
