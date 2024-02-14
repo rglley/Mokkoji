@@ -101,6 +101,10 @@ const reloadPage = () => {
   router.push("/").then(() => {
     window.location.reload();
   });
+  Swal.fire({
+    icon: "success",
+    title: `환영합니다, ${store.name} 님!`,
+  });
 };
 
 const showLoginModal = () => {
@@ -116,6 +120,7 @@ const logout = () => {
   Swal.fire({
     title: "로그아웃 하시겠습니까?",
     icon: "warning",
+    showCancelButton: true,
     confirmButtonText: "네",
     cancelButtonText: "돌아가기",
   }).then((result) => {
