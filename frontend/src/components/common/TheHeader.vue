@@ -151,7 +151,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-  if (localStorage.getItem("reload") == true) {
+  if (localStorage.isKey("reload")) {
     localStorage.removeItem("reload");
     Swal.fire({
       icon: "success",

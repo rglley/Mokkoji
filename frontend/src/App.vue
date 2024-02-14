@@ -18,6 +18,7 @@ import TheFooter from '@/components/common/TheFooter.vue'
 import { RouterView } from 'vue-router'
 
 const isMeeting = ref(false)
+const reload = ref(0);
 
 const createMeeting = () => {
   isMeeting.value = true
