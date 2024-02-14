@@ -28,10 +28,8 @@ spring:
 #            redirect-uri: https://mokkoji.online/oauth2/login/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
-            scope: profile, account_email
+            scope: profile
             client-name: Kakao
-
-
 
         provider:
           naver:
