@@ -58,13 +58,13 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
-  const deleteSession = async (sessionId) => {
+  const deleteSession = async (sessionId, maxUserNum) => {
     try {
       await axiosJwt.delete(
         VITE_SERVER + `/meetings/sessions/${sessionId}`,
         {
           data: {
-            participantCount: 123
+            participantCount: maxUserNum
           }
         },
         {
@@ -127,12 +127,10 @@ export const useLetterStore = defineStore('letter', () => {
     if (textFile !== '') formData.append('writerAndText', blob)
 
     try {
-      // axios를 사용하여 POST 요청 보내기
       const response = await axiosJwt.post(
         VITE_SERVER + `/events/${sessionStorage.getItem('sessionId')}/rollingpapers`,
         formData,
         {
-          // 필수: FormData를 사용할 때는 이 헤더를 설정해야 함
           headers: {
             'Content-Type': 'multipart/form-data'
           }

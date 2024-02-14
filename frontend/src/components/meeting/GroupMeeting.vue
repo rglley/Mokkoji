@@ -152,7 +152,7 @@
     <!-- 기능 버튼 -->
     <section class="h-[15%] flex justify-center items-center">
       <div class="w-[75%] h-full flex justify-center items-center">
-        <div class="w-[15%] h-full flex items-center">
+        <div class="w-[20%] h-full flex items-center">
           <button
             class="w-[20%] aspect-square rounded-full bg-white hover:bg-slate-200"
             @click="showMeetingDetailModal"
@@ -268,6 +268,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div v-if="isCount" class="fixed top-[10%] text-[20vw] text-purple-200 text-stroke">
+        {{ setTime }}
       </div>
     </section>
     <transition-group name="up">
@@ -772,6 +775,14 @@ onBeforeUnmount(() => {
   overflow-x: scroll;
 }
 
+#screen-change-button:hover ~ #screen-change {
+  display: block;
+}
+
+#screen-change {
+  display: none;
+}
+
 span {
   text-align: center;
 }
@@ -792,16 +803,6 @@ input {
 input::placeholder {
   align-content: center;
   font-size: 1vw;
-}
-
-::-webkit-scrollbar {
-  width: 0;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  border: none;
 }
 
 .up-enter-active {

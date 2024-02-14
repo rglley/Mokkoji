@@ -149,13 +149,7 @@ import IconPeople from '@/icons/result/IconPeople.vue'
 import IconPhoto from '@/icons/result/IconPhoto.vue'
 import IconLetter from '@/icons/result/IconLetter.vue'
 import msg from '@/temp/result/messages.json'
-import RollingPaperItem from '@/components/myresult/RollingPaperItem.vue'
 import PageNavigation from '@/components/common/PageNavigation.vue'
-
-// Import Swiper styles
-import 'swiper/css'
-import 'swiper/css/pagination'
-import '../pagination.css'
 
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 // import PhotoCard from '@/temp/result/photocard.json'

@@ -17,7 +17,10 @@
               @click="updateMainVideoStreamManager(sub)"
             />
           </div>
-          <div class="mr-[1vh] w-full h-full basis-3/4 flex justify-center items-start">
+          <div
+            ref="myVideo"
+            class="mr-[1vh] w-full h-full basis-3/4 flex justify-center items-start"
+          >
             <user-Video :stream-manager="state.mainStreamManager" :main-stream="true" />
           </div>
         </div>
@@ -168,7 +171,7 @@
             class="ml-[1lvh] w-[30%] aspect-square bg-neutral-500 hover:bg-neutral-800 rounded-full flex justify-center items-center"
             @click="toggleCamera"
           >
-            <IconScreenChange id="screen-change-button" class="size-[80%]" />
+            <IconScreenChange id="screen-change-button" class="size-[70%]" />
             <ScreenChangeModal id="screen-change" />
           </button>
         </div>
@@ -378,6 +381,7 @@ const userList = ref([])
 const connectedUser = ref([])
 const myVideo = ref(null)
 const groupVideo = ref(null)
+const maxUserNum = ref(0)
 const setTime = ref(3)
 
 // 개인 사진 촬영
@@ -535,7 +539,7 @@ const joinSession = () => {
   state.session = state.OV.initSession()
 
   // 3) 유효한 사용자 토큰으로 세션에 연결하기
-  getToken()
+  getToken(sessionStorage.getItem('sessionId'))
     .then((token) => {
       state.session.connect(token, { clientData: state.myUserName }).then(() => {
         let publisher = state.OV.initPublisher(undefined, {
@@ -581,7 +585,7 @@ const joinSession = () => {
         const name = JSON.parse(userList.value[idx].stream.connection.data)
         const subscriberName = JSON.parse(subscriber.stream.connection.data)
 
-        if (name.clientData === sessionStorage.getItem('host')) {
+        if (subscriberName.clientData === sessionStorage.getItem('host')) {
           state.mainStreamManager = subscriber
         } else if (name.clientData === subscriberName.clientData) {
           state.subscribers.push(subscriber)
@@ -590,6 +594,9 @@ const joinSession = () => {
     } else {
       state.subscribers.push(subscriber)
     }
+
+    // 최대 유저수 갱신
+    maxUserNum.value = Math.max(maxUserNum.value, userList.value.length)
   })
 
   // 시그널링 서버로부터 수신된 채팅 메시지 처리
@@ -641,7 +648,7 @@ const joinSession = () => {
   state.session.on('signal:group', async (event) => {
     sessionStorage.setItem('groupSessionId', event.data)
 
-    emit('create-group-meeting')
+    emit('create-group-meeting', state.publisher)
 
     deleteSession()
   })
@@ -672,8 +679,8 @@ const createToken = async (sessionId) => {
   return response.data.connectionToken // 토큰
 }
 
-const getToken = async () => {
-  return await createToken(sessionStorage.getItem('sessionId'))
+const getToken = async (sessionId) => {
+  return await createToken(sessionId)
 }
 
 const leaveMainMeeting = async () => {
@@ -682,7 +689,7 @@ const leaveMainMeeting = async () => {
   tracks.forEach((track) => track.stop())
 
   if (sessionStorage.getItem('isHost') === 'true') {
-    await store.deleteSession(sessionStorage.getItem('sessionId'))
+    await store.deleteSession(sessionStorage.getItem('sessionId'), maxUserNum.value)
     sessionStorage.clear()
   } else {
     deleteSession()
@@ -711,8 +718,6 @@ const createGroupMeeting = async (userList) => {
   connectedUser.value.forEach((user) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
     const userIndex = foundUser ? userList.value.indexOf(foundUser) : -1
-
-    console.log(foundUser)
 
     if (userIndex !== -1) {
       state.session.signal({
