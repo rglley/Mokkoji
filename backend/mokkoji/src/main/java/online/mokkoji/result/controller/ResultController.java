@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.result.dto.request.RecollectionReqDto;
+import online.mokkoji.result.dto.response.CoverImageResDTO;
 import online.mokkoji.result.service.PhotomosaicService;
 import online.mokkoji.s3.S3Service;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
@@ -96,8 +97,8 @@ public class ResultController {
 
     // 대표이미지 설정
     @PatchMapping("/{resultId}/memories")
-    public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody String url) {
-        resultService.updateThumbnail(resultId, url);
+    public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody CoverImageResDTO coverImageResDTO) {
+        resultService.updateThumbnail(resultId, coverImageResDTO.getUrl());
         return new ResponseEntity<>("대표이미지 설정 완료", HttpStatus.OK);
     }
 
