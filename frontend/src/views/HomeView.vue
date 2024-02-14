@@ -218,8 +218,6 @@
       </div>
       <div id="space"></div>
     </section>
-
-    <!--logo-->
     <section class="flex items-center justify-center py-[5vh] bg-primary2">
       <img src="@/assets/logo/mokkoji_logo.png" class="w-[20vh] px-[3vh]" />
 
@@ -301,6 +299,7 @@ const toTop = () => {
 }
 
 onMounted(() => {
+  window.scrollTo(0, 0)
   emit('load-home')
 })
 </script>
