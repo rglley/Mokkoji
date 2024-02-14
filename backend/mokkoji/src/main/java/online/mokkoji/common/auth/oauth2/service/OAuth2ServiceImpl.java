@@ -119,29 +119,23 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         String email = "";
         String name = "";
         String image = "";
-        String jwtAccessToken = "";
 
         if(provider.equals("naver")) {
             email = profileJSON.path("response").path("email").asText();
             name = profileJSON.path("response").path("name").asText();
             image = profileJSON.path("response").path("profile_image").asText();
-            jwtAccessToken = jwtUtil.createAccessToken("NAVER", email);
         }
         else if(provider.equals("google")) {
             email = profileJSON.path("email").asText();
             name = profileJSON.path("name").asText();
             image = profileJSON.path("picture").asText();
-            jwtAccessToken = jwtUtil.createAccessToken("GOOGLE", email);
         }
         else if(provider.equals("kakao")) {
             name = profileJSON.path("properties").path("nickname").asText();
             image = profileJSON.path("properties").path("profile_image").asText();
-            jwtAccessToken = jwtUtil.createAccessToken("KAKAO", email);
         }
 
         Map<String, Object> resultMap = new HashMap<>();
-
-        resultMap.put("accessToken", jwtAccessToken);
 
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider.toUpperCase()), email);
 
