@@ -11,7 +11,6 @@
           <input
             class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
             v-model="email"
-            disabled
           />
         </div>
 
@@ -110,6 +109,7 @@ const signUp = async () => {
     url: import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER + '/users',
     method: 'POST',
     data: {
+      email: email.value,
       name: name.value,
       image: image.value,
       bank: bank.value,
