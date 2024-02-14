@@ -54,7 +54,12 @@ class TokenService {
   }
 
   expiredToken = () => {
-    return parseJwt($cookies.get('token')).exp * 1000 <= Date.now()
+    try{
+      return parseJwt($cookies.get('token')).exp * 1000 <= Date.now()
+    }
+    catch{
+      return false;
+    }
   }
 }
 

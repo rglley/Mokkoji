@@ -44,7 +44,7 @@
         </div>
       </div>
       <button
-        class="bg-natural-yellow border-2 border-yellow-600 rounded-xl p-2 my-10 relative "
+        class="ring-2 ring-primary rounded-xl hover:ring-white bg-primary p-2 my-10 relative "
         @click="update"
       >
         정보 수정하기
@@ -58,12 +58,10 @@
 
 <script setup>
 import { ref, onBeforeMount } from 'vue'
-import { useUserStore } from '../../stores/user'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
 
 const router = useRouter()
-const store = useUserStore()
 
 const name = ref('')
 const image = ref('')
@@ -112,7 +110,6 @@ const base64 = (file) => {
 //     try {
 //       await axios.delete(import.meta.env.VITE_SERVER + '/users')
 //       .then(() => {
-//         store.isLogin.value = false;
 //         router.push('/')
 //       })
 //     } catch (err) {
