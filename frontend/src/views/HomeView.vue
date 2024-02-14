@@ -244,6 +244,8 @@ import MeetingJoinModal from '../components/modal/home/MeetingJoinModal.vue'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import Swal from 'sweetalert2';
+
 
 const emit = defineEmits(['load-home'])
 
@@ -282,11 +284,10 @@ const createMeeting = () => {
   if ($cookies.get('user') !== null) {
     store.createSession()
   } else {
-    toast('로그인이 필요합니다', {
-      theme: 'auto',
-      type: 'warning',
-      transition: 'flip',
-      autoClose: 1000
+    Swal.fire({
+      title: "로그인이 필요합니다.",
+      text: "서비스를 사용하기 위해 로그인을 해주세요",
+      icon: "warning",
     })
   }
 }
@@ -301,6 +302,7 @@ const toTop = () => {
 onMounted(() => {
   window.scrollTo(0, 0)
   emit('load-home')
+  
 })
 </script>
 
