@@ -98,7 +98,6 @@ initFlowbite();
 
 // header 홈뷰에서 새로고침
 const reloadPage = () => {
-  localStorage.setItem("reload", "true");
   router.push("/").then(() => {
     window.location.reload();
   });
@@ -124,7 +123,7 @@ const logout = () => {
     if (result.isConfirmed) {
       Swal.fire({
         title: "로그아웃 되었습니다!",
-        icno: "info",
+        icon: "info",
       }).then(() => {
         tokenService.removeUser();
         isLogin.value = false;
@@ -150,22 +149,20 @@ onBeforeMount(() => {
   }
 });
 
-onMounted(() => {
-  if (localStorage.isKey("reload")) {
-    localStorage.removeItem("reload");
-    Swal.fire({
-      icon: "success",
-      title: `환영합니다, ${store.name} 님!`,
-    });
-  }
-});
-
 watch(
   () => store.forceReload,
   (newValue, oldValue) => {
     if (newValue === true) {
-      store.forceReload = false;
-      setTimeout(reloadPage, 100);
+      Swal.fire({
+        icon: "success",
+        title: `환영합니다, ${store.name} 님!`,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          store.forceReload = false;
+          setTimeout(reloadPage, 500);
+        }
+      })
     }
   }
 );
