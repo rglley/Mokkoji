@@ -14,6 +14,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
 import tokenService from '@/services/token.service'
+import Swal from 'vue-sweetalert2'
+
 const router = useRouter()
 const route = useRoute()
 const store = useUserStore()
@@ -42,7 +44,7 @@ onMounted(() => {
   if (isNaver.value) url = url + '/oauth2/naver?code=' + naverquerycode.value
   else if (isGoogle.value) url = url + '/oauth2/google?code=' + googlequerycode.value
   else if (isKakao.value) url = url + '/oauth2/kakao?code=' + kakaoquerycode.value
-  
+
   axios({
     url: url
   })
@@ -54,12 +56,21 @@ onMounted(() => {
       store.email = res.data.email
       store.image = res.data.image
       if (res.data.first == true) {
+        Swal.fire({
+          title: '회원가입',
+          text: '추가 정보 수정을 위해 회원가입 페이지로 이동합니다.',
+          icon: 'info', 
+        })
         router.push('/signup')
       } else {
         store.isLogin = true
         const refreshToken = res.headers['authorization-refresh']
         tokenService.setLocalRefreshToken(refreshToken)
         store.forceReload = true
+        Swal.fire({
+          icon: 'success',
+          title: `환영합니다, ${res.data.name} 님!`
+        })
         router.push('/')
       }
     })
