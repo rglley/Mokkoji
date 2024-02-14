@@ -177,7 +177,7 @@
     </transition>
   </div>
   <!-- 섹션 4/6 도움말, 올라가기, 내려가기 -->
-  <div class="h-[100vh] mt-5" ref="help">
+  <div class="h-[100vh] pt-5 bg-white" ref="help">
     <div class="flex justify-center items-center h-[120px]">
       <div class="mr-5" @click="scrollToPhotoMosaic"><IconScrollDownBlue /></div>
       <div class="ml-5" @click="scrollToTop"><IconUpArrowPurple /></div>
@@ -206,7 +206,7 @@
       >
       <p />
     </div>
-    <div class="h-[300px] flex items-center justify-center">
+    <div class="h-[300px] bg-white flex items-center justify-center">
       <div v-if="isDefaultHelp">
         <div class="mb-10 flex items-center justify-center">
           <IconQuestionMarkGray />
@@ -291,7 +291,7 @@
     </div>
   </div>
   <!-- 섹션 6/6 올라가기 -->
-  <div class="h-[200px]">
+  <div class="h-[200px] bg-white">
     <div class="justify-center flex" @click="scrollToRollingPaper"><IconUpArrowPurple /></div>
     <div class="text-slate-500 justify-center flex" @click="scrollToTop">
       <strong>처음으로</strong>

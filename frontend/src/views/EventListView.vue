@@ -76,8 +76,8 @@
     </div>
   </div>
   <!-- 섹션 2/3, 기억: Memory -->
-  <div class="">
-    <div class="justify-center mt-10 ml-24 w-[40%]">
+  <div class="bg-white">
+    <div class="justify-center pt-10 ml-24 w-[40%]">
       <div class="flex">
         <strong class="text-[40px]">기억 </strong>
         <p class="text-3xl mt-3">: Memory</p>

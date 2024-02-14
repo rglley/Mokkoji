@@ -4,7 +4,7 @@
       <!-- 추억 결과물 카드 -->
       <div class="mt-[10vh]" v-if="isPhotoCardResult">
         <div class="flex justify-center items-center">
-          <RecollectionList :key="photocard.eventId" :recollection="photocard" />
+          <RecollectionList :key="resultIDStore.getID" :recollection="photocard" />
         </div>
         <button
           class="w-[12vw] mx-auto mt-[1vh] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
@@ -20,75 +20,33 @@
         </button>
       </div>
       <!--롤링페이퍼-->
-      <div class="flex justify-center items-center" v-if="isRollingPaperResult">
-        <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
-        <!-- <swiper :pagination="true" :slides-per-view="1" :module="modules" class="mySwiper">
-          <swiper-slide v-for="(msg, index) in Messages" :key="`${index}`">
-            <RollingPaperItem :msg="msg" />
-          </swiper-slide>
+      <div v-if="isRollingPaperResult">
+        <div class="flex justify-center items-center">
+          <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
+          <div class="absolute z-30 w-[800px] h-[1000px]"></div>
 
-        </swiper> -->
-        <div class="absolute z-30 w-[800px] h-[1000px]">
-          <swiper :pagination="pagination" :modules="modules" class="mt-3">
-            <swiper-slide v-for="n in 2" :key="n" class="pt-3">
-              <div class="absolute w-[100px] h-[100px] bottom-[100px] right-[100px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][0].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][0].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] bottom-[100px] left-[-45px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][1].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][1].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] bottom-[100px] left-[110px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][2].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][2].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] top-[120px] left-[110px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][3].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][3].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] bottom-[-60px] left-[110px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][4].name }}</p>
-                <p class="text-[9px]">
-                  {{ msg[n - 1][4].content }}
-                </p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] bottom-[-60px] left-[-45px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][5].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][5].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] bottom-[-60px] right-[100px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][6].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][6].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] top-[120px] right-[100px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][7].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][7].content }}</p>
-              </div>
-              <div class="absolute w-[100px] h-[100px] top-[120px] left-[-45px]">
-                <p class="text-center text-[8px] mb-1">From {{ msg[n - 1][8].name }}</p>
-                <p class="text-[9px]">{{ msg[n - 1][8].content }}</p>
-              </div>
-            </swiper-slide>
-          </swiper>
+          <img
+            :src="`src/assets/rollingtemplate/wedding.png`"
+            :alt="`template_${design}`"
+            width="450px"
+            height="700px"
+            class="z-10"
+          />
+          <img
+            :src="`src/assets/rollingnote/rainbow.png`"
+            :alt="`template_${color}`"
+            class="absolute z-20"
+            width="420px"
+            height="650px"
+          />
         </div>
 
-        <img
-          :src="`src/assets/rollingtemplate/baby.png`"
-          :alt="`template_${design}`"
-          width="450px"
-          height="700px"
-          class="z-10"
-        />
-        <img
-          :src="`src/assets/rollingnote/rainbow.png`"
-          :alt="`template_${color}`"
-          class="absolute z-20"
-          width="420px"
-          height="650px"
-        />
+        <PageNavigation
+          :current-page="currentPage"
+          :total-page="totalPage"
+          @pageChange="onPageChange"
+        ></PageNavigation>
       </div>
-
       <!--포토모자이크-->
 
       <div class="mt-[7vh]" v-if="isPhotomosaicResult">
@@ -191,15 +149,15 @@ import IconPhoto from '@/icons/result/IconPhoto.vue'
 import IconLetter from '@/icons/result/IconLetter.vue'
 import msg from '@/temp/result/messages.json'
 import RollingPaperItem from '@/components/myresult/RollingPaperItem.vue'
-import { Swiper, SwiperSlide } from 'swiper/vue'
+import PageNavigation from '@/components/common/PageNavigation.vue'
+
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
 import '../pagination.css'
-import { Pagination } from 'swiper/modules'
 
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
-import PhotoCard from '@/temp/result/photocard.json'
+// import PhotoCard from '@/temp/result/photocard.json'
 
 import { ref, onMounted } from 'vue'
 import {
@@ -212,7 +170,16 @@ import {
   useSharePhotomosaic
 } from '@/stores/result.js'
 
-let photocard = PhotoCard
+// let photocard = PhotoCard
+
+const photocard = ref({
+  name: '',
+  content: '',
+  image: ''
+})
+
+const currentPage = ref(1)
+const totalPage = ref(10)
 
 const recollectionStore = useRecollection()
 const resultIDStore = useResultIDStore()
@@ -221,16 +188,6 @@ const downloadThumbnailStore = useDownloadThumbnail()
 const downloadPhotomosaicStore = useDownloadPhotomosaic()
 const shareImageStore = useShareImage()
 const sharePhotomosaicStore = useSharePhotomosaic()
-
-const pagination = {
-  clickable: true,
-  renderBullet: function (index, className) {
-    return '<span class="' + className + '">' + (index + 1) + '</span>'
-  }
-}
-
-const modules = [Pagination]
-const swiper = ref(null)
 
 const design = ref('')
 const username = ref('')
@@ -312,7 +269,7 @@ const sharePhotomosaic = () => {
 
 const onPageChange = (val) => {
   console.log(val + '번 페이지로 이동 준비 끝!!!')
-  // currentPage.value = val
+  currentPage.value = val
   // param.value.pgno = val
   // getHotArticleList()
 }
@@ -326,6 +283,9 @@ const getResultView = (id) => {
       color.value = res.data.postitTemplate
       participantCount.value = res.data.participantCount
       letterCount.value = res.data.messageCount
+      photocard.value.image = res.data.thumbnail
+      photocard.value.content = res.data.content
+      photocard.value.name = res.data.name
       console.log(res)
     },
     (error) => {

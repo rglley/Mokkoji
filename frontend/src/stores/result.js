@@ -269,3 +269,13 @@ export const useSharePhotomosaic = defineStore('SharePhotomosaic', () => {
   }
   return { SharePhotomosaic }
 })
+
+export const useCreatePhotomosaic = defineStore('createPhotomosaic', () => {
+  const CreatePhotomosaic = async (id, success, fail) => {
+    await axiosJwt
+      .get(VITE_API_URL_LOCAL + VITE_SERVER + `/results/${id}/photomosaic`)
+      .then(success)
+      .catch(fail)
+  }
+  return { CreatePhotomosaic }
+})

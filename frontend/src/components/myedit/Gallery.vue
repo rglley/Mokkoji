@@ -133,7 +133,8 @@ import {
   useMainImageStore,
   useGalleryStore,
   useSaveThumbnail,
-  useResultIDStore
+  useResultIDStore,
+  useCreatePhotomosaic
 } from '@/stores/result.js'
 import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
@@ -150,6 +151,7 @@ import { Endpoint } from 'aws-sdk'
 const galleryStore = useGalleryStore()
 const saveThumbnailStore = useSaveThumbnail()
 const resultIDStore = useResultIDStore()
+const createPhotomosaicStore = useCreatePhotomosaic()
 
 const props = defineProps({
   scrollToHelp: Function
@@ -253,6 +255,20 @@ const saveThumbnail = (id) => {
   return result
 }
 
+const createPhotomosaic = (id) => {
+  console.log(`행사번호 ${id}의 포토모자이크 생성하기`)
+  let result = 1
+  createPhotomosaicStore.createPhotomosaic(
+    id,
+    (res) => {
+      console.log(res)
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
+}
+
 const showSaved = (e) => {
   isSaved.value = true
   setTimeout(() => {
@@ -260,7 +276,7 @@ const showSaved = (e) => {
   }, 2000)
   switch (e) {
     case '포토모자이크':
-      if (isSaved.value) {
+      if (createPhotomosaic(resultIDStore.getID) === 1) {
         alertText.value = '포토모자이크를 생성했어요'
       } else {
         alertText.value = '포토모자이크 생성에 실패했어요'
