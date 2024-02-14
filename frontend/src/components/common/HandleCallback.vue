@@ -74,14 +74,6 @@ onMounted(() => {
         const refreshToken = res.headers["authorization-refresh"];
         tokenService.setLocalRefreshToken(refreshToken);
         store.forceReload = true;
-        Swal.fire({
-          icon: "success",
-          title: `환영합니다, ${res.data.name} 님!`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            router.push("/");
-          }
-        });
       }
     })
     .catch((err) => {
