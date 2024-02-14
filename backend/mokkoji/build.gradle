@@ -69,7 +69,7 @@ dependencies {
 
     //photomosaic
 //    implementation files('C:\\opencv\\build\\java\\opencv-490.jar')
-    implementation files('\\user\\src\\app\\opencv\\opencv-490.jar')
+//    implementation files('\\user\\src\\app\\opencv\\opencv-490.jar')
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
