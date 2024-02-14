@@ -6,8 +6,8 @@ spring:
           naver:
             client-id: Y_veSn1KXI8bYwTv29AA
             client-secret: ${OAUTH2_SECRET_NAVER}
+#            redirect-uri: https://localhost:5173/oauth2/login/naver
             redirect-uri: https://mokkoji.online/oauth2/login/naver
-            #            redirect-uri: https://mokkoji.online/oauth2/login/naver
             client-authentication-method: client_secret_basic
             authorization-grant-type: authorization_code
             scope: name, email, profile_image
@@ -16,16 +16,16 @@ spring:
           google:
             client-id: 784446908563-mecj1ijjk02b1064karovm690fedar97.apps.googleusercontent.com
             client-secret: ${OAUTH2_SECRET_GOOGLE}
-            redirect-uri: http://localhost:5173/oauth2/login/google
-            #            redirect-uri: https://mokkoji.online/oauth2/login/google
+#            redirect-uri: http://localhost:5173/oauth2/login/google
+            redirect-uri: https://mokkoji.online/oauth2/login/google
             authorization-grant-type: authorization_code
             scope: email, profile
 
           kakao:
             client-id: 323592db1ec782570297bada5395a487
             client-secret: ${OAUTH2_SECRET_KAKAO}
-            redirect-uri: http://localhost:5173/oauth2/login/kakao
-#            redirect-uri: https://mokkoji.online/oauth2/login/kakao
+#            redirect-uri: http://localhost:5173/oauth2/login/kakao
+            redirect-uri: https://mokkoji.online/oauth2/login/kakao
             authorization-grant-type: authorization_code
             client-authentication-method: client_secret_post
             scope: profile
