@@ -8,18 +8,14 @@
       <div class="space-y-4">
         <div class="space-y-2">
           <label class="text-sm font-medium text-slate-500" for="email"> 이메일 </label>
-          <input
-            class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            v-model="email"
-          />
+          <input class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
+            v-model="email" />
         </div>
 
         <div class="space-y-2">
           <label class="text-sm font-medium text-slate-500" for="name"> 이름 </label>
-          <input
-            class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
-            v-model="name"
-          />
+          <input class="flex h-10 w-full bg-background px-3 py-2 text-sm border-2 border-gray-300 rounded-md"
+            v-model="name" />
         </div>
 
         <div class="flex items-center space-x-4">
@@ -29,10 +25,7 @@
             </label>
             <input
               class="mx-auto h-10 w-full rounded-md border-2 border-slate-200 bg-background px-1 py-2 text-sm file:border-0 file:bg-transparent file:text-sm"
-              id="profile-picture"
-              type="file"
-              @change="getFileName($event.target.files)"
-            />
+              id="profile-picture" type="file" @change="getFileName($event.target.files)" />
           </div>
         </div>
         <div>
@@ -45,12 +38,8 @@
                   {{ bank }}
                 </option>
               </select>
-              <input
-                id="input"
-                class="w-auto border-2 border-slate-300"
-                placeholder="계좌번호를 입력하세요"
-                v-model="accountNumber"
-              />
+              <input id="input" class="w-auto border-2 border-slate-300" placeholder="계좌번호를 입력하세요"
+                v-model="accountNumber" />
             </div>
           </div>
         </div>
@@ -64,7 +53,7 @@
 import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import axios from '@/services/api'
 import Swal from 'sweetalert2'
 
 const router = useRouter()
@@ -106,7 +95,7 @@ const accountNumber = ref('')
 
 const signUp = async () => {
   await axios({
-    url: import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER + '/users',
+    url: import.meta.env.VITE_SERVER + '/users',
     method: 'POST',
     data: {
       email: email.value,
