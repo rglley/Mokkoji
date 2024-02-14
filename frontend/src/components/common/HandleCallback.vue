@@ -64,8 +64,11 @@ onMounted(() => {
           title: "회원가입",
           text: "추가 정보 입력을 위해 회원가입 페이지로 이동합니다.",
           icon: "info",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/");
+          }
         });
-        router.push("/signup");
       } else {
         store.isLogin = true;
         const refreshToken = res.headers["authorization-refresh"];
@@ -74,7 +77,11 @@ onMounted(() => {
         Swal.fire({
           icon: "success",
           title: `환영합니다, ${res.data.name} 님!`,
-        }).then(router.replace("/"));
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/");
+          }
+        });
       }
     })
     .catch((err) => {

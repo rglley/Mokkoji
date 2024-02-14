@@ -128,7 +128,11 @@ const signUp = async () => {
         title: "회원가입 성공!",
         text: "모꼬지 서비스를 사용해보세요",
         icon: "success",
-      }).then(router.replace("/"));
+      }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/");
+          }
+        });
     })
     .catch((err) => {
       console.log(err);
