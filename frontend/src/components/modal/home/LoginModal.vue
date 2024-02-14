@@ -56,12 +56,12 @@ const naverApiRequestURI =
   VITE_REDIRECT_URI +
   '&state=mokkoji&response_type=code'
 
-const googleApiRequestURI = 
-  `https://accounts.google.com/o/oauth2/v2/auth` + 
-  VITE_GOOGLE_CLIENT_ID + 
+const googleApiRequestURI =
+  `https://accounts.google.com/o/oauth2/v2/auth?client_id=` +
+  VITE_GOOGLE_CLIENT_ID +
   '&redirect_uri=' +
   VITE_REDIRECT_URI +
-  '&state=mokkoji&response_type=code'
+  '&state=mokkoji&response_type=code&scope=email profile'
 </script>
 
 <style></style>
