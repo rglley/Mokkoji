@@ -30,13 +30,7 @@ public class OAuth2Controller {
     public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @RequestParam String code,
                                                       HttpServletResponse res) throws Exception {
 
-        log.info("소셜 로그인!!!!!!!!!!");
         Map<String, Object> result = oAuth2Service.getUserInfo(provider, code);
-
-//        if(provider.equals("naver"))
-//            result = oAuth2Service.getNaverUserInfo(code);
-//        else if(provider.equals("google"))
-//            result = oAuth2Service.getGoogleUserInfo(code);
 
         UserInfoResDto userInfoResDto = (UserInfoResDto) result.get("userInfo");
 
