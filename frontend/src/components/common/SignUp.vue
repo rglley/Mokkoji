@@ -66,6 +66,7 @@ import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
+import Swal from 'vue-sweetalert2'
 
 const router = useRouter()
 const store = useUserStore()
@@ -118,6 +119,11 @@ const signUp = async () => {
     .then(() => {
       store.isLogin = true;
       store.forceReload = true;
+      Swal.fire({
+        title: '회원가입 성공!',
+        text: '모꼬지 서비스를 사용해보세요',
+        icon: 'success',
+      })
       router.replace('/')
     })
     .catch((err) => {
