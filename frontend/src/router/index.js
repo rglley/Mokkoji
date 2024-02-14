@@ -130,6 +130,8 @@ router.beforeEach((to, from, next) => {
       return;
     }
   }
+  
+  next();
 
   if (from.path === '/meetings') {
     if (confirm('회의 페이지를 벗어나면 변경사항이 저장되지 않을 수 있습니다.')) {
@@ -140,7 +142,6 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  next();
 
 });
 
