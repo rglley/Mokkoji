@@ -83,7 +83,7 @@ export const useSessionStore = defineStore('session', () => {
 
     try {
       const res = await axiosJwt.post(
-        VITE_SERVER + `/events/photos/${sessionStorage.getItem('sessionId')}`,
+        VITE_SERVER + `/events/${sessionStorage.getItem('sessionId')}/photos`,
         formData,
         {
           headers: {
@@ -129,7 +129,7 @@ export const useLetterStore = defineStore('letter', () => {
     try {
       // axios를 사용하여 POST 요청 보내기
       const response = await axiosJwt.post(
-        VITE_SERVER + `/events/rollingpapers/${sessionStorage.getItem('sessionId')}`,
+        VITE_SERVER + `/events/${sessionStorage.getItem('sessionId')}/rollingpapers`,
         formData,
         {
           // 필수: FormData를 사용할 때는 이 헤더를 설정해야 함

@@ -465,18 +465,14 @@ const setCameraState = () => {
 
 // 소그룹 생성 모달
 const showGroupModal = () => {
-  if ($cookies.get('user') !== null) {
-    if (sessionStorage.getItem('isHost') === 'true') {
-      isGroupAlertModal.value = true
+  if (sessionStorage.getItem('isHost') === 'true') {
+    isGroupAlertModal.value = true
 
-      setTimeout(() => {
-        isGroupAlertModal.value = false
-      }, 1000)
-    } else {
-      isGroupModal.value = !isGroupModal.value
-    }
+    setTimeout(() => {
+      isGroupAlertModal.value = false
+    }, 1000)
   } else {
-    alert('로그인이 필요한 기능입니다.')
+    isGroupModal.value = !isGroupModal.value
   }
 }
 
@@ -716,16 +712,13 @@ const createGroupMeeting = async (userList) => {
     const foundUser = userList.value.find((checkedUser) => checkedUser.userName === user.name)
     const userIndex = foundUser ? userList.value.indexOf(foundUser) : -1
 
+    console.log(foundUser)
+
     if (userIndex !== -1) {
       state.session.signal({
         data: response,
         to: [user.connection, state.session.connection],
         type: 'group'
-      })
-    } else {
-      state.session.signal({
-        to: [],
-        type: 'else-group'
       })
     }
   })
