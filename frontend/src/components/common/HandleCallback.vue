@@ -29,7 +29,8 @@ onBeforeMount(() => {
     isGoogle.value = true
     googlequerycode.value = route.query.code 
   } 
-  if (window.location.href.includes('naver')) {
+  else {
+  // if (window.location.href.includes('naver')) {
     isNaver.value = true
     naverquerycode.value = route.query.code
   }
