@@ -153,6 +153,12 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             params.add("redirect_uri", oAuth2Config.getGoogleRedirectUri());
         }
 
+        else if(provider.equals("kakao")) {
+            params.add("client_id", oAuth2Config.getKakaoId());
+            params.add("client_secret", oAuth2Config.getKakaoSecret());
+            params.add("redirect_uri", oAuth2Config.getKakaoRedirectUri());
+        }
+
         return new HttpEntity<>(params, headers);
     }
 
@@ -178,6 +184,10 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         else if(provider.equals("google")) {
             tokenUrl = oAuth2Config.getGoogleTokenUrl();
             profileUrl = oAuth2Config.getGoogleProfileUrl();
+        }
+        else if(provider.equals("kakao")) {
+            tokenUrl = oAuth2Config.getKakaoTokenUrl();
+            profileUrl = oAuth2Config.getKakaoProfileUrl();
         }
 
         log.info("네이버? 구글? {}", provider);
@@ -225,6 +235,12 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             name = profileJSON.path("name").asText();
             image = profileJSON.path("picture").asText();
             jwtAccessToken = jwtUtil.createAccessToken("GOOGLE", email);
+        }
+        else if(provider.equals("kakao")) {
+            email = profileJSON.path("kakao_account").path("email").asText();
+            name = profileJSON.path("properties").path("nickname").asText();
+            image = profileJSON.path("properties").path("profile_image").asText();
+            jwtAccessToken = jwtUtil.createAccessToken("KAKAO", email);
         }
 
         log.info("회원정보 가져왔어~");

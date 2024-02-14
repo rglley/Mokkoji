@@ -44,6 +44,26 @@ public class OAuth2Config {
     @Value("${spring.security.oauth2.client.provider.google.user-info-uri}")
     private String googleProfileUrl;
 
-    @Value("${spring.security.oauth2.client.provider.naver.user_name_attribute}")
+    @Value("${spring.security.oauth2.client.provider.google.user-name-attribute}")
     private String googleAttribute;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String kakaoId;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    private String kakaoSecret;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String kakaoRedirectUri;
+
+    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
+    private String kakaoTokenUrl;
+
+    @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
+    private String kakaoProfileUrl;
+
+    @Value("${spring.security.oauth2.client.provider.kakao.user_name_attribute}")
+    private String kakaoAttribute;
+
+
 }
