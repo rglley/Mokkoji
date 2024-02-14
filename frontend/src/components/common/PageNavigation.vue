@@ -1,17 +1,17 @@
 <template>
-  <div class="flex items-center justify-center mt-10">
+  <div class="flex items-center justify-center">
     <ul class="flex">
       <li>
         <a
           @click="onPageChange(1)"
-          class="border-2 border-pink-100 border-solid rounded-lg p-1 opacity-70 hover:opacity-100 w-12 h-2"
+          class="border-2 cursor-pointer border-pink-100 border-solid rounded-lg p-1 opacity-70 hover:opacity-100 hover:bg-pink-100 w-12 h-2"
           >최신</a
         >
       </li>
       <li>
         <a
           @click="onPageChange(startPage == 1 ? 1 : startPage - 1)"
-          class="border-2 border-pink-100 border-solid rounded-lg p-1 opacity-70"
+          class="border-2 cursor-pointer border-pink-100 border-solid rounded-lg p-1 opacity-70 hover:opacity-100 hover:bg-pink-100 w-12 h-2"
           >이전</a
         >
       </li>
@@ -23,14 +23,14 @@
       <li>
         <a
           @click="onPageChange(endRange ? totalPage : endPage + 1)"
-          class="border-2 border-pink-100 border-solid rounded-lg p-1 opacity-70"
+          class="border-2 cursor-pointer border-pink-100 border-solid rounded-lg p-1 opacity-70 hover:opacity-100 hover:bg-pink-100 w-12 h-2"
           >다음</a
         >
       </li>
       <li>
         <a
           @click="onPageChange(totalPage)"
-          class="border-2 border-pink-100 border-solid rounded-lg p-1 opacity-70"
+          class="border-2 cursor-pointer border-pink-100 border-solid rounded-lg p-1 opacity-70 hover:opacity-100 hover:bg-pink-100 w-12 h-2"
           >마지막</a
         >
       </li>

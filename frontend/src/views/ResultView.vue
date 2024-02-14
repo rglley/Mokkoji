@@ -1,6 +1,6 @@
 <template>
   <div class="h-[100vh] w-[100vw] bg-[#fef6fb] flex">
-    <div class="ml-[10vb] h-[100vh] w-[55vw] mt-[8vh]">
+    <div class="ml-[20vb] h-[100vh] w-[55vw] mt-[20vh]">
       <!-- 추억 결과물 카드 -->
       <div class="mt-[10vh]" v-if="isPhotoCardResult">
         <div class="flex justify-center items-center">
@@ -21,9 +21,8 @@
       </div>
       <!--롤링페이퍼-->
       <div v-if="isRollingPaperResult">
-        <div class="flex justify-center items-center">
+        <div class="flex justify-center items-center w-[500px] h-[600px]">
           <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
-          <div class="absolute z-30 w-[800px] h-[1000px]"></div>
 
           <img
             :src="`src/assets/rollingtemplate/wedding.png`"
@@ -40,12 +39,13 @@
             height="650px"
           />
         </div>
-
-        <PageNavigation
-          :current-page="currentPage"
-          :total-page="totalPage"
-          @pageChange="onPageChange"
-        ></PageNavigation>
+        <div class="w-[500px] h-[50px]">
+          <PageNavigation
+            :current-page="currentPage"
+            :total-page="totalPage"
+            @pageChange="onPageChange"
+          ></PageNavigation>
+        </div>
       </div>
       <!--포토모자이크-->
 
@@ -123,9 +123,10 @@
     </div>
     <div class="h-[100vh] w-[5vw]"></div>
   </div>
-  <div class="h-[30vh] w-[100vw] bg-pink-50">
+  <div class="h-[15vh] w-[100vw] bg-[#fef6fb]"></div>
+  <div class="h-[15vh] w-[100vw] bg-pink-50">
     <p class="text-center text-2xl pt-[5vh]">모꼬지가 마음에 드셨나요?</p>
-    <div class="flex justify-center items-center pt-[vh]">
+    <div class="flex justify-center items-center pt-[vh] pb-[3vh]">
       <div class="rate">
         <input type="radio" id="star5" name="rate" value="5" />
         <label for="star5" title="text">5 stars</label>
@@ -188,7 +189,6 @@ const downloadThumbnailStore = useDownloadThumbnail()
 const downloadPhotomosaicStore = useDownloadPhotomosaic()
 const shareImageStore = useShareImage()
 const sharePhotomosaicStore = useSharePhotomosaic()
-
 const design = ref('')
 const username = ref('')
 const color = ref('')
