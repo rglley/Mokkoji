@@ -41,8 +41,10 @@ onMounted(() => {
   if (isNaver.value) url = url + '/oauth2/naver/' + naverquerycode.value
   if (isGoogle.value) url = url + '/oauth2/google/' + googlequerycode.value
 
+  console.log(url)
+
   axios
-    .get(url)
+    .get({url: url})
     .then((res) => {
       const token = res.headers['authorization']
       tokenService.setLocalAccessToken(token)
