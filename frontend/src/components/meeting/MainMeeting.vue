@@ -636,13 +636,15 @@ const joinSession = () => {
 
   // 호스트가 회의 종료시 참가자들을 closeroom 컴포넌트로 이동시키는 메소드
   state.session.on('signal:close', async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-    const tracks = stream.getTracks()
-    tracks.forEach((track) => track.stop())
+    if (sessionStorage.getItem('isHost') === 'false') {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      const tracks = stream.getTracks()
+      tracks.forEach((track) => track.stop())
 
-    sessionStorage.clear()
-    emit('leave-meeting')
-    router.push('/closeroom')
+      sessionStorage.clear()
+      emit('leave-meeting')
+      router.push('/closeroom')
+    }
   })
 }
 
@@ -752,6 +754,10 @@ const toggleCamera = async () => {
 // 개인 사진 촬영
 const captureMyVideo = () => {
   if ($cookies.get('user') !== null) {
+    const hostStream = state.mainStreamManager
+
+    state.mainStreamManager = state.publisher
+
     isCount.value = true
 
     const countTime = setInterval(() => {
@@ -766,6 +772,7 @@ const captureMyVideo = () => {
       const target = myVideo.value
 
       if (!target) {
+        state.mainStreamManager = hostStream
         return alert('사진 촬영 실패')
       }
 
@@ -777,6 +784,7 @@ const captureMyVideo = () => {
       })
 
       showCaptureCheckModal()
+      state.mainStreamManager = hostStream
     }, 3000)
   } else {
     showLoginCheckModal()

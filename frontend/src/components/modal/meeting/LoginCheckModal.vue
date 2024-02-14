@@ -26,10 +26,10 @@
         </button>
       </div>
     </div>
+    <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
+      <LoginModal />
+    </ModalView>
   </div>
-  <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
-    <LoginModal />
-  </ModalView>
 </template>
 
 <script setup>
@@ -37,7 +37,7 @@ import { ref } from 'vue'
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/home/LoginModal.vue'
 
-const emit = defineEmits('remove-login-check-modal')
+defineEmits(['remove-login-check-modal'])
 
 const isLoginModal = ref(false)
 
