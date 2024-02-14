@@ -19,7 +19,7 @@ spring:
   data:
     web:
       pageable:
-        default-page-size: 10 #이렇게 설정가능
+        default-page-size: 9 #이렇게 설정가능
         max-page-size: 2000
         one-indexed-parameters: true #인덱스가 1인 파라미터부터 시작. 근데 이건 페이징이 안됨
 
