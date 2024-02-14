@@ -98,8 +98,8 @@ initFlowbite();
 
 // header 홈뷰에서 새로고침
 const reloadPage = () => {
-  store.isReloaded = true;
   router.push("/").then(() => {
+    store.isReloaded = true;
     window.location.reload();
   });
 };
@@ -136,6 +136,7 @@ const logout = () => {
 };
 
 onBeforeMount(() => {
+  window.scrollTo(0,0);
   window.addEventListener("scroll", handleScroll);
   // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
   if ($cookies.isKey("user")) {
