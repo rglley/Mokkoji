@@ -103,7 +103,7 @@ public class ResultController {
 
     // 추억 결과물 보기(롤링페이퍼)
     @GetMapping("/recollections/{resultId}")
-    public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, @PageableDefault(page = 0, size = 9) Pageable pageable) {
+    public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, Pageable pageable) {
 
         ResultResDto resultResDto = resultService.getResult(resultId, pageable);
 
