@@ -30,6 +30,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -44,8 +47,9 @@ public class S3ServiceImpl implements S3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop" +
-            File.separator + "mokkoji" + File.separator;
+
+    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop" + File.separator +
+            "mokkoji" + File.separator;
 
     private final AmazonS3Client amazonS3Client;
     private final ResultRepository resultRepository;
@@ -236,6 +240,33 @@ public class S3ServiceImpl implements S3Service {
         return localFile.getAbsolutePath();
     }
 
+    @Override
+    public String downloadThumbnail(Long resultId, String thumbnailPath) {
+        URL url;
+        try {
+            url = new URL(thumbnailPath);
+        } catch (MalformedURLException e) {
+            throw new RestApiException(S3ErrorCode.INVALID_URL);
+        }
+
+        String key = url.getPath().substring(1);
+
+        File localFile = new File(LOCAL_PATH + resultId + File.separator + "thumbnail.jpg");
+
+        File parentDir = localFile.getParentFile();
+        if(!parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+
+        GetObjectRequest request = new GetObjectRequest(bucket, key);
+
+        amazonS3Client.getObject(request, localFile);
+
+        return localFile.getAbsolutePath();
+    }
+
+
+
     //S3 photoList 전체 다운로드
     @Override
     public String downloadCellImages(Long resultId) {
@@ -253,22 +284,26 @@ public class S3ServiceImpl implements S3Service {
 
         ListObjectsV2Result listResponse = amazonS3Client.listObjectsV2(listRequest);
 
+        Path cellImagesPath = Paths.get(LOCAL_PATH + resultId + File.separator + "cellImages");
+        if(!Files.exists(cellImagesPath)) {
+            try {
+                Files.createDirectories(cellImagesPath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         for(S3ObjectSummary s3ObjectSummary : listResponse.getObjectSummaries()) {
             String key = s3ObjectSummary.getKey();
 
-            File localFile = new File(LOCAL_PATH + key.substring(key.indexOf('/') + 1));
-
-            File parentDir = localFile.getParentFile();
-            if(!parentDir.exists()) {
-                parentDir.mkdirs();
-            }
+            File cellImage = new File(cellImagesPath + File.separator + key.substring(key.indexOf('/') + 1));
 
             GetObjectRequest request = new GetObjectRequest(bucket, key);
 
-            amazonS3Client.getObject(request, localFile);
+            amazonS3Client.getObject(request, cellImage);
         }
 
-        return LOCAL_PATH;
+        return cellImagesPath.toString();
     }
 
     //포토모자이크 업로드
@@ -278,21 +313,19 @@ public class S3ServiceImpl implements S3Service {
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
         String key = result.getUser().getId() + File.separator + resultId + File.separator +
-                "photos" + File.separator + "photomosaic.jpeg";
+                "photos" + File.separator + "photomosaic.jpg";
 
         if (amazonS3Client.doesObjectExist(bucket, key)) {
             amazonS3Client.deleteObject(bucket, key);
         }
 
         File photomosaic = new File(System.getProperty("user.home") + File.separator + "Desktop" +
-                File.separator + "photomosaic.jpeg");
+                File.separator + "mokkoji" +  File.separator + resultId + File.separator + "photomosaic.jpeg");
 
         PutObjectRequest request = new PutObjectRequest(bucket, key, photomosaic);
 
         try {
             amazonS3Client.putObject(request);
-        } catch (AmazonServiceException e) {
-            e.printStackTrace();
         } catch (SdkClientException e) {
             e.printStackTrace();
         }

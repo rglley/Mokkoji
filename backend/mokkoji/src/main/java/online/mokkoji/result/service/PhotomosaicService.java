@@ -8,6 +8,8 @@ import online.mokkoji.common.exception.errorcode.ResultErrorCode;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,14 +25,12 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class PhotomosaicService {
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
+    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop" + File.separator +
+            "mokkoji" + File.separator;
 
-    public double calculateDistance(Scalar color1, Scalar color2) {
+    private double calculateDistance(Scalar color1, Scalar color2) {
         double distance = 0.0;
         for (int i = 0; i < color1.val.length; i++) {
             distance += Math.pow(color1.val[i] - color2.val[i], 2);
@@ -38,7 +38,7 @@ public class PhotomosaicService {
         return Math.sqrt(distance);
     }
 
-    public List<Mat> getComponentImages(String path, int size) throws IOException {
+    private List<Mat> getComponentImages(String path, int size) throws IOException {
         List<Mat> images = new ArrayList<>();
         List<Scalar> avgColors = new ArrayList<>();
 
@@ -55,50 +55,49 @@ public class PhotomosaicService {
         return images;
     }
 
-    public String createPhotomosaic(String thumbnailPath, String cellImagesPath) {
-        Mat inputImage = Imgcodecs.imread(thumbnailPath);
+    public String createPhotomosaic(Long resultId) {
+        Mat inputImage = Imgcodecs.imread(LOCAL_PATH + "thumbnail" + File.separator + "thumbnail.jpg");
         int height = inputImage.rows();
         int width = inputImage.cols();
         Mat blankImage = Mat.zeros(height, width, CvType.CV_8UC3);
 
-        File cellImagesFolder = new File(cellImagesPath);
-        File[] images = cellImagesFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".jpeg") || name.toLowerCase().endsWith(".png"));
-        int totalImages = images.length;
+        List<Mat> images = null;
+        try {
+            images = getComponentImages(LOCAL_PATH + resultId + File.separator + "cellImages", 30);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        int stride = 30;
-
-        for (int widthIdx = 0; widthIdx < width / stride; widthIdx++) {
-            for (int heightIdx = 0; heightIdx < height / stride; heightIdx++) {
-                Rect roi = new Rect(widthIdx * stride, heightIdx * stride, stride, stride);
+        for (int i = 0; i < width / 30; i++) {
+            for (int j = 0; j < height / 30; j++) {
+                Rect roi = new Rect(i * 30, j * 30, 30, 30);
                 Mat partialInputImage = new Mat(inputImage, roi);
                 Scalar partialAvgColor = Core.mean(partialInputImage);
 
                 double minDistance = Double.MAX_VALUE;
-                int imageIdx = -1;
-                for (int idx = 0; idx < totalImages; idx++) {
-                    Mat image = Imgcodecs.imread(images[idx].getAbsolutePath());
-                    double distance = calculateDistance(partialAvgColor, Core.mean(image));
+                int idx = -1;
+                for (int k = 0; k < images.size(); k++) {
+                    double distance = calculateDistance(partialAvgColor, Core.mean(images.get(k)));
                     if (distance < minDistance) {
                         minDistance = distance;
-                        imageIdx = idx;
+                        idx = k;
                     }
                 }
 
-                Mat selectedImage = Imgcodecs.imread(images[imageIdx].getAbsolutePath());
+                Mat selectedImage = images.get(idx);
                 selectedImage.copyTo(blankImage.submat(roi));
             }
         }
 
-        String outputFilePath = System.getProperty("user.home") + File.separator + "Desktop" +
-                File.separator + "photomosaic.jpeg";
-        Imgcodecs.imwrite(outputFilePath, blankImage);
+        String outputImagePath = LOCAL_PATH + resultId + File.separator + "photomosaic.jpg";
+        Imgcodecs.imwrite(outputImagePath, blankImage);
 
-        return outputFilePath;
+        return outputImagePath;
     }
 
-    public void deleteCellImages(String localPath) {
+    public void deleteImages(String imagesPath) {
 
-        File directory = new File(localPath);
+        File directory = new File(imagesPath);
 
         if(!directory.exists() || !directory.isDirectory())
             throw new RestApiException(ResultErrorCode.NONE_FOLDER_DIRECTORY);
@@ -107,12 +106,12 @@ public class PhotomosaicService {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    deleteCellImages(file.getAbsolutePath());
+                    deleteImages(file.getAbsolutePath());
                 } else {
                     file.delete();
                 }
             }
-        }
+        }s
 
         directory.delete();
     }

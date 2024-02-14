@@ -8,7 +8,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         # show_sql: true
@@ -32,7 +32,6 @@ spring:
   #application-oauth 프로필 등록
   profiles:
     include: oauth, jwt, s3, secret
-
 
 # OpenVidu
 openvidu:
@@ -62,3 +61,4 @@ cloud:
 
 api:
   version: /api/v1
+

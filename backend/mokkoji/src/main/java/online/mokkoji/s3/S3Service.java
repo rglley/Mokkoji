@@ -25,6 +25,9 @@ public interface S3Service {
     //url로 다운로드
     String downloadWithUrl(String s3Url, String folderName);
 
+    //대표 사진 다운로드
+    String downloadThumbnail(Long resultId, String thumbnailPath);
+
     //포토모자이크 cellImages 다운로드
     String downloadCellImages(Long resultId);
 
