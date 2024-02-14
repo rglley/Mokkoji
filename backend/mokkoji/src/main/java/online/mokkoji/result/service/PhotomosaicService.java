@@ -26,6 +26,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PhotomosaicService {
 
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
     public double calculateDistance(Scalar color1, Scalar color2) {
         double distance = 0.0;
         for (int i = 0; i < color1.val.length; i++) {
