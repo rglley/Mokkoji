@@ -50,6 +50,5 @@ export const useUserStore = defineStore('user', () => {
     forceReload,
     getLoginStatus,
     getBankAccount,
-    getProfileImg,
   }
 })
