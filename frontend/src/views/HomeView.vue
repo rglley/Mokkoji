@@ -225,6 +225,7 @@
       >
         처음으로 돌아가기
       </button>
+      <button @click="test">test</button>
     </section>
   </main>
 </template>
