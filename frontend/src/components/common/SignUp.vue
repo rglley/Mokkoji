@@ -66,7 +66,7 @@ import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
-import Swal from 'vue-sweetalert2'
+import Swal from 'sweetalert2'
 
 const router = useRouter()
 const store = useUserStore()

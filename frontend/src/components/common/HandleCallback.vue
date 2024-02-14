@@ -14,7 +14,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
 import tokenService from '@/services/token.service'
-import Swal from 'vue-sweetalert2'
+import Swal from 'sweetalert2'
 
 const router = useRouter()
 const route = useRoute()
