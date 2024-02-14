@@ -123,14 +123,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    if (!($cookies.isKey('token') || $cookies.isKey('refresh-token'))) {
-      alert('로그인이 필요합니다!');
-      next('/');
-      return;
-    }
-  }
-  
+  // if (to.meta.requireAuth) {
+  //   if (!($cookies.isKey('token') || $cookies.isKey('refresh-token'))) {
+  //     alert('서비스를 사용하기 위해 로그인을 해주세요.');
+  //     next('/');
+  //     return;
+  //   }
+  // }
+
   next();
 
   if (from.path === '/meetings') {

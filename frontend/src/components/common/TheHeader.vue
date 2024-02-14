@@ -81,6 +81,7 @@ const dropdownKey = ref(3)
 
 initFlowbite()
 
+// header 홈뷰에서 새로고침
 const reloadPage = () => {
   router.push('/').then(() => {
     window.location.reload()
@@ -97,14 +98,17 @@ const handleScroll = () => {
 }
 
 const logout = () => {
-  tokenService.removeUser()
-  isLogin.value = false
-  store.isLogin = false
-  router.push('/')
+  if (confirm('로그아웃 하시겠습니까?')) {
+    tokenService.removeUser()
+    isLogin.value = false
+    store.isLogin = false
+    router.push('/')
+  }
 }
 
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScroll)
+  // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
   if ($cookies.isKey('user')) {
     if (tokenService.expiredToken($cookies.get('token'))) {
       $cookies.keys().forEach(cookie => $cookies.remove(cookie));
@@ -130,8 +134,7 @@ watch(
 
 <style>
 .transparent-header {
-  @apply opacity-0 transition-opacity duration-500 z-10;
-  pointer-events: none;
+  @apply opacity-0 transition-opacity duration-500 z-10 pointer-events-none;
 }
 
 li {

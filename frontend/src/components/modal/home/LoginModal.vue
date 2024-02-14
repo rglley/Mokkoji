@@ -7,10 +7,10 @@
     <div id="title-sub-bold" class="ml-auto mr-auto mb-5 tracking-wider pb-10">모꼬지 시작하기</div>
     <div id="box-shadow">
       <div>
-        <button
+        <a
           type="button"
           class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2"
-          @click="login('naver')"
+          :href="googleApiRequestURI"
         >
           <svg
             class="w-4 h-4 me-2"
@@ -26,7 +26,7 @@
             />
           </svg>
           구글 계정으로 시작하기
-        </button>
+        </a>
       </div>
       <div>
         <a
@@ -47,13 +47,20 @@
 </template>
 
 <script setup>
-const { VITE_NAVER_CLIENT_ID, VITE_NAVER_REDIRECT_URI } = import.meta.env
+const { VITE_NAVER_CLIENT_ID, VITE_GOOGLE_CLIENT_ID, VITE_REDIRECT_URI } = import.meta.env
 
 const naverApiRequestURI =
   `https://nid.naver.com/oauth2.0/authorize?client_id=` +
   VITE_NAVER_CLIENT_ID +
   '&redirect_uri=' +
-  VITE_NAVER_REDIRECT_URI +
+  VITE_REDIRECT_URI +
+  '&state=mokkoji&response_type=code'
+
+const googleApiRequestURI = 
+  `https://accounts.google.com/o/oauth2/v2/auth` + 
+  VITE_GOOGLE_CLIENT_ID + 
+  '&redirect_uri=' +
+  VITE_REDIRECT_URI +
   '&state=mokkoji&response_type=code'
 </script>
 

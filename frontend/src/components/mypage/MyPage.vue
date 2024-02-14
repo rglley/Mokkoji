@@ -7,8 +7,8 @@
       <div class="absolute -mt-28 mx-10 justify-center">
         <img alt="프로필 사진" id="image-profile" :src="userData.image" />
       </div>
-      <div class="gap-5 flex max-md:flex-col max-md:gap-2 mt-20">
-        <div class="flex flex-col w-[25lvw] items-center justify-center">
+      <div class="gap-4 flex max-md:flex-col max-md:gap-2 mt-20">
+        <div class="flex flex-col w-[15lvw] items-center justify-center border-2 border-slate-300 rounded-lg shadow-md m-3">
           <span class="flex flex-col mt-10 max-md:mt-10"
             ><div class="text-3xl font-bold">{{ userData.name }}님</div>
           </span>
@@ -71,7 +71,6 @@ import { ref, onMounted } from "vue";
 import axios from "@/services/api";
 
 const userData = ref({});
-const num = 0;
 const getUserDetail = () => {
   -axios
     .get(import.meta.env.VITE_SERVER + "/users/mypage")
