@@ -155,7 +155,6 @@ import PageNavigation from '@/components/common/PageNavigation.vue'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
-import '../pagination.css'
 
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 // import PhotoCard from '@/temp/result/photocard.json'
