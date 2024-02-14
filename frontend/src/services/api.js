@@ -2,7 +2,7 @@ import axios from 'axios'
 import tokenService from '@/services/token.service.js'
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_LOCAL + import.meta.env.VITE_SERVER
+  baseURL: import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER
 })
 
 instance.interceptors.request.use(

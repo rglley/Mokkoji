@@ -41,7 +41,7 @@ onMounted(() => {
   let url = import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER
   if (isNaver.value) url = url + '/oauth2/naver?code=' + naverquerycode.value
   else if (isGoogle.value) url = url + '/oauth2/google?code=' + googlequerycode.value
-  else if (isKakao.value) url = url + '/oauth2/google?code=' + kakaoquerycode.value
+  else if (isKakao.value) url = url + '/oauth2/kakao?code=' + kakaoquerycode.value
   
   axios({
     url: url
