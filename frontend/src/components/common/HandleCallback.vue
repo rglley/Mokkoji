@@ -58,7 +58,7 @@ onMounted(() => {
       if (res.data.first == true) {
         Swal.fire({
           title: '회원가입',
-          text: '추가 정보 수정을 위해 회원가입 페이지로 이동합니다.',
+          text: '추가 정보 입력을 위해 회원가입 페이지로 이동합니다.',
           icon: 'info', 
         })
         router.push('/signup')

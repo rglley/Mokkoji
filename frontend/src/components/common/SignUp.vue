@@ -65,7 +65,7 @@
 import { ref, onBeforeMount } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
-import axios from '@/services/api'
+import axios from 'axios'
 import Swal from 'sweetalert2'
 
 const router = useRouter()
@@ -107,7 +107,7 @@ const accountNumber = ref('')
 
 const signUp = async () => {
   await axios({
-    url: '/users',
+    url: import.meta.env.VITE_API_URL + import.meta.env.VITE_SERVER + '/users',
     method: 'POST',
     data: {
       name: name.value,
