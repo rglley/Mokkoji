@@ -182,7 +182,7 @@ pre {
   }
 
   #box-shadow {
-    @apply p-5 pt-7 border-2 border-natural-beige rounded-lg shadow-md bg-slate-50 items-center ring-4 ring-primary2 max-w-[30lvw];
+    @apply p-5 pt-7 rounded-lg shadow-md bg-slate-100 items-center ring-4 ring-primary max-w-[30lvw];
   }
 
   #button-header {
