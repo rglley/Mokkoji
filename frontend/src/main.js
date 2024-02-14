@@ -28,7 +28,7 @@ app.use(router)
 
 // sweetalert custom option
 const options = {
-  confirmButtonColor : '#AB90FF'
+  confirmButtonColor : '#C8B6FF'
 }
 app.use(VueSweetalert2, options);
 
