@@ -13,7 +13,7 @@ public class UserInfoResDto {
     @NotBlank
     private String provider;
 
-    @NotBlank
+    @NotNull
     private String email;
 
     @NotBlank
