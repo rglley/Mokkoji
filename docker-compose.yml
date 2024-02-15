@@ -6,3 +6,6 @@ services:
       - '8080:8080'
     env_file:
       - ./.env
+    # opencv mount
+    volumes:
+      - /home/ubuntu/opencv:/usr/src/app/opencv

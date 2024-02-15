@@ -34,6 +34,12 @@ spring:
   profiles:
     include: oauth, jwt, s3, secret
 
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+
 # OpenVidu
 openvidu:
   url: ${OPENVIDU_URL}
