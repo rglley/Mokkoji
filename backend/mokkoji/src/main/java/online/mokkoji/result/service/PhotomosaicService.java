@@ -63,15 +63,15 @@ public class PhotomosaicService {
 
         List<Mat> images = null;
         try {
-            images = getComponentImages(LOCAL_PATH + resultId + File.separator + "cellImages", 30);
+            images = getComponentImages(LOCAL_PATH + resultId + File.separator + "cellImages", 20);
             log.info("셀 이미지 개수 : {}", images.size());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        for (int i = 0; i < width / 30; i++) {
-            for (int j = 0; j < height / 30; j++) {
-                Rect roi = new Rect(i * 30, j * 30, 30, 30);
+        for (int i = 0; i < width / 20; i++) {
+            for (int j = 0; j < height / 20; j++) {
+                Rect roi = new Rect(i * 20, j * 20, 20, 20);
                 Mat partialInputImage = new Mat(inputImage, roi);
                 Scalar partialAvgColor = Core.mean(partialInputImage);
 
