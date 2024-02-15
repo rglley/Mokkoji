@@ -230,11 +230,18 @@ import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Pagination } from 'swiper/modules'
 import { useSessionStore } from '@/stores/meeting'
+import AOS from 'aos'
 import Swal from 'sweetalert2'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'aos/dist/aos.css'
+
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    AOS.refresh()
+  }, 500)
+})
 
 const emit = defineEmits(['load-home'])
 
