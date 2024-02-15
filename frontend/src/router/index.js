@@ -19,9 +19,6 @@ import SignUp from '@/components/common/SignUp.vue'
 import tokenService from '@/services/token.service'
 
 const router = createRouter({
-  scrollBehavior() {
-    return { top: 0 }
-  },
   history: createWebHistory(import.meta.env.BASE_URL),
   // meta -> requireauth : 로그인 필요한 기능 식별
   routes: [
