@@ -114,8 +114,8 @@ const logout = () => {
         tokenService.removeUser()
         isLogin.value = false
         store.isLogin = false
+        router.push('/')
       })
-      router.push('/')
     }
   })
 }
