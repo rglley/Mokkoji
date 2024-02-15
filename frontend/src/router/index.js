@@ -15,12 +15,15 @@ import ReloadingRoom from '@/components/meeting/ReloadingRoom.vue'
 import CloseRoom from '@/components/meeting/CloseRoom.vue'
 
 const router = createRouter({
+  scrollBehavior() {
+    return { top: 0 }
+  },
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/oauth2/:pathMatch(.*)*',
@@ -115,6 +118,7 @@ const router = createRouter({
       component: ResultPage
     }
   ]
+  
 })
 
 router.beforeEach((to, from, next) => {

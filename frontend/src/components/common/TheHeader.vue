@@ -107,6 +107,7 @@ const logout = () => {
 }
 
 onBeforeMount(() => {
+  initFlowbite()
   window.addEventListener('scroll', handleScroll)
   // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
   if ($cookies.isKey('user')) {
