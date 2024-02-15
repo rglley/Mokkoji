@@ -1,5 +1,6 @@
 package online.mokkoji.result.domain.rollingpaper;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,6 +18,7 @@ public class Message {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rollingpaper_id")
+    @JsonBackReference
     private RollingPaper rollingPaper;
 
     @Column(length = 6, nullable = false)

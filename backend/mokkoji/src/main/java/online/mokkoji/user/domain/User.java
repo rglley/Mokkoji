@@ -1,5 +1,6 @@
 package online.mokkoji.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -37,9 +38,11 @@ public class User {
     private String image;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Result> results = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Event> events = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
