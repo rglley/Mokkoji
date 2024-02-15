@@ -55,7 +55,7 @@ public class OpenviduController {
                                               HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        User user=userService.searchUser(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
@@ -101,7 +101,7 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
-        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        User user=userService.searchUser(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
         sessionReqDto.setUserId(user.getId());
 

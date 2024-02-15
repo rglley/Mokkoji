@@ -46,7 +46,7 @@ public class EventController {
                                            HttpServletRequest req,
                                            MultipartFile photo) throws IOException {
 
-        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        User user= userService.searchUser(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
         // 사진 업로드
         Event event = eventRepository.findBySessionId(sessionId)
                 .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));
@@ -67,7 +67,7 @@ public class EventController {
                                                   @RequestPart(value = "video", required = false) MultipartFile video,
                                                   @RequestPart("writerAndText") MessageReqDto messageReqDto) throws IOException {
 
-        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        User user=userService.searchUser(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
         Event event = eventRepository.findBySessionId(sessionId)
                 .orElseThrow(()->new RestApiException(EventErrorCode.EVENT_NOT_FOUND));

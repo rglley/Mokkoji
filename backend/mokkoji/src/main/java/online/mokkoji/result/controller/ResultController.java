@@ -79,7 +79,7 @@ public class ResultController {
                                            HttpServletRequest req,
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
-        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userService.searchUser(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         // 사진 업로드
         List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
