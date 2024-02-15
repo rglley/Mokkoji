@@ -41,7 +41,8 @@ public class RollingPaper  {
     @Builder(builderMethodName = "buildWithResult")
     public RollingPaper(Result result, BackgroundTemplate backgroundTemplate, PostitTemplate postitTemplate) {
         this.result = result;
-        updateTemplate(backgroundTemplate,postitTemplate);
+        this.backgroundTemplate=backgroundTemplate;
+        this.postitTemplate=postitTemplate;
         result.setRollingpaper(this);
     }
 
