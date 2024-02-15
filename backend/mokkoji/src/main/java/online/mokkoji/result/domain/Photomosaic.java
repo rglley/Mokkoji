@@ -8,7 +8,7 @@ import online.mokkoji.common.domain.BaseEntity;
 
 @Entity
 @Getter
-public class Photomosaic extends BaseEntity {
+public class Photomosaic  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

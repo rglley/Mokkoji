@@ -10,7 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "eventCount", "totalTime", "totalParticipant", "totalMessage"})
-public class Record extends BaseEntity {
+public class Record {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RollingPaper extends BaseEntity {
+public class RollingPaper  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

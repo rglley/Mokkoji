@@ -9,7 +9,7 @@ import online.mokkoji.common.domain.BaseEntity;
 @Getter
 @Table(name = "account")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserAccount extends BaseEntity {
+public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

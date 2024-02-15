@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class Photo extends BaseEntity {
+public class Photo{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

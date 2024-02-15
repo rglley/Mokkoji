@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @ToString(of = {"id","name", "content", "status","image"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Result extends BaseEntity {
+public class Result  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
