@@ -1,10 +1,10 @@
 <template>
-  <div class="w-[25lvw] items-center m-5 flex flex-col gap-2 mb-16  p-5 pb-10">
+  <div class="w-80 items-center m-5 flex flex-col gap-4 mb-16 p-5">
     <img
       src="@/assets/logo/mokkoji_logo.png"
       class="w-24 p-2 m-2 mb-4 border-2 rounded-2xl border-primary bg-natural-beige shadow-md"
     />
-    <div id="title-sub-bold" class="ml-auto mr-auto tracking-wider pb-10">모꼬지 시작하기</div>
+    <div id="title-sub-bold">모꼬지 시작하기</div>
     <div id="box-shadow">
       <div class="flex flex-col justify-center">
         <a
@@ -59,13 +59,31 @@
         </a>
         <a
           type="button"
-          class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2 w-[14lvw]"
+          class="text-white bg-green-400 hover:bg-green-500 font-medium rounded-lg text-sm pl-5 py-2.5 text-center inline-flex items-center m-0 w-[14lvw] my-4"
           :href="naverApiRequestURI"
         >
-          <img
-            src="@/assets/logo/logoN_naver.svg"
-            class="w-4 h-43 inline-block mb-2 ml-2 mt-1 mr-2"
-          />
+          <svg
+            version="1.0"
+            xmlns="http://www.w3.org/2000/svg"
+
+            viewBox="0 0 300.000000 265.000000"
+            preserveAspectRatio="xMidYMid meet"
+            class="w-4 h-4 me-2"
+          >
+            <g
+              transform="translate(0.000000,265.000000) scale(0.100000,-0.100000)"
+              fill="white"
+              stroke="none"
+            >
+              <path
+                d="M10 1843 c0 -445 -3 -1040 -7 -1321 l-6 -512 521 0 522 0 0 538 -1
+537 -33 158 c-18 86 -30 157 -27 157 3 0 226 -313 495 -695 l488 -695 407 0
+c223 0 457 -3 519 -7 l112 -6 -2 1319 -3 1319 -519 3 -518 2 6 -357 c12 -711
+12 -711 70 -1036 11 -63 11 -76 0 -65 -7 7 -232 337 -499 733 -268 396 -488
+721 -489 721 0 1 -234 5 -518 9 l-518 7 0 -809z"
+              />
+            </g>
+          </svg>
           네이버로 시작하기
         </a>
       </div>

@@ -13,6 +13,7 @@ import HandleCallback from '@/components/common/HandleCallback.vue'
 import WaitingRoom from '@/components/meeting/WaitingRoom.vue'
 import ReloadingRoom from '@/components/meeting/ReloadingRoom.vue'
 import CloseRoom from '@/components/meeting/CloseRoom.vue'
+import Swal from 'sweetalert2'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -114,13 +115,20 @@ const router = createRouter({
       name: 'resultpage',
       component: ResultPage
     }
-  ]
+  ],
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     if (!($cookies.isKey('token') || $cookies.isKey('refresh-token'))) {
-      alert('서비스를 사용하기 위해 로그인을 해주세요.')
+      Swal.fire({
+        title : '로그인 해주세요',
+        text : '일부 서비스는 로그인이 필요할 수 있습니다.',
+        icon: 'warning',
+      })
       next('/')
       return
     }
