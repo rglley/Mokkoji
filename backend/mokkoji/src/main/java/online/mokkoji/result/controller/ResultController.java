@@ -37,7 +37,7 @@ public class ResultController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final S3Service s3Service;
-//    private final PhotomosaicService photomosaicService;
+    private final PhotomosaicService photomosaicService;
 
     /**
      * 결과물 리스트 조회
@@ -158,8 +158,7 @@ public class ResultController {
         Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         //로컬 이미지 삭제
-        String imagesDirectory = System.getProperty("user.home") + File.separator + "Desktop" +
-                File.separator + "mokkoji" + File.separator + resultId;
+        String imagesDirectory = "/opt/result" + File.separator;
 
         photomosaicService.deleteImages(imagesDirectory);
 
