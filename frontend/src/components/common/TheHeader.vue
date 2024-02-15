@@ -136,24 +136,18 @@ const logout = () => {
 } 
 
 onBeforeMount(() => {
-  window.scrollTo(0, 0) 
-  window.addEventListener("scroll", handleScroll) 
-  // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 처리
-  try{
-    if ($cookies.isKey("user")) {
-      // 토큰이 만료되었을 때 cookie에 저장된 모든 정보 제거 후 로그아웃 처리
-      if (tokenService.expiredToken($cookies.get("token"))) {
-        $cookies.keys().forEach((cookie) => $cookies.remove(cookie)) 
-      } else {
-        isLogin.value = true 
-        image.value = $cookies.get("user").image 
-        name.value = $cookies.get("user").name 
-      }
+  initFlowbite()
+  window.addEventListener('scroll', handleScroll)
+  // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
+  if ($cookies.isKey('user')) {
+    if (tokenService.expiredToken($cookies.get('token'))) {
+      $cookies.keys().forEach(cookie => $cookies.remove(cookie));
     }
-  }
-  // cookie에서 token 가져올때 발생하는 에러 처리
-  catch{
-    console.log(err);
+    else {
+      isLogin.value = true
+      image.value = $cookies.get('user').image
+      name.value = $cookies.get('user').name
+    }
   }
 }) 
 
