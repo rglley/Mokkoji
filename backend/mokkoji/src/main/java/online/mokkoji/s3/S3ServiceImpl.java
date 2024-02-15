@@ -48,8 +48,7 @@ public class S3ServiceImpl implements S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop" + File.separator +
-            "mokkoji" + File.separator;
+    private final String LOCAL_PATH = "/opt/result" + File.separator;
 
     private final AmazonS3Client amazonS3Client;
     private final ResultRepository resultRepository;

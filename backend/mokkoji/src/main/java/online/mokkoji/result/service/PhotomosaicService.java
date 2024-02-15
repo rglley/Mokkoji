@@ -27,8 +27,7 @@ import java.util.List;
 @Transactional
 public class PhotomosaicService {
 
-    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop" + File.separator +
-            "mokkoji" + File.separator;
+    private final String LOCAL_PATH = "/opt/result" + File.separator;
 
     private double calculateDistance(Scalar color1, Scalar color2) {
         double distance = 0.0;
