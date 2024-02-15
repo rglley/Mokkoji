@@ -39,7 +39,11 @@ public class ResultController {
     private final S3Service s3Service;
     private final PhotomosaicService photomosaicService;
 
-    // 행사 리스트
+    /**
+     *
+     * @param req 유저 Access Token
+     * @return 기억 리스트, 추억 리스트
+     */
     @GetMapping("/lists")
     public ResponseEntity<Map<String, Object>> getResultList(HttpServletRequest req) {
 
@@ -48,7 +52,11 @@ public class ResultController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    // 기억 편집화면
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @return 사진 리스트, 롤링페이퍼 템플릿
+     */
     @GetMapping("/{resultId}/memories")
     public ResponseEntity<Map<String, Object>> getRollingpaperAndPhotoEdit(@PathVariable Long resultId) {
 
@@ -62,7 +70,12 @@ public class ResultController {
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
-    // 롤링페이퍼 편집 완료
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @param rollingPaperReqDto 배경 템플릿, 포스트잇 템플릿
+     * @return 완료 안내 텍스트
+     */
     @PatchMapping("/{resultId}/memories/rollingpaper")
     public ResponseEntity<String> updateRollingpaper(@PathVariable Long resultId,
                                                      @RequestBody RollingPaperReqDto rollingPaperReqDto) {
@@ -73,7 +86,14 @@ public class ResultController {
     }
 
 
-    // 사진첩 사진 추가
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @param req 유저 Access Token
+     * @param photoList 추가하는 사진 파일
+     * @return 완료 안내 텍스트
+     * @throws IOException
+     */
     @PostMapping("/{resultId}/memories/photos")
     public ResponseEntity<String> addPhotos(@PathVariable("resultId") Long resultId,
                                            HttpServletRequest req,
@@ -94,14 +114,24 @@ public class ResultController {
     }
 
 
-    // 대표이미지 설정
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @param coverImageReqDTO 대표이미지 url
+     * @return 완료 안내 텍스트
+     */
     @PatchMapping("/{resultId}/memories")
     public ResponseEntity<String> updateThumbnail(@PathVariable("resultId") Long resultId, @RequestBody CoverImageReqDto coverImageReqDTO) {
         resultService.updateThumbnail(resultId, coverImageReqDTO.getUrl());
         return new ResponseEntity<>("대표이미지 설정 완료", HttpStatus.OK);
     }
 
-    // 추억 결과물 보기(롤링페이퍼)
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @param pageable 페이징 페이지 번호
+     * @return 결과물-롤링페이퍼, 포토모자이크, 간단 정보
+     */
     @GetMapping("/recollections/{resultId}")
     public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, Pageable pageable) {
 
@@ -110,7 +140,13 @@ public class ResultController {
         return new ResponseEntity<>(resultResDto, HttpStatus.OK);
     }
 
-    // 추억 생성
+    /**
+     * 
+     * @param resultId 결과물 ID
+     * @param recollectionReqDto 추억 제목, 내용 
+     * @param req 유저 Access Token
+     * @return 결과물 리스트-기억 리스트, 추억 리스트
+     */
     @PostMapping("/{resultId}")
     public ResponseEntity<Map<String, Object>> addRecollection(@PathVariable Long resultId,
                                                                @RequestBody RecollectionReqDto recollectionReqDto, HttpServletRequest req) {
@@ -130,7 +166,11 @@ public class ResultController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    //대표사진 다운로드
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @return 201 코드
+     */
     @GetMapping("/{resultId}/thumbnail")
     public ResponseEntity<Void> downloadThumbnail(@PathVariable Long resultId) {
         String thumbnailPath = resultService.getThumbnailPath(resultId);
@@ -139,7 +179,11 @@ public class ResultController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //포토 모자이크 다운로드
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @return 201 코드
+     */
     @GetMapping("{resultId}/photomosaic")
     public ResponseEntity<Void> downloadPhotomosaic(@PathVariable Long resultId) {
         String photomosaicPath = resultService.getPhotomosaicPath(resultId);
@@ -149,7 +193,11 @@ public class ResultController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //대표사진 공유 링크 생성
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @return 대표이미지 다운로드 URL
+     */
     @GetMapping("{resultId}/sharing/thumbnail")
     public ResponseEntity<String> shareThumbnail(@PathVariable Long resultId) {
         String downloadUrl = resultService.getThumbnailPath(resultId);
@@ -157,7 +205,11 @@ public class ResultController {
         return new ResponseEntity<>(downloadUrl, HttpStatus.CREATED);
     }
 
-    //포토모자이크 공유 링크 생성
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @return 포토모자이크 다운로드 URL
+     */
     @GetMapping("{resultId}/sharing/photomosaic/")
     public ResponseEntity<String> sharePhotoMosaic(@PathVariable Long resultId) {
         String downloadUrl = resultService.getPhotomosaicPath(resultId);
@@ -165,7 +217,11 @@ public class ResultController {
         return new ResponseEntity<>(downloadUrl, HttpStatus.CREATED);
     }
 
-    //포토 모자이크 생성
+    /**
+     *
+     * @param resultId 결과물 ID
+     * @return 포토모자이크 URL
+     */
     @PutMapping("{resultId}/photomosaic")
     public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId) {
         //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
