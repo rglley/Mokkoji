@@ -237,12 +237,6 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'aos/dist/aos.css'
 
-document.addEventListener('DOMContentLoaded', function () {
-  setTimeout(function () {
-    AOS.refresh()
-  }, 500)
-})
-
 const emit = defineEmits(['load-home'])
 
 const store = useSessionStore()
@@ -331,6 +325,12 @@ const toTop = () => {
     behavior: 'smooth'
   })
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    AOS.refresh()
+  }, 500)
+})
 
 onMounted(() => {
   window.scrollTo(0, 0)
