@@ -66,7 +66,7 @@ onMounted(() => {
           icon: "info",
         }).then((result) => {
           if (result.isConfirmed) {
-            router.push("/");
+            router.push("/signup");
           }
         });
       } else {
