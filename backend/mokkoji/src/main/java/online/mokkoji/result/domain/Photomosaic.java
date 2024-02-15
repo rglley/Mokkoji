@@ -19,7 +19,7 @@ public class Photomosaic extends BaseEntity {
     @JoinColumn(name = "result_id")
     private Result result;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     @Size(max = 100)
     private String path;
 

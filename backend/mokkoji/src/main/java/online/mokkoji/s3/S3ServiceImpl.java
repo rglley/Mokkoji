@@ -40,8 +40,8 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class S3ServiceImpl implements S3Service {
 
 
@@ -54,26 +54,21 @@ public class S3ServiceImpl implements S3Service {
     private final AmazonS3Client amazonS3Client;
     private final ResultRepository resultRepository;
     private final PhotoRepository photoRepository;
-    private final UserRepository userRepository;
 
-
-    // 사진 한 장 업로드 후 url 리턴
+    //사진 한 장 업로드
     @Override
     public PhotoResDto uploadOnePhoto(MultipartFile multipartFile, Long userId, Result result) throws IOException {
         return getPhotoResDto(multipartFile, userId, result);
     }
 
-
-    // 사진 여러장 업로드
+    //사진 여러장 업로드
     @Override
     public List<PhotoResDto> uploadPhotoList(List<MultipartFile> photoList, Long userId, Long resultId) {
-
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
         List<PhotoResDto> dtoList = new ArrayList<>();
 
-        // 사진 업로드 후 dto에 담아서 리턴
         for (MultipartFile photo : photoList) {
             try {
                 PhotoResDto photoResDto = getPhotoResDto(photo, userId, result);
@@ -82,6 +77,7 @@ public class S3ServiceImpl implements S3Service {
                 throw new RuntimeException(e);
             }
         }
+
         return dtoList;
     }
 
@@ -89,12 +85,6 @@ public class S3ServiceImpl implements S3Service {
     // 롤링페이퍼 업로드
     @Override
     public Map<String, String> uploadRollingpaper(Map<String, MultipartFile> multipartFiles, Long userId, Long paperId) throws IOException {
-
-        if (multipartFiles == null) {
-            log.info("파일 없음");
-            return null;
-        }
-
         String dir = "rollingpaper";
         String subDir = "";
         String prefix;
@@ -241,7 +231,7 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public String downloadThumbnail(Long resultId, String thumbnailPath) {
+    public void downloadThumbnail(Long resultId, String thumbnailPath) {
         URL url;
         try {
             url = new URL(thumbnailPath);
@@ -261,15 +251,13 @@ public class S3ServiceImpl implements S3Service {
         GetObjectRequest request = new GetObjectRequest(bucket, key);
 
         amazonS3Client.getObject(request, localFile);
-
-        return localFile.getAbsolutePath();
     }
 
 
 
     //S3 photoList 전체 다운로드
     @Override
-    public String downloadCellImages(Long resultId) {
+    public void downloadCellImages(Long resultId) {
         Result findResult = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
@@ -296,14 +284,12 @@ public class S3ServiceImpl implements S3Service {
         for(S3ObjectSummary s3ObjectSummary : listResponse.getObjectSummaries()) {
             String key = s3ObjectSummary.getKey();
 
-            File cellImage = new File(cellImagesPath + File.separator + key.substring(key.indexOf('/') + 1));
+            File cellImage = new File(cellImagesPath + File.separator + key.substring(key.lastIndexOf('/') + 1));
 
             GetObjectRequest request = new GetObjectRequest(bucket, key);
 
             amazonS3Client.getObject(request, cellImage);
         }
-
-        return cellImagesPath.toString();
     }
 
     //포토모자이크 업로드
@@ -312,15 +298,16 @@ public class S3ServiceImpl implements S3Service {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
-        String key = result.getUser().getId() + File.separator + resultId + File.separator +
-                "photos" + File.separator + "photomosaic.jpg";
+        String key = result.getUser().getId() + "/" + resultId + "/" +
+                "photos/photomosaic.jpg";
+
 
         if (amazonS3Client.doesObjectExist(bucket, key)) {
             amazonS3Client.deleteObject(bucket, key);
         }
 
         File photomosaic = new File(System.getProperty("user.home") + File.separator + "Desktop" +
-                File.separator + "mokkoji" +  File.separator + resultId + File.separator + "photomosaic.jpeg");
+                File.separator + "mokkoji" +  File.separator + resultId + File.separator + "photomosaic.jpg");
 
         PutObjectRequest request = new PutObjectRequest(bucket, key, photomosaic);
 

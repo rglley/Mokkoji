@@ -26,11 +26,11 @@ public interface S3Service {
     String downloadWithUrl(String s3Url, String folderName);
 
     //대표 사진 다운로드
-    String downloadThumbnail(Long resultId, String thumbnailPath);
+    void downloadThumbnail(Long resultId, String thumbnailPath);
 
     //포토모자이크 cellImages 다운로드
-    String downloadCellImages(Long resultId);
+    void downloadCellImages(Long resultId);
 
-    //포토모자이크 S3로 업로드
+    //포토모자이크 업로드
     String uploadPhotomosaic(String localPath, Long resultId);
 }
