@@ -8,4 +8,4 @@ services:
       - ./.env
     # opencv mount
     volumes:
-      - /home/ubuntu/opencv:/usr/src/app/opencv
+      - /opt/result:/usr/src/app/result
