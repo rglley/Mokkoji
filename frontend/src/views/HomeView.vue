@@ -230,11 +230,11 @@ import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Pagination } from 'swiper/modules'
 import { useSessionStore } from '@/stores/meeting'
+import Swal from 'sweetalert2'
 import 'vue3-toastify/dist/index.css'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import Swal from 'sweetalert2'
-import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const emit = defineEmits(['load-home'])
 
@@ -328,7 +328,6 @@ const toTop = () => {
 onMounted(() => {
   window.scrollTo(0, 0)
   emit('load-home')
-  AOS.refresh()
 })
 </script>
 
