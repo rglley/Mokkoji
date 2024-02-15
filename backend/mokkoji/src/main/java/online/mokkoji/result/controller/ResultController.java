@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.result.dto.request.CoverImageReqDto;
 import online.mokkoji.result.dto.request.RecollectionReqDto;
-import online.mokkoji.result.service.PhotomosaicService;
+//import online.mokkoji.result.service.PhotomosaicService;
 import online.mokkoji.s3.S3Service;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.event.dto.response.PhotoResDto;
@@ -37,7 +37,7 @@ public class ResultController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final S3Service s3Service;
-    private final PhotomosaicService photomosaicService;
+//    private final PhotomosaicService photomosaicService;
 
     /**
      * 결과물 리스트 조회
@@ -160,7 +160,7 @@ public class ResultController {
         //로컬 이미지 삭제
         String imagesDirectory = "/opt/result" + File.separator;
 
-        photomosaicService.deleteImages(imagesDirectory);
+//        photomosaicService.deleteImages(imagesDirectory);
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
@@ -237,7 +237,7 @@ public class ResultController {
         log.info("셀 이미지 다운로드 완료");
 
         //photomosaic 생성, 임시 경로에 저장
-        String photomosaic = photomosaicService.createPhotomosaic(resultId);
+//        String photomosaic = photomosaicService.createPhotomosaic(resultId);
 
         //임시 경로에 저장된 포토 모자이크 S3로 업로드
         log.info("S3 업로드 시작");
