@@ -141,7 +141,8 @@ const photoList = () => {
   formDataStore.clearFormData()
 }
 </script>
-<style>
+
+<style scoped>
 .highlight {
   box-shadow: inset 0 -3px 0 #5faeb5;
 }

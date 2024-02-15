@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, defineProps } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import getImages from '@/api/get_images'
 import {
   useMainImageStore,
@@ -291,7 +291,8 @@ onMounted(() => {
   scrollContainer.value.addEventListener('scroll', handleScroll)
 })
 </script>
-<style>
+
+<style scoped>
 .highlight-yellow {
   box-shadow: inset 0 -6px 0 #833c7e;
   color: black;

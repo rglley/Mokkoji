@@ -13,3 +13,5 @@ defineProps({
   tag: { type: String, default: 'li' }
 })
 </script>
+
+<style scoped></style>

@@ -251,7 +251,7 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.3s ease-in-out;

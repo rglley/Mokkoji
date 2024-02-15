@@ -421,6 +421,7 @@ onMounted(() => {
   console.log(currentPage.value)
 })
 </script>
+
 <style scoped>
 * {
   margin: 0;
