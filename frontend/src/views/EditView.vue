@@ -290,19 +290,23 @@
   <!-- 섹션 6/6 올라가기 -->
   <div class="h-[300px] bg-white">
     <div class="flex justify-center items-center">
-      <div>
-        <div class="justify-center flex" @click="scrollToRollingPaper"><IconUpArrowPurple /></div>
+      <div class="w-[600px]"></div>
+      <div class="">
+        <div class="" @click="scrollToRollingPaper"><IconUpArrowPurple /></div>
         <div class="text-slate-500 justify-center flex" @click="scrollToTop">
           <strong>처음으로</strong>
         </div>
       </div>
       <div
-        class="mt-[20vh] opacity-70 border-2 rounded-lg w-40 mx-auto h-9 flex items-center justify-center hover:cursor-pointer hover:opacity-100 effect-button"
+        class="opacity-70 border-2 border-primary2 rounded-lg w-64 mx-auto h-9 hover:cursor-pointer hover:opacity-100 effect-button"
       >
         <a href="/eventlist"
-          ><p class="text-[20px] justify-center ml-2 flex">목록으로 돌아가기</p>
+          ><p class="text-[20px] justify-center items-center flex">
+            행사 목록으로 돌아가기 <IconBackReverse />
+          </p>
         </a>
       </div>
+      <div class="w-[500px]"></div>
     </div>
   </div>
 </template>
@@ -332,6 +336,7 @@ import IconCheckSkyBlue from '@/icons/result/IconCheckSkyBlue.vue'
 import IconCheckBlue from '@/icons/result/IconCheckBlue.vue'
 import Gallery from '@/components/myedit/Gallery.vue'
 import IconQuestionMarkGray from '@/icons/result/IconQuestionMarkGray.vue'
+import IconBackReverse from '@/icons/result/IconBackReverse.vue'
 
 const editMemoryStore = useEditMemory()
 const saveTemplateStore = useSaveTemplate()
@@ -456,11 +461,14 @@ const showSaved = (e) => {
 }
 
 const reloadParent = () => {
+  window.addEventListener('beforeunload', () => {
+    scrollToPhotoMosaic()
+  })
   setTimeout(() => {
     location.reload()
     console.log('reload 완료')
-    scrollToPhotoMosaic()
-  }, 3000)
+  }, 100)
+  // scrollToPhotoMosaic()
 }
 
 //템플릿 저장 Axios
@@ -520,38 +528,38 @@ const selectBackground = (value) => {
 
   switch (value) {
     case 'BASIC':
-      design.value = 'BASIC'
-      rollingPaperTemplate.value.backgroundName = 'BASIC'
+      design.value = 'basic'
+      rollingPaperTemplate.value.backgroundName = 'basic'
       isSelectedBasic.value = true
       isNotSelectedBasic.value = false
       break
     case 'WEDDING':
-      design.value = 'WEDDING'
-      rollingPaperTemplate.value.backgroundName = 'WEDDING'
+      design.value = 'wedding'
+      rollingPaperTemplate.value.backgroundName = 'wedding'
       isSelectedWedding.value = true
       isNotSelectedWedding.value = false
       break
     case 'SCHOOL':
-      design.value = 'SCHOOL'
-      rollingPaperTemplate.value.backgroundName = 'SCHOOL'
+      design.value = 'school'
+      rollingPaperTemplate.value.backgroundName = 'school'
       isSelectedSchool.value = true
       isNotSelectedSchool.value = false
       break
     case 'LUNAR':
-      design.value = 'LUNAR'
-      rollingPaperTemplate.value.backgroundName = 'LUNAR'
+      design.value = 'lunar'
+      rollingPaperTemplate.value.backgroundName = 'lunar'
       isSelectedLunar.value = true
       isNotSelectedLunar.value = false
       break
     case 'BABY':
-      design.value = 'BABY'
-      rollingPaperTemplate.value.backgroundName = 'BABY'
+      design.value = 'baby'
+      rollingPaperTemplate.value.backgroundName = 'baby'
       isSelectedBaby.value = true
       isNotSelectedBaby.value = false
       break
     default:
-      design.value = 'BASIC'
-      rollingPaperTemplate.value.backgroundName = 'BASIC'
+      design.value = 'basic'
+      rollingPaperTemplate.value.backgroundName = 'basic'
       isSelectedBasic.value = true
       isNotSelectedBasic.value = false
   }
@@ -571,38 +579,38 @@ const selectInground = (value) => {
   isNotSelectedPink.value = true
   switch (value) {
     case 'RAINBOW':
-      color.value = 'RAINBOW'
-      rollingPaperTemplate.value.postitName = 'RAINBOW'
+      color.value = 'rainbow'
+      rollingPaperTemplate.value.postitName = 'rainbow'
       isNotSelectedPastel.value = false
       isSelectedPastel.value = true
       break
     case 'GREEN':
-      color.value = 'GREEN'
-      rollingPaperTemplate.value.postitName = 'GREEN'
+      color.value = 'green'
+      rollingPaperTemplate.value.postitName = 'green'
       isNotSelectedGreen.value = false
       isSelectedGreen.value = true
       break
     case 'BLUE':
-      color.value = 'BLUE'
-      rollingPaperTemplate.value.postitName = 'BLUE'
+      color.value = 'blue'
+      rollingPaperTemplate.value.postitName = 'blue'
       isNotSelectedBlue.value = false
       isSelectedBlue.value = true
       break
     case 'PINK':
-      color.value = 'PINK'
-      rollingPaperTemplate.value.postitName = 'PINK'
+      color.value = 'pink'
+      rollingPaperTemplate.value.postitName = 'pink'
       isNotSelectedPink.value = false
       isSelectedPink.value = true
       break
     case 'YELLOW':
-      color.value = 'YELLOW'
-      rollingPaperTemplate.value.postitName = 'YELLOW'
+      color.value = 'yellow'
+      rollingPaperTemplate.value.postitName = 'yellow'
       isNotSelectedYellow.value = false
       isSelectedYellow.value = true
       break
     default:
-      color.value = 'RAINBOW'
-      rollingPaperTemplate.value.postitName = 'RAINBOW'
+      color.value = 'rainbow'
+      rollingPaperTemplate.value.postitName = 'rainbow'
       isNotSelectedPastel.value = false
       isSelectedPastel.value = true
   }
@@ -628,7 +636,7 @@ onMounted(() => {
 }
 
 .effect-button:hover {
-  box-shadow: inset 0 -200px 0 #e7ebff;
+  box-shadow: inset 0 -200px 0 #b0e3e2;
   color: black;
 }
 

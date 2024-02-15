@@ -6,12 +6,7 @@
         <div class="flex justify-center items-center">
           <RecollectionList :key="resultIDStore.getID" :recollection="photocard" />
         </div>
-        <button
-          class="w-[12vw] mx-auto mt-[1vh] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
-          @click="showSucceeded('대표이미지다운')"
-        >
-          대표 이미지 다운로드
-        </button>
+
         <button
           class="w-[12vw] mx-auto mt-[1vh] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
           @click="shareThumbnail()"
@@ -25,64 +20,64 @@
           <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
 
           <img
-            :src="`src/assets/rollingtemplate/${design}.png`"
-            :alt="`template_${design}`"
+            :src="`src/assets/rollingtemplate/${design.toLowerCase().trim()}.png`"
+            :alt="`template_${design.toLowerCase().trim()}`"
             width="450px"
             height="700px"
             class="z-10"
           />
           <img
-            :src="`src/assets/rollingnote/${color}.png`"
-            :alt="`template_${color}`"
+            :src="`src/assets/rollingnote/${color.toLowerCase().trim()}.png`"
+            :alt="`template_${color.toLowerCase().trim()}`"
             class="absolute z-20"
             width="420px"
             height="650px"
           />
         </div>
-        <!-- <div class="z-30 absolute">
+        <div class="z-30 absolute">
           <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[63px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[0].name }}</p>
-            <p class="text-[9px]">{{ msg[0].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[0].writer }}</p>
+            <p class="text-[9px]">{{ msg[0].text }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[63px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[1].name }}</p>
-            <p class="text-[9px]">{{ msg[1].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[1].writer }}</p>
+            <p class="text-[9px]">{{ msg[1].text }}</p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[63px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[2].name }}</p>
-            <p class="text-[9px]">{{ msg[2].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[2].writer }}</p>
+            <p class="text-[9px]">{{ msg[2].text }}</p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[203px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[3].name }}</p>
-            <p class="text-[9px]">{{ msg[3].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[3].writer }}</p>
+            <p class="text-[9px]">{{ msg[3].text }}</p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[203px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[4].name }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[4].writer }}</p>
             <p class="text-[9px]">
-              {{ msg[4].content }}
+              {{ msg[4].text }}
             </p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[203px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[5].name }}</p>
-            <p class="text-[9px]">{{ msg[5].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[5].writer }}</p>
+            <p class="text-[9px]">{{ msg[5].text }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[345px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[6].name }}</p>
-            <p class="text-[9px]">{{ msg[6].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[6].writer }}</p>
+            <p class="text-[9px]">{{ msg[6].text }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[345px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[7].name }}</p>
-            <p class="text-[9px]">{{ msg[7].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[7].writer }}</p>
+            <p class="text-[9px]">{{ msg[7].text }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[345px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[8].name }}</p>
-            <p class="text-[9px]">{{ msg[8].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[8].writer }}</p>
+            <p class="text-[9px]">{{ msg[8].text }}</p>
           </div>
-        </div> -->
+        </div>
         <div class="w-[500px] h-[50px]">
           <PageNavigation
             :current-page="currentPage"
@@ -100,13 +95,13 @@
           </div>
         </div>
         <div class="flex items-center justify-center mt-[3vh]">
-          <button
+          <!-- <button
             class="w-[12vw] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
             @click="downloadPhotomosaic"
           >
             포토 모자이크 다운로드
-          </button>
-          <div class="mx-4"></div>
+          </button> -->
+          <!-- <div class="mx-4"></div> -->
           <button
             class="w-[12vw] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
             @click="sharePhotomosaic"
@@ -188,7 +183,7 @@
   <transition name="modal-fade">
     <div
       v-if="isSaved"
-      class="fixed bottom-[50%] left-[50%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
+      class="fixed bottom-[50%] left-[20%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
     >
       <p class="flex text-[30px]">{{ alertText }}</p>
     </div>
@@ -197,25 +192,27 @@
   <transition name="modal-fade">
     <div
       v-if="isCopyBoard"
-      class="fixed bottom-[50%] left-[10%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
+      class="fixed bottom-[50%] left-[10%] custom-translate rounded-lg bg-white px-14 py-3 z-30"
     >
       <div class="flex">
         <p class="">아래 링크를 공유해주세요.</p>
       </div>
       <p class="flex text-[10px]">{{ shareLink }}</p>
       <div class="flex">
+        <div class="w-[450px]"></div>
         <button
-          class="text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
+          class="ml-16 text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
           @click="copyShare(`${shareLink}`)"
         >
           링크 복사
         </button>
         <button
-          class="text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
+          class="mr-16 text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
           @click="showCopyModal"
         >
           닫기
         </button>
+        <div class="w-[450px]"></div>
       </div>
     </div>
   </transition>
@@ -296,16 +293,13 @@ const showPhotoCard = () => {
 }
 
 const showSucceeded = async (e) => {
-  let mainImgDownload
   isSaved.value = true
   setTimeout(() => {
     isSaved.value = false
   }, 2000)
   switch (e) {
     case '대표이미지다운':
-      mainImgDownload = await downloadThumbnail()
-
-      if (mainImgDownload === 1) {
+      if (downloadThumbnail() === 1) {
         alertText.value = '바탕화면 mokkoji 폴더에 대표이미지가 저장되었어요'
       } else {
         alertText.value = '대표이미지 저장에 실패했어요'
@@ -325,25 +319,17 @@ const copyShare = (shareLink) => {
 
 //대표이미지 다운로드
 const downloadThumbnail = () => {
-  return new Promise((resolve) => {
-    downloadThumbnailStore.DownloadThumbnail(
-      resultIDStore.getID,
-      (res) => {
-        console.log(res)
-        resolve(1)
-      },
-      (error) => {
-        console.log(error)
-        resolve(0)
-      }
-    )
-  })
+  downloadThumbnailStore.DownloadThumbnail(
+    resultIDStore.getID,
+    (res) => {
+      console.log(res)
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
+  return 1
 }
-
-downloadThumbnail().then((result) => {
-  console.log(result)
-  return result
-})
 
 //대표이미지 공유하기
 const shareThumbnail = () => {
@@ -409,8 +395,14 @@ const getResultView = (id) => {
       photocard.value.content = res.data.content
       photocard.value.name = res.data.name
       photomosaic_url.value = res.data.photomosaic
-      totalPage.value = res.data.totalPage + 1
-      msg.value = res.data.messageList
+      totalPage.value = res.data.totalPage
+      msg.value = res.data.messageList.content
+      if (msg.value.length < 9) {
+        for (let i = msg.value.length; i < 9; i++) {
+          msg.value.push(i)
+        }
+      }
+      console.log(msg.value)
       console.log(res)
       console.log(photocard.value.image)
       console.log(photomosaic_url.value)
@@ -424,11 +416,13 @@ const getResultView = (id) => {
 onMounted(() => {
   setTimeout(() => {
     getResultView(resultIDStore.getID)
+  }, 500)
+  setTimeout(() => {
     username.value = $cookies.get('user').name
     isSaved.value = false
     console.log(msg[currentPage.value])
     console.log(currentPage.value)
-  }, 500)
+  }, 1000)
 })
 </script>
 
