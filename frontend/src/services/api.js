@@ -34,7 +34,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (res) => {
     const accessToken = res.headers.get('authorization')
-    const refreshToken = res.headers.get('authorizatoin-Refresh')
+    const refreshToken = res.headers.get('authorization-refresh')
     if (accessToken != null) tokenService.setLocalAccessToken(accessToken)
     if (refreshToken != null) tokenService.setLocalRefreshToken(refreshToken)
 
