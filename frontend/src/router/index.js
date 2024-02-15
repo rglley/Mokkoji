@@ -133,6 +133,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  initFlowbite()
   if (to === '/') {
     AOS.init({
       once: true,

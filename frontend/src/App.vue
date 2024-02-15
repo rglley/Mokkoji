@@ -1,6 +1,6 @@
 <template>
   <main>
-    <TheHeader v-if="!isMeeting" :key="reload" />
+    <TheHeader v-if="!isMeeting"/>
     <RouterView
       @load-home="leaveMeeting"
       @create-meeting="createMeeting"
@@ -18,7 +18,6 @@ import TheFooter from '@/components/common/TheFooter.vue'
 import { RouterView } from 'vue-router'
 
 const isMeeting = ref(false)
-const reload = ref(0)
 
 const createMeeting = () => {
   isMeeting.value = true
@@ -26,7 +25,6 @@ const createMeeting = () => {
 
 const leaveMeeting = () => {
   isMeeting.value = false
-  reload.value = reload.value + 1
 }
 </script>
 
