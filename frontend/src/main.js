@@ -12,8 +12,10 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import AOS from 'aos'
 import App from './App.vue'
 import router from './router/index.js'
+//vue-cookies
 import VueCookies from 'vue-cookies'
 import tokenService from '@/services/token.service'
+//sweetalert
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css';
 

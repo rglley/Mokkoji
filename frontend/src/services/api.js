@@ -1,10 +1,10 @@
 import axios from 'axios'
 import tokenService from '@/services/token.service.js'
-
+// axios base url
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL
 })
-
+// axios request interceptor로 token 또는 refresh-token을 header에 담아 보내줌
 instance.interceptors.request.use(
   (config) => {
     const token = tokenService.getLocalAccessToken()
@@ -17,6 +17,7 @@ instance.interceptors.request.use(
     return config
   },
   (err) => {
+    // err status별 처리
     switch (err.status) {
       case 401:
         alert(err.errorMsg)
@@ -30,7 +31,7 @@ instance.interceptors.request.use(
     return Promise.reject(err)
   }
 )
-
+// axios response interceptor로 받아온 token 또는 refresh-token을 tokenservice로 저장
 instance.interceptors.response.use(
   (res) => {
     const accessToken = res.headers.get('authorization')

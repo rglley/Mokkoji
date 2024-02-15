@@ -162,8 +162,6 @@ import {
 import IconFlowers from '@/icons/result/IconFlowers.vue'
 import IconFlowersColored from '@/icons/result/IconFlowersColored.vue'
 import MemoryList from '@/components/myevent/MemoryList.vue'
-import MemoryData from '@/temp/memory.json'
-import RecollectionData from '@/temp/recollection.json'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 
 const eventListStore = useEventList()

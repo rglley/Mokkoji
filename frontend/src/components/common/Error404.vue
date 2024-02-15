@@ -39,7 +39,7 @@
 
 <script setup>
 import { onMounted, onBeforeMount } from 'vue'
-
+// 페이지 랜딩 시 header 제거 처리 emit
 const emit = defineEmits(['waiting-room']['load-home'])
 
 onMounted(() => {

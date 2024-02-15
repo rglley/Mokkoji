@@ -16,11 +16,6 @@
             >이전</a
           >
         </li>
-        <!-- <div v-for="pg in range(startPage, endPage)" :key="pg">
-        <li :class="currentPage === pg ? 'page-item active' : 'page-item'">
-          <a class="page-item" @click="onPageChange(pg)">{{ pg }}</a>
-        </li>
-      </div> -->
         <div class="justify-center flex items-center px-2">
           <p>{{ currentPage }} / {{ totalPage }}</p>
         </div>
@@ -43,9 +38,15 @@
   </div>
 </template>
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
-const props = defineProps({ currentPage: Number, totalPage: Number })
+const props = defineProps({ currentPage: {
+  type: Number 
+}, 
+  totalPage: {
+    type: Number
+  } 
+})
 const emit = defineEmits(['pageChange'])
 
 const navigationSize = parseInt(1)
@@ -64,22 +65,10 @@ const endRange = computed(() => {
   return parseInt((props.totalPage - 1) / navigationSize) * navigationSize < props.currentPage
 })
 
-function range(start, end) {
-  const list = []
-  for (let i = start; i <= end; i++) list.push(i)
-  return list
-  //   return Array(end - start + 1)
-  //     .fill()
-  //     .map((val, i) => start + i);
-}
-
-function onPageChange(pg) {
+const onPageChange = (pg) => {
   console.log(pg + '로 이동!!!')
   emit('pageChange', pg)
 }
-onMounted(() => {
-  setTimeout(() => {})
-})
 </script>
 
 <style scoped>

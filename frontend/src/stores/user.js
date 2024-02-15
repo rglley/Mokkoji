@@ -8,8 +8,10 @@ export const useUserStore = defineStore('user', () => {
   const email = ref('')
   const image = ref('')
   const isLogin = ref(false)
+  // 로그인 또는 회원가입 후 렌더링 위한 새로고침
   const forceReload = ref(false)
 
+  // tokenservice 연계 로그인 판단 후 정보 가져옴
   const getLoginStatus = () => {
     try {
       const user = tokenService.getUser()
@@ -18,10 +20,11 @@ export const useUserStore = defineStore('user', () => {
       user.image = image.value
       isLogin.value = true
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
+  // 회의 주최 시 계좌번호 받기 위한 메서드
   const getBankAccount = async () => {
     const bank = ref('')
     const accountNumber = ref('')

@@ -72,6 +72,7 @@ const bank = ref('')
 const accountNumber = ref('')
 const email = ref('')
 
+// 수정된 정보 기반 update axios
 const update = () => {
   axios
     .put(import.meta.env.VITE_SERVER + '/users', {
@@ -86,7 +87,7 @@ const update = () => {
         title : '회원정보 수정!',
         icon: 'info',
       })
-      .then((result) => {
+      .then((result) => { // 회원정보 화면으로 이동
         if (result.isConfirmed) {
           router.go(-1);
         }
@@ -96,7 +97,7 @@ const update = () => {
       console.log(err);
     });
 };
-
+// 업로드 사진파일 미리보기
 const getFileName = async (files) => {
   fileName.value = files[0].name
   await base64(files[0])
@@ -114,6 +115,7 @@ const base64 = (file) => {
   })
 }
 
+// 회원 탈퇴 axios 
 // const withdraw = async () => {
 //     try {
 //       await axios.delete(import.meta.env.VITE_SERVER + '/users')
@@ -126,7 +128,7 @@ const base64 = (file) => {
 //     }
 //   }
 
-
+// axios로 회원 세부 정보 가져오기
 onBeforeMount(() => {
   axios
     .get(import.meta.env.VITE_SERVER + '/users/userinfo')

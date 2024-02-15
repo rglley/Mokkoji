@@ -75,43 +75,43 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, watch } from "vue";
-import { initFlowbite } from "flowbite";
-import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
-import ModalView from "@/views/ModalView.vue";
-import LoginModal from "@/components/modal/home/LoginModal.vue";
-import tokenService from "@/services/token.service";
-import Swal from "sweetalert2";
+import { ref, onBeforeMount, watch } from "vue"
+import { initFlowbite } from "flowbite"
+import { useRouter } from "vue-router"
+import { useUserStore } from "@/stores/user"
+import ModalView from "@/views/ModalView.vue"
+import LoginModal from "@/components/modal/home/LoginModal.vue"
+import tokenService from "@/services/token.service"
+import Swal from "sweetalert2"
 
-const router = useRouter();
-const store = useUserStore();
-const isLoginModal = ref(false);
-const isTransparent = ref(false);
-const image = ref("");
-const name = ref("");
-const isLogin = ref(false);
-const limitHeight = 200;
-const dropdownKey = ref(3);
+const router = useRouter() 
+const store = useUserStore() 
+const isLoginModal = ref(false) 
+const isTransparent = ref(false) 
+const image = ref("") 
+const name = ref("") 
+const isLogin = ref(false) 
+const limitHeight = 200 
+const dropdownKey = ref(3) 
 
-initFlowbite();
+initFlowbite() 
 
 // header 홈뷰에서 새로고침
 const reloadPage = () => {
   router.push("/").then(() => {
-    window.location.reload();
-  });
-};
+    window.location.reload() 
+  }) 
+} 
 
 const showLoginModal = () => {
-  isLoginModal.value = !isLoginModal.value;
-};
-
+  isLoginModal.value = !isLoginModal.value 
+} 
+// 스크롤 일정 높이 이상 내려가면 transparent
 const handleScroll = () => {
-  if (scrollY > limitHeight) isTransparent.value = true;
-  if (scrollY < limitHeight) isTransparent.value = false;
-};
-
+  if (scrollY > limitHeight) isTransparent.value = true 
+  if (scrollY < limitHeight) isTransparent.value = false 
+} 
+// 컨펌 후 로그아웃
 const logout = () => {
   Swal.fire({
     title: "로그아웃 하시겠습니까?",
@@ -125,55 +125,65 @@ const logout = () => {
         title: "로그아웃 되었습니다!",
         icon: "info",
       }).then(() => {
-        tokenService.removeUser();
-        isLogin.value = false;
-        store.isLogin = false;
-      });
-      router.push("/");
+        // tokenservice로 cookie 저장된 정보 삭제 + 로그아웃 처리
+        tokenService.removeUser() 
+        isLogin.value = false 
+        store.isLogin = false 
+      }) 
+      router.push("/") 
     }
-  });
-};
+  }) 
+} 
 
 onBeforeMount(() => {
-  window.scrollTo(0, 0);
-  window.addEventListener("scroll", handleScroll);
-  // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 만료 여부 처리
-  if ($cookies.isKey("user")) {
-    if (tokenService.expiredToken($cookies.get("token"))) {
-      $cookies.keys().forEach((cookie) => $cookies.remove(cookie));
-    } else {
-      isLogin.value = true;
-      image.value = $cookies.get("user").image;
-      name.value = $cookies.get("user").name;
+  window.scrollTo(0, 0) 
+  window.addEventListener("scroll", handleScroll) 
+  // 브라우저를 재연결시 이미 쿠키에 저장된 토큰 처리
+  try{
+    if ($cookies.isKey("user")) {
+      // 토큰이 만료되었을 때 cookie에 저장된 모든 정보 제거 후 로그아웃 처리
+      if (tokenService.expiredToken($cookies.get("token"))) {
+        $cookies.keys().forEach((cookie) => $cookies.remove(cookie)) 
+      } else {
+        isLogin.value = true 
+        image.value = $cookies.get("user").image 
+        name.value = $cookies.get("user").name 
+      }
     }
   }
-});
+  // cookie에서 token 가져올때 발생하는 에러 처리
+  catch{
+    console.log(err);
+  }
+}) 
 
 watch(
+  // store에서 새로고침 요청이 들어오면 (로그인 및 회원가입 성공시)
   () => store.forceReload,
   (newValue, oldValue) => {
     if (newValue === true) {
+      // 알림 후 새로고침
       Swal.fire({
         icon: "success",
         title: `환영합니다, ${store.name} 님!`,
       })
       .then((result) => {
         if (result.isConfirmed) {
-          store.forceReload = false;
-          setTimeout(reloadPage, 500);
+          store.forceReload = false 
+          setTimeout(reloadPage, 500) 
         }
       })
     }
   }
-);
+) 
 </script>
 
 <style>
 .transparent-header {
-  @apply opacity-0 transition-opacity duration-500 z-10 pointer-events-none;
+  @apply opacity-0 transition-opacity duration-500 z-10 pointer-events-none 
 }
 
 li {
-  @apply m-[1vw] p-[1vw];
+  @apply m-[1vw] p-[1vw] 
 }
 </style>

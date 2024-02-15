@@ -90,6 +90,7 @@ c223 0 457 -3 519 -7 l112 -6 -2 1319 -3 1319 -519 3 -518 2 6 -357 c12 -711
   </div>
 </template>
 <script setup>
+// .env에서 client id 및 uri import
 const {
   VITE_NAVER_CLIENT_ID,
   VITE_GOOGLE_CLIENT_ID,
@@ -98,23 +99,27 @@ const {
   VITE_GOOGLE_REDIRECT_URI,
   VITE_KAKAO_REDIRECT_URI
 } = import.meta.env
+// 플랫폼 별 request uri href 이동
 const naverApiRequestURI =
   `https://nid.naver.com/oauth2.0/authorize?client_id=` +
   VITE_NAVER_CLIENT_ID +
   '&redirect_uri=' +
   VITE_NAVER_REDIRECT_URI +
   '&state=mokkoji&response_type=code'
+
 const googleApiRequestURI =
   `https://accounts.google.com/o/oauth2/v2/auth?client_id=` +
   VITE_GOOGLE_CLIENT_ID +
   '&redirect_uri=' +
   VITE_GOOGLE_REDIRECT_URI +
   '&state=mokkoji&response_type=code&scope=email profile'
+
 const kakaoApiRequestURI =
   `https://kauth.kakao.com/oauth/authorize?client_id=` +
   VITE_KAKAO_CLIENT_ID +
   '&redirect_uri=' +
   VITE_KAKAO_REDIRECT_URI +
   '&state=mokkoji&response_type=code'
+
 </script>
 <style></style>

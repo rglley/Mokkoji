@@ -225,7 +225,6 @@ import IconLetter from '@/icons/result/IconLetter.vue'
 
 import PageNavigation from '@/components/common/PageNavigation.vue'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
-// import PhotoCard from '@/temp/result/photocard.json'
 
 import { ref, onMounted } from 'vue'
 import {
