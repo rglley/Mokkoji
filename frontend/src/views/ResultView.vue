@@ -188,7 +188,7 @@
   <transition name="modal-fade">
     <div
       v-if="isSaved"
-      class="fixed bottom-[50%] left-[50%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
+      class="fixed bottom-[50%] left-[20%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
     >
       <p class="flex text-[30px]">{{ alertText }}</p>
     </div>
@@ -205,13 +205,13 @@
       <p class="flex text-[10px]">{{ shareLink }}</p>
       <div class="flex">
         <button
-          class="text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
+          class="ml-16 text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
           @click="copyShare(`${shareLink}`)"
         >
           링크 복사
         </button>
         <button
-          class="text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
+          class="mr-16 text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
           @click="showCopyModal"
         >
           닫기
