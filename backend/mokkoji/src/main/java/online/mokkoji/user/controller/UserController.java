@@ -25,7 +25,11 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final JwtUtil jwtService;
 
-    //회원 정보 수정으로 이동
+    /**
+     * 회원 정보 수정으로 이동
+     * @param req 유저 Access Token
+     * @return 업데이트 된 유저 정보
+     */
     @GetMapping("/userinfo")
     public ResponseEntity<UpdatePageResDto> getUserInfo(HttpServletRequest req) {
         String provider = jwtService.getProvider(req);
@@ -36,7 +40,11 @@ public class UserController {
         return new ResponseEntity<>(updatePageResDto, HttpStatus.OK);
     }
 
-    //마이 페이지로 이동
+    /**
+     * 마이 페이지로 이동
+     * @param req 유저 Access Token
+     * @return 유저 정보
+     */
     @GetMapping("/mypage")
     public ResponseEntity<MyPageResDto> getMyPage(HttpServletRequest req) {
         String provider = jwtService.getProvider(req);
@@ -47,6 +55,12 @@ public class UserController {
         return new ResponseEntity<>(myPageResDto, HttpStatus.OK);
     }
 
+    /**
+     * 회원 가입
+     * @param req 유저 Access Token
+     * @param userInputReqDto 회원가입 정보
+     * @return 회원가입된 유저 정보
+     */
     //회원 가입
     @PostMapping
     public ResponseEntity<UserInputReqDto> signUp(HttpServletRequest req,
@@ -60,6 +74,12 @@ public class UserController {
         return new ResponseEntity<>(userInputReqDto, HttpStatus.CREATED);
     }
 
+    /**
+     * 회원 정보 수정
+     * @param req 유저 Access Token
+     * @param modifyDto 유저 수정정보
+     * @return 수정된 유저
+     */
     //회원 정보 수정
     @PutMapping
     public ResponseEntity<UserInputReqDto> editUser(HttpServletRequest req,
@@ -72,7 +92,11 @@ public class UserController {
         return new ResponseEntity<>(modifyDto, HttpStatus.OK);
     }
 
-    //회원 탈퇴
+    /**
+     * 회원 탈퇴
+     * @param req 유저 Access Token
+     * @return 200 코드
+     */
     @DeleteMapping
     public ResponseEntity<User> removeUser(HttpServletRequest req) {
         String provider = jwtService.getProvider(req);
