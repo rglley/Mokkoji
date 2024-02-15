@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.mokkoji.result.dto.request.CoverImageReqDto;
 import online.mokkoji.result.dto.request.RecollectionReqDto;
-import online.mokkoji.result.service.PhotomosaicService;
+//import online.mokkoji.result.service.PhotomosaicService;
 import online.mokkoji.s3.S3Service;
 import online.mokkoji.common.auth.jwt.util.JwtUtil;
 import online.mokkoji.event.dto.response.PhotoResDto;
@@ -158,10 +158,9 @@ public class ResultController {
         Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         //로컬 이미지 삭제
-        String imagesDirectory = System.getProperty("user.home") + File.separator + "Desktop" +
-                File.separator + "mokkoji" + File.separator + resultId;
+        String imagesDirectory = "/opt/result" + File.separator;
 
-        photomosaicService.deleteImages(imagesDirectory);
+//        photomosaicService.deleteImages(imagesDirectory);
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
@@ -217,35 +216,35 @@ public class ResultController {
         return new ResponseEntity<>(downloadUrl, HttpStatus.CREATED);
     }
 
-    /**
-     * 포토모자이크 URL 생성
-     * @param resultId 결과물 ID
-     * @return 포토모자이크 URL
-     */
-    @PutMapping("{resultId}/photomosaic")
-    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId) {
-
-        log.info("포토 모자이크 생성 시작");
-
-        //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
-        String thumbnailPath = resultService.getThumbnailPath(resultId);
-
-
-
-        s3Service.downloadThumbnail(resultId, thumbnailPath);
-        log.info("대표사진 다운로드 완료");
-        s3Service.downloadCellImages(resultId);
-        log.info("셀 이미지 다운로드 완료");
-
-        //photomosaic 생성, 임시 경로에 저장
-        String photomosaic = photomosaicService.createPhotomosaic(resultId);
-
-        //임시 경로에 저장된 포토 모자이크 S3로 업로드
-        log.info("S3 업로드 시작");
-        String photomosaicPath = s3Service.uploadPhotomosaic(photomosaic, resultId);
-        resultService.updatePhotomosaic(resultId, photomosaicPath);
-        log.info("업로드 완료");
-
-        return new ResponseEntity<>(photomosaicPath, HttpStatus.CREATED);
-    }
+//    /**
+//     * 포토모자이크 URL 생성
+//     * @param resultId 결과물 ID
+//     * @return 포토모자이크 URL
+//     */
+//    @PutMapping("{resultId}/photomosaic")
+//    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId) {
+//
+//        log.info("포토 모자이크 생성 시작");
+//
+//        //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
+//        String thumbnailPath = resultService.getThumbnailPath(resultId);
+//
+//
+//
+//        s3Service.downloadThumbnail(resultId, thumbnailPath);
+//        log.info("대표사진 다운로드 완료");
+//        s3Service.downloadCellImages(resultId);
+//        log.info("셀 이미지 다운로드 완료");
+//
+//        //photomosaic 생성, 임시 경로에 저장
+//        String photomosaic = photomosaicService.createPhotomosaic(resultId);
+//
+//        //임시 경로에 저장된 포토 모자이크 S3로 업로드
+//        log.info("S3 업로드 시작");
+//        String photomosaicPath = s3Service.uploadPhotomosaic(photomosaic, resultId);
+//        resultService.updatePhotomosaic(resultId, photomosaicPath);
+//        log.info("업로드 완료");
+//
+//        return new ResponseEntity<>(photomosaicPath, HttpStatus.CREATED);
+//    }
 }
