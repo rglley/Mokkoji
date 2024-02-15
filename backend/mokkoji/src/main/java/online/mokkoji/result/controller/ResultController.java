@@ -40,7 +40,7 @@ public class ResultController {
     private final PhotomosaicService photomosaicService;
 
     /**
-     *
+     * 결과물 리스트 조회
      * @param req 유저 Access Token
      * @return 기억 리스트, 추억 리스트
      */
@@ -53,7 +53,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 선택 결과물의 사진 리스트, 롤링페이퍼 템플릿 조회
      * @param resultId 결과물 ID
      * @return 사진 리스트, 롤링페이퍼 템플릿
      */
@@ -71,7 +71,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 롤링페이퍼 템플릿 업데이트
      * @param resultId 결과물 ID
      * @param rollingPaperReqDto 배경 템플릿, 포스트잇 템플릿
      * @return 완료 안내 텍스트
@@ -87,7 +87,7 @@ public class ResultController {
 
 
     /**
-     *
+     * 사진 추가
      * @param resultId 결과물 ID
      * @param req 유저 Access Token
      * @param photoList 추가하는 사진 파일
@@ -99,7 +99,7 @@ public class ResultController {
                                            HttpServletRequest req,
                                            @RequestParam("photos") List<MultipartFile> photoList) throws IOException {
 
-        User user = userService.getByProviderAndEmail(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
+        User user = userService.searchUser(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         // 사진 업로드
         List<PhotoResDto> photoResDtoList = s3Service.uploadPhotoList(photoList, user.getId(), resultId);
@@ -115,7 +115,7 @@ public class ResultController {
 
 
     /**
-     *
+     * 대표이미지 변경
      * @param resultId 결과물 ID
      * @param coverImageReqDTO 대표이미지 url
      * @return 완료 안내 텍스트
@@ -127,7 +127,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 선택 결과물 정보 조회 TODO : 경배오빠한테 물어보기
      * @param resultId 결과물 ID
      * @param pageable 페이징 페이지 번호
      * @return 결과물-롤링페이퍼, 포토모자이크, 간단 정보
@@ -141,7 +141,7 @@ public class ResultController {
     }
 
     /**
-     * 
+     * 결과물 기억에서 추억으로 변경, 사진 삭제
      * @param resultId 결과물 ID
      * @param recollectionReqDto 추억 제목, 내용 
      * @param req 유저 Access Token
@@ -167,7 +167,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 대표이미지 다운로드
      * @param resultId 결과물 ID
      * @return 201 코드
      */
@@ -180,7 +180,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 포토모자이크 다운로드
      * @param resultId 결과물 ID
      * @return 201 코드
      */
@@ -194,7 +194,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 대표이미지 다운로드 URL 생성
      * @param resultId 결과물 ID
      * @return 대표이미지 다운로드 URL
      */
@@ -206,7 +206,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 포토모자이크 다운로드 URL 생성
      * @param resultId 결과물 ID
      * @return 포토모자이크 다운로드 URL
      */
@@ -218,7 +218,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * 포토모자이크 URL 생성
      * @param resultId 결과물 ID
      * @return 포토모자이크 URL
      */

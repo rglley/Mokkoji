@@ -51,7 +51,7 @@ public class OpenviduController {
 
 
     /**
-     *
+     * 메인 행사 세션 생성
      * @param params 세션 생성 정보
      * @param req 유저 Access Token
      * @return 세션 ID
@@ -63,7 +63,7 @@ public class OpenviduController {
                                               HttpServletRequest req
     ) throws OpenViduJavaClientException, OpenViduHttpException {
 
-        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        User user=userService.searchUser(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
         // request body 객체로 직렬화
         SessionProperties properties = SessionProperties.fromJson(params).build();
@@ -82,7 +82,7 @@ public class OpenviduController {
 
 
     /**
-     *
+     * 메인 세션 정보 조회
      * @param sessionId 조회할 세션 ID
      * @return 세션 정보, 호스트 이름
      * @throws OpenViduJavaClientException
@@ -108,7 +108,7 @@ public class OpenviduController {
 
 
     /**
-     *
+     * 메인 세션 삭제
      * @param sessionId 삭제할 세션 ID
      * @param req 유저 Access Token
      * @param sessionReqDto 회의 최대 참가자 수
@@ -123,7 +123,7 @@ public class OpenviduController {
             throws OpenViduJavaClientException, OpenViduHttpException {
 
 
-        User user=userService.getByProviderAndEmail(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
+        User user=userService.searchUser(jwtUtil.getProvider(req),jwtUtil.getEmail(req));
 
         sessionReqDto.setUserId(user.getId());
 
@@ -140,7 +140,7 @@ public class OpenviduController {
 
 
     /**
-     *
+     * 세션 연결 토큰 생성
      * @param sessionId 연결할 세션 ID
      * @param params 연결 정보
      * @return Connection Token
@@ -167,7 +167,7 @@ public class OpenviduController {
     }
 
     /**
-     *
+     * 소그룹 세션 생성
      * @param params 소그룹 세션 정보(customSessionId==메인 세션의 sessionId)
      * @return 소그룹 sessionId
      * @throws OpenViduJavaClientException
@@ -196,7 +196,7 @@ public class OpenviduController {
     }
 
     /**
-     *
+     * 소그룹 리스트 조회
      * @param sessionId 소그룹 세션 ID
      * @return 소그룹 세션 리스트
      * @throws OpenViduJavaClientException
