@@ -4,7 +4,7 @@
       <!-- 추억 결과물 카드 -->
       <div class="mt-[10vh]" v-if="isPhotoCardResult">
         <div class="flex justify-center items-center">
-          <RecollectionList :key="resultIDStore.getID" :recollection="photocard" />
+          <RecollectionList :key="`${route.params.resultId}`" :recollection="photocard" />
         </div>
 
         <button
@@ -20,15 +20,15 @@
           <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
 
           <img
-            :src="`src/assets/rollingtemplate/${design.toLowerCase().trim()}.png`"
-            :alt="`template_${design.toLowerCase().trim()}`"
+            :src="`src/assets/rollingtemplate/${design}.png`"
+            :alt="`template_${design}`"
             width="450px"
             height="700px"
             class="z-10"
           />
           <img
-            :src="`src/assets/rollingnote/${color.toLowerCase().trim()}.png`"
-            :alt="`template_${color.toLowerCase().trim()}`"
+            :src="`@/assets/rollingnote/${color}.png`"
+            :alt="`template_${color}`"
             class="absolute z-20"
             width="420px"
             height="650px"
@@ -39,17 +39,17 @@
             <p class="text-center text-[8px] mb-1">From {{ msg[0].writer }}</p>
             <p class="text-[9px]">{{ msg[0].text }}</p>
           </div>
-          <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[63px]">
+          <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[203px]">
             <p class="text-center text-[8px] mb-1">From {{ msg[1].writer }}</p>
             <p class="text-[9px]">{{ msg[1].text }}</p>
           </div>
 
-          <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[63px]">
+          <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[345px]">
             <p class="text-center text-[8px] mb-1">From {{ msg[2].writer }}</p>
             <p class="text-[9px]">{{ msg[2].text }}</p>
           </div>
 
-          <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[203px]">
+          <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[63px]">
             <p class="text-center text-[8px] mb-1">From {{ msg[3].writer }}</p>
             <p class="text-[9px]">{{ msg[3].text }}</p>
           </div>
@@ -61,15 +61,15 @@
             </p>
           </div>
 
-          <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[203px]">
+          <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[345px]">
             <p class="text-center text-[8px] mb-1">From {{ msg[5].writer }}</p>
             <p class="text-[9px]">{{ msg[5].text }}</p>
           </div>
-          <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[345px]">
+          <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[63px]">
             <p class="text-center text-[8px] mb-1">From {{ msg[6].writer }}</p>
             <p class="text-[9px]">{{ msg[6].text }}</p>
           </div>
-          <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[345px]">
+          <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[203px]">
             <p class="text-center text-[8px] mb-1">From {{ msg[7].writer }}</p>
             <p class="text-[9px]">{{ msg[7].text }}</p>
           </div>
@@ -116,7 +116,7 @@
     <div class="h-[100vh] w-[40vw] justify-center items-center" ref="top">
       <div class="text-[20px] justify-center items-center flex pt-[20vh]">
         <strong
-          ><p class="effect-black flex">{{ photocard.name }}님의 추억 결과물</p>
+          ><p class="effect-black flex">{{ username }}님의 추억 결과물</p>
         </strong>
       </div>
       <div class="pt-[6vh]">
@@ -199,7 +199,7 @@
       </div>
       <p class="flex text-[10px]">{{ shareLink }}</p>
       <div class="flex">
-        <div class="w-[450px]"></div>
+        <div class="w-[300px]"></div>
         <button
           class="ml-16 text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
           @click="copyShare(`${shareLink}`)"
@@ -212,7 +212,7 @@
         >
           닫기
         </button>
-        <div class="w-[450px]"></div>
+        <div class="w-[300px]"></div>
       </div>
     </div>
   </transition>
@@ -223,14 +223,13 @@ import IconHeart from '@/icons/result/IconHeart.vue'
 import IconPeople from '@/icons/result/IconPeople.vue'
 import IconClose from '@/icons/result/IconClose.vue'
 import IconLetter from '@/icons/result/IconLetter.vue'
-
+import { useRoute } from 'vue-router'
 import PageNavigation from '@/components/common/PageNavigation.vue'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 
 import { ref, onMounted } from 'vue'
 import {
   useRecollection,
-  useResultIDStore,
   useUserNameStore,
   useDownloadThumbnail,
   useDownloadPhotomosaic,
@@ -238,8 +237,11 @@ import {
   useSharePhotomosaic
 } from '@/stores/result.js'
 
+const route = useRoute()
+
 //추억 카드 데이터
 const photocard = ref({
+  resultId: 0,
   name: '',
   content: '',
   image: ''
@@ -248,9 +250,9 @@ const msg = ref([])
 const currentPage = ref(1)
 const totalPage = ref(1)
 const alertText = ref('')
-const design = ref('')
+const design = ref('basic')
 const username = ref('')
-const color = ref('')
+const color = ref('rainbow')
 const participantCount = ref(0)
 const letterCount = ref(0)
 
@@ -258,7 +260,7 @@ const shareLink = ref('')
 const photomosaic_url = ref('')
 
 const recollectionStore = useRecollection()
-const resultIDStore = useResultIDStore()
+
 const userNameStore = useUserNameStore()
 const downloadThumbnailStore = useDownloadThumbnail()
 const downloadPhotomosaicStore = useDownloadPhotomosaic()
@@ -320,7 +322,7 @@ const copyShare = (shareLink) => {
 //대표이미지 다운로드
 const downloadThumbnail = () => {
   downloadThumbnailStore.DownloadThumbnail(
-    resultIDStore.getID,
+    photocard.value.resultId,
     (res) => {
       console.log(res)
     },
@@ -334,7 +336,7 @@ const downloadThumbnail = () => {
 //대표이미지 공유하기
 const shareThumbnail = () => {
   shareImageStore.ShareImage(
-    resultIDStore.getID,
+    photocard.value.resultId,
     (res) => {
       console.log(res)
       shareLink.value = res.data
@@ -350,7 +352,7 @@ const shareThumbnail = () => {
 //포토모자이크 다운로드 Axios
 const downloadPhotomosaic = () => {
   downloadPhotomosaicStore.DownloadPhotomosaic(
-    resultIDStore.getID,
+    photocard.value.resultId,
     (res) => {
       console.log(res)
     },
@@ -363,7 +365,7 @@ const downloadPhotomosaic = () => {
 //포토모자이크 공유 Axios
 const sharePhotomosaic = () => {
   sharePhotomosaicStore.SharePhotomosaic(
-    resultIDStore.getID,
+    photocard.value.resultId,
     (res) => {
       console.log(res)
     },
@@ -377,7 +379,7 @@ const onPageChange = (val) => {
   console.log(val + '번 페이지로 이동 준비 끝!!!')
   currentPage.value = val
   setTimeout(() => {
-    getResultView(resultIDStore.getID)
+    getResultView(photocard.value.resultId)
   }, 500)
 }
 //결과물 페이지 Axios
@@ -387,8 +389,8 @@ const getResultView = (id) => {
     id,
     currentPage.value,
     (res) => {
-      design.value = res.data.backgroundTemplate
-      color.value = res.data.postitTemplate
+      design.value = res.data.backgroundTemplate.toLowerCase()
+      color.value = res.data.postitTemplate.toLowerCase()
       participantCount.value = res.data.participantCount
       letterCount.value = res.data.messageCount
       photocard.value.image = res.data.thumbnail
@@ -404,6 +406,8 @@ const getResultView = (id) => {
       }
       console.log(msg.value)
       console.log(res)
+      console.log(design.value)
+      console.log(color.value.toLowerCase().trim())
       console.log(photocard.value.image)
       console.log(photomosaic_url.value)
     },
@@ -414,13 +418,16 @@ const getResultView = (id) => {
 }
 
 onMounted(() => {
-  setTimeout(() => {
-    getResultView(resultIDStore.getID)
-  }, 500)
+  console.log(route.params.resultId)
+  photocard.value.resultId = route.params.resultId
+  getResultView(photocard.value.resultId)
+  // setTimeout(() => {
+  //   getResultView(photocard.value.resultId)
+  // }, 500)
   setTimeout(() => {
     username.value = $cookies.get('user').name
     isSaved.value = false
-    console.log(msg[currentPage.value])
+
     console.log(currentPage.value)
   }, 1000)
 })
