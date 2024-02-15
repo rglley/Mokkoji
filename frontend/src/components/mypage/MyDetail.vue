@@ -60,7 +60,7 @@
 import { ref, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
-import Swal from 'vue-sweetalert2'
+import Swal from 'sweetalert2'
 
 const router = useRouter()
 
@@ -82,14 +82,18 @@ const update = () => {
       email : email.value
     })
     .then(() => {
-      Swal.file({
+      Swal.fire({
         title : '회원정보 수정!',
         icon: 'info',
       })
-      router.go(-1);
+      .then((result) => {
+        if (result.isConfirmed) {
+          router.go(-1);
+        }
+      })
     })
     .catch((err) => {
-      alert(err);
+      console.log(err);
     });
 };
 

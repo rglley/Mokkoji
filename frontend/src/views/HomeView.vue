@@ -256,7 +256,7 @@ const submitConferenceId = async () => {
   if (result === 'success') {
     isInputError.value = false
     
-    if ($cookies.get('user') !== null) {
+    if ($cookies.get('user') !== undefined) {
       router.push('/meetings')
     } else {
       Swal.fire({
