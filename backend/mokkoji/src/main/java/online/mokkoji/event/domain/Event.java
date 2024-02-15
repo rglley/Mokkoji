@@ -24,7 +24,7 @@ import static online.mokkoji.event.domain.EventStatus.*;
 @AllArgsConstructor
 @DynamicInsert
 @ToString(of = {"id", "participantCount", "status", "startTime", "endTime"})
-public class Event extends BaseEntity {
+public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
