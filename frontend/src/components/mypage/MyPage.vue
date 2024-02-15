@@ -1,14 +1,14 @@
 <template>
   <div
     class="flex mt-0 w-full flex-col justify-center items-center px-16 py-12 max-md:max-w-full max-md:px-5"
-    id="main-gradient"
+    id="main-gradient2"
   >
     <div id="card-div">
-      <div class="absolute -mt-28 mx-10 justify-center">
+      <div class="absolute -mt-24 mx-4 justify-center">
         <img alt="프로필 사진" id="image-profile" :src="userData.image" />
       </div>
       <div class="gap-4 flex max-md:flex-col max-md:gap-2 mt-20">
-        <div class="flex flex-col w-6/12 ml-10">
+        <div class="flex flex-col items-center w-5/12 ml-5">
           <span class="flex flex-col mt-10 max-md:mt-10"
             ><div class="text-3xl font-bold">{{ userData.name }}님</div>
           </span>
@@ -19,7 +19,7 @@
               <a class="text-2xl text-red-500" v-text="userData.accountRegistered ? 'O' : 'X'" />
             </div>
           </span>
-          <div class="text-sm font-light m-2 max-w-[24lvh] mt-5 whitespace-wrap text-center">
+          <div class="text-sm font-light max-w-[24lvh] mt-5 whitespace-wrap text-center">
             계좌를 등록하시면 참가자들의 마음을 받을 수 있어요
           </div>
           <button
