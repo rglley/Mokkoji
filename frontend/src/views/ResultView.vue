@@ -383,7 +383,9 @@ const sharePhotomosaic = () => {
 const onPageChange = (val) => {
   console.log(val + '번 페이지로 이동 준비 끝!!!')
   currentPage.value = val
-  getResultView(resultIDStore.getID)
+  setTimeout(() => {
+    getResultView(resultIDStore.getID)
+  }, 500)
 }
 //결과물 페이지 Axios
 const getResultView = (id) => {
@@ -413,11 +415,13 @@ const getResultView = (id) => {
 }
 
 onMounted(() => {
-  getResultView(resultIDStore.getID)
-  username.value = userNameStore.getName
-  isSaved.value = false
-  console.log(msg[currentPage.value])
-  console.log(currentPage.value)
+  setTimeout(() => {
+    getResultView(resultIDStore.getID)
+    username.value = $cookies.get('user').name
+    isSaved.value = false
+    console.log(msg[currentPage.value])
+    console.log(currentPage.value)
+  }, 500)
 })
 </script>
 
