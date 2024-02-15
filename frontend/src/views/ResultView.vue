@@ -224,7 +224,6 @@ import IconClose from '@/icons/result/IconClose.vue'
 import IconLetter from '@/icons/result/IconLetter.vue'
 
 import PageNavigation from '@/components/common/PageNavigation.vue'
-import RollingPaperItem from '@/components/myresult/RollingPaperItem.vue'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 // import PhotoCard from '@/temp/result/photocard.json'
 
