@@ -336,7 +336,7 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .swiper-pagination-bullet {
   @apply size-[0.6lvw] bg-white;
 }
