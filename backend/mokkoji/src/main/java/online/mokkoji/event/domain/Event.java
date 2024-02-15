@@ -3,7 +3,6 @@ package online.mokkoji.event.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import online.mokkoji.common.domain.BaseEntity;
 import online.mokkoji.common.exception.RestApiException;
 import online.mokkoji.common.exception.errorcode.EventErrorCode;
 import online.mokkoji.openvidu.dto.request.SessionReqDto;

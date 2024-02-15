@@ -2,8 +2,6 @@ package online.mokkoji.user.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import online.mokkoji.common.domain.BaseEntity;
-import online.mokkoji.user.domain.User;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity

@@ -3,7 +3,6 @@ package online.mokkoji.user.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import online.mokkoji.common.domain.BaseEntity;
 import online.mokkoji.event.domain.Event;
 import online.mokkoji.result.domain.Result;
 

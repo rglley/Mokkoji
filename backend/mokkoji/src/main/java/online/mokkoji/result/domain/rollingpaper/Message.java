@@ -3,9 +3,6 @@ package online.mokkoji.result.domain.rollingpaper;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
-import online.mokkoji.common.domain.BaseEntity;
-
-import java.io.Serializable;
 
 @Getter
 @Entity
