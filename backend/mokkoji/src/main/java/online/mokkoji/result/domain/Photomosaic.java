@@ -4,10 +4,11 @@ package online.mokkoji.result.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import online.mokkoji.common.domain.BaseEntity;
 
 @Entity
 @Getter
-public class Photomosaic {
+public class Photomosaic extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

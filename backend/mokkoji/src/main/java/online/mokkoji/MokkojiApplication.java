@@ -10,7 +10,7 @@ import java.io.File;
 @SpringBootApplication
 public class MokkojiApplication {
     static {
-        String libPath = System.getProperty("user.dir") + File.separator + "mokkoji" + File.separator + "libs" + File.separator + "opencv_java490.dll";
+        String libPath = System.getProperty("user.dir") + File.separator + "libs" + File.separator + "opencv_java490.dll";
         System.load(libPath);
     }
     public static void main(String[] args) {
