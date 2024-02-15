@@ -26,6 +26,14 @@ public class OAuth2Controller {
 
     private final OAuth2ServiceImpl oAuth2Service;
 
+    /**
+     * 소셜 로그인, redirect 이후 유저 정보 반환
+     * @param provider 소셜 도메인
+     * @param code authorization code
+     * @param res header에 토큰 전송
+     * @return UserInfoResDto 소셜 회원 정보
+     * @throws Exception
+     */
     @GetMapping("/{provider}")
     public ResponseEntity<UserInfoResDto> getUserInfo(@PathVariable String provider, @RequestParam String code,
                                                       HttpServletResponse res) throws Exception {

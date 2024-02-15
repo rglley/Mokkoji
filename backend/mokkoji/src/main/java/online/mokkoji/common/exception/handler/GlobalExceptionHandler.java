@@ -16,8 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-//전역적으로 에러를 처리해주는 클래스
 @RestControllerAdvice(basePackages = "online.mokkoji")
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {

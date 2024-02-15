@@ -34,6 +34,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+    //authorizationCode로 소셜 accessToken 발급 요청 생성
     @Override
     public HttpEntity<MultiValueMap<String, String>> generateTokenReq(String provider, String authorizationCode) {
         HttpHeaders headers = new HttpHeaders();
@@ -44,8 +45,8 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         params.add("code", authorizationCode);
         params.add("state", "mokkoji");
 
+        //소셜 도메인 별 필요 정보 구분
         if(provider.equals("naver")) {
-            log.info("네이버 파람 추가");
             params.add("client_id", oAuth2Config.getNaverId());
             params.add("client_secret", oAuth2Config.getNaverSecret());
         }
@@ -65,6 +66,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         return new HttpEntity<>(params, headers);
     }
 
+    //헤더에 accessToken을 담은 프로필 정보 요청 생성
     @Override
     public HttpEntity<MultiValueMap<String, String>> generateProfileReq(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
@@ -72,6 +74,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         return new HttpEntity<>(headers);
     }
 
+    //소셜 로그인 회원 정보 저장
     @Override
     public Map<String, Object> getUserInfo(String provider, String authorizationCode) throws Exception {
         if(authorizationCode == null)
@@ -80,6 +83,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         String tokenUrl = "";
         String profileUrl = "";
 
+        //소셜 도메인 별 요청 url 구분
         if(provider.equals("naver")) {
             tokenUrl = oAuth2Config.getNaverTokenUrl();
             profileUrl = oAuth2Config.getNaverProfileUrl();
@@ -95,6 +99,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
         HttpEntity<MultiValueMap<String, String>> tokenRequest = generateTokenReq(provider, authorizationCode);
 
+        //RestTemplate을 사용해 요청 전송, access token 반환
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> tokenResponse = restTemplate.exchange(
                 tokenUrl, HttpMethod.POST, tokenRequest, String.class
@@ -109,6 +114,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
         HttpEntity<MultiValueMap<String, String>> profileRequest = generateProfileReq(accessToken);
 
+        //RestTemplate을 사용해 요청 전송, 프로필 정보 반환
         restTemplate = new RestTemplate();
         ResponseEntity<String> profileResponse = restTemplate.exchange(
                 profileUrl, HttpMethod.POST, profileRequest, String.class
@@ -121,6 +127,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         String image = "";
         String jwtAccessToken = "";
 
+        //도메인 별 JSON 정보 접근 구분, provider가 담긴 자체 jwt 토큰 생성
         if(provider.equals("naver")) {
             email = profileJSON.path("response").path("email").asText();
             name = profileJSON.path("response").path("name").asText();
@@ -143,9 +150,11 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
         resultMap.put("accessToken", jwtAccessToken);
 
+        //최초 로그인 구분을 위한 DB 조회
         Optional<User> findUser = userRepository.findByProviderAndEmail(Provider.valueOf(provider.toUpperCase()), email);
 
         if(findUser.isEmpty()) {
+            //최초 로그인이면 Guest 유저 생성, 유저 정보 반환
             User newUser = User.builder()
                     .provider(Provider.valueOf(provider.toUpperCase()))
                     .email(email)
@@ -162,6 +171,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             return resultMap;
         }
 
+        //기존 회원 로그인이면 refreshToken 재발급, 유저 정보 반환
         String refreshToken = jwtUtil.createRefreshToken();
 
         User loginUser = findUser.get();

@@ -223,16 +223,16 @@ public class ResultController {
      */
 //    @PutMapping("{resultId}/photomosaic")
 //    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId) {
-//        //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
+//        //S3에 저장된 thumbnail, images 다운로드
 //        String thumbnailPath = resultService.getThumbnailPath(resultId);
 //
 //        s3Service.downloadThumbnail(resultId, thumbnailPath);
 //        s3Service.downloadCellImages(resultId);
 //
-//        //photomosaic 생성, 임시 경로에 저장
+//        //photomosaic 생성, 로컬에 저장
 //        String photomosaic = photomosaicService.createPhotomosaic(resultId);
 //
-//        //임시 경로에 저장된 포토 모자이크 S3로 업로드
+//        //로컬에 저장된 포토 모자이크 S3로 업로드
 //        String photomosaicPath = s3Service.uploadPhotomosaic(photomosaic, resultId);
 //        resultService.updatePhotomosaic(resultId, photomosaicPath);
 //
