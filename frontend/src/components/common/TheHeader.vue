@@ -4,9 +4,9 @@
     class="fixed h-[10vh] z-10 my-auto w-full bg-transparent"
   >
     <nav class="w-full flex items-center px-[2vw]">
-      <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse cursor-grab">
+      <a href="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse cursor-grab">
         <img src="@/assets/logo/mokkoji_logo.png" class="w-[8vw]" alt="모꼬지 로고" />
-      </router-link>
+      </a>
 
       <div class="ml-auto self-center relative">
         <ul class="font-medium flex md:flex-row">
