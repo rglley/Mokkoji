@@ -35,12 +35,12 @@
             >
               <div class="flex justify-center items-center rounded-full mr-[2lvw]">
                 <img
-                  class="overflow-hidden rounded-full w-[7vh] m-0 mr-[1vw]"
+                  class="overflow-hidden rounded-full w-[7vh] h-[7vh] m-0 mr-[1vw]"
                   :src="image"
                 />
                 <p class="text-black text-[2.5vh]">{{ name }}님</p>
               </div>
-              <div class="relative inline-block m-0 items-center ">
+              <div class="relative inline-block m-0 items-center pt-[0.5vh]">
                 <button id="button-header" class="" @click="showDropdown">내 서비스</button>
                 <div
                   id="dropdown"
@@ -83,8 +83,8 @@ const router = useRouter();
 const store = useUserStore();
 const isLoginModal = ref(false);
 const isTransparent = ref(false);
-const image = ref("@/assets/logo/mokkoji_logo.png");
-const name = ref("qqq");
+const image = ref("");
+const name = ref("");
 const isLogin = ref(false);
 const limitHeight = 200;
 
