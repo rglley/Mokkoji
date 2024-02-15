@@ -8,13 +8,13 @@
         </div>
         <button
           class="w-[12vw] mx-auto mt-[1vh] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
-          @click="downloadThumbnail"
+          @click="showSucceeded('대표이미지다운')"
         >
           대표 이미지 다운로드
         </button>
         <button
           class="w-[12vw] mx-auto mt-[1vh] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
-          @click="shareThumbnail"
+          @click="shareThumbnail()"
         >
           대표 이미지 공유하기
         </button>
@@ -25,14 +25,14 @@
           <p class="absolute z-20 text-[30px] pb-[500px]">{{ username }}님의 추억조각</p>
 
           <img
-            :src="`src/assets/rollingtemplate/wedding.png`"
+            :src="`src/assets/rollingtemplate/${design}.png`"
             :alt="`template_${design}`"
             width="450px"
             height="700px"
             class="z-10"
           />
           <img
-            :src="`src/assets/rollingnote/rainbow.png`"
+            :src="`src/assets/rollingnote/${color}.png`"
             :alt="`template_${color}`"
             class="absolute z-20"
             width="420px"
@@ -41,46 +41,46 @@
         </div>
         <div class="z-30 absolute">
           <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[63px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][0].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][0].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[0].name }}</p>
+            <p class="text-[9px]">{{ msg[0].content }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[63px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][1].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][1].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[1].name }}</p>
+            <p class="text-[9px]">{{ msg[1].content }}</p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[63px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][2].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][2].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[2].name }}</p>
+            <p class="text-[9px]">{{ msg[2].content }}</p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[203px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][3].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][3].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[3].name }}</p>
+            <p class="text-[9px]">{{ msg[3].content }}</p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[203px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][4].name }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[4].name }}</p>
             <p class="text-[9px]">
-              {{ msg[currentPage - 1][4].content }}
+              {{ msg[4].content }}
             </p>
           </div>
 
           <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[203px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][5].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][5].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[5].name }}</p>
+            <p class="text-[9px]">{{ msg[5].content }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[380px] left-[345px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][6].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][6].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[6].name }}</p>
+            <p class="text-[9px]">{{ msg[6].content }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[235px] left-[345px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][7].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][7].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[7].name }}</p>
+            <p class="text-[9px]">{{ msg[7].content }}</p>
           </div>
           <div class="absolute w-[100px] h-[100px] bottom-[90px] left-[345px]">
-            <p class="text-center text-[8px] mb-1">From {{ msg[currentPage - 1][8].name }}</p>
-            <p class="text-[9px]">{{ msg[currentPage - 1][8].content }}</p>
+            <p class="text-center text-[8px] mb-1">From {{ msg[8].name }}</p>
+            <p class="text-[9px]">{{ msg[8].content }}</p>
           </div>
         </div>
         <div class="w-[500px] h-[50px]">
@@ -95,7 +95,9 @@
 
       <div class="mt-[7vh]" v-if="isPhotomosaicResult">
         <div class="flex justify-center items-center">
-          <div class="w-[500px] h-[500px] border-2 border-black"></div>
+          <div class="w-[500px] h-[500px] border-2 border-black">
+            <img :src="`${photomosaic_url}`" width="500px" height="500px" />
+          </div>
         </div>
         <div class="flex items-center justify-center mt-[3vh]">
           <button
@@ -185,18 +187,44 @@
       </div>
     </div>
   </div>
+  <!-- 재확인 모달 ex. 저장되었습니다 -->
+  <transition name="modal-fade">
+    <div
+      v-if="isSaved"
+      class="fixed bottom-[50%] left-[50%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
+    >
+      <p class="flex text-[30px]">{{ alertText }}</p>
+    </div>
+  </transition>
+  <!--- 클립보드 복사 모달 -->
+  <transition name="modal-fade">
+    <div
+      v-if="isCopyBoard"
+      class="fixed bottom-[50%] left-[50%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
+    >
+      <div class="flex">
+        <p class="">아래 링크를 공유해주세요.</p>
+        <button class="ml-[450px]" @click="showCopyModal"><IconClose /></button>
+      </div>
+      <p class="flex text-[10px]">{{ shareLink }}</p>
+      <button
+        class="text-[10px] rounded-lg border-2 border-solid border-pink-300 p-[1px] px-[2px] mt-1 mx-auto bg-pink-300 text-white"
+        @click="copyShare(`${shareLink}`)"
+      >
+        링크 복사
+      </button>
+    </div>
+  </transition>
 </template>
 <script setup>
 import IconGift from '@/icons/result/IconGift.vue'
 import IconHeart from '@/icons/result/IconHeart.vue'
 import IconPeople from '@/icons/result/IconPeople.vue'
-import IconPhoto from '@/icons/result/IconPhoto.vue'
+import IconClose from '@/icons/result/IconClose.vue'
 import IconLetter from '@/icons/result/IconLetter.vue'
-import msg from '@/temp/result/messages.json'
+
 import PageNavigation from '@/components/common/PageNavigation.vue'
-import RollingPaperItem from '@/components/myresult/RollingPaperItem.vue'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
-// import PhotoCard from '@/temp/result/photocard.json'
 
 import { ref, onMounted } from 'vue'
 import {
@@ -216,10 +244,10 @@ const photocard = ref({
   content: '',
   image: ''
 })
-
+const msg = ref([])
 const currentPage = ref(1)
 const totalPage = ref(8)
-
+const alertText = ref('')
 const recollectionStore = useRecollection()
 const resultIDStore = useResultIDStore()
 const userNameStore = useUserNameStore()
@@ -232,6 +260,10 @@ const username = ref('')
 const color = ref('')
 const participantCount = ref(0)
 const letterCount = ref(0)
+const isSaved = ref(false)
+const isCopyBoard = ref(false)
+const shareLink = ref('')
+const photomosaic_url = ref('')
 // const currentPage = ref(1)
 // const totalPage = ref(0)
 
@@ -239,6 +271,9 @@ const isRollingPaperResult = ref(false)
 const isPhotomosaicResult = ref(false)
 const isPhotoCardResult = ref(true)
 
+const showCopyModal = () => {
+  isCopyBoard.value = false
+}
 const showRollingPaper = () => {
   isRollingPaperResult.value = true
   isPhotomosaicResult.value = false
@@ -257,11 +292,62 @@ const showPhotoCard = () => {
   isPhotoCardResult.value = true
 }
 
+const showSucceeded = async (e) => {
+  let mainImgDownload
+  isSaved.value = true
+  setTimeout(() => {
+    isSaved.value = false
+  }, 2000)
+  switch (e) {
+    case '대표이미지다운':
+      mainImgDownload = await downloadThumbnail()
+
+      if (mainImgDownload === 1) {
+        alertText.value = '바탕화면 mokkoji 폴더에 대표이미지가 저장되었어요'
+      } else {
+        alertText.value = '대표이미지 저장에 실패했어요'
+      }
+      break
+    case '복사성공':
+      isCopyBoard.value = false
+      alertText.value = '클립보드에 복사되었습니다.'
+  }
+}
+
+const copyShare = (shareLink) => {
+  navigator.clipboard.writeText(shareLink)
+  showSucceeded('복사성공')
+}
+
 const downloadThumbnail = () => {
-  downloadThumbnailStore.DownloadThumbnail(
+  return new Promise((resolve) => {
+    downloadThumbnailStore.DownloadThumbnail(
+      resultIDStore.getID,
+      (res) => {
+        console.log(res)
+        resolve(1)
+      },
+      (error) => {
+        console.log(error)
+        resolve(0)
+      }
+    )
+  })
+}
+
+downloadThumbnail().then((result) => {
+  console.log(result)
+  return result
+})
+
+const shareThumbnail = () => {
+  shareImageStore.ShareImage(
     resultIDStore.getID,
     (res) => {
       console.log(res)
+      shareLink.value = res.data
+      isCopyBoard.value = true
+      console.log(shareLink.value)
     },
     (error) => {
       console.log(error)
@@ -271,18 +357,6 @@ const downloadThumbnail = () => {
 
 const downloadPhotomosaic = () => {
   downloadPhotomosaicStore.DownloadPhotomosaic(
-    resultIDStore.getID,
-    (res) => {
-      console.log(res)
-    },
-    (error) => {
-      console.log(error)
-    }
-  )
-}
-
-const shareThumbnail = () => {
-  shareImageStore.ShareImage(
     resultIDStore.getID,
     (res) => {
       console.log(res)
@@ -308,6 +382,7 @@ const sharePhotomosaic = () => {
 const onPageChange = (val) => {
   console.log(val + '번 페이지로 이동 준비 끝!!!')
   currentPage.value = val
+  getResultView(resultIDStore.getID)
   // param.value.pgno = val
   // getHotArticleList()
 }
@@ -315,7 +390,7 @@ const getResultView = (id) => {
   console.log(`행사번호 ${id}의 result view 불러오기`)
   recollectionStore.RecollectionData(
     id,
-    0,
+    currentPage.value,
     (res) => {
       design.value = res.data.backgroundTemplate
       color.value = res.data.postitTemplate
@@ -324,7 +399,12 @@ const getResultView = (id) => {
       photocard.value.image = res.data.thumbnail
       photocard.value.content = res.data.content
       photocard.value.name = res.data.name
+      photomosaic_url.value = res.data.photomosaic
+      totalPage.value = res.data.totalPage
+      msg.value = res.data.messageList
       console.log(res)
+      console.log(photocard.value.image)
+      console.log(photomosaic_url.value)
     },
     (error) => {
       console.log(error)
@@ -335,6 +415,7 @@ const getResultView = (id) => {
 onMounted(() => {
   getResultView(resultIDStore.getID)
   username.value = userNameStore.getName
+  isSaved.value = false
   console.log(msg[0][0].name)
   console.log(msg[0][0].content)
   console.log(msg[currentPage.value])

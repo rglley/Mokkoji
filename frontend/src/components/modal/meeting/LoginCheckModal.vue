@@ -1,7 +1,6 @@
 <template>
   <div class="fixed w-[30%] h-[50%] left-[35%]">
     <div
-      id="gift-container"
       class="px-[5vh] h-[100%] bg-purple-100 flex flex-col justify-center items-center rounded-r-lg"
     >
       <div class="mb-[3vh] font-bold text-r-lg underline decoration-[1vh] decoration-purple-400/50">
@@ -26,10 +25,10 @@
         </button>
       </div>
     </div>
+    <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
+      <LoginModal />
+    </ModalView>
   </div>
-  <ModalView v-if="isLoginModal" :show-modal="isLoginModal" @close-modal="showLoginModal">
-    <LoginModal />
-  </ModalView>
 </template>
 
 <script setup>
@@ -37,7 +36,7 @@ import { ref } from 'vue'
 import ModalView from '@/views/ModalView.vue'
 import LoginModal from '@/components/modal/home/LoginModal.vue'
 
-const emit = defineEmits('remove-login-check-modal')
+defineEmits(['remove-login-check-modal'])
 
 const isLoginModal = ref(false)
 

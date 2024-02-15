@@ -1,15 +1,15 @@
 <template>
-  <div class="w-80 items-center m-5 flex flex-col gap-2 mb-16">
+  <div class="w-80 items-center m-5 flex flex-col gap-4 mb-16 p-5">
     <img
       src="@/assets/logo/mokkoji_logo.png"
-      class="w-24 p-2 m-2 mb-4 border-2 rounded-2xl border-primary bg-natural-beige shadow-md"
+      class="w-24 p-2 m-2 mb-4 border-2 rounded-2xl border-primary bg-natural-beige shadow-md rounded-r-lg"
     />
-    <div id="title-sub-bold" class="ml-auto mr-auto mb-5 tracking-wider pb-10">모꼬지 시작하기</div>
+    <div id="title-sub-bold">모꼬지 시작하기</div>
     <div id="box-shadow">
       <div class="flex flex-col justify-center">
         <a
           type="button"
-          class="text-white bg-[#FEE500] hover:bg-[#FEE500]/50 focus:ring-4 focus:outline-none focus:ring-[#FEE500]/40 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-4 w-[15lvw]"
+          class="text-white bg-[#fde047] hover:bg-[#fed400cb] focus:ring-4 focus:outline-none focus:ring-[#FEE500]/40 font-bold rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mb-4 w-[14lvw]"
           :href="kakaoApiRequestURI"
         >
           <svg
@@ -22,39 +22,24 @@
             class="m-0 mr-[0.5lvw]"
           >
             <g
-              transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)"
+              transform="translate(0.000000,183.000000) scale(0.100000,-0.100000)"
               fill="#000000"
               stroke="none"
             >
               <path
-                d="M943 1845 c-207 -38 -433 -163 -535 -297 -72 -95 -128 -251 -128
--358 0 -194 142 -418 332 -523 32 -18 58 -36 58 -42 0 -5 -18 -75 -40 -155
--54 -202 -57 -202 160 -55 l172 116 177 3 c209 4 267 18 436 101 209 104 334
-251 381 450 34 148 -13 335 -119 467 -81 102 -253 214 -402 262 -142 45 -343
-58 -492 31z m40 -477 c14 -13 37 -57 52 -98 14 -41 38 -106 52 -144 14 -38 26
--85 27 -105 1 -33 -1 -36 -28 -36 -24 0 -31 6 -41 35 l-12 35 -84 3 -84 2 -17
--41 c-15 -35 -21 -40 -45 -37 -19 2 -29 9 -31 23 -2 16 63 199 123 348 7 16
-35 34 57 36 4 1 18 -9 31 -21z m248 12 c18 -10 19 -23 19 -170 l0 -160 69 0
-c61 0 70 -2 76 -20 13 -40 -10 -50 -109 -50 -58 0 -96 4 -104 12 -8 8 -12 66
--12 195 0 163 2 183 18 192 21 13 20 13 43 1z m267 -2 c7 -7 12 -42 12 -87 l0
--76 83 83 c82 82 102 93 125 70 19 -19 15 -26 -54 -98 l-66 -68 66 -84 c74
--93 83 -130 34 -136 -24 -3 -35 7 -90 82 -58 80 -63 85 -79 70 -13 -12 -19
--35 -21 -83 -3 -66 -3 -66 -33 -66 -39 0 -43 16 -44 209 -1 135 2 162 16 178
-19 21 34 23 51 6z m-681 -14 c12 -31 -11 -49 -66 -52 l-51 -3 0 -152 c0 -84
--4 -158 -9 -165 -5 -8 -21 -12 -37 -10 l-29 3 -3 162 -2 162 -52 3 c-54 3 -77
-21 -65 52 6 14 27 16 157 16 130 0 151 -2 157 -16z"
-              />
-              <path
-                d="M920 1233 c-12 -43 -25 -84 -27 -90 -4 -10 11 -13 57 -13 55 0 61 2
-55 18 -3 9 -16 46 -27 82 -11 36 -24 69 -28 73 -4 4 -17 -27 -30 -70z"
+                d="M815 1799 c-33 -5 -100 -20 -149 -34 -438 -125 -702 -476 -635 -841
+32 -175 164 -360 340 -475 l78 -51 -23 -64 c-27 -74 -72 -146 -143 -231 -81
+-96 -72 -102 77 -50 123 43 263 108 370 172 l85 50 140 -3 c215 -5 380 27 552
+108 210 98 379 278 443 470 30 89 37 224 16 319 -46 216 -223 421 -459 531
+-99 46 -227 85 -331 99 -89 13 -274 12 -361 0z"
               />
             </g>
           </svg>
-          카카오 계정으로 시작하기
+          카카오로 시작하기
         </a>
         <a
           type="button"
-          class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm pl-5 py-2.5 text-center inline-flex items-center m-0 w-[15lvw]"
+          class="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm pl-5 py-2.5 text-center inline-flex items-center m-0 w-[14lvw]"
           :href="googleApiRequestURI"
         >
           <svg
@@ -70,24 +55,42 @@ c61 0 70 -2 76 -20 13 -40 -10 -50 -109 -50 -58 0 -96 4 -104 12 -8 8 -12 66
               clip-rule="evenodd"
             />
           </svg>
-          구글 계정으로 시작하기
+          구글로 시작하기
         </a>
         <a
           type="button"
-          class="text-white bg-green-400 hover:bg-green-500 me-2 mb-2 mt-4 rounded-lg font-medium text-sm p-2 w-[15lvw]"
+          class="text-white bg-green-400 hover:bg-green-500 font-medium rounded-lg text-sm pl-5 py-2.5 text-center inline-flex items-center m-0 w-[14lvw] my-4"
           :href="naverApiRequestURI"
         >
-          <img
-            src="@/assets/logo/logoN_naver.svg"
-            class="w-4 h-43 inline-block mb-2 ml-2 mt-1 mr-2"
-          />
-          네이버 계정으로 시작하기
+          <svg
+            version="1.0"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 300.000000 265.000000"
+            preserveAspectRatio="xMidYMid meet"
+            class="w-4 h-4 me-2"
+          >
+            <g
+              transform="translate(0.000000,265.000000) scale(0.100000,-0.100000)"
+              fill="white"
+              stroke="none"
+            >
+              <path
+                d="M10 1843 c0 -445 -3 -1040 -7 -1321 l-6 -512 521 0 522 0 0 538 -1
+537 -33 158 c-18 86 -30 157 -27 157 3 0 226 -313 495 -695 l488 -695 407 0
+c223 0 457 -3 519 -7 l112 -6 -2 1319 -3 1319 -519 3 -518 2 6 -357 c12 -711
+12 -711 70 -1036 11 -63 11 -76 0 -65 -7 7 -232 337 -499 733 -268 396 -488
+721 -489 721 0 1 -234 5 -518 9 l-518 7 0 -809z"
+              />
+            </g>
+          </svg>
+          네이버로 시작하기
         </a>
       </div>
     </div>
   </div>
 </template>
 <script setup>
+// .env에서 client id 및 uri import
 const {
   VITE_NAVER_CLIENT_ID,
   VITE_GOOGLE_CLIENT_ID,
@@ -96,23 +99,27 @@ const {
   VITE_GOOGLE_REDIRECT_URI,
   VITE_KAKAO_REDIRECT_URI
 } = import.meta.env
+// 플랫폼 별 request uri href 이동
 const naverApiRequestURI =
   `https://nid.naver.com/oauth2.0/authorize?client_id=` +
   VITE_NAVER_CLIENT_ID +
   '&redirect_uri=' +
   VITE_NAVER_REDIRECT_URI +
   '&state=mokkoji&response_type=code'
+
 const googleApiRequestURI =
   `https://accounts.google.com/o/oauth2/v2/auth?client_id=` +
   VITE_GOOGLE_CLIENT_ID +
   '&redirect_uri=' +
   VITE_GOOGLE_REDIRECT_URI +
   '&state=mokkoji&response_type=code&scope=email profile'
+
 const kakaoApiRequestURI =
   `https://kauth.kakao.com/oauth/authorize?client_id=` +
   VITE_KAKAO_CLIENT_ID +
   '&redirect_uri=' +
   VITE_KAKAO_REDIRECT_URI +
   '&state=mokkoji&response_type=code'
+
 </script>
 <style></style>

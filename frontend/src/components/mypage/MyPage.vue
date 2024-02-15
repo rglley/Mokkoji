@@ -69,6 +69,7 @@ import axios from '@/services/api'
 
 const userData = ref({})
 
+// axios로 회원 정보 가져오기
 onBeforeMount(() => {
   axios
     .get(import.meta.env.VITE_SERVER + '/users/mypage')

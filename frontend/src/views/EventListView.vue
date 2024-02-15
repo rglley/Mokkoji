@@ -162,8 +162,6 @@ import {
 import IconFlowers from '@/icons/result/IconFlowers.vue'
 import IconFlowersColored from '@/icons/result/IconFlowersColored.vue'
 import MemoryList from '@/components/myevent/MemoryList.vue'
-import MemoryData from '@/temp/memory.json'
-import RecollectionData from '@/temp/recollection.json'
 import RecollectionList from '@/components/myevent/RecollectionList.vue'
 
 const eventListStore = useEventList()
@@ -266,8 +264,14 @@ const scrollMethods = (e) => {
 }
 
 onMounted(() => {
-  userNameStore.setName($cookies.get('user').name)
+  // const username = $cookies.get('user').name
+  // if (username != null) {
+  //   userNameStore.setName($cookies.get('user').name)
+  // } else {
+  userNameStore.setName('이정민')
+  // }
   name.value = userNameStore.getName
+  console.log(name.value)
   setShow()
   setShowTwo()
   getEventList()

@@ -9,7 +9,6 @@
             class="h-full basis-1/4 flex flex-col justify-start items-center overflow-y-scroll gap-[1vh]"
           >
             <user-Video
-              id="sub-video"
               v-for="sub in state.subscribers"
               :key="sub.stream.connection.connectionId"
               :stream-manager="sub"
@@ -32,7 +31,6 @@
         class="w-full h-full basis-3/4 grid grid-cols-3 gap-[1vh] overflow-y-scroll items-center"
       >
         <user-Video
-          id="user-video"
           v-for="user in userList"
           :key="user.stream.connection.connectionId"
           :stream-manager="user"
@@ -71,7 +69,9 @@
               </button>
             </div>
           </div>
-          <div class="bg-gray h-[80%] flex flex-col justify-center items-center overflow-hidden">
+          <div
+            class="bg-gray pt-[1vh] h-[80%] flex flex-col justify-start items-center overflow-y-scroll"
+          >
             <UserList
               v-for="user in userList"
               :key="user.stream.connection.connectionId"
@@ -230,10 +230,14 @@
             <span @click="showGiftModal" class="button-text">선물하기</span>
           </div>
           <div>
-            <button id="button-picture" class="bg-purple-200" @click="captureMyVideo">
+            <button
+              id="button-picture"
+              :class="{ 'bg-purple-400': isCaptureModal, 'bg-purple-200': !isCaptureModal }"
+              @click="showCaptureModal"
+            >
               <IconCamera class="size-[50%]" />
             </button>
-            <span @click="captureMyVideo" class="button-text">사진찍기</span>
+            <span @click="showCaptureModal" class="button-text">사진찍기</span>
           </div>
         </div>
         <div id="button-container-right" class="w-[25%] h-full flex">
@@ -265,7 +269,7 @@
                 class="w-full aspect-[2] bg-red-500 hover:bg-red-400 text-white rounded-r-xl text-r-md"
                 @click="leaveMainMeeting"
               >
-                회의 종료
+                행사 종료
               </button>
               <button
                 v-else
@@ -298,9 +302,14 @@
       />
       <LetterModal v-if="isLetterModal" @remove-letter-modal="showLetterModal" />
       <GiftModal v-if="isGiftModal" />
+      <CaptureModal
+        v-if="isCaptureModal"
+        @capture-my-video="captureMyVideo"
+        @capture-group-video="captureGroupVideo"
+      />
     </transition-group>
     <transition-group name="down">
-      <InviteModal v-if="isInviteModal" />
+      <InviteModal v-if="isInviteModal" @remove-invite-modal="showInviteModal" />
       <MicModal v-if="isMicModal" :is-mic="isMic" />
       <CameraModal v-if="isCameraModal" :is-camera="isCamera" />
       <GroupAlertModal v-if="isGroupAlertModal" />
@@ -346,6 +355,7 @@ import GiftModal from '@/components/modal/meeting/GiftModal.vue'
 import LetterModal from '@/components/modal/meeting/LetterModal.vue'
 import GroupModal from '@/components/modal/meeting/GroupModal.vue'
 import GroupAlertModal from '@/components/modal/meeting/GroupAlertModal.vue'
+import CaptureModal from '@/components/modal/meeting/CaptureModal.vue'
 import CaptureCheckModal from '@/components/modal/meeting/CaptureCheckModal.vue'
 import LoginCheckModal from '@/components/modal/meeting/LoginCheckModal.vue'
 
@@ -371,12 +381,12 @@ const isGroup = ref(false)
 const isGroupAlertModal = ref(false)
 const isGiftModal = ref(false)
 const isCount = ref(false)
+const isCaptureModal = ref(false)
 const isCaptureCheckModal = ref(false)
 const isUserList = ref(false)
 const isChat = ref(false)
 const isFrontCamera = ref(true)
 const isLoginCheckModal = ref(false)
-
 const searchUserName = ref('')
 const chatMessage = ref('')
 const chatMessages = ref([])
@@ -386,6 +396,7 @@ const myVideo = ref(null)
 const groupVideo = ref(null)
 const maxUserNum = ref(1)
 const setTime = ref(3)
+const autoCapture = ref(null)
 
 // 행사 초대 링크 모달
 const showInviteModal = (event) => {
@@ -462,13 +473,21 @@ const showLetterModal = () => {
   if ($cookies.get('user') !== null) {
     isLetterModal.value = !isLetterModal.value
   } else {
-    showLoginCheckModal()
+    isLoginCheckModal.value = true
   }
 }
 
 // 선물하기 모달
 const showGiftModal = () => {
   isGiftModal.value = !isGiftModal.value
+}
+
+const showCaptureModal = () => {
+  if ($cookies.get('user') !== null) {
+    isCaptureModal.value = !isCaptureModal.value
+  } else {
+    isLoginCheckModal.value = true
+  }
 }
 
 // 사진 촬영 확인 모달
@@ -488,10 +507,110 @@ const showChat = () => {
   isChat.value = !isChat.value
 }
 
+// 새로운 채팅 메시지가 오면 메시지창을 최하단으로 내리기
 const scrollToBottom = () => {
   const scroll = document.getElementById('chat-container')
 
   scroll.scrollTop = scroll.scrollHeight
+}
+
+// 카메라 전, 후면 전환
+const toggleCamera = async () => {
+  const devices = await state.OV.getDevices()
+  const videoDevices = await devices.filter((device) => device.kind === 'videoinput')
+
+  isFrontCamera.value = !isFrontCamera.value
+
+  if (videoDevices && videoDevices.length > 1) {
+    const mediaStream = await state.OV.getUserMedia({
+      audioSource: false,
+      videoSource: isFrontCamera.value ? videoDevices[0].deviceId : videoDevices[1].deviceId,
+      resolution: `${videoWidth}x${videoHeight}`,
+      frameRate: 30
+    })
+
+    const myTrack = mediaStream.getVideoTracks()[0]
+
+    state.publisher.replaceTrack(myTrack)
+  } else {
+    // 모달창 띄우기
+    console.log('화면을 전환할 수 없습니다.')
+  }
+}
+
+// 개인 사진 촬영
+const captureMyVideo = () => {
+  isCount.value = true
+
+  const countTime = setInterval(() => {
+    setTime.value--
+  }, 1000)
+
+  setTimeout(() => {
+    const target = myVideo.value
+
+    if (!target) {
+      isCount.value = false
+      setTime.value = 3
+      clearInterval(countTime)
+      return alert('사진 촬영 실패')
+    }
+
+    html2canvas(target).then((canvas) => {
+      canvas.toBlob((blob) => {
+        const file = new File([blob], 'myVideo.png', { type: 'image/png' })
+        store.sendPicture(file)
+      })
+    })
+
+    isCount.value = false
+    setTime.value = 3
+    showCaptureCheckModal()
+    clearInterval(countTime)
+  }, 3000)
+}
+
+// 단체 사진 촬영
+const captureGroupVideo = async () => {
+  isGrid.value = true
+  isCount.value = true
+
+  const countTime = setInterval(() => {
+    setTime.value--
+  }, 1000)
+
+  setTimeout(() => {
+    const target = groupVideo.value
+
+    if (!target) {
+      isGrid.value = false
+      isCount.value = false
+      setTime.value = 3
+      clearInterval(countTime)
+      return alert('사진 촬영 실패')
+    }
+
+    html2canvas(target).then((canvas) => {
+      canvas.toBlob((blob) => {
+        const file = new File([blob], 'groupVideo.png', { type: 'image/png' })
+        store.sendPicture(file)
+      })
+    })
+
+    isGrid.value = false
+    isCount.value = false
+    setTime.value = 3
+    showCaptureCheckModal()
+    clearInterval(countTime)
+  }, 3000)
+}
+
+// 행사 참여시 뒤로가기 버튼 클릭 막기
+const noBack = () => {
+  history.pushState(null, null, location.href)
+  window.onpopstate = () => {
+    history.go(1)
+  }
 }
 
 // ---------------- OpenVidu 관련 ----------------
@@ -535,12 +654,7 @@ const joinSession = () => {
           mirror: false
         })
 
-        if (sessionStorage.getItem('isHost') === 'true') {
-          state.mainStreamManager = publisher
-        } else {
-          state.subscribers.unshift(publisher)
-        }
-
+        state.mainStreamManager = publisher
         state.publisher = publisher
         state.session.publish(publisher)
         userList.value.unshift(publisher)
@@ -559,22 +673,8 @@ const joinSession = () => {
   // 새로운 참가자 입장
   state.session.on('streamCreated', ({ stream }) => {
     const subscriber = state.session.subscribe(stream, undefined)
+    state.subscribers.push(subscriber)
     userList.value.push(subscriber)
-
-    if (sessionStorage.getItem('isHost') === 'false') {
-      for (let idx = 0; idx < userList.value.length; idx++) {
-        const name = JSON.parse(userList.value[idx].stream.connection.data)
-        const subscriberName = JSON.parse(subscriber.stream.connection.data)
-
-        if (subscriberName.clientData === sessionStorage.getItem('host')) {
-          state.mainStreamManager = subscriber
-        } else if (name.clientData === subscriberName.clientData) {
-          state.subscribers.push(subscriber)
-        }
-      }
-    } else {
-      state.subscribers.push(subscriber)
-    }
 
     // 최대 유저수 갱신
     maxUserNum.value = Math.max(maxUserNum.value, userList.value.length)
@@ -631,22 +731,24 @@ const joinSession = () => {
 
     emit('create-group-meeting', state.publisher)
 
-    deleteSession()
+    disconnectSession()
   })
 
-  // 호스트가 회의 종료시 참가자들을 closeroom 컴포넌트로 이동시키는 메소드
+  // 호스트가 행사 종료시 참가자들을 'closeroom' 컴포넌트로 이동시키는 메소드
   state.session.on('signal:close', async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-    const tracks = stream.getTracks()
-    tracks.forEach((track) => track.stop())
+    if (sessionStorage.getItem('isHost') === 'false') {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      const tracks = stream.getTracks()
+      tracks.forEach((track) => track.stop())
 
-    sessionStorage.clear()
-    emit('leave-meeting')
-    router.push('/closeroom')
+      sessionStorage.clear()
+      emit('leave-meeting')
+      router.push('/closeroom')
+    }
   })
 }
 
-const deleteSession = () => {
+const disconnectSession = () => {
   if (state.session) {
     state.session.disconnect()
     state.session = undefined
@@ -671,23 +773,26 @@ const createToken = async (sessionId) => {
   return response.data.connectionToken // 토큰
 }
 
+// 세션 아이디를 사용해 토큰 얻기
 const getToken = async (sessionId) => {
   return await createToken(sessionId)
 }
 
+// 호스트는 행사를 종료하고 참여자는 행사를 나간다
 const leaveMainMeeting = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
   const tracks = stream.getTracks()
   tracks.forEach((track) => track.stop())
 
   if (sessionStorage.getItem('isHost') === 'true') {
+    clearInterval(autoCapture.value)
     state.session.signal({
       to: [],
       type: 'close'
     })
     await store.deleteSession(sessionStorage.getItem('sessionId'), maxUserNum.value)
   } else {
-    deleteSession()
+    disconnectSession()
   }
 
   sessionStorage.clear()
@@ -695,6 +800,7 @@ const leaveMainMeeting = async () => {
   router.push('/')
 }
 
+// 행사에 참여한 모든 참가자들에게 채팅 메시지 보내기
 const sendMessage = () => {
   if (chatMessage.value.trim() !== '') {
     state.session.signal({
@@ -707,6 +813,7 @@ const sendMessage = () => {
   }
 }
 
+// 소그룹 생성하기
 const createGroupMeeting = async (userList) => {
   const response = await store.createGroupSession(sessionStorage.getItem('sessionId'))
 
@@ -726,48 +833,19 @@ const createGroupMeeting = async (userList) => {
   isGroupModal.value = false
 }
 
-const toggleCamera = async () => {
-  const devices = await state.OV.getDevices()
-  const videoDevices = await devices.filter((device) => device.kind === 'videoinput')
-
-  isFrontCamera.value = !isFrontCamera.value
-
-  if (videoDevices && videoDevices.length > 1) {
-    const mediaStream = await state.OV.getUserMedia({
-      audioSource: false,
-      videoSource: isFrontCamera.value ? videoDevices[0].deviceId : videoDevices[1].deviceId,
-      resolution: `${videoWidth}x${videoHeight}`,
-      frameRate: 30
-    })
-
-    const myTrack = mediaStream.getVideoTracks()[0]
-
-    state.publisher.replaceTrack(myTrack)
-  } else {
-    // 모달창 띄우기
-    console.log('화면을 전환할 수 없습니다.')
-  }
+const updateMainVideoStreamManager = (stream) => {
+  if (state.mainStreamManager === stream) return
+  state.mainStreamManager = stream
 }
 
-// 개인 사진 촬영
-const captureMyVideo = () => {
-  if ($cookies.get('user') !== null) {
-    isCount.value = true
+onBeforeMount(() => {
+  noBack()
+  joinSession()
 
-    const countTime = setInterval(() => {
-      setTime.value--
-    }, 1000)
-
-    setTimeout(() => {
-      isCount.value = false
-      setTime.value = 3
-      clearInterval(countTime)
-
+  // 호스트 화면은 1분마다 자동 캡쳐
+  if (sessionStorage.getItem('isHost') === 'true') {
+    autoCapture.value = setInterval(() => {
       const target = myVideo.value
-
-      if (!target) {
-        return alert('사진 촬영 실패')
-      }
 
       html2canvas(target).then((canvas) => {
         canvas.toBlob((blob) => {
@@ -775,40 +853,23 @@ const captureMyVideo = () => {
           store.sendPicture(file)
         })
       })
-
-      showCaptureCheckModal()
-    }, 3000)
-  } else {
-    showLoginCheckModal()
+    }, 60000)
   }
-}
 
-const updateMainVideoStreamManager = (stream) => {
-  if (state.mainStreamManager === stream) return
-  state.mainStreamManager = stream
-}
-
-onBeforeMount(() => {
-  joinSession()
-  window.addEventListener('beforeunload', deleteSession)
+  window.addEventListener('beforeunload', disconnectSession)
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('beforeunload', deleteSession)
+  // 호스트 행사 종료시 자동 캡쳐 종료
+  if (autoCapture.value) {
+    clearInterval(autoCapture.value)
+  }
+
+  window.removeEventListener('beforeunload', disconnectSession)
 })
 </script>
 
 <style scoped>
-::-webkit-scrollbar {
-  width: 0.8vw;
-  background-color: white;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #e7c6ff;
-  border-radius: var(--border-radius-lg);
-}
-
 #button-container-center {
   margin: auto 0;
 }

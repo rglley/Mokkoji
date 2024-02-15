@@ -1,3 +1,4 @@
+// jwt parse
 const parseJwt = (token) => {
   const base64Url = token.split('.')[1]
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
@@ -13,7 +14,7 @@ const parseJwt = (token) => {
 }
 
 class TokenService {
-
+  // cookie에 저장, getter & setter
   getLocalRefreshToken = () => {
     return $cookies.get('user') ? $cookies.get('refresh-token') : null
   }
@@ -23,15 +24,15 @@ class TokenService {
   }
 
   setLocalRefreshToken = (token) => {
-    $cookies.set('refresh-token', token);
+    $cookies.set('refresh-token', token) 
   }
 
   setLocalAccessToken = (token) => {
-    $cookies.set('token', token);
+    $cookies.set('token', token) 
   }
 
   updateLocalAccessToken = (token) => {
-    $cookies.set('token', token);
+    $cookies.set('token', token) 
   }
 
   getUser = () => {
@@ -43,22 +44,24 @@ class TokenService {
   }
 
   removeUser = () => {
-    $cookies.remove('user');
-    $cookies.remove('token');
+    $cookies.remove('user') 
+    $cookies.remove('token') 
+    // refresh token이 있다면 삭제
     try{
-      $cookies.remove('refresh-token');
+      $cookies.remove('refresh-token') 
     }
     catch(err) {
-      console.log(err);
+      console.log('')
     }
   }
 
   expiredToken = () => {
+    // 저장된 token expired 판단 후 return boolean
     try{
       return parseJwt($cookies.get('token')).exp * 1000 <= Date.now()
     }
     catch{
-      return false;
+      return false 
     }
   }
 }
