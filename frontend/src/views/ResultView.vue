@@ -197,7 +197,7 @@
   <transition name="modal-fade">
     <div
       v-if="isCopyBoard"
-      class="fixed bottom-[50%] left-[50%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
+      class="fixed bottom-[50%] left-[10%] custom-translate rounded-lg bg-slate-50 px-14 py-3 z-30"
     >
       <div class="flex">
         <p class="">아래 링크를 공유해주세요.</p>
