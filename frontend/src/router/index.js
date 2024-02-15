@@ -16,8 +16,6 @@ import CloseRoom from '@/components/meeting/CloseRoom.vue'
 import Swal from 'sweetalert2'
 import SignUp from '@/components/common/SignUp.vue'
 
-import AOS from 'aos'
-import { initFlowbite } from 'flowbite'
 import tokenService from '@/services/token.service'
 
 const router = createRouter({
@@ -133,15 +131,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to === '/') {
-    AOS.init({
-      once: true,
-      delay: 0,
-      duration: 1000,
-      mirror: false
-    })
-  }
-
   // 로그인 필요한 화면 이동 시 로그인 상태 확인
   let isAuth = false
   if (to.meta.requireAuth) {

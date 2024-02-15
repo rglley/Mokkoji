@@ -6,8 +6,8 @@
     <nav class="w-full flex items-center px-[2vw]">
       <router-link to="/" class="w-[8vw] flex items-center rtl:l:space-x-reverse cursor-grab">
         <img
-          src="/src/assets/logo/mokkoji_logo.png"
-          class="w-[8vw] transition ease-in-out hover:animate-pulse"
+          src="@/assets/logo/mokkoji_logo.png"
+          class="w-[8vw]"
           alt="모꼬지 로고"
         />
       </router-link>
@@ -33,7 +33,6 @@
               <button
                 id="button-header"
                 data-dropdown-toggle="dropdown"
-                data-dropdown-trigger="click"
               >
                 내 서비스
               </button>
@@ -80,7 +79,7 @@ const isLogin = ref(false)
 const limitHeight = 200
 const dropdownKey = ref(3)
 
-initFlowbite()
+// initFlowbite()
 
 // header 홈뷰에서 새로고침
 const reloadPage = () => {
@@ -115,9 +114,8 @@ const logout = () => {
         tokenService.removeUser()
         isLogin.value = false
         store.isLogin = false
-        store.forceReload = true;
+        router.push('/')
       })
-      // router.push('/')
     }
   })
 }
@@ -149,7 +147,7 @@ watch(
       }).then((result) => {
         if (result.isConfirmed) {
           store.forceReload = false
-          setTimeout(reloadPage, 500)
+          setTimeout(reloadPage, 100)
         }
       })
     }
