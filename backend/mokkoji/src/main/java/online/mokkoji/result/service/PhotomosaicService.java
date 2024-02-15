@@ -56,7 +56,8 @@ public class PhotomosaicService {
     }
 
     public String createPhotomosaic(Long resultId) {
-        Mat inputImage = Imgcodecs.imread(LOCAL_PATH + "thumbnail" + File.separator + "thumbnail.jpg");
+        log.info("포토 모자이크 생성 시작");
+        Mat inputImage = Imgcodecs.imread(LOCAL_PATH + resultId + File.separator + "thumbnail.jpg");
         int height = inputImage.rows();
         int width = inputImage.cols();
         Mat blankImage = Mat.zeros(height, width, CvType.CV_8UC3);
@@ -64,6 +65,7 @@ public class PhotomosaicService {
         List<Mat> images = null;
         try {
             images = getComponentImages(LOCAL_PATH + resultId + File.separator + "cellImages", 30);
+            log.info("셀 이미지 개수 : {}", images.size());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -92,6 +94,7 @@ public class PhotomosaicService {
         String outputImagePath = LOCAL_PATH + resultId + File.separator + "photomosaic.jpg";
         Imgcodecs.imwrite(outputImagePath, blankImage);
 
+        log.info("생성 완료!!");
         return outputImagePath;
     }
 
