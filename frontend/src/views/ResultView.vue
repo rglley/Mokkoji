@@ -296,16 +296,13 @@ const showPhotoCard = () => {
 }
 
 const showSucceeded = async (e) => {
-  let mainImgDownload
   isSaved.value = true
   setTimeout(() => {
     isSaved.value = false
   }, 2000)
   switch (e) {
     case '대표이미지다운':
-      mainImgDownload = await downloadThumbnail()
-
-      if (mainImgDownload === 1) {
+      if (downloadThumbnail() === 1) {
         alertText.value = '바탕화면 mokkoji 폴더에 대표이미지가 저장되었어요'
       } else {
         alertText.value = '대표이미지 저장에 실패했어요'
@@ -325,25 +322,17 @@ const copyShare = (shareLink) => {
 
 //대표이미지 다운로드
 const downloadThumbnail = () => {
-  return new Promise((resolve) => {
-    downloadThumbnailStore.DownloadThumbnail(
-      resultIDStore.getID,
-      (res) => {
-        console.log(res)
-        resolve(1)
-      },
-      (error) => {
-        console.log(error)
-        resolve(0)
-      }
-    )
-  })
+  downloadThumbnailStore.DownloadThumbnail(
+    resultIDStore.getID,
+    (res) => {
+      console.log(res)
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
+  return 1
 }
-
-downloadThumbnail().then((result) => {
-  console.log(result)
-  return result
-})
 
 //대표이미지 공유하기
 const shareThumbnail = () => {
