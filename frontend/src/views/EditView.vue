@@ -355,8 +355,8 @@ const alertText = ref('')
 const direction = ref('대표이미지란?')
 
 //템플릿
-const design = ref('basic')
-const color = ref('rainbow')
+const design = ref('BASIC')
+const color = ref('RAINBOW')
 
 const isSelectedBasic = ref(true)
 const isSelectedBaby = ref(false)
@@ -384,8 +384,8 @@ const isNotSelectedPink = ref(true)
 
 //아무것도 지정 안해도 값을 넘겨줌
 const rollingPaperTemplate = ref({
-  backgroundName: 'basic',
-  postitName: 'rainbow'
+  backgroundName: 'BASIC',
+  postitName: 'RAINBOW'
 })
 
 const onHelp = () => {
