@@ -26,6 +26,7 @@ const createMeeting = () => {
 
 const leaveMeeting = () => {
   isMeeting.value = false
+  reload.value = reload.value + 1;
 }
 </script>
 
