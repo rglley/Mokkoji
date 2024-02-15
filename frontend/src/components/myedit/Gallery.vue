@@ -18,24 +18,6 @@
         </div>
       </div>
       <div class="">
-        <!-- <div class="flex justify-center items-center">
-          <div
-            class="mt-12 opacity-70 border-2 justify-center items-center h-[100px] flex border-[#5da2bd] rounded-lg w-[150px] mr-5 hover:cursor-pointer hover:opacity-100"
-          >
-            <p class="text-[25px] justify-center flex text-center">
-              추억카드 <br />미리보기 <IconSearch />
-            </p>
-          </div>
-
-          <div
-            class="mt-12 opacity-70 border-2 justify-center items-center h-[100px] flex border-[#5da2bd] rounded-lg w-[150px] ml-5 hover:cursor-pointer hover:opacity-100"
-          >
-            <p class="text-[25px] justify-center flex text-center">
-              포토모자이크 <br />미리보기 <IconSearch />
-            </p>
-          </div>
-        </div> -->
-
         <div
           class="mt-[3vh] opacity-70 border-[3px] rounded-lg h-[2.5vw] w-[15vw] mx-auto border-[#9f46c8] justify-center items-center flex hover:cursor-pointer hover:opacity-100"
           @click="showSaved('대표이미지')"
@@ -93,7 +75,6 @@
     </div>
   </transition>
   <!-- 사진 업로드 모달 - 자르기 -->
-  <!-- <transition name="modal-fade"> -->
   <div
     v-if="isCutPhotoUploadModal"
     class="fixed bg-white bottom-[100px] left-[500px] w-[800px] h-[500px] border-2 rounded-lg border-[#5da2bd] z-20 bg-[#f5fcff]"
@@ -110,7 +91,6 @@
       <!--성공, 실패 여부에 따라 메시지 출력 필요.-->
     </div>
   </div>
-  <!-- </transition> -->
   <!-- 사진 업로드 모달 - bulk -->
   <div
     v-if="isPhotoUploadModal"
@@ -136,17 +116,14 @@ import {
   useResultIDStore,
   useCreatePhotomosaic
 } from '@/stores/result.js'
-import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconPhotoAdd from '@/icons/result/IconPhotoAdd.vue'
 import IconClose from '@/icons/result/IconClose.vue'
 import ImgUpload from '@/components/myedit/ImgUpload.vue'
 import ImgUploadBulk from '@/components/myedit/ImgUploadBulk.vue'
 import IconCrop from '@/icons/result/IconCrop.vue'
-import IconQuestionMarkBlue from '@/icons/result/IconQuestionMarkBlue.vue'
 import IconMosaic from '@/icons/result/IconMosaic.vue'
 import IconMainPhoto from '@/icons/result/IconMainPhoto.vue'
 import IconCheckBlue from '@/icons/result/IconCheckMark.vue'
-import { Endpoint } from 'aws-sdk'
 
 const galleryStore = useGalleryStore()
 const saveThumbnailStore = useSaveThumbnail()
@@ -156,10 +133,6 @@ const createPhotomosaicStore = useCreatePhotomosaic()
 const props = defineProps({
   scrollToHelp: Function
 })
-
-const callScrollToHelp = () => {
-  props.scrollToHelp('사진 업로드 TIP')
-}
 
 const store = useMainImageStore()
 const selectedImage = ref('src/assets/edit/no_image.png')
@@ -200,15 +173,11 @@ const closePhotoUploadModal = () => {
   isPhotoUploadModal.value = !isPhotoUploadModal.value
   loadGallery()
 }
-
+//무한스크롤
 const loadPhotos = (number) => {
   const newImages = getImages(0, number, gallery.value)
   endPoint.value = number
   photos.value = newImages
-}
-
-const deletePhoto = (index) => {
-  this.photos.splice(index, 1)
 }
 
 const loadMorePhotos = () => {
@@ -229,13 +198,14 @@ const handleScroll = () => {
     loadMorePhotos()
   }
 }
-
+//사진 선택
 const selectedPhoto = (photo) => {
   store.selectedImage(photo) //data 보내기
   selectedImage.value = store.getSelectedImage
   isSelectedImage.value = true
 }
 
+//대표 이미지 생성 Axios
 const saveThumbnail = (id) => {
   console.log(`행사번호 ${id}의 대표이미지 저장하기`)
   let result = 1
@@ -255,6 +225,7 @@ const saveThumbnail = (id) => {
   return result
 }
 
+//포토 모자이크 생성 Axios
 const createPhotomosaic = (id) => {
   console.log(`행사번호 ${id}의 포토모자이크 생성하기`)
   let result = 1
@@ -272,6 +243,7 @@ const createPhotomosaic = (id) => {
   return result
 }
 
+//성공 실패 모달 알림창
 const showSaved = (e) => {
   isSaved.value = true
   setTimeout(() => {
@@ -300,12 +272,7 @@ const showSaved = (e) => {
 }
 
 const loadGallery = () => {
-  // setTimeout(() => {
-  //   totalPhotos.value = galleryStore.uploadedPhotos.length //총 사진의 수
-  //   console.log(totalPhotos.value)
-  //   gallery.value = galleryStore.uploadedPhotos //사진 전체
-  // }, 200)
-  location.reload()
+  this.$emit('reload')
 }
 
 onMounted(() => {

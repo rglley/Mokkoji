@@ -50,13 +50,12 @@ const image = ref(null)
 const cropper = ref(null)
 const croppedImage = ref(null)
 const imageUrl = ref('src/assets/edit/no_image.png') //처음 이미지
-
 const imgList = []
 
 const cropImage = () => {
   const croppedDataUrl = cropper.value.getCroppedCanvas().toDataURL('image/png')
   croppedImage.value = croppedDataUrl
-  const base64String = croppedDataUrl.split(',')[1] // Extract base64 data
+  const base64String = croppedDataUrl.split(',')[1]
   const byteArray = atob(base64String)
   const byteNumbers = new Array(byteArray.length)
   for (let i = 0; i < byteArray.length; i++) {
@@ -65,7 +64,7 @@ const cropImage = () => {
   const byteArrayUint8 = new Uint8Array(byteNumbers)
   const blob = new Blob([byteArrayUint8], { type: 'image/png' })
 
-  // Create a new File object with the Blob
+  // Blob으로 새로운 파일 객체 생성
   const file = new File([blob], `cropped_image.png`, { type: 'image/png' })
 
   imgList.push(file)
@@ -78,11 +77,6 @@ const handleFileChange = (event) => {
   if (file) {
     imageUrl.value = URL.createObjectURL(file)
     cropper.value.replace(imageUrl.value)
-    // console.log(file)
-    // formDataStore.addFile(file)
-    // console.log(formDataStore.formData)
-    // imgList.push(file)
-    // console.log(file)
   }
 }
 
@@ -90,6 +84,7 @@ const uploadImage = () => {
   photoList()
 }
 
+//이미지 업로드 Axios
 const photoList = () => {
   console.log('사진 추가 데이터 전송 메소드 실행')
 
@@ -103,7 +98,6 @@ const photoList = () => {
     formData,
     ({ res }) => {
       galleryStore.addUploadedPhoto(imgList[0])
-
       console.log('이미지 업로드 성공')
     },
     (error) => {

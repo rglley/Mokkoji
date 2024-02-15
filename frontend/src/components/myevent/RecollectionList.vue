@@ -31,12 +31,6 @@ const mainImage = ref('@/assets/logo/mokkoji_logo_with_bg.png')
 
 const { VITE_RECOLLECTION_FRAME_COUNT } = import.meta.env
 
-//액자, 미정
-let imgNo = computed(() => {
-  let no = props.recollection.eventId % VITE_RECOLLECTION_FRAME_COUNT
-  return no === 0 ? VITE_RECOLLECTION_FRAME_COUNT : no
-})
-
 onMounted(() => {
   mainImage.value = props.recollection.image
   console.log(mainImage.value)

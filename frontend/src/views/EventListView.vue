@@ -120,39 +120,10 @@
       </div>
     </div>
   </div>
-
-  <!--더 이상 사용하지 않는 모달-->
-  <!-- 
-  <transition name="modal-fade">
-    <div
-      v-if="isOpenTwo"
-      class="fixed top-36 left-72 w-full h-full flex content-center items-center z-20"
-    >
-      <div class="bg-white relative px-28 py-36 border-black border-2 border-solid rounded-lg">
-        <div>
-          <button
-            @click="showModalTwo"
-            class="text-sm absolute px-2 py-1 bottom-64 right-2 cursor-pointer bg-violet-100 rounded-lg"
-          >
-            확인
-          </button>
-          <div>
-            <img
-              src="@/assets/eventlist/recollection_ex.png"
-              class="absolute bottom-24 right-12 w-32 h-42"
-            />
-          </div>
-          <p class="absolute text-base bottom-16 right-24">TIP!</p>
-          <p class="absolute text-sm bottom-10 right-6">대표 이미지를 클릭하면 완성된</p>
-          <p class="absolute text-sm bottom-4 right-12">결과물로 이동합니다.</p>
-        </div>
-      </div>
-    </div>
-  </transition> -->
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
   useEventList,
   useRecollectionsStore,
@@ -219,6 +190,7 @@ const setShowTwo = () => {
   }, 1000)
 }
 
+//EventList 불러오기 Axios
 const getEventList = () => {
   console.log('user이름님의 event list 불러오기')
   //API 호출
@@ -238,6 +210,7 @@ const getEventList = () => {
   )
 }
 
+//기억, 추억 리스트 마우스로 스크롤
 const scrollMethods = (e) => {
   e.value.addEventListener('mousedown', (event) => {
     isMouseDown.value = true
@@ -264,12 +237,8 @@ const scrollMethods = (e) => {
 }
 
 onMounted(() => {
-  // const username = $cookies.get('user').name
-  // if (username != null) {
-  //   userNameStore.setName($cookies.get('user').name)
-  // } else {
-  userNameStore.setName('이정민')
-  // }
+  userNameStore.setName($cookies.get('user').name)
+
   name.value = userNameStore.getName
   console.log(name.value)
   setShow()

@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+//파일 미리보기
 defineEmits(['remove'])
 defineProps({
   file: { type: Object, required: true },

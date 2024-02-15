@@ -233,10 +233,7 @@
             <img src="@/assets/eventlist/photomosaic_ex.png" class="pt-10 mr-10 w-48" />
           </div>
           <div class="ml-10 text-xl">
-            <p class="pt-32">포토 모자이크 생성에는 최소 n 개, 최대 m 개의 사진이 필요합니다.</p>
-            <p class="">
-              멋진 포토 모자이크를 위해 다양한 색감의 사진들을 300 ~ 500장 준비해 주세요.
-            </p>
+            <p class="pt-32">멋진 포토 모자이크를 위해 다양한 색감의 사진들을 준비해 주세요.</p>
             <p class=""></p>
           </div>
         </div>
@@ -286,7 +283,7 @@
       </div>
 
       <div class="w-[80vw]">
-        <Gallery :scrollToHelp="scrollToHelp" />
+        <Gallery :scrollToHelp="scrollToHelp" @reload="reloadParent" />
       </div>
     </div>
   </div>
@@ -319,7 +316,6 @@ import IconLocation from '@/icons/result/IconLocation.vue'
 import IconWifi from '@/icons/result/IconWifi.vue'
 import IconLoveLetterBlue from '@/icons/result/IconLoveLetterBlue.vue'
 import IconCheckMark from '@/icons/result/IconCheck.vue'
-import IconConfetti from '@/icons/result/IconConfetti.vue'
 import IconQuestionMark from '@/icons/result/IconQuestionMark.vue'
 import IconCheckSkyBlue from '@/icons/result/IconCheckSkyBlue.vue'
 import IconCheckBlue from '@/icons/result/IconCheckBlue.vue'
@@ -334,7 +330,6 @@ const resultIDStore = useResultIDStore()
 const isSaved = ref(false)
 const isHoveredHelp = ref(false)
 const isNotHoveredHelp = ref(true)
-
 const isDefaultHelp = ref(true)
 const isHoveredMainImage = ref(false)
 const isHoveredPhotoMosaicTip = ref(false)
@@ -345,14 +340,12 @@ const photomosaic = ref(null)
 const help = ref(null)
 const top = ref(null)
 const resultID = ref('')
-
-let uploadedPhotos = []
-
+const alertText = ref('')
 const direction = ref('대표이미지란?')
 
+//템플릿
 const design = ref('basic')
 const color = ref('rainbow')
-const alertText = ref('')
 
 const isSelectedBasic = ref(true)
 const isSelectedBaby = ref(false)
@@ -434,6 +427,7 @@ const hoverMainImage = () => {
   isDefaultHelp.value = false
 }
 
+//저장 모달
 const showSaved = (e) => {
   isSaved.value = true
   setTimeout(() => {
@@ -450,6 +444,12 @@ const showSaved = (e) => {
   }
 }
 
+const reloadParent = () => {
+  location.reload()
+  scrollToPhotoMosaic()
+}
+
+//템플릿 저장 Axios
 const saveTemplate = (id) => {
   console.log(`행사번호 ${id}의 템플릿 저장하기`)
   let result = 1
@@ -469,6 +469,7 @@ const saveTemplate = (id) => {
   return result
 }
 
+//편집 페이지 Axios
 const getEditView = (id) => {
   console.log(`행사번호 ${id}의 edit view 불러오기`)
   editMemoryStore.editMemory(

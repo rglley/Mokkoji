@@ -14,7 +14,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 const emit = defineEmits(['files-dropped'])
 const active = ref(false)
 let inActiveTimeout = null
-
+// 파일 드래그앤 드롭
 const setActive = () => {
   active.value = true
   clearTimeout(inActiveTimeout)

@@ -152,9 +152,6 @@
         <div class="flex items-center justify-center pr-[5vb]">
           <IconLetter />모꼬지 편지 {{ letterCount }}장
         </div>
-        <!-- <div class="flex items-center justify-center">
-          <IconPhoto />모꼬지 사진 {{ photocard.photos }}장
-        </div> -->
       </div>
       <div class="text-[20px] flex justify-center items-center">
         <div
@@ -237,8 +234,7 @@ import {
   useSharePhotomosaic
 } from '@/stores/result.js'
 
-// let photocard = PhotoCard
-
+//추억 카드 데이터
 const photocard = ref({
   name: '',
   content: '',
@@ -246,8 +242,17 @@ const photocard = ref({
 })
 const msg = ref([])
 const currentPage = ref(1)
-const totalPage = ref(8)
+const totalPage = ref(1)
 const alertText = ref('')
+const design = ref('')
+const username = ref('')
+const color = ref('')
+const participantCount = ref(0)
+const letterCount = ref(0)
+
+const shareLink = ref('')
+const photomosaic_url = ref('')
+
 const recollectionStore = useRecollection()
 const resultIDStore = useResultIDStore()
 const userNameStore = useUserNameStore()
@@ -255,18 +260,9 @@ const downloadThumbnailStore = useDownloadThumbnail()
 const downloadPhotomosaicStore = useDownloadPhotomosaic()
 const shareImageStore = useShareImage()
 const sharePhotomosaicStore = useSharePhotomosaic()
-const design = ref('')
-const username = ref('')
-const color = ref('')
-const participantCount = ref(0)
-const letterCount = ref(0)
+
 const isSaved = ref(false)
 const isCopyBoard = ref(false)
-const shareLink = ref('')
-const photomosaic_url = ref('')
-// const currentPage = ref(1)
-// const totalPage = ref(0)
-
 const isRollingPaperResult = ref(false)
 const isPhotomosaicResult = ref(false)
 const isPhotoCardResult = ref(true)
@@ -314,11 +310,13 @@ const showSucceeded = async (e) => {
   }
 }
 
+//클립보드 링크 복사
 const copyShare = (shareLink) => {
   navigator.clipboard.writeText(shareLink)
   showSucceeded('복사성공')
 }
 
+//대표이미지 다운로드
 const downloadThumbnail = () => {
   return new Promise((resolve) => {
     downloadThumbnailStore.DownloadThumbnail(
@@ -340,6 +338,7 @@ downloadThumbnail().then((result) => {
   return result
 })
 
+//대표이미지 공유하기
 const shareThumbnail = () => {
   shareImageStore.ShareImage(
     resultIDStore.getID,
@@ -355,6 +354,7 @@ const shareThumbnail = () => {
   )
 }
 
+//포토모자이크 다운로드 Axios
 const downloadPhotomosaic = () => {
   downloadPhotomosaicStore.DownloadPhotomosaic(
     resultIDStore.getID,
@@ -367,6 +367,7 @@ const downloadPhotomosaic = () => {
   )
 }
 
+//포토모자이크 공유 Axios
 const sharePhotomosaic = () => {
   sharePhotomosaicStore.SharePhotomosaic(
     resultIDStore.getID,
@@ -383,9 +384,8 @@ const onPageChange = (val) => {
   console.log(val + '번 페이지로 이동 준비 끝!!!')
   currentPage.value = val
   getResultView(resultIDStore.getID)
-  // param.value.pgno = val
-  // getHotArticleList()
 }
+//결과물 페이지 Axios
 const getResultView = (id) => {
   console.log(`행사번호 ${id}의 result view 불러오기`)
   recollectionStore.RecollectionData(
@@ -416,8 +416,7 @@ onMounted(() => {
   getResultView(resultIDStore.getID)
   username.value = userNameStore.getName
   isSaved.value = false
-  console.log(msg[0][0].name)
-  console.log(msg[0][0].content)
+  location.reload()
   console.log(msg[currentPage.value])
   console.log(currentPage.value)
 })

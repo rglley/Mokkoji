@@ -1,5 +1,5 @@
 <template>
-  <DropZone class="h-[700px]" @files-dropped="addFiles" #default="{ dropZoneActive }">
+  <DropZone class="h-[600px]" @files-dropped="addFiles" #default="{ dropZoneActive }">
     <label for="file-input" class="text-black">
       <span v-if="dropZoneActive">
         <span>
@@ -77,6 +77,7 @@ const uploadImage = () => {
   photoList()
 }
 
+//사진 추가 Bulk Axios
 const photoList = () => {
   console.log('사진 추가 Bulk 데이터 전송 메소드 실행')
   console.log(files.value)
@@ -104,7 +105,7 @@ const photoList = () => {
               const croppedFile = new File([blob], file.name, { type: 'image/jpeg' })
               formDataStore.addFile(croppedFile)
               formData.append('photos', croppedFile)
-              galleryStore.addUploadedPhoto(croppedFile) // Assuming you have a method to add the image to the gallery
+              galleryStore.addUploadedPhoto(croppedFile)
               resolve()
             }, 'image/jpeg')
           }
@@ -114,7 +115,7 @@ const photoList = () => {
       })
     )
   }
-
+  //비동기 처리, 이미지 업로드 성공 여부
   Promise.all(promises).then(() => {
     imgUploadStore
       .addPhotos(resultIDStore.getID, formData, ({ res }) => {
