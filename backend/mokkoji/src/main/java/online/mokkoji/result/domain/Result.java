@@ -1,5 +1,6 @@
 package online.mokkoji.result.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -23,10 +24,12 @@ public class Result  {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     @Enumerated(EnumType.STRING)

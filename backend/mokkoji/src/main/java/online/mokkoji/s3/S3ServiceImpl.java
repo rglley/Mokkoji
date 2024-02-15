@@ -48,7 +48,8 @@ public class S3ServiceImpl implements S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final String LOCAL_PATH = "/opt/result" + File.separator;
+    private final String LOCAL_PATH = System.getProperty("user.home") + File.separator + "Desktop"
+            + File.separator + "mokkoji" + File.separator;
 
     private final AmazonS3Client amazonS3Client;
     private final ResultRepository resultRepository;
@@ -297,16 +298,14 @@ public class S3ServiceImpl implements S3Service {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
-        String key = result.getUser().getId() + "/" + resultId + "/" +
-                "photos/photomosaic.jpg";
+        String key = result.getUser().getId() + "/" + resultId + "/photos/photomosaic.jpg";
 
 
         if (amazonS3Client.doesObjectExist(bucket, key)) {
             amazonS3Client.deleteObject(bucket, key);
         }
 
-        File photomosaic = new File(System.getProperty("user.home") + File.separator + "Desktop" +
-                File.separator + "mokkoji" +  File.separator + resultId + File.separator + "photomosaic.jpg");
+        File photomosaic = new File(LOCAL_PATH + resultId + File.separator + "photomosaic.jpg");
 
         PutObjectRequest request = new PutObjectRequest(bucket, key, photomosaic);
 

@@ -9,10 +9,11 @@ import java.io.File;
 @EnableCaching
 @SpringBootApplication
 public class MokkojiApplication {
-//    static {
-//        String libPath = System.getProperty("user.dir") + File.separator + "opencv" + File.separator + "opencv_java490.dll";
-//        System.load(libPath);
-//    }
+    static {
+        String libPath = System.getProperty("user.dir") + File.separator + "libs"
+                + File.separator + "opencv_java490.dll";
+        System.load(libPath);
+    }
     public static void main(String[] args) {
         SpringApplication.run(MokkojiApplication.class, args);
     }

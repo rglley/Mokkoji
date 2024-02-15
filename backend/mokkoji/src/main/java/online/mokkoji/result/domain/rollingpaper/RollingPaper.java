@@ -1,5 +1,6 @@
 package online.mokkoji.result.domain.rollingpaper;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import online.mokkoji.result.domain.Result;
@@ -27,6 +28,7 @@ public class RollingPaper  {
     private boolean isEdited;
 
     @OneToMany(mappedBy = "rollingPaper")
+    @JsonManagedReference
     List<Message> messages =new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
