@@ -210,12 +210,12 @@
             포토 모자이크 다운로드
           </button> -->
           <!-- <div class="mx-4"></div> -->
-          <!-- <button
+          <button
             class="w-[12vw] p-2 opacity-70 border-2 rounded-lg flex items-center justify-center hover:opacity-100 effect-button"
             @click="sharePhotomosaic"
           >
             포토 모자이크 공유하기
-          </button> -->
+          </button>
         </div>
       </div>
     </div>

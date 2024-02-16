@@ -72,18 +72,18 @@ const router = createRouter({
     {
       path: '/eventlist',
       name: 'eventlist',
-      component: EventListPage
-      // meta: {
-      //   requireAuth: true
-      // }
+      component: EventListPage,
+      meta: {
+        requireAuth: true
+      }
     },
     {
       path: '/editpage',
       name: 'editpage',
-      component: EditPage
-      // meta: {
-      //   requireAuth: true
-      // }
+      component: EditPage,
+      meta: {
+        requireAuth: true
+      }
     },
     // 존재하지 않는 경로 404 reroute
     {
@@ -118,10 +118,10 @@ const router = createRouter({
     {
       path: '/resultpage/:resultId',
       name: 'resultpage',
-      component: ResultPage
-      // meta: {
-      //   requireAuth: true
-      // }
+      component: ResultPage,
+      meta: {
+        requireAuth: true
+      }
     }
   ],
   // 모든 라우터 이동 후 스크롤 맨 위로
