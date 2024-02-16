@@ -48,7 +48,7 @@
 
 ---
 
-## 🐳포팅 메뉴얼
+## 🐳[포팅 메뉴얼](https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A401/-/blob/master/exec/mokkoji_%ED%8F%AC%ED%8C%85%EB%A7%A4%EB%89%B4%EC%96%BC.pdf?ref_type=heads) 
 
 ## 💡 프로젝트 콘셉트
 
