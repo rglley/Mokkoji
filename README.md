@@ -1,7 +1,7 @@
 # 공통 프로젝트(웹 기술) - 모꼬지(Mokkoji)
 
 ### 모꼬지 링크 : https://mokkoji.online/
-
+![mokkoji_logo](/uploads/7b5575137162495153b5cc3cda0a6860/mokkoji_logo.png)
 💻SSAFY 10기 2학기 공통 프로젝트💻<br>
 2024.01.03 - 2024.02.16(45일)
 
@@ -111,29 +111,48 @@
 
 ### 메인 페이지
 
-![메인 페이지](%E1%84%86%E1%85%A9%E1%84%81%E1%85%A9%E1%84%8C%E1%85%B5%20README%20md%20fbbe472b4bd34b3abeb008a70b1dfcd8/screencapture-mokkoji-online-2024-02-14-01_23_10.png)
+![mokkoji-main](/uploads/763aa9662f6f4f3aac783cd221c23ca0/screencapture-mokkoji-online-2024-02-14-01_23_10.png)
 
 ### 소셜 로그인
 
-![화면 캡처 2024-02-14 012544.png](%E1%84%86%E1%85%A9%E1%84%81%E1%85%A9%E1%84%8C%E1%85%B5%20README%20md%20fbbe472b4bd34b3abeb008a70b1dfcd8/%25ED%2599%2594%25EB%25A9%25B4_%25EC%25BA%25A1%25EC%25B2%2598_2024-02-14_012544.png)
+![mokkoji-login](/uploads/5ec7995752082cac61fc855e64a54201/_ED_99_94_EB_A9_B4__EC_BA_A1_EC_B2_98_2024-02-14_012544.png)
 
-![화면 캡처 2024-02-14 012738.png](%E1%84%86%E1%85%A9%E1%84%81%E1%85%A9%E1%84%8C%E1%85%B5%20README%20md%20fbbe472b4bd34b3abeb008a70b1dfcd8/%25ED%2599%2594%25EB%25A9%25B4_%25EC%25BA%25A1%25EC%25B2%2598_2024-02-14_012738.png)
+![_ED_99_94_EB_A9_B4__EC_BA_A1_EC_B2_98_2024-02-14_012652](/uploads/b3a46f640306af9c9f785682cb1f21d4/_ED_99_94_EB_A9_B4__EC_BA_A1_EC_B2_98_2024-02-14_012652.png)
 
-![화면 캡처 2024-02-14 012652.png](%E1%84%86%E1%85%A9%E1%84%81%E1%85%A9%E1%84%8C%E1%85%B5%20README%20md%20fbbe472b4bd34b3abeb008a70b1dfcd8/%25ED%2599%2594%25EB%25A9%25B4_%25EC%25BA%25A1%25EC%25B2%2598_2024-02-14_012652.png)
+![_ED_99_94_EB_A9_B4__EC_BA_A1_EC_B2_98_2024-02-14_012738](/uploads/da2709d6d471d03f0c184afffa1c9b00/_ED_99_94_EB_A9_B4__EC_BA_A1_EC_B2_98_2024-02-14_012738.png)
+
+### 마이페이지
+![마이페이지](/uploads/da5b9081e600fc734f73c02f8469de76/마이페이지.png)
+
+### 행사 생성
+![회의](/uploads/50248520613075b1c508af03340588e6/회의.png)
 
 ### 소그룹 형성
+![소그룹](/uploads/cee31fd67fb70fc50500c6c1ffcaecba/소그룹.png)
 
 ### 축하 편지 쓰기
+![메시지보내기](/uploads/d7e50ffaaf029ed8f3df7ede8400ecf6/메시지보내기.png)
 
 ### 사진 찍기
+![사진찍기](/uploads/2bf4977acbd58f51f039ba70f2b64843/사진찍기.png)
 
-### 화면 배치 변경
-
-### 참여자 목록
+### 기억 페이지
+![결과물-기억](/uploads/1d7a6adc4c728254074756b331416470/결과물-기억.png)
 
 ### 롤링페이퍼 생성
+![롤링페이지편집](/uploads/bb1e8e50a61adeb6970d841701d14677/롤링페이지편집.png)
 
 ### 포토 모자이크 생성
+![사진_편집](/uploads/8851f9b18c1082cf6187571d7fb5c8c6/사진_편집.png)
+
+### 추억 페이지
+![결과물-추억](/uploads/04d487c2a09c4840e35a5bcf69d640be/결과물-추억.png)
+
+### 롤링페이퍼 확인
+![추억-롤페](/uploads/ebd214c3f94cefa8f951318fa5c5fc0b/추억-롤페.png)
+
+### 포토모자이크 확인
+![추억-포토모자이크](/uploads/7a146839adf262630f763e1674b8c5b4/추억-포토모자이크.png)
 
 ## 🛠️ 기술 스택
 
@@ -187,12 +206,14 @@
 ## 🗂설계 문서
 
 ### Flow Chart
+![모꼬지_플로우차트](/uploads/a9bbb87e95208f617c49f16cbafc8889/모꼬지_플로우차트.jpg)
 
 ### Wire Frame
+![와이어프레임](/uploads/67316c7842fcab8bf1c94079f37b9b21/image.png)
 
 ## 💾 ERD
 
-![mokkoji-erd.png](%E1%84%86%E1%85%A9%E1%84%81%E1%85%A9%E1%84%8C%E1%85%B5%20README%20md%20fbbe472b4bd34b3abeb008a70b1dfcd8/mokkoji-erd.png)
+![mokkoji-erd](/uploads/9618596855c1de49af0d268ef9227652/mokkoji-erd.png)
 
 ## 📁프로젝트 구조
 
@@ -299,7 +320,7 @@ mokkoji
               <img src="https://avatars.githubusercontent.com/u/82487512?v=4" width="100">
         </td>
         <td style="min-width: 250px;">
-              <img src="" width="100">
+              <img src="https://avatars.githubusercontent.com/u/112466460?v=4" width="100">
         </td>
     </tr>
     <tr align="center">
@@ -337,7 +358,7 @@ mokkoji
     </tr>
     <tr align="center">
         <td style="min-width: 250px;">
-              <img src="" width="100">
+              <img src="https://avatars.githubusercontent.com/u/112466460?v=4" width="100">
         </td>
         <td style="min-width: 250px;">
               <img src="https://avatars.githubusercontent.com/u/112466460?v=4" width="100">
