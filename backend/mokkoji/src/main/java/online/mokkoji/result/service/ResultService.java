@@ -56,5 +56,5 @@ public interface ResultService {
     String getPhotoMosaicFileName(Long resultId);
 
     //포토모자이크 S3 링크 DB에 저장
-    void updatePhotomosaic(Long resultId, String photomosaicPath);
+    void createPhotomosaic(Long resultId, String photomosaicPath);
 }

@@ -158,7 +158,7 @@ public class ResultController {
         Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         //로컬 이미지 삭제
-        String imagesDirectory = "/opt/result" + File.separator;
+//        String imagesDirectory = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "mokkoji";
 
 //        photomosaicService.deleteImages(imagesDirectory);
 
@@ -223,18 +223,18 @@ public class ResultController {
      */
 //    @PutMapping("{resultId}/photomosaic")
 //    public ResponseEntity<String> addPhotomosaic(@PathVariable("resultId") Long resultId) {
-//        //S3에 저장된 thumbnail, images 다운로드
+//        //S3에 저장된 thumbnail, images 임시 다운로드(경로 확인 필요)
 //        String thumbnailPath = resultService.getThumbnailPath(resultId);
 //
 //        s3Service.downloadThumbnail(resultId, thumbnailPath);
 //        s3Service.downloadCellImages(resultId);
 //
-//        //photomosaic 생성, 로컬에 저장
+//        //photomosaic 생성, 임시 경로에 저장
 //        String photomosaic = photomosaicService.createPhotomosaic(resultId);
 //
-//        //로컬에 저장된 포토 모자이크 S3로 업로드
+//        //임시 경로에 저장된 포토 모자이크 S3로 업로드
 //        String photomosaicPath = s3Service.uploadPhotomosaic(photomosaic, resultId);
-//        resultService.updatePhotomosaic(resultId, photomosaicPath);
+//        resultService.createPhotomosaic(resultId, photomosaicPath);
 //
 //        return new ResponseEntity<>(photomosaicPath, HttpStatus.CREATED);
 //    }

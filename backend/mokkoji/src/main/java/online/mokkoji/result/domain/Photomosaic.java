@@ -3,10 +3,14 @@ package online.mokkoji.result.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Photomosaic  {
 
     @Id
@@ -22,7 +26,9 @@ public class Photomosaic  {
     @Size(max = 100)
     private String path;
 
-    public void updatePath(String path) {
+    @Builder
+    public Photomosaic(Result result, String path) {
+        this.result = result;
         this.path = path;
     }
 }
