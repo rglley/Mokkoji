@@ -125,7 +125,7 @@
 ![마이페이지](/uploads/da5b9081e600fc734f73c02f8469de76/마이페이지.png)
 
 ### 행사 생성
-![회의](/uploads/50248520613075b1c508af03340588e6/회의.png)
+![화상회의](/uploads/ac38475cae8d7ad407c1f68327dc61cd/image__6_.png)
 
 ### 소그룹 형성
 ![소그룹](/uploads/cee31fd67fb70fc50500c6c1ffcaecba/소그룹.png)
@@ -143,16 +143,16 @@
 ![롤링페이지편집](/uploads/bb1e8e50a61adeb6970d841701d14677/롤링페이지편집.png)
 
 ### 포토 모자이크 생성
-![사진_편집](/uploads/8851f9b18c1082cf6187571d7fb5c8c6/사진_편집.png)
+![포토모자이크생성](/uploads/7366037d0e9fa9de4169fa53785a4382/image__4_.png)
 
 ### 추억 페이지
-![결과물-추억](/uploads/04d487c2a09c4840e35a5bcf69d640be/결과물-추억.png)
+![추억결과](/uploads/8ea0235178dca5b82c70c5cab433e3a2/추억결과.PNG)
 
 ### 롤링페이퍼 확인
-![추억-롤페](/uploads/ebd214c3f94cefa8f951318fa5c5fc0b/추억-롤페.png)
+![롤링페이퍼결과](/uploads/c1b9a9b564e664c72131f912d6154ad6/롤링페이퍼결과.PNG)
 
 ### 포토모자이크 확인
-![추억-포토모자이크](/uploads/7a146839adf262630f763e1674b8c5b4/추억-포토모자이크.png)
+![포토모자이크결과](/uploads/b33282b7a5927f88906dd841b0755e51/포토모자이크결과.PNG)
 
 ## 🛠️ 기술 스택
 
@@ -202,6 +202,7 @@
 ![postman](https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 
 ## 🛠️서비스 아키텍처
+![서비스아키텍처](/uploads/465a44994c56f47db9abfd9312d00410/mokkoji__1_.png)
 
 ## 🗂설계 문서
 
@@ -320,7 +321,7 @@ mokkoji
               <img src="https://avatars.githubusercontent.com/u/82487512?v=4" width="100">
         </td>
         <td style="min-width: 250px;">
-              <img src="https://avatars.githubusercontent.com/u/112466460?v=4" width="100">
+              <img src="https://secure.gravatar.com/avatar/2c1b4340df6c333d6e31f0331798b5a8?s=800&d=identicon" width="100">
         </td>
     </tr>
     <tr align="center">
@@ -358,7 +359,7 @@ mokkoji
     </tr>
     <tr align="center">
         <td style="min-width: 250px;">
-              <img src="https://avatars.githubusercontent.com/u/112466460?v=4" width="100">
+              <img src="https://secure.gravatar.com/avatar/11aa9e89b7b70c7db93e39b018993c08?s=800&d=identicon" width="100">
         </td>
         <td style="min-width: 250px;">
               <img src="https://avatars.githubusercontent.com/u/112466460?v=4" width="100">
