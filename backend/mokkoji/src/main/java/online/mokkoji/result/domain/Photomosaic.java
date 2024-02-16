@@ -31,5 +31,9 @@ public class Photomosaic  {
         this.result = result;
         this.path = path;
     }
+
+    public void updatePhotomosaic(String path) {
+        this.path = path;
+    }
 }
 

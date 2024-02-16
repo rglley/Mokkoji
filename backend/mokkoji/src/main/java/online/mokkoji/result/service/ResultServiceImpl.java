@@ -332,6 +332,15 @@ public class ResultServiceImpl implements ResultService {
         Result result = resultRepository.findById(resultId)
                 .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
+        Optional<Photomosaic> findPhotomosaic = photomosaicRepository.findByResult_Id(resultId);
+
+        if(findPhotomosaic.isPresent()) {
+            Photomosaic photomosaic = findPhotomosaic.get();
+            photomosaic.updatePhotomosaic(photomosaicPath);
+            photomosaicRepository.save(photomosaic);
+            return;
+        }
+
         Photomosaic photomosaic = Photomosaic.builder()
                 .result(result)
                 .path(photomosaicPath)

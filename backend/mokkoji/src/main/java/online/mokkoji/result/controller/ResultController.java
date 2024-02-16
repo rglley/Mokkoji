@@ -127,12 +127,12 @@ public class ResultController {
     }
 
     /**
-     * 선택 결과물 정보 조회 TODO : 경배오빠한테 물어보기
+     * 결과물(포토 모자이크, 롤링 페이퍼) 반환
      * @param resultId 결과물 ID
      * @param pageable 페이징 페이지 번호
      * @return 결과물-롤링페이퍼, 포토모자이크, 간단 정보
      */
-    @GetMapping("/recollections/{resultId}")
+    @GetMapping("/{resultId}/recollections")
     public ResponseEntity<ResultResDto> getResult(@PathVariable Long resultId, Pageable pageable) {
 
         ResultResDto resultResDto = resultService.getResult(resultId, pageable);
