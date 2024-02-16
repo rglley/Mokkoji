@@ -1,0 +1,115 @@
+stages:
+  - create-env
+  - frontend-build
+  - backend-build
+  - docker-build
+  - docker-pull
+
+variables:
+  DOCKER_COMPOSE_FILE: docker-compose.yml
+
+create-env:
+  stage: create-env
+  script:
+    # front
+    - echo "DOCKER_USERNAME = ${DOCKER_USERNAME}" >> .env
+    - echo "DOCKER_REPO = ${DOCKER_REPO}" >> .env
+    # back
+    - echo "DB_URL=${DB_URL}" >> .env
+    - echo "DB_NAME=${DB_NAME}" >> .env
+    - echo "DB_USERNAME=${DB_USERNAME}" >> .env
+    - echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
+    - echo "REDIS_HOST = ${REDIS_HOST}" >> .env
+    - echo "REDIS_PORT = ${REDIS_PORT}" >> .env
+    - echo "REDIS_PASSWORD = ${REDIS_PASSWORD}" >> .env
+    - echo "JWT_SECRET = ${JWT_SECRET}" >> .env
+    - echo "OAUTH2_SECRET_GOOGLE = ${OAUTH2_SECRET_GOOGLE}" >> .env
+    - echo "OAUTH2_SECRET_NAVER = ${OAUTH2_SECRET_NAVER}" >> .env
+    - echo "OAUTH2_SECRET_KAKAO = ${OAUTH2_SECRET_KAKAO}" >> .env
+    - echo "S3_ACCESS_KEY = ${S3_ACCESS_KEY}" >> .env
+    - echo "S3_BUCKET = ${S3_BUCKET}" >> .env
+    - echo "S3_REGION = ${S3_REGION}" >> .env
+    - echo "S3_SECRET_KEY = ${S3_SECRET_KEY}" >> .env
+    - echo "DOCKER_USERNAME = ${DOCKER_USERNAME}" >> .env
+    - echo "DOCKER_REPO = ${DOCKER_REPO}" >> .env
+    - echo "OPENVIDU_URL = ${OPENVIDU_URL}" >> .env
+    - echo "OPENVIDU_SECRET = ${OPENVIDU_SECRET}" >> .env
+  artifacts:
+    paths:
+      - .env
+  only:
+    - deploy
+
+frontend-build:
+  stage: frontend-build
+  image: node:18-alpine
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist
+  only:
+    - frontend-deploy
+
+backend-build:
+  stage: backend-build
+  image: gradle:jdk17
+  script:
+    - cd backend
+    - cd mokkoji
+    - chmod +x gradlew
+    - ./gradlew clean build
+  cache:
+    paths:
+      - .gradle/wrapper
+      - .gradle/caches
+  artifacts:
+    paths:
+      - backend/mokkoji/build/libs/mokkoji-0.0.1-SNAPSHOT.jar
+  only:
+    - deploy
+
+docker-build:
+  stage: docker-build
+  dependencies:
+    - create-env
+    - frontend-build
+    - backend-build
+  script:
+    # image removal
+    - docker rmi ${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest || true
+    # login
+    - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    # frontend push
+    - cd frontend
+    - docker build -t ${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest -f Dockerfile .
+    - docker push ${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest
+    # backend push
+    - cd backend
+    - cd mokkoji
+    - docker build -t ${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest -f Dockerfile .
+    - docker push ${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest
+  only:
+    - deploy
+
+docker-pull:
+  stage: docker-pull
+  script:
+    # login again
+    - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+    # container removal
+    - docker stop $(docker ps -q --filter ancestor=${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest) || true
+    - docker stop $(docker ps -q --filter ancestor=${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest) || true
+    - docker rm $(docker ps -aq --filter ancestor=${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest) || true
+    - docker rm $(docker ps -aq --filter ancestor=${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest) || true
+    - docker-compose -f $DOCKER_COMPOSE_FILE down || true
+    - docker rmi $(docker images -q ${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest) || true
+    - docker rmi $(docker images -q ${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest) || true
+    # deploy
+    - docker-compose -f $DOCKER_COMPOSE_FILE pull
+    - docker-compose -f $DOCKER_COMPOSE_FILE up -d
+    - docker image prune -f
+  only:
+    - deploy

@@ -1,0 +1,18 @@
+version: '3'
+services:
+  frontend:
+    image: ${DOCKER_USERNAME}/${DOCKER_REPO}:frontend-latest
+    ports:
+      - '5173:5173'
+    env_file:
+      - ./.env
+
+  backend:
+    image: ${DOCKER_USERNAME}/${DOCKER_REPO}:backend-latest
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./.env
+    # opencv mount
+    volumes:
+      - /home/ubuntu/opencv:/usr/src/app/opencv
