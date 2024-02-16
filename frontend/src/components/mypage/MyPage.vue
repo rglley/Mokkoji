@@ -34,7 +34,7 @@
             <span class="flex items-stretch justify-between">
               <div class="text-black text-2xl font-extrabold">활동 기록</div>
               <!-- TODO : 결과물 보기 링크 -->
-              <a href="/eventlist" class="text-1xl">상세보기 ></a>
+              <button @click="$router.push('/eventlist')" class="text-1xl">상세보기 ></button>
             </span>
           </div>
           <div class="flex items-stretch justify-between gap-5 mt-6 pr-1.5">
