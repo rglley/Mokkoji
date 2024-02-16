@@ -328,11 +328,14 @@ public class ResultServiceImpl implements ResultService {
 
     //포토모자이크 S3 링크 DB에 저장
     @Override
-    public void updatePhotomosaic(Long resultId, String photomosaicPath) {
-        Photomosaic photomosaic = photomosaicRepository.findByResult_Id(resultId)
-                .orElseThrow(() -> new RestApiException(ResultErrorCode.PHOTOMOSAIC_NOT_FOUND));
+    public void createPhotomosaic(Long resultId, String photomosaicPath) {
+        Result result = resultRepository.findById(resultId)
+                .orElseThrow(() -> new RestApiException(ResultErrorCode.RESULT_NOT_FOUND));
 
-        photomosaic.updatePath(photomosaicPath);
+        Photomosaic photomosaic = Photomosaic.builder()
+                .result(result)
+                .path(photomosaicPath)
+                .build();
 
         photomosaicRepository.save(photomosaic);
     }

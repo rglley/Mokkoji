@@ -158,9 +158,9 @@ public class ResultController {
         Map<String, Object> result = resultService.getResultList(jwtUtil.getProvider(req), jwtUtil.getEmail(req));
 
         //로컬 이미지 삭제
-        String imagesDirectory = "/opt/result" + File.separator;
+        String imagesDirectory = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "mokkoji";
 
-//        photomosaicService.deleteImages(imagesDirectory);
+        photomosaicService.deleteImages(imagesDirectory);
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
@@ -234,7 +234,8 @@ public class ResultController {
 
         //임시 경로에 저장된 포토 모자이크 S3로 업로드
         String photomosaicPath = s3Service.uploadPhotomosaic(photomosaic, resultId);
-        resultService.updatePhotomosaic(resultId, photomosaicPath);
+
+        resultService.createPhotomosaic(resultId, photomosaicPath);
 
         return new ResponseEntity<>(photomosaicPath, HttpStatus.CREATED);
     }
