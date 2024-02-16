@@ -1,7 +1,7 @@
 # 공통 프로젝트(웹 기술) - 모꼬지(Mokkoji)
 
 ### 모꼬지 링크 : https://mokkoji.online/
-![mokkoji_logo](/uploads/7b5575137162495153b5cc3cda0a6860/mokkoji_logo.png)
+<img src="/uploads/7b5575137162495153b5cc3cda0a6860/mokkoji_logo.png" width="300"/><br>
 💻SSAFY 10기 2학기 공통 프로젝트💻<br>
 2024.01.03 - 2024.02.16(45일)
 
