@@ -374,7 +374,7 @@ mokkoji
         <br/>
         </td>
         <td>
-        <b>Frontend</b><br> 소셜 로그인 담당
+        <b>Frontend</b><br> 소셜 로그인, 사용자 기능 담당
         <br/>
         </td>
         <td>
