@@ -122,6 +122,14 @@
 
 ![화상회의](./assets/converstaion.png)
 
+### 롤링 페이퍼 작성
+
+![롤링페이퍼](./assets/rollingpaper.png)
+
+### 사진 촬영(포토 모자이크)
+
+![사진촬영](./assets/mosaic_picture.png)
+
 ### 결과물 페이지
 
 ![주최행사](./assets/result.png)
